@@ -257,6 +257,8 @@
         var banner = document.getElementById('promo-banner');
         var btnYear = document.getElementById('open-payment-modal-year');
         var btnMonth = document.getElementById('open-payment-modal-month');
+        var newBtnYear = document.getElementById('new-payment-modal-year');
+        var newBtnMonth = document.getElementById('new-payment-modal-month');
         function explodeButton(btn) {
           if (!btn) return;
           btn.style.visibility = 'hidden';
@@ -279,6 +281,18 @@
             setTimeout(function() { banner.style.display = 'none'; }, 500);
             explodeButton(btnYear);
             explodeButton(btnMonth);
+            setTimeout(function() {
+              if (btnYear) btnYear.style.display = 'none';
+              if (btnMonth) btnMonth.style.display = 'none';
+              if (newBtnYear) {
+                newBtnYear.style.display = '';
+                setTimeout(function(){ newBtnYear.style.opacity = 1; newBtnYear.style.pointerEvents = 'auto'; }, 50);
+              }
+              if (newBtnMonth) {
+                newBtnMonth.style.display = '';
+                setTimeout(function(){ newBtnMonth.style.opacity = 1; newBtnMonth.style.pointerEvents = 'auto'; }, 50);
+              }
+            }, 900);
           });
         }
       });
@@ -290,8 +304,10 @@
           <h2 class="text-4xl md:text-5xl font-extrabold text-white mb-6">VPN для важных задач</h2>
           <p class="text-xl md:text-2xl text-white mb-8 max-w-lg">Быстро. Безопасно. Анонимно.<br>Доступ к любимым сайтам и сервисам по всему миру — без ограничений и слежки. Всё по-базарному просто!</p>
           <div class="flex gap-4">
-            <button id="open-payment-modal-year" class="rounded-xl px-8 py-4 text-lg font-bold bg-gradient-to-r from-orange-500 to-purple-500 text-white shadow-lg hover:scale-105 transition-transform">2290₽/год</button>
-            <button id="open-payment-modal-month" class="rounded-xl px-8 py-4 text-lg font-bold border-2 border-orange-400 text-orange-500 bg-[#232323] shadow hover:bg-orange-900 hover:scale-105 transition-transform">399₽/мес</button>
+            <button id="open-payment-modal-year" class="rounded-xl px-8 py-4 text-lg font-bold bg-gradient-to-r from-orange-500 to-purple-500 text-white shadow-lg hover:scale-105 transition-transform explode-btn">2290₽/год</button>
+            <button id="open-payment-modal-month" class="rounded-xl px-8 py-4 text-lg font-bold border-2 border-orange-400 text-orange-500 bg-[#232323] shadow hover:bg-orange-900 hover:scale-105 transition-transform explode-btn">399₽/мес</button>
+            <button id="new-payment-modal-year" style="display:none;opacity:0;pointer-events:none;" class="rounded-xl px-8 py-4 text-lg font-bold bg-gradient-to-r from-orange-500 to-purple-500 text-white shadow-lg hover:scale-105 transition-transform">1989₽/год</button>
+            <button id="new-payment-modal-month" style="display:none;opacity:0;pointer-events:none;" class="rounded-xl px-8 py-4 text-lg font-bold border-2 border-orange-400 text-orange-500 bg-[#232323] shadow hover:bg-orange-900 hover:scale-105 transition-transform">289₽/мес</button>
           </div>
         </div>
         <div class="flex-1 flex justify-center items-center">
@@ -512,27 +528,31 @@
     // Открытие модалки оплаты по клику на кнопки тарифов с подстановкой данных
     const openYear = document.getElementById('open-payment-modal-year');
     const openMonth = document.getElementById('open-payment-modal-month');
+    const newBtnYear = document.getElementById('new-payment-modal-year');
+    const newBtnMonth = document.getElementById('new-payment-modal-month');
     const modalBg = document.getElementById('payment-modal-bg');
     const closeModal = document.getElementById('close-payment-modal');
     const modalTitle = document.getElementById('modal-tariff-title');
     const payBtn = document.getElementById('pay-btn');
     const payBtnText = document.getElementById('pay-btn-text');
     const payBtnPrice = document.getElementById('pay-btn-price');
-    function showModal(type) {
+    function showModal(type, isNew) {
       if (type === 'year') {
         modalTitle.textContent = 'Тариф "BazaraVPN" — Годовой';
         payBtnText.textContent = 'Оплатить';
-        payBtnPrice.textContent = '2290₽';
+        payBtnPrice.textContent = isNew ? '1989₽' : '2290₽';
       } else {
         modalTitle.textContent = 'Тариф "BazaraVPN" — Месячный';
         payBtnText.textContent = 'Оплатить';
-        payBtnPrice.textContent = '399₽';
+        payBtnPrice.textContent = isNew ? '289₽' : '399₽';
       }
       modalBg.classList.remove('hidden');
       modalBg.classList.add('opacity-100');
     }
-    if (openYear) openYear.onclick = () => showModal('year');
-    if (openMonth) openMonth.onclick = () => showModal('month');
+    if (openYear) openYear.onclick = () => showModal('year', false);
+    if (openMonth) openMonth.onclick = () => showModal('month', false);
+    if (newBtnYear) newBtnYear.onclick = () => showModal('year', true);
+    if (newBtnMonth) newBtnMonth.onclick = () => showModal('month', true);
     if (closeModal) closeModal.onclick = () => {
       modalBg.classList.add('hidden');
       modalBg.classList.remove('opacity-100');

@@ -590,13 +590,16 @@
       if (banner && vpnBlock) {
         banner.addEventListener('transitionend', function(e) {
           if (banner.style.opacity === '0') {
+            // Сначала оставляем блок на месте, потом плавно поднимаем
+            var startRect = vpnBlock.getBoundingClientRect();
+            vpnBlock.style.transition = 'none';
             vpnBlock.style.opacity = 0;
             vpnBlock.style.transform = 'translateY(40px)';
             setTimeout(function(){
               vpnBlock.style.transition = 'opacity 0.7s, transform 0.7s';
               vpnBlock.style.opacity = 1;
               vpnBlock.style.transform = 'none';
-            }, 30);
+            }, 100);
           }
         });
       }

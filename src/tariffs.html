@@ -120,6 +120,28 @@
       box-shadow: 0 0 0 2px #ff880055;
       border-radius: 1rem !important;
     }
+    .explode-btn {
+      position: relative;
+      z-index: 1;
+      transition: transform 0.3s, opacity 0.3s;
+    }
+    .explode-piece {
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      background: linear-gradient(90deg, #ff8800 0%, #a259ff 100%);
+      border-radius: 6px;
+      opacity: 1;
+      pointer-events: none;
+      z-index: 10;
+      animation: explode-fall 1.2s forwards;
+    }
+    @keyframes explode-fall {
+      to {
+        transform: translateY(120px) scale(0.7) rotate(40deg);
+        opacity: 0;
+      }
+    }
   </style>
 </head>
 <body class="text-white min-h-screen flex flex-col">
@@ -219,24 +241,44 @@
     <!-- Banner -->
     <div id="promo-banner" class="w-full max-w-5xl mx-auto rounded-2xl bg-gradient-to-r from-[#7b2ff2] to-[#f357a8] flex items-center justify-between px-8 py-7 mb-10 shadow-lg cursor-pointer transition-opacity duration-500">
       <div class="flex items-center gap-6">
-        <img src="assets/tort.png" alt="Торт" class="w-20 h-20 md:w-24 md:h-24 select-none" draggable="false">
+        <img src="assets/tort.png" alt="Торт" class="w-32 h-32 md:w-40 md:h-40 select-none" draggable="false">
         <div class="flex flex-col gap-1">
           <span class="text-3xl md:text-4xl font-extrabold text-white">Открытие BazaraVPN</span>
           <span class="text-xl md:text-2xl font-semibold text-white">20% скидка на все тарифы!<br><span class='text-base text-white font-normal'>Только до 31 мая</span></span>
         </div>
       </div>
       <div class="flex flex-col items-center">
-        <span class="bg-white text-orange-600 font-bold px-7 py-3 rounded-2xl text-2xl shadow-lg">20%</span>
+        <span class="bg-white text-orange-600 font-bold px-7 py-3 rounded-2xl text-2xl shadow-lg">Жми!</span>
       </div>
     </div>
     <script>
-      // Плавное скрытие баннера при клике
+      // Плавное скрытие баннера при клике и анимация рассыпания кнопок
       document.addEventListener('DOMContentLoaded', function() {
         var banner = document.getElementById('promo-banner');
+        var btnYear = document.getElementById('open-payment-modal-year');
+        var btnMonth = document.getElementById('open-payment-modal-month');
+        function explodeButton(btn) {
+          if (!btn) return;
+          btn.style.visibility = 'hidden';
+          var rect = btn.getBoundingClientRect();
+          var parentRect = btn.parentElement.getBoundingClientRect();
+          for (var i = 0; i < 12; i++) {
+            var piece = document.createElement('div');
+            piece.className = 'explode-piece';
+            piece.style.left = (btn.offsetLeft + btn.offsetWidth/2 - 12 + Math.random()*btn.offsetWidth/2*(Math.random()>0.5?1:-1)) + 'px';
+            piece.style.top = (btn.offsetTop + btn.offsetHeight/2 - 12 + Math.random()*btn.offsetHeight/2*(Math.random()>0.5?1:-1)) + 'px';
+            piece.style.background = i%2===0 ? 'linear-gradient(90deg, #ff8800 0%, #a259ff 100%)' : '#232323';
+            piece.style.animationDelay = (Math.random()*0.2)+'s';
+            btn.parentElement.appendChild(piece);
+            setTimeout(function(p){ p.remove(); }, 1300, piece);
+          }
+        }
         if (banner) {
           banner.addEventListener('click', function() {
             banner.style.opacity = '0';
             setTimeout(function() { banner.style.display = 'none'; }, 500);
+            explodeButton(btnYear);
+            explodeButton(btnMonth);
           });
         }
       });

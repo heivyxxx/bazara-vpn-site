@@ -265,14 +265,6 @@
       </div>
     </div>
   </div>
-  <script async src="https://telegram.org/js/telegram-widget.js?7"
-    data-telegram-login="BazaraVpnLoginBot"
-    data-size="large"
-    data-userpic="false"
-    data-radius="14"
-    data-request-access="write"
-    data-onauth="onTelegramAuth(user)"
-    id="tg-login-script"></script>
   <script>
   function onTelegramAuth(user) {
     fetch('/api/telegram_auth', {
@@ -288,8 +280,47 @@
       document.getElementById('tg-auth-result').textContent = 'Ошибка соединения с сервером.';
     });
   }
+  // Динамическое добавление/удаление Telegram-виджета
+  const tgAuthModalBg = document.getElementById('tg-auth-modal-bg');
+  const closeTgAuthModal = document.getElementById('close-tg-auth-modal');
+  function openTgAuthModal() {
+    tgAuthModalBg.classList.remove('hidden');
+    setTimeout(() => tgAuthModalBg.classList.add('opacity-100'), 10);
+    // Добавляем Telegram-виджет только при открытии
+    const btn = document.getElementById('telegram-login-btn');
+    if (btn && !btn.querySelector('script#tg-login-script')) {
+      btn.innerHTML = '';
+      const script = document.createElement('script');
+      script.src = 'https://telegram.org/js/telegram-widget.js?7';
+      script.async = true;
+      script.setAttribute('data-telegram-login', 'BazaraVpnLoginBot');
+      script.setAttribute('data-size', 'large');
+      script.setAttribute('data-userpic', 'false');
+      script.setAttribute('data-radius', '14');
+      script.setAttribute('data-request-access', 'write');
+      script.setAttribute('data-onauth', 'onTelegramAuth(user)');
+      script.id = 'tg-login-script';
+      btn.appendChild(script);
+    }
+  }
+  function closeTgAuthModalFn() {
+    tgAuthModalBg.classList.add('hidden');
+    tgAuthModalBg.classList.remove('opacity-100');
+    // Удаляем Telegram-виджет при закрытии
+    const btn = document.getElementById('telegram-login-btn');
+    if (btn) btn.innerHTML = '';
+    document.getElementById('tg-auth-result').textContent = '';
+  }
+  if (closeTgAuthModal) closeTgAuthModal.onclick = closeTgAuthModalFn;
+  if (tgAuthModalBg) tgAuthModalBg.addEventListener('click', (e) => {
+    if (e.target === tgAuthModalBg) closeTgAuthModalFn();
+  });
+  // Открытие модалки Telegram авторизации по клику на кнопку 'Активировать пробную версию'
+  const trialBtn = document.querySelector('button.bg-orange-500');
+  if (trialBtn && tgAuthModalBg) {
+    trialBtn.addEventListener('click', openTgAuthModal);
+  }
   </script>
-  <!-- /Модалка Telegram авторизации -->
   <script>
     // Анимация появления блоков при скролле
     function revealOnScroll() {
@@ -344,28 +375,6 @@
         btn.classList.add('selected');
       };
     });
-    // Открытие модалки Telegram авторизации по клику на кнопку 'Активировать пробную версию'
-    const trialBtn = document.querySelector('button.bg-orange-500');
-    const tgAuthModalBg = document.getElementById('tg-auth-modal-bg');
-    if (trialBtn && tgAuthModalBg) {
-      trialBtn.addEventListener('click', () => {
-        tgAuthModalBg.classList.remove('hidden');
-        setTimeout(() => tgAuthModalBg.classList.add('opacity-100'), 10); // плавное появление
-      });
-      tgAuthModalBg.addEventListener('click', (e) => {
-        if (e.target === tgAuthModalBg) {
-          tgAuthModalBg.classList.add('hidden');
-          tgAuthModalBg.classList.remove('opacity-100');
-        }
-      });
-      const closeTgAuthModal = document.getElementById('close-tg-auth-modal');
-      if (closeTgAuthModal) {
-        closeTgAuthModal.addEventListener('click', () => {
-          tgAuthModalBg.classList.add('hidden');
-          tgAuthModalBg.classList.remove('opacity-100');
-        });
-      }
-    }
   </script>
 </body>
 </html> 

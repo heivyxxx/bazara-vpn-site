@@ -1,0 +1,40 @@
+<!-- Footer (универсальный для всех страниц) -->
+<footer class="w-full bg-[#232323] border-t border-[#333] py-6 px-4 flex items-center justify-center gap-10 text-gray-200 text-base mt-auto">
+  <!-- Theme Switcher (UI only) -->
+  <div class="relative group" id="theme-switcher-group">
+    <button class="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-[#181818] transition text-lg" id="theme-switcher-btn">
+      <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+      <span id="theme-current">Системная тема</span>
+      <svg class="w-5 h-5 ml-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+    </button>
+    <div id="theme-dropdown" class="hidden absolute left-1/2 -translate-x-1/2 bottom-full mb-2 w-48 bg-[#232323] border border-gray-700 rounded-lg shadow-lg py-1 z-50">
+      <div class="px-4 py-2 hover:bg-[#181818] cursor-pointer">Системная тема</div>
+      <div class="px-4 py-2 hover:bg-[#181818] cursor-pointer">Светлая</div>
+      <div class="px-4 py-2 hover:bg-[#181818] cursor-pointer">Тёмная</div>
+    </div>
+  </div>
+  <div class="text-center text-lg font-medium">© 2024 BazaraVPN</div>
+  <!-- Sitemap (UI only) -->
+  <div class="relative group">
+    <button class="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-[#181818] transition text-lg">
+      <span>Карта сайта</span>
+      <svg class="w-5 h-5 ml-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+    </button>
+    <div class="hidden group-hover:block absolute left-1/2 -translate-x-1/2 bottom-full mb-2 w-48 bg-[#232323] border border-gray-700 rounded-lg shadow-lg py-1 z-50">
+      <div class="px-4 py-2 hover:bg-[#181818] cursor-pointer">Главная</div>
+      <div class="px-4 py-2 hover:bg-[#181818] cursor-pointer">Тарифы</div>
+      <div class="px-4 py-2 hover:bg-[#181818] cursor-pointer">Скачать</div>
+      <div class="px-4 py-2 hover:bg-[#181818] cursor-pointer">FAQ</div>
+    </div>
+  </div>
+  <!-- Social Icons -->
+  <div class="flex items-center gap-5">
+    <a href="#" class="hover:text-orange-400" aria-label="Instagram"><svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="6"/><circle cx="12" cy="12" r="5"/><circle cx="17" cy="7" r="1.5"/></svg></a>
+    <a href="#" class="hover:text-orange-400" aria-label="Facebook"><svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="6"/><path d="M16 8h-2a2 2 0 0 0-2 2v2h4l-.5 3h-3.5v7"/></svg></a>
+    <a href="#" class="hover:text-orange-400" aria-label="X"><svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4l16 16M20 4L4 20"/></svg></a>
+    <a href="#" class="hover:text-orange-400" aria-label="YouTube"><svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="4"/><polygon points="10,9 16,12 10,15" fill="currentColor"/></svg></a>
+    <a href="#" class="hover:text-orange-400" aria-label="Telegram"><svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 4L12 20l-3-7-7-3z"/></svg></a>
+    <a href="#" class="hover:text-orange-400" aria-label="Reddit"><svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="8.5" cy="13.5" r="1.5"/><circle cx="15.5" cy="13.5" r="1.5"/><path d="M12 17c2 0 3.5-1 3.5-2.5h-7C8.5 16 10 17 12 17z"/></svg></a>
+    <a href="#" class="hover:text-orange-400" aria-label="VK"><svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="6"/><path d="M7 9c1.5 2.5 3.5 4 5 4s3.5-1.5 5-4"/></svg></a>
+  </div>
+</footer> 

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>База знаний — Поддержка BazaraVPN</title>
+  <meta name="description" content="База знаний BazaraVPN: инструкции, советы, ответы на вопросы.">
+  <link rel="icon" href="/favicon.ico">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    html,body{background:#181818!important;color:#fff;min-height:100vh;}
+    .fade-up{opacity:0;transform:translateY(40px);transition:opacity 0.7s,transform 0.7s;}
+    .fade-up.visible{opacity:1;transform:none;}
+    .kb-block{background:#232323;border-radius:1.5rem;border:2px solid #ff8800;padding:2.5rem 2rem;margin-bottom:2.5rem;box-shadow:0 4px 32px 0 #ff880022;}
+    .kb-block h3{font-size:1.5rem;font-weight:800;color:#ff8800;margin-bottom:1rem;}
+    .kb-block p{font-size:1.1rem;line-height:1.7;color:#e5e5e5;}
+    .kb-block ul{margin:1rem 0 0 1.2rem;list-style:disc;color:#ff8800;}
+    .kb-block li{color:#e5e5e5;}
+    @media(max-width:700px){.kb-block{padding:1.2rem 0.7rem;}}
+  </style>
+</head>
+<body class="min-h-screen flex flex-col text-white">
+  <!--#include file="header.html" -->
+  <main class="flex-1 flex flex-col items-center pt-24 pb-16">
+    <section class="fade-up w-full max-w-3xl mx-auto flex flex-col items-center min-h-0 bg-[#181818] pt-8 pb-16 animate-fade-in">
+      <h2 class="text-4xl font-extrabold text-orange-400 mb-10 text-center">База знаний BazaraVPN</h2>
+      <div class="text-lg mb-10 text-gray-300 text-center max-w-2xl">Добро пожаловать в базу знаний BazaraVPN! Здесь вы найдёте инструкции, советы по безопасности, ответы на вопросы и полезные статьи о нашем сервисе.</div>
+      <div class="kb-block fade-up">
+        <h3>Обзор BazaraVPN</h3>
+        <p>BazaraVPN — это современный VPN-сервис для защиты ваших данных, обхода блокировок и анонимности в интернете. Мы предлагаем приложения для всех популярных платформ, высокую скорость и надёжную поддержку.</p>
+      </div>
+      <div class="kb-block fade-up">
+        <h3>Установка и настройка</h3>
+        <p>Скачайте приложение BazaraVPN для вашей платформы (Windows, macOS, Android, iOS, Linux) с официального сайта. Следуйте простым шагам мастера установки, войдите в аккаунт и подключитесь к серверу одним кликом.</p>
+        <ul>
+          <li>Поддержка всех популярных устройств</li>
+          <li>Пошаговые инструкции внутри приложения</li>
+          <li>Автоматическое подключение при запуске</li>
+        </ul>
+      </div>
+      <div class="kb-block fade-up">
+        <h3>Безопасность и анонимность</h3>
+        <p>Ваши данные защищены современным шифрованием. Мы не храним логи, не отслеживаем активность и не передаём информацию третьим лицам. Используйте VPN для анонимного и безопасного доступа к интернету.</p>
+        <ul>
+          <li>Сильное шифрование трафика</li>
+          <li>Скрытие реального IP-адреса</li>
+          <li>Защита в публичных Wi-Fi сетях</li>
+        </ul>
+      </div>
+      <div class="kb-block fade-up">
+        <h3>Тарифы и оплата</h3>
+        <p>Выберите подходящий тариф: бесплатный с базовыми возможностями или премиум с максимальной скоростью и расширенными функциями. Оплата возможна картой, криптовалютой и другими способами.</p>
+        <ul>
+          <li>Гибкая система тарифов</li>
+          <li>Безопасная оплата</li>
+          <li>Пробный период для новых пользователей</li>
+        </ul>
+      </div>
+      <div class="kb-block fade-up">
+        <h3>Техническая поддержка</h3>
+        <p>Если возникли вопросы или проблемы — наша команда поддержки всегда готова помочь. Напишите нам через чат на сайте или по email, и мы быстро решим ваш вопрос.</p>
+        <ul>
+          <li>Круглосуточная поддержка</li>
+          <li>Ответы на email и в чате</li>
+          <li>Быстрая помощь по любым вопросам</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+  <!--#include file="footer.html" -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('.fade-up').forEach(el => {
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight - 40) {
+          el.classList.add('visible');
+        }
+      });
+    });
+  </script>
+</body>
+</html> 

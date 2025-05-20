@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BazaraVPN — Поддержка</title>
+  <meta name="description" content="Поддержка BazaraVPN — FAQ, база знаний, обсуждение, связь с командой.">
+  <link rel="icon" href="/favicon.ico">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    html, body { background: #181818 !important; color: #fff; min-height: 100vh; }
+    .fade-up { opacity: 0; transform: translateY(40px); transition: opacity 0.7s, transform 0.7s; }
+    .fade-up.visible { opacity: 1; transform: none; }
+    .support-block { background: linear-gradient(120deg, #232323 80%, #2d1a00 100%); border-radius: 2.2rem; box-shadow: 0 8px 48px 0 rgba(255,136,0,0.13), 0 2px 0 #ff8800; padding: 2.8rem 2.2rem 2.2rem 2.2rem; }
+    .support-block h2 { font-size: 2.2rem; font-weight: 900; text-align: center; margin-bottom: 0.5rem; background: linear-gradient(90deg, #ff8800 0%, #a259ff 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .support-block .support-icon { margin-bottom: 1.5rem; }
+    .support-block .support-btn { background: linear-gradient(90deg, #ff8800 0%, #a259ff 100%); color: #fff; font-weight: 700; font-size: 1.18rem; border: none; border-radius: 1.1rem; padding: 1.1rem 2.5rem; transition: box-shadow 0.22s, transform 0.18s, background 0.18s; outline: none; box-shadow: 0 2px 16px 0 #ff880088, 0 2px 8px 0 #a259ff44; pointer-events: auto; }
+    .support-block .support-btn:hover { box-shadow: 0 0 32px 0 #ff8800cc, 0 4px 16px 0 #a259ff88; background: linear-gradient(90deg, #ff8800 10%, #a259ff 90%); transform: scale(1.06); }
+    @media (max-width: 900px) { .support-block { padding: 1.2rem 0.5rem 1.2rem 0.5rem; max-width: 98vw; } .support-block h2 { font-size: 1.5rem; } }
+    .support-block, .support-btn, #open-support-chat { pointer-events: auto !important; }
+    .card-hover {
+      transition: box-shadow 0.22s, transform 0.18s;
+    }
+    .card-hover:hover {
+      transform: translateY(-4px) scale(1.03);
+      box-shadow: 0 10px 32px 0 #a259ff44, 0 2px 16px 0 #ff880088, 0 0 0 2px #a259ff22;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col text-white" id="main-body">
+  <!--#include file="header.html" -->
+  <main class="flex-1 flex flex-col items-center pt-24 pb-16">
+    <!-- Hero -->
+    <section class="w-full max-w-5xl mx-auto flex flex-col items-center text-center mb-16 fade-up" style="animation-delay:0.1s">
+      <a href="javascript:void(0)" id="open-support-chat" class="group block relative mb-8" style="outline: none;" onclick="openSupportChatModal()">
+        <img src="assets/trader.gif" alt="BazaraVPN" class="mx-auto w-52 h-52 object-contain drop-shadow-lg transition-transform duration-200 group-hover:scale-105 cursor-pointer" draggable="false" style="filter: drop-shadow(0 8px 32px #a259ff55);">
+      </a>
+      <h1 class="text-5xl md:text-6xl font-extrabold mb-4">
+        <span class="text-orange-400">Поддержка Bazara</span><span class="text-white">VPN</span>
+      </h1>
+      <div class="text-xl md:text-2xl text-[#B8B8B8] mb-6 max-w-xl mx-auto leading-relaxed" style="max-width:600px;line-height:1.7;">
+        Всё для вашей уверенности: быстрые ответы, база знаний, обсуждение и личный чат с поддержкой. Мы всегда на связи!
+      </div>
+    </section>
+    <!-- Блоки -->
+    <section class="w-full max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 mb-20 px-4">
+      <div class="bg-[#232323] rounded-[2.2rem] shadow-xl p-10 flex flex-col items-center text-center fade-up card-hover" style="animation-delay:0.2s; box-shadow: 0 8px 32px 0 #00000044, 0 2px 8px 0 #a259ff22;">
+        <img src="assets/faq-3d.png" alt="FAQ" class="w-20 h-20 mb-6 select-none pointer-events-none mx-auto" draggable="false">
+        <div class="text-2xl font-extrabold text-white mb-2">FAQ</div>
+        <div class="text-[16px] text-[#B8B8B8] mb-5">Ответы на самые частые вопросы о BazaraVPN.</div>
+        <button class="w-full max-w-xs py-4 px-0 rounded-2xl font-bold text-lg text-white shadow-lg transition-all duration-200 bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700 mt-0" onclick="location.href='faq.html'">Открыть FAQ</button>
+      </div>
+      <div class="bg-[#232323] rounded-[2.2rem] shadow-xl p-10 flex flex-col items-center text-center fade-up card-hover" style="animation-delay:0.3s; box-shadow: 0 8px 32px 0 #00000044, 0 2px 8px 0 #a259ff22;">
+        <img src="assets/kb-3d.png" alt="База знаний" class="w-20 h-20 mb-6 select-none pointer-events-none mx-auto" draggable="false">
+        <div class="text-2xl font-extrabold text-white mb-2">База знаний</div>
+        <div class="text-[16px] text-[#B8B8B8] mb-5">Всё, что нужно знать о BazaraVPN и наших продуктах.</div>
+        <button class="w-full max-w-xs py-4 px-0 rounded-2xl font-bold text-lg text-white shadow-lg transition-all duration-200 bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700 mt-0" onclick="location.href='kb.html'">Открыть базу знаний</button>
+      </div>
+      <div class="bg-[#232323] rounded-[2.2rem] shadow-xl p-10 flex flex-col items-center text-center fade-up card-hover" style="animation-delay:0.4s; box-shadow: 0 8px 32px 0 #00000044, 0 2px 8px 0 #a259ff22;">
+        <img src="assets/chat-3d.png" alt="Обсудить" class="w-20 h-20 mb-6 select-none pointer-events-none mx-auto" draggable="false">
+        <div class="text-2xl font-extrabold text-white mb-2">Обсудить</div>
+        <div class="text-[16px] text-[#B8B8B8] mb-5">Присоединяйтесь к обсуждению с командой и пользователями BazaraVPN.</div>
+        <button class="w-full max-w-xs py-4 px-0 rounded-2xl font-bold text-lg text-white shadow-lg transition-all duration-200 bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700 mt-0" onclick="location.href='discuss.html'">Перейти к обсуждению</button>
+      </div>
+      <div class="bg-[#232323] rounded-[2.2rem] shadow-xl p-10 flex flex-col items-center text-center fade-up card-hover" style="animation-delay:0.5s; box-shadow: 0 8px 32px 0 #00000044, 0 2px 8px 0 #a259ff22;">
+        <img src="assets/bug-3d.png" alt="Сообщить об ошибке" class="w-20 h-20 mb-6 select-none pointer-events-none mx-auto" draggable="false">
+        <div class="text-2xl font-extrabold text-white mb-2">Сообщить об ошибке</div>
+        <div class="text-[16px] text-[#B8B8B8] mb-5">Оставьте отзыв или сообщите о проблеме — мы всегда на связи!</div>
+        <button class="w-full max-w-xs py-4 px-0 rounded-2xl font-bold text-lg text-white shadow-lg transition-all duration-200 bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700 mt-0" onclick="console.log('Error btn'); openErrorModal()">Сообщить об ошибке</button>
+      </div>
+    </section>
+    <div class="flex justify-center mt-8 mb-4">
+      <a id="support-mail-link" href="mailto:support@bazaravpn.ru" class="group flex flex-col items-center bg-[#232323] rounded-2xl shadow-xl px-8 py-6 transition hover:shadow-2xl relative" style="box-shadow: 0 8px 32px 0 #00000044, 0 2px 8px 0 #a259ff22;">
+        <span class="absolute inset-0 rounded-2xl pointer-events-none opacity-0 group-hover:opacity-100 transition duration-300" style="box-shadow: 0 0 16px 2px #a259ff55;"></span>
+        <img src="assets/mail-3d.png" alt="Почта поддержки" class="w-20 h-20 mb-3 z-10 transition-transform duration-300 group-hover:-rotate-12 select-none pointer-events-none" draggable="false">
+        <span class="text-xl font-bold text-white z-10 select-none opacity-0 group-hover:opacity-100 transition-opacity duration-300" style="white-space:nowrap;">support@bazaravpn.ru</span>
+        <span id="copy-popup" class="absolute -top-8 left-1/2 -translate-x-1/2 bg-[#232323] text-white text-sm font-semibold px-4 py-2 rounded-xl shadow-lg opacity-0 pointer-events-none transition-opacity duration-300" style="z-index:20;">Скопировано!</span>
+      </a>
+    </div>
+    <script>
+      const mailLink = document.getElementById('support-mail-link');
+      const popup = document.getElementById('copy-popup');
+      if (mailLink && popup) {
+        mailLink.addEventListener('click', function() {
+          navigator.clipboard.writeText('support@bazaravpn.ru');
+          popup.style.opacity = '1';
+          setTimeout(() => { popup.style.opacity = '0'; }, 1500);
+        });
+      }
+    </script>
+    <!-- SPA секции -->
+    <div id="faq-section" class="w-full max-w-5xl mx-auto fade-up hidden" style="animation-delay:0.6s">
+      <section id="faq-page" class="flex-1 flex flex-col items-center min-h-0 bg-[#181818] pt-8 pb-16 animate-fade-in fade-up">
+        <div class="w-full max-w-5xl mx-auto flex flex-col">
+          <button id="back-to-support-faq" class="self-start mb-6 flex items-center gap-2 text-orange-400 hover:text-orange-500 text-lg font-semibold"><svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg>Назад</button>
+          <h2 class="text-4xl font-extrabold text-orange-400 mb-10 text-center">Часто задаваемые вопросы</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="bg-[#232323] rounded-2xl border-2 border-orange-700 shadow-lg">
+              <button class="w-full flex justify-between items-center px-8 py-6 text-xl font-bold text-left text-white focus:outline-none faq-question">Как работает BazaraVPN?<span class="faq-icon text-3xl text-orange-400">+</span></button>
+              <div class="faq-answer px-8 pb-6 text-gray-200 text-lg hidden">BazaraVPN защищает вашу конфиденциальность в Интернете, скрывая ваш настоящий IP-адрес. Когда ваше виртуальное местоположение скрыто, отслеживать, ограничивать или продавать вашу онлайн-активность становится намного сложнее.</div>
+            </div>
+            <div class="bg-[#232323] rounded-2xl border-2 border-orange-700 shadow-lg">
+              <button class="w-full flex justify-between items-center px-8 py-6 text-xl font-bold text-left text-white focus:outline-none faq-question">Как установить BazaraVPN?<span class="faq-icon text-3xl text-orange-400">+</span></button>
+              <div class="faq-answer px-8 pb-6 text-gray-200 text-lg hidden">Чтобы установить BazaraVPN, скачайте приложение для вашего устройства и следуйте нашему руководству по настройке. Затем просто войдите в свой аккаунт, и вы будете готовы к подключению.</div>
+            </div>
+            <div class="bg-[#232323] rounded-2xl border-2 border-orange-700 shadow-lg">
+              <button class="w-full flex justify-between items-center px-8 py-6 text-xl font-bold text-left text-white focus:outline-none faq-question">Можно ли пользоваться бесплатно?<span class="faq-icon text-3xl text-orange-400">+</span></button>
+              <div class="faq-answer px-8 pb-6 text-gray-200 text-lg hidden">Да, у нас есть бесплатный пробный период и базовые функции без оплаты.</div>
+            </div>
+            <div class="bg-[#232323] rounded-2xl border-2 border-orange-700 shadow-lg">
+              <button class="w-full flex justify-between items-center px-8 py-6 text-xl font-bold text-left text-white focus:outline-none faq-question">Какие устройства поддерживаются?<span class="faq-icon text-3xl text-orange-400">+</span></button>
+              <div class="faq-answer px-8 pb-6 text-gray-200 text-lg hidden">Windows, macOS, Android, iOS, роутеры и другие.</div>
+            </div>
+            <div class="bg-[#232323] rounded-2xl border-2 border-orange-700 shadow-lg">
+              <button class="w-full flex justify-between items-center px-8 py-6 text-xl font-bold text-left text-white focus:outline-none faq-question">Можно ли смотреть Netflix и другие стриминги?<span class="faq-icon text-3xl text-orange-400">+</span></button>
+              <div class="faq-answer px-8 pb-6 text-gray-200 text-lg hidden">Да, BazaraVPN позволяет обходить блокировки и смотреть любые стриминговые сервисы.</div>
+            </div>
+            <div class="bg-[#232323] rounded-2xl border-2 border-orange-700 shadow-lg">
+              <button class="w-full flex justify-between items-center px-8 py-6 text-xl font-bold text-left text-white focus:outline-none faq-question">Сколько устройств можно подключить?<span class="faq-icon text-3xl text-orange-400">+</span></button>
+              <div class="faq-answer px-8 pb-6 text-gray-200 text-lg hidden">До 5 устройств одновременно на одном аккаунте.</div>
+            </div>
+            <div class="bg-[#232323] rounded-2xl border-2 border-orange-700 shadow-lg">
+              <button class="w-full flex justify-between items-center px-8 py-6 text-xl font-bold text-left text-white focus:outline-none faq-question">Как оплатить подписку?<span class="faq-icon text-3xl text-orange-400">+</span></button>
+              <div class="faq-answer px-8 pb-6 text-gray-200 text-lg hidden">Мы принимаем карты, криптовалюту и другие способы оплаты.</div>
+            </div>
+            <div class="bg-[#232323] rounded-2xl border-2 border-orange-700 shadow-lg">
+              <button class="w-full flex justify-between items-center px-8 py-6 text-xl font-bold text-left text-white focus:outline-none faq-question">Законно ли использовать VPN?<span class="faq-icon text-3xl text-orange-400">+</span></button>
+              <div class="faq-answer px-8 pb-6 text-gray-200 text-lg hidden">В большинстве стран — да. Но проверьте законы вашей страны.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+    <div id="kb-section" class="w-full max-w-5xl mx-auto fade-up hidden" style="animation-delay:0.7s">
+      <section id="kb-page" class="flex-1 flex flex-col items-center min-h-0 bg-[#181818] pt-8 pb-16 animate-fade-in fade-up">
+        <div class="w-full max-w-4xl mx-auto flex flex-col md:flex-row gap-10 py-12 md:py-20 items-center md:items-start justify-center">
+          <aside class="w-full md:w-64 bg-[#232323] rounded-2xl border-2 border-orange-700 shadow-lg p-6 flex flex-col gap-4 mb-6 md:mb-0">
+            <div class="text-lg font-bold text-orange-400 mb-2">Разделы</div>
+            <button class="text-left text-white hover:text-orange-400 font-semibold">Обзор BazaraVPN</button>
+            <button class="text-left text-white hover:text-orange-400">Установка и настройка</button>
+            <button class="text-left text-white hover:text-orange-400">Безопасность и анонимность</button>
+            <button class="text-left text-white hover:text-orange-400">Тарифы и оплата</button>
+            <button class="text-left text-white hover:text-orange-400">Техническая поддержка</button>
+          </aside>
+          <main class="flex-1 bg-[#232323] rounded-2xl border-2 border-orange-700 shadow-lg p-8 flex flex-col gap-6 min-w-0">
+            <button id="back-to-support-kb" class="self-start mb-4 flex items-center gap-2 text-orange-400 hover:text-orange-500 text-lg font-semibold"><svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg>Назад</button>
+            <h2 class="text-3xl font-extrabold text-orange-400 mb-4">База знаний BazaraVPN</h2>
+            <div class="text-lg mb-4">Добро пожаловать в базу знаний BazaraVPN! Здесь вы найдёте подробные инструкции, советы по безопасности, ответы на вопросы и полезные статьи о нашем сервисе.</div>
+            <div class="bg-[#181818] rounded-xl p-6 border border-orange-700 flex flex-col gap-2">
+              <h3 class="text-xl font-bold text-orange-400 mb-2">Обзор BazaraVPN</h3>
+              <p>BazaraVPN — это современный VPN-сервис для защиты ваших данных, обхода блокировок и анонимности в интернете. Мы предлагаем приложения для всех популярных платформ, высокую скорость и надёжную поддержку.</p>
+              <p class="text-gray-400">Воспользуйтесь меню слева для перехода к нужному разделу.</p>
+            </div>
+          </main>
+        </div>
+      </section>
+    </div>
+    <div id="discuss-section" class="w-full max-w-5xl mx-auto fade-up hidden" style="animation-delay:0.8s">
+      <section id="discuss-page" class="flex-1 flex flex-col items-center min-h-0 bg-[#181818] pt-8 pb-16 animate-fade-in fade-up">
+        <div class="w-full max-w-3xl mx-auto flex flex-col items-center">
+          <button id="back-to-support-discuss" class="self-start mb-6 flex items-center gap-2 text-orange-400 hover:text-orange-500 text-lg font-semibold"><svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg>Назад</button>
+          <h2 class="text-4xl font-extrabold text-orange-400 mb-8 text-center">Обсудить в Telegram</h2>
+          <div class="flex flex-col items-center gap-6 bg-[#232323] rounded-2xl border-2 border-orange-700 shadow-lg p-10">
+            <svg class="w-24 h-24 text-orange-400 mb-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 48 48"><path d="M22 38l-2-6-8-2c-2-.5-2-2.5 0-3l32-12c2-.5 3 1.5 2.5 3l-6 32c-.5 2-2.5 2-3 0l-2-8-6-2z" fill="#a259ff"/><path d="M22 38l-2-6-8-2c-2-.5-2-2.5 0-3l32-12c2-.5 3 1.5 2.5 3l-6 32c-.5 2-2.5 2-3 0l-2-8-6-2z" stroke="#ff8800" stroke-width="3"/></svg>
+            <div class="text-2xl font-bold text-white mb-2">Наш Telegram-чат</div>
+            <div class="text-gray-300 text-lg mb-4 text-center">Присоединяйтесь к нашему Telegram-чату, чтобы задать вопрос, обсудить BazaraVPN или просто пообщаться с командой и другими пользователями!</div>
+            <a href="https://t.me/bazaravpn" target="_blank" class="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-4 px-10 rounded-xl transition-all duration-200 shadow-lg text-xl flex items-center gap-2"><svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 4L12 20l-3-7-7-3z"/></svg>Вступить в Telegram</a>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+  <!--#include file="footer.html" -->
+  <!-- Модалки (чат и ошибка) -->
+  <!-- ...оставить существующие модалки... -->
+  <script>
+    // Fade-up анимация появления блоков при скролле (как на тарифах)
+    function revealOnScroll() {
+      document.querySelectorAll('.fade-up').forEach(el => {
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight - 40) {
+          el.classList.add('visible');
+        }
+      });
+    }
+    window.addEventListener('scroll', revealOnScroll);
+    window.addEventListener('DOMContentLoaded', revealOnScroll);
+    // SPA логика для секций
+    function showSection(section) {
+      console.log('showSection', section);
+      document.getElementById('faq-section').classList.add('hidden');
+      document.getElementById('kb-section').classList.add('hidden');
+      document.getElementById('discuss-section').classList.add('hidden');
+      if (section === 'faq') document.getElementById('faq-section').classList.remove('hidden');
+      if (section === 'kb') document.getElementById('kb-section').classList.remove('hidden');
+      if (section === 'discuss') document.getElementById('discuss-section').classList.remove('hidden');
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    }
+    // Открытие модалки ошибки
+    function openErrorModal() {
+      console.log('openErrorModal');
+      document.getElementById('error-modal-bg').classList.remove('hidden');
+    }
+    function openSupportChatModal() {
+      const modal = document.getElementById('support-chat-modal-bg');
+      if (modal) modal.classList.remove('hidden');
+    }
+    // Закрытие модалки ошибки по крестику
+    document.addEventListener('DOMContentLoaded', function() {
+      var closeErrorModal = document.getElementById('close-error-modal');
+      var errorModalBg = document.getElementById('error-modal-bg');
+      if (closeErrorModal && errorModalBg) {
+        closeErrorModal.onclick = function() {
+          errorModalBg.classList.add('hidden');
+        };
+        errorModalBg.addEventListener('click', function(e) {
+          if (e.target === errorModalBg) errorModalBg.classList.add('hidden');
+        });
+      }
+    });
+  </script>
+  <!-- Error Modal -->
+<div id="error-modal-bg" class="fixed inset-0 z-50 bg-black bg-opacity-70 flex items-center justify-center hidden transition-all duration-300">
+  <div class="bg-gradient-to-br from-[#232323] via-[#181818] to-[#2d1a00] rounded-3xl shadow-2xl p-0 max-w-md w-full relative animate-fade-in flex flex-col border-4 border-orange-500/30" id="error-modal" style="box-shadow:0 8px 48px 0 #ff880022,0 2px 0 #a259ff;">
+    <button id="close-error-modal" class="absolute top-3 right-3 text-gray-400 hover:text-orange-400 text-3xl font-bold transition-all">&times;</button>
+    <div class="flex items-center gap-3 px-8 pt-8 pb-2">
+      <svg class="w-10 h-10 text-orange-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 48 48">
+        <circle cx="24" cy="24" r="20" stroke-width="3"/>
+        <rect x="16" y="16" width="16" height="8" rx="2" stroke-width="3"/>
+      </svg>
+      <span class="text-2xl font-extrabold text-orange-400">Сообщить о проблеме</span>
+    </div>
+    <form id="error-form" class="flex flex-col gap-4 px-8 py-6">
+      <textarea class="bg-[#181818] border border-gray-700 rounded-xl p-3 text-white resize-none min-h-[80px]" placeholder="Опишите проблему или ошибку..." required></textarea>
+      <input type="email" class="bg-[#181818] border border-gray-700 rounded-xl p-3 text-white" placeholder="Ваш email (необязательно)">
+      <button type="submit" class="bg-gradient-to-r from-orange-500 to-purple-700 hover:from-orange-600 hover:to-purple-800 text-white font-bold py-2 px-6 rounded-xl transition-all shadow-lg">Отправить</button>
+    </form>
+    <div id="error-success" class="hidden text-green-400 mt-4 text-center font-bold text-lg">Спасибо! Ваше сообщение отправлено.</div>
+  </div>
+</div>
+<!-- Support Chat Modal -->
+<div id="support-chat-modal-bg" class="fixed inset-0 z-50 bg-black bg-opacity-70 flex items-center justify-center hidden transition-all duration-300">
+  <div class="bg-gradient-to-br from-[#232323] via-[#181818] to-[#2d1a00] rounded-3xl shadow-2xl max-w-3xl w-full h-[80vh] relative animate-fade-in flex flex-col border-4 border-orange-500/30" id="support-chat-modal" style="box-shadow:0 8px 48px 0 #ff880022,0 2px 0 #a259ff;">
+    <button id="close-support-chat" class="absolute top-5 right-7 text-gray-400 hover:text-orange-400 text-4xl font-bold transition-all">&times;</button>
+    <div class="flex items-center gap-3 px-10 pt-8 pb-4 border-b border-orange-700">
+      <svg class="w-12 h-12 text-orange-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 48 48">
+        <circle cx="24" cy="24" r="20" stroke-width="3"/>
+        <path d="M24 32v-4" stroke-width="3"/>
+        <circle cx="24" cy="18" r="3" fill="currentColor"/>
+      </svg>
+      <span class="text-3xl font-extrabold text-orange-400">Чат поддержки</span>
+      <span class="ml-auto text-base text-gray-400 font-semibold">Онлайн</span>
+    </div>
+    <div id="support-chat-messages" class="flex-1 overflow-y-auto px-10 py-6 space-y-4 bg-[#181818] rounded-b-3xl flex flex-col" style="min-height:0;">
+      <div class="flex items-start gap-3">
+        <div class="bg-gradient-to-br from-orange-500 to-purple-700 rounded-full w-12 h-12 flex items-center justify-center text-white font-bold text-lg shadow-lg">S</div>
+        <div class="bg-[#232323] rounded-2xl px-5 py-3 text-white max-w-[70%] shadow border border-orange-500 text-base">Здравствуйте! Чем можем помочь?</div>
+      </div>
+    </div>
+    <form id="support-chat-form" class="flex gap-3 p-8 border-t border-orange-700 bg-[#232323] rounded-b-3xl">
+      <input id="support-chat-input" type="text" class="flex-1 bg-[#181818] border border-gray-700 rounded-xl p-4 text-white text-lg" placeholder="Введите сообщение..." autocomplete="off" required>
+      <button type="submit" class="bg-gradient-to-r from-orange-500 to-purple-700 hover:from-orange-600 hover:to-purple-800 text-white font-bold py-3 px-8 rounded-xl text-lg transition-all shadow-lg">Отправить</button>
+    </form>
+  </div>
+</div>
+<script>
+document.getElementById('close-support-chat').onclick = function() {
+  document.getElementById('support-chat-modal-bg').classList.add('hidden');
+};
+document.getElementById('support-chat-modal-bg').addEventListener('click', function(e) {
+  if (e.target === this) this.classList.add('hidden');
+});
+document.getElementById('support-chat-form').onsubmit = function(e) {
+  e.preventDefault();
+  const input = document.getElementById('support-chat-input');
+  const messages = document.getElementById('support-chat-messages');
+  const msg = input.value.trim();
+  if (!msg) return;
+  const userMsg = document.createElement('div');
+  userMsg.className = 'flex items-start gap-3 justify-end';
+  userMsg.innerHTML = `<div class="bg-[#181818] rounded-xl px-4 py-2 text-white max-w-[70%] shadow border border-orange-500">${msg.replace(/</g,'&lt;')}</div><div class="bg-gradient-to-br from-orange-500 to-purple-700 rounded-full w-10 h-10 flex items-center justify-center text-white font-bold text-lg">Вы</div>`;
+  messages.appendChild(userMsg);
+  input.value = '';
+  messages.scrollTop = messages.scrollHeight;
+};
+</script>
+</body>
+</html> 

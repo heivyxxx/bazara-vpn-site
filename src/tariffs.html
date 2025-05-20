@@ -286,11 +286,21 @@
               if (btnMonth) btnMonth.style.display = 'none';
               if (newBtnYear) {
                 newBtnYear.style.display = '';
-                setTimeout(function(){ newBtnYear.style.opacity = 1; newBtnYear.style.pointerEvents = 'auto'; }, 50);
+                setTimeout(function(){
+                  newBtnYear.style.transition = 'opacity 0.7s, transform 0.7s';
+                  newBtnYear.style.opacity = 1;
+                  newBtnYear.style.transform = 'none';
+                  newBtnYear.style.pointerEvents = 'auto';
+                }, 50);
               }
               if (newBtnMonth) {
                 newBtnMonth.style.display = '';
-                setTimeout(function(){ newBtnMonth.style.opacity = 1; newBtnMonth.style.pointerEvents = 'auto'; }, 50);
+                setTimeout(function(){
+                  newBtnMonth.style.transition = 'opacity 0.7s, transform 0.7s';
+                  newBtnMonth.style.opacity = 1;
+                  newBtnMonth.style.transform = 'none';
+                  newBtnMonth.style.pointerEvents = 'auto';
+                }, 50);
               }
             }, 900);
           });
@@ -299,15 +309,15 @@
     </script>
     <!-- Новый тарифный блок в стиле Яндекс 360 -->
     <section class="w-full flex justify-center items-center py-16 px-4">
-      <div class="w-full max-w-6xl bg-[#232323] rounded-3xl shadow-2xl flex flex-col md:flex-row items-center md:items-stretch gap-16 md:gap-0 p-14 md:p-20 border border-[#333]" style="min-height:440px;">
+      <div id="vpn-main-block" class="w-full max-w-6xl bg-[#232323] rounded-3xl shadow-2xl flex flex-col md:flex-row items-center md:items-stretch gap-16 md:gap-0 p-14 md:p-20 border border-[#333] fade-up" style="min-height:440px; opacity:1; transform:none; transition:opacity 0.7s, transform 0.7s;">
         <div class="flex-1 flex flex-col justify-center items-start">
           <h2 class="text-4xl md:text-5xl font-extrabold text-white mb-6">VPN для важных задач</h2>
           <p class="text-xl md:text-2xl text-white mb-8 max-w-lg">Быстро. Безопасно. Анонимно.<br>Доступ к любимым сайтам и сервисам по всему миру — без ограничений и слежки. Всё по-базарному просто!</p>
           <div class="flex gap-4">
             <button id="open-payment-modal-year" class="rounded-xl px-8 py-4 text-lg font-bold bg-gradient-to-r from-orange-500 to-purple-500 text-white shadow-lg hover:scale-105 transition-transform explode-btn">2290₽/год</button>
             <button id="open-payment-modal-month" class="rounded-xl px-8 py-4 text-lg font-bold border-2 border-orange-400 text-orange-500 bg-[#232323] shadow hover:bg-orange-900 hover:scale-105 transition-transform explode-btn">399₽/мес</button>
-            <button id="new-payment-modal-year" style="display:none;opacity:0;pointer-events:none;" class="rounded-xl px-8 py-4 text-lg font-bold bg-gradient-to-r from-orange-500 to-purple-500 text-white shadow-lg hover:scale-105 transition-transform">1989₽/год</button>
-            <button id="new-payment-modal-month" style="display:none;opacity:0;pointer-events:none;" class="rounded-xl px-8 py-4 text-lg font-bold border-2 border-orange-400 text-orange-500 bg-[#232323] shadow hover:bg-orange-900 hover:scale-105 transition-transform">289₽/мес</button>
+            <button id="new-payment-modal-year" style="display:none;opacity:0;pointer-events:none;transform:translateY(40px);" class="rounded-xl px-8 py-4 text-lg font-bold bg-gradient-to-r from-orange-500 to-purple-500 text-white shadow-lg hover:scale-105 transition-transform fade-up">1989₽/год</button>
+            <button id="new-payment-modal-month" style="display:none;opacity:0;pointer-events:none;transform:translateY(40px);" class="rounded-xl px-8 py-4 text-lg font-bold border-2 border-orange-400 text-orange-500 bg-[#232323] shadow hover:bg-orange-900 hover:scale-105 transition-transform fade-up">289₽/мес</button>
           </div>
         </div>
         <div class="flex-1 flex justify-center items-center">
@@ -570,6 +580,26 @@
         payMethods.forEach(b => b.classList.remove('selected'));
         btn.classList.add('selected');
       };
+    });
+  </script>
+  <script>
+    // Fade-up анимация для блока VPN при уходе баннера
+    document.addEventListener('DOMContentLoaded', function() {
+      var banner = document.getElementById('promo-banner');
+      var vpnBlock = document.getElementById('vpn-main-block');
+      if (banner && vpnBlock) {
+        banner.addEventListener('transitionend', function(e) {
+          if (banner.style.opacity === '0') {
+            vpnBlock.style.opacity = 0;
+            vpnBlock.style.transform = 'translateY(40px)';
+            setTimeout(function(){
+              vpnBlock.style.transition = 'opacity 0.7s, transform 0.7s';
+              vpnBlock.style.opacity = 1;
+              vpnBlock.style.transform = 'none';
+            }, 30);
+          }
+        });
+      }
     });
   </script>
 </body>

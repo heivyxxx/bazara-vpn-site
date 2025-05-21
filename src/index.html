@@ -1375,7 +1375,6 @@ function setLang(lang) {
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n');
     if (translations[lang][key]) {
-      // Если перевод содержит HTML-теги, используем innerHTML
       if (/<[a-z][\s\S]*>/i.test(translations[lang][key])) {
         el.innerHTML = translations[lang][key];
       } else {
@@ -1384,6 +1383,15 @@ function setLang(lang) {
     }
   });
   renderReviews();
+  // Повторно назначаем обработчик, если элемент был пересоздан
+  const langBtnNew = document.getElementById('lang-dropdown-btn');
+  if (langBtnNew && !langBtnNew._langClick) {
+    langBtnNew.onclick = function(e) {
+      e.stopPropagation();
+      langDropdown.classList.toggle('hidden');
+    };
+    langBtnNew._langClick = true;
+  }
 }
 let lang = localStorage.getItem('lang') || 'ru';
 setLang(lang);

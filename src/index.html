@@ -1374,8 +1374,16 @@ function setLang(lang) {
   langCurrent.textContent = lang === 'ru' ? 'Русский' : 'English';
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n');
-    if (translations[lang][key]) el.textContent = translations[lang][key];
+    if (translations[lang][key]) {
+      // Если перевод содержит HTML-теги, используем innerHTML
+      if (/<[a-z][\s\S]*>/i.test(translations[lang][key])) {
+        el.innerHTML = translations[lang][key];
+      } else {
+        el.textContent = translations[lang][key];
+      }
+    }
   });
+  renderReviews();
 }
 let lang = localStorage.getItem('lang') || 'ru';
 setLang(lang);

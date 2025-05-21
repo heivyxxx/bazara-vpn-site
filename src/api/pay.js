@@ -16,24 +16,41 @@ export default async function handler(req, res) {
         });
       });
     }
+    console.log('PAY API BODY:', body);
+
     const { amount, method, order_id, description } = body;
+    const wataBody = {
+      amount,
+      method,
+      order_id,
+      description,
+      terminal_id: TERMINAL_ID
+    };
+    console.log('WATA BODY:', wataBody);
+
     const resp = await fetch('https://wata.pro/api/v1/invoice/create', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + API_KEY
       },
-      body: JSON.stringify({
-        amount,
-        method,
-        order_id,
-        description,
-        terminal_id: TERMINAL_ID
-      })
+      body: JSON.stringify(wataBody)
     });
-    const data = await resp.json();
+
+    const text = await resp.text();
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch (e) {
+      console.error('WATA RESPONSE NOT JSON:', text);
+      throw new Error('Wata.pro returned non-JSON: ' + text);
+    }
+
+    console.log('WATA RESPONSE:', data);
+
     res.status(resp.status).json(data);
   } catch (e) {
+    console.error('PAY API ERROR:', e);
     res.status(500).json({ error: 'Server error', details: e.message });
   }
 } 

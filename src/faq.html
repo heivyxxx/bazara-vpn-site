@@ -7,7 +7,15 @@
   <meta name="description" content="Часто задаваемые вопросы о BazaraVPN.">
   <link rel="icon" href="/favicon.ico">
   <script src="https://cdn.tailwindcss.com"></script>
-  <style>html,body{background:#181818!important;color:#fff;min-height:100vh;}.fade-up{opacity:0;transform:translateY(40px);transition:opacity 0.7s,transform 0.7s;}.fade-up.visible{opacity:1;transform:none;}</style>
+  <style>html,body{background:#181818!important;color:#fff;min-height:100vh;}.fade-up{opacity:0;transform:translateY(40px);transition:opacity 0.7s,transform 0.7s;}.fade-up.visible{opacity:1;transform:none;}
+#lang-dropdown {
+  top: 100% !important;
+  bottom: auto !important;
+  margin-top: 0.5rem !important;
+  margin-bottom: 0 !important;
+  z-index: 1050 !important;
+}
+</style>
 </head>
 <body class="min-h-screen flex flex-col text-white">
   <!-- HEADER (универсальный для всех страниц) -->
@@ -186,7 +194,28 @@ document.addEventListener('DOMContentLoaded', function() {
       'faq-q7': 'Как оплатить подписку?',
       'faq-a7': 'Мы принимаем карты, криптовалюту и другие способы оплаты.',
       'faq-q8': 'Законно ли использовать VPN?',
-      'faq-a8': 'В большинстве стран — да. Но проверьте законы вашей страны.'
+      'faq-a8': 'В большинстве стран — да. Но проверьте законы вашей страны.',
+      'header-advantages': 'Преимущества',
+      'header-tariffs': 'Тарифы',
+      'header-download': 'Скачать',
+      'header-support': 'Поддержка',
+      'header-what-vpn': 'Что такое VPN?',
+      'header-what-vpn-desc': 'VPN — это технология для анонимности, безопасности и обхода блокировок в интернете.',
+      'header-why-bazara': 'Почему BazaraVPN?',
+      'header-why-bazara-desc': 'Без логов, высокая скорость, поддержка стриминга и торрентов, современные протоколы.',
+      'header-all-features': 'Все функции',
+      'header-all-features-desc': 'Мультиустройство, защита Wi-Fi, смена IP, доступ к контенту по всему миру.',
+      'header-servers': 'VPN-серверы',
+      'header-servers-desc': 'Сервера в 10+ странах для стабильного и быстрого соединения.',
+      'header-streaming': 'VPN для стриминга',
+      'header-streaming-desc': 'Смотрите Netflix, Hulu, Disney+ и другие сервисы без ограничений.',
+      'header-countries': 'Страны',
+      'header-countries-desc': 'США, Турция, Япония, Германия, Франция, и другие.',
+      'header-devices': 'Устройства',
+      'header-devices-desc': 'Windows, macOS, Android, iOS, роутеры.',
+      'footer-contacts': 'Контакты',
+      'footer-privacy': 'Политика',
+      'footer-copyright': '© 2024 BazaraVPN',
     },
     en: {
       'faq-title': 'Frequently Asked Questions',
@@ -205,7 +234,28 @@ document.addEventListener('DOMContentLoaded', function() {
       'faq-q7': 'How do I pay for a subscription?',
       'faq-a7': 'We accept cards, cryptocurrency, and other payment methods.',
       'faq-q8': 'Is it legal to use a VPN?',
-      'faq-a8': 'In most countries — yes. But check the laws of your country.'
+      'faq-a8': 'In most countries — yes. But check the laws of your country.',
+      'header-advantages': 'Advantages',
+      'header-tariffs': 'Tariffs',
+      'header-download': 'Download',
+      'header-support': 'Support',
+      'header-what-vpn': 'What is VPN?',
+      'header-what-vpn-desc': 'VPN is a technology for anonymity, security, and bypassing internet blocks.',
+      'header-why-bazara': 'Why BazaraVPN?',
+      'header-why-bazara-desc': 'No logs, high speed, streaming and torrent support, modern protocols.',
+      'header-all-features': 'All features',
+      'header-all-features-desc': 'Multi-device, Wi-Fi protection, IP change, access to content worldwide.',
+      'header-servers': 'VPN servers',
+      'header-servers-desc': 'Servers in 10+ countries for stable and fast connection.',
+      'header-streaming': 'VPN for streaming',
+      'header-streaming-desc': 'Watch Netflix, Hulu, Disney+ and other services without limits.',
+      'header-countries': 'Countries',
+      'header-countries-desc': 'USA, Turkey, Japan, Germany, France, and more.',
+      'header-devices': 'Devices',
+      'header-devices-desc': 'Windows, macOS, Android, iOS, routers.',
+      'footer-contacts': 'Contacts',
+      'footer-privacy': 'Privacy',
+      'footer-copyright': '© 2024 BazaraVPN',
     }
   };
   function setLang(lang) {
@@ -213,16 +263,21 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('[data-i18n]').forEach(el => {
       const key = el.getAttribute('data-i18n');
       if (translations[lang][key]) {
-        el.innerHTML = translations[lang][key];
+        if (/<[a-z][\s\S]*>/i.test(translations[lang][key])) {
+          el.innerHTML = translations[lang][key];
+        } else {
+          el.textContent = translations[lang][key];
+        }
       }
     });
+    const langCurrent = document.getElementById('lang-current');
+    if (langCurrent) langCurrent.textContent = lang === 'ru' ? 'Русский' : 'English';
   }
   let lang = localStorage.getItem('lang') || 'ru';
   setLang(lang);
   // --- Переключатель языка (кнопка и дропдаун)
   const langBtn = document.getElementById('lang-dropdown-btn');
   const langDropdown = document.getElementById('lang-dropdown');
-  const langCurrent = document.getElementById('lang-current');
   const langSwitcher = document.getElementById('lang-switcher');
   if (langBtn && langDropdown) {
     langBtn.onclick = function(e) {
@@ -234,7 +289,6 @@ document.addEventListener('DOMContentLoaded', function() {
         e.stopPropagation();
         setLang(this.getAttribute('data-lang'));
         langDropdown.classList.add('hidden');
-        if (langCurrent) langCurrent.textContent = this.getAttribute('data-lang') === 'ru' ? 'Русский' : 'English';
       };
     });
     document.addEventListener('click', function(e) {

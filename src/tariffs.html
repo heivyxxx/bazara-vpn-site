@@ -440,9 +440,9 @@
         </div>
       </div>
       <div class="flex gap-4 mb-4">
-        <div class="flex-1 pay-method" id="pay-mir" data-i18n="modal-pay-mir">Карта MIR</div>
-        <div class="flex-1 pay-method" id="pay-pay" data-i18n="modal-pay-pay">Карта Пэй</div>
-        <div class="flex-1 pay-method" id="pay-add" data-i18n="modal-pay-add">Добавить карту</div>
+        <div class="flex-1 pay-method" id="pay-sbp" data-i18n="modal-pay-sbp">СБП</div>
+        <div class="flex-1 pay-method" id="pay-card" data-i18n="modal-pay-card">Добавить карту</div>
+        <div class="flex-1 pay-method" id="pay-crypto" data-i18n="modal-pay-crypto">Крипта</div>
       </div>
       <button id="pay-btn" class="relative w-full py-4 rounded-xl font-bold text-lg text-white bg-[#444] flex justify-center items-center px-8 hover:bg-orange-500 transition-colors duration-200 cursor-pointer" disabled>
         <span id="pay-btn-text" class="mx-auto" data-i18n="modal-pay-btn">Оплатить</span>
@@ -576,9 +576,9 @@
     if (modalBg) modalBg.onclick = (e) => { if (e.target === modalBg) { modalBg.classList.add('hidden'); modalBg.classList.remove('opacity-100'); } };
     // Выделение выбранного способа оплаты
     const payMethods = [
-      document.getElementById('pay-mir'),
-      document.getElementById('pay-pay'),
-      document.getElementById('pay-add')
+      document.getElementById('pay-sbp'),
+      document.getElementById('pay-card'),
+      document.getElementById('pay-crypto')
     ];
     payMethods.forEach(btn => {
       if (!btn) return;
@@ -661,9 +661,9 @@
           'modal-pay-feature-unlim': 'Безлимит',
           'modal-pay-feature-devices': '5 устройств',
           'modal-pay-feature-netflix': 'Доступ к Netflix',
-          'modal-pay-mir': 'Карта MIR',
-          'modal-pay-pay': 'Карта Пэй',
-          'modal-pay-add': 'Добавить карту',
+          'modal-pay-sbp': 'СБП',
+          'modal-pay-card': 'Добавить карту',
+          'modal-pay-crypto': 'Крипта',
           'modal-pay-btn': 'Оплатить',
           'modal-pay-agree': 'Нажимая кнопку "Оплатить", вы соглашаетесь с условиями <a href="#" class="underline">лицензионного соглашения</a>.',
           'modal-tg-title': 'Авторизация через Telegram',
@@ -717,9 +717,9 @@
           'modal-pay-feature-unlim': 'Unlimited',
           'modal-pay-feature-devices': '5 devices',
           'modal-pay-feature-netflix': 'Netflix access',
-          'modal-pay-mir': 'MIR Card',
-          'modal-pay-pay': 'Pay Card',
-          'modal-pay-add': 'Add Card',
+          'modal-pay-sbp': 'SBP',
+          'modal-pay-card': 'Add card',
+          'modal-pay-crypto': 'Crypto',
           'modal-pay-btn': 'Pay',
           'modal-pay-agree': 'By clicking "Pay", you agree to the <a href="#" class="underline">license agreement</a>.',
           'modal-tg-title': 'Login via Telegram',
@@ -805,6 +805,61 @@
         });
       }
     });
+  </script>
+  <script>
+    const API_KEY = "sk_test_xxx";
+    let selectedPayMethod = null;
+    const payBtn = document.getElementById('pay-btn');
+    const payBtnText = document.getElementById('pay-btn-text');
+    const payBtnPrice = document.getElementById('pay-btn-price');
+    const payMethods = [
+      document.getElementById('pay-sbp'),
+      document.getElementById('pay-card'),
+      document.getElementById('pay-crypto')
+    ];
+    payMethods.forEach(btn => {
+      if (!btn) return;
+      btn.onclick = () => {
+        payMethods.forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        selectedPayMethod = btn.id;
+        payBtn.disabled = false;
+      };
+    });
+    payBtn.onclick = async function() {
+      if (selectedPayMethod === 'pay-sbp') {
+        await createInvoice('sbp');
+      } else if (selectedPayMethod === 'pay-card') {
+        await createInvoice('card');
+      } else if (selectedPayMethod === 'pay-crypto') {
+        alert('Скоро будет доступно!');
+      }
+    };
+    async function createInvoice(method) {
+      try {
+        const resp = await fetch('https://wata.pro/api/v1/invoice/create', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + API_KEY
+          },
+          body: JSON.stringify({
+            amount: Number(payBtnPrice.textContent.replace(/[^\d]/g, '')),
+            method: method,
+            order_id: 'bazara_' + Math.floor(Math.random()*1000000),
+            description: 'Подписка BazaraVPN'
+          })
+        });
+        const data = await resp.json();
+        if (data && data.invoice_url) {
+          window.open(data.invoice_url, '_blank');
+        } else {
+          alert('Ошибка при создании счёта!');
+        }
+      } catch (e) {
+        alert('Ошибка соединения!');
+      }
+    }
   </script>
 </body>
 </html> 

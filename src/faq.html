@@ -10,7 +10,99 @@
   <style>html,body{background:#181818!important;color:#fff;min-height:100vh;}.fade-up{opacity:0;transform:translateY(40px);transition:opacity 0.7s,transform 0.7s;}.fade-up.visible{opacity:1;transform:none;}</style>
 </head>
 <body class="min-h-screen flex flex-col text-white">
-  <!--#include file="header.html" -->
+  <!-- HEADER (универсальный для всех страниц) -->
+  <nav class="fixed top-0 left-0 w-full z-20 bg-[#181818] shadow-sm border-b border-orange-900" id="main-navbar">
+    <div class="max-w-6xl mx-auto flex items-center justify-between py-4 px-4 md:px-8 text-lg gap-8">
+      <div class="flex items-center gap-3 logo-home cursor-pointer flex-shrink-0">
+        <a href="index.html" class="flex items-center gap-3">
+          <img src="logo-bazara.png" alt="BazaraVPN Logo" class="h-10 w-10">
+          <span class="text-3xl font-bold text-orange-500">Bazara<span class="text-white">VPN</span></span>
+        </a>
+      </div>
+      <div class="flex-1 flex justify-center">
+        <ul class="flex items-center gap-8 font-semibold">
+          <li class="relative group" id="advantages-menu">
+            <a href="index.html#advantages" class="text-white hover:text-orange-500 transition flex items-center gap-1 py-2 px-2 rounded-lg" data-i18n="header-advantages">
+              Преимущества
+              <svg class="w-5 h-5 text-orange-400 group-hover:rotate-180 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+            </a>
+            <!-- MegaMenu -->
+            <div id="mega-advantages" class="hidden group-hover:flex group-focus-within:flex absolute left-0 top-full mt-3 w-[700px] bg-[#232323] rounded-2xl shadow-2xl p-6 z-50 text-white animate-fade-in flex gap-8">
+              <div class="flex-1 min-w-[220px] flex flex-col gap-4">
+                <div>
+                  <div class="font-bold text-lg text-orange-400 mb-1" data-i18n="header-what-vpn">Что такое VPN?</div>
+                  <div class="text-gray-200 text-sm" data-i18n="header-what-vpn-desc">VPN — это технология для анонимности, безопасности и обхода блокировок в интернете.</div>
+                </div>
+                <div>
+                  <div class="font-bold text-lg text-orange-400 mb-1" data-i18n="header-why-bazara">Почему BazaraVPN?</div>
+                  <div class="text-gray-200 text-sm" data-i18n="header-why-bazara-desc">Без логов, высокая скорость, поддержка стриминга и торрентов, современные протоколы.</div>
+                </div>
+                <div>
+                  <div class="font-bold text-lg text-orange-400 mb-1" data-i18n="header-all-features">Все функции</div>
+                  <div class="text-gray-200 text-sm" data-i18n="header-all-features-desc">Мультиустройство, защита Wi-Fi, смена IP, доступ к контенту по всему миру.</div>
+                </div>
+                <div>
+                  <div class="font-bold text-lg text-orange-400 mb-1" data-i18n="header-servers">VPN-серверы</div>
+                  <div class="text-gray-200 text-sm" data-i18n="header-servers-desc">Сервера в 10+ странах для стабильного и быстрого соединения.</div>
+                </div>
+              </div>
+              <div class="flex-1 min-w-[220px] flex flex-col gap-4">
+                <div>
+                  <div class="font-bold text-lg text-orange-400 mb-1" data-i18n="header-streaming">VPN для стриминга</div>
+                  <div class="text-gray-200 text-sm" data-i18n="header-streaming-desc">Смотрите Netflix, Hulu, Disney+ и другие сервисы без ограничений.</div>
+                </div>
+                <div>
+                  <div class="font-bold text-lg text-orange-400 mb-1" data-i18n="header-countries">Страны</div>
+                  <div class="text-gray-200 text-sm" data-i18n="header-countries-desc">США, Турция, Япония, Германия, Франция, и другие.</div>
+                </div>
+                <div>
+                  <div class="font-bold text-lg text-orange-400 mb-1" data-i18n="header-devices">Устройства</div>
+                  <div class="text-gray-200 text-sm" data-i18n="header-devices-desc">Windows, macOS, Android, iOS, роутеры.</div>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li><a href="tariffs.html" class="text-white hover:text-orange-500 transition py-2 px-2 rounded-lg" data-i18n="header-tariffs">Тарифы</a></li>
+          <li class="relative group" id="download-menu">
+            <a href="index.html#download" class="text-white hover:text-orange-500 transition flex items-center gap-1 py-2 px-2 rounded-lg" data-i18n="header-download">
+              Скачать
+              <svg class="w-5 h-5 text-orange-400 group-hover:rotate-180 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+            </a>
+            <!-- MegaMenu for Download -->
+            <div id="mega-download" class="hidden group-hover:flex group-focus-within:flex absolute left-0 top-full mt-3 w-[500px] min-w-[320px] bg-[#232323] rounded-2xl shadow-2xl p-8 z-50 text-white animate-fade-in flex gap-10">
+              <div class="flex-1 min-w-[220px] flex flex-col gap-4">
+                <div class="font-bold text-orange-400 mb-2" data-i18n="header-devices">Устройства</div>
+                <a href="install-windows.html" class="flex items-center gap-2 py-2 hover:text-orange-400 transition whitespace-nowrap">Windows</a>
+                <a href="install-macos.html" class="flex items-center gap-2 py-2 hover:text-orange-400 transition whitespace-nowrap">macOS</a>
+                <a href="install-linux.html" class="flex items-center gap-2 py-2 hover:text-orange-400 transition whitespace-nowrap">Linux</a>
+                <a href="install-android.html" class="flex items-center gap-2 py-2 hover:text-orange-400 transition whitespace-nowrap">Android</a>
+                <a href="install-ios.html" class="flex items-center gap-2 py-2 hover:text-orange-400 transition whitespace-nowrap">iPhone / iPad</a>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="flex items-center gap-6 flex-shrink-0">
+        <!-- Поддержка -->
+        <a href="support.html" class="flex items-center gap-2 text-orange-500 font-bold py-2 px-3 rounded-lg border border-orange-500 bg-[#232323]" data-i18n="header-support">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <span class="hidden md:inline">Поддержка</span>
+        </a>
+        <!-- Language Switcher Dropdown (только RU/EN) -->
+        <div id="lang-switcher" class="relative flex items-center gap-2 select-none">
+          <button id="lang-dropdown-btn" class="flex items-center gap-2 px-3 py-2 bg-[#232323] rounded-lg border border-gray-700 text-white hover:bg-[#2c2c2c] focus:outline-none text-base">
+            <svg class="w-6 h-6 text-gray-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 0 20M12 2a15.3 15.3 0 0 0 0 20"/></svg>
+            <span id="lang-current" class="font-semibold">Русский</span>
+            <svg class="w-5 h-5 ml-1 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div id="lang-dropdown" class="hidden absolute right-0 mt-2 w-40 bg-[#232323] border border-gray-700 rounded-lg shadow-lg py-1 z-50">
+            <button type="button" class="w-full text-left px-5 py-3 text-base hover:bg-[#181818] text-white flex items-center gap-2" data-lang="ru">Русский</button>
+            <button type="button" class="w-full text-left px-5 py-3 text-base hover:bg-[#181818] text-white flex items-center gap-2" data-lang="en">English</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
   <main class="flex-1 flex flex-col items-center pt-24 pb-16">
 <!-- FAQ CONTENT START -->
 <section class="fade-up flex-1 flex flex-col items-center min-h-0 bg-[#181818] pt-8 pb-16 animate-fade-in">
@@ -156,5 +248,26 @@ document.addEventListener('DOMContentLoaded', function() {
 <!-- FAQ CONTENT END -->
   </main>
   <!--#include file="footer.html" -->
+  <footer class="w-full bg-[#232323] border-t border-[#333] py-6 px-4 flex items-center justify-center gap-12 text-gray-200 text-base mt-auto">
+    <!-- Контакты -->
+    <a href="contacts.html" class="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-[#181818] transition text-lg font-semibold">
+      <img src="assets/mail-3d.png" alt="Контакты" class="w-7 h-7" style="object-fit:contain;">
+      <span data-i18n="footer-contacts">Контакты</span>
+    </a>
+    <div class="text-center text-lg font-medium" data-i18n="footer-copyright">© 2024 BazaraVPN</div>
+    <a href="privacy.html" class="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-[#181818] transition text-lg font-semibold">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8 8h8v8H8z"/></svg>
+      <span data-i18n="footer-privacy">Политика</span>
+    </a>
+    <!-- Соцсети -->
+    <div class="flex items-center gap-5">
+      <a href="#" class="hover:text-orange-400" aria-label="Telegram"><svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 4L12 20l-3-7-7-3z"/></svg></a>
+      <a href="#" class="hover:text-orange-400" aria-label="Instagram"><svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="6"/><circle cx="12" cy="12" r="5"/><circle cx="17" cy="7" r="1.5"/></svg></a>
+      <!-- YouTube -->
+      <a href="#" class="hover:text-orange-400" aria-label="YouTube"><svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="4"/><polygon points="10,9 16,12 10,15" fill="currentColor"/></svg></a>
+      <!-- TikTok (актуальный SVG) -->
+      <a href="#" class="hover:text-orange-400" aria-label="TikTok"><svg class="w-7 h-7" viewBox="0 0 24 24" fill="none"><path d="M16.5 3a4.5 4.5 0 0 0 4.5 4.5v2A6.5 6.5 0 0 1 14.5 3h2zm-2 0v12.5a3.5 3.5 0 1 1-3.5-3.5h1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    </div>
+  </footer>
 </body>
 </html> 

@@ -765,7 +765,7 @@
     <div class="flex-1 flex justify-center">
       <ul class="flex items-center gap-8 font-semibold">
         <li class="relative group" id="advantages-menu">
-          <a href="index.html#advantages" class="text-white hover:text-orange-500 transition flex items-center gap-1 py-2 px-2 rounded-lg">
+          <a href="index.html#advantages" class="text-white hover:text-orange-500 transition flex items-center gap-1 py-2 px-2 rounded-lg" data-i18n="header-advantages">
             Преимущества
             <svg class="w-5 h-5 text-orange-400 group-hover:rotate-180 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
           </a>
@@ -805,9 +805,9 @@
             </div>
           </div>
         </li>
-        <li><a href="tariffs.html" class="text-white hover:text-orange-500 transition py-2 px-2 rounded-lg">Тарифы</a></li>
+        <li><a href="tariffs.html" class="text-white hover:text-orange-500 transition py-2 px-2 rounded-lg" data-i18n="header-tariffs">Тарифы</a></li>
         <li class="relative group" id="download-menu">
-          <a href="index.html#download" class="text-white hover:text-orange-500 transition flex items-center gap-1 py-2 px-2 rounded-lg">
+          <a href="index.html#download" class="text-white hover:text-orange-500 transition flex items-center gap-1 py-2 px-2 rounded-lg" data-i18n="header-download">
             Скачать
             <svg class="w-5 h-5 text-orange-400 group-hover:rotate-180 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
           </a>
@@ -827,19 +827,20 @@
     </div>
     <div class="flex items-center gap-6 flex-shrink-0">
       <!-- Поддержка -->
-      <a href="support.html" class="flex items-center gap-2 text-orange-500 font-bold py-2 px-3 rounded-lg border border-orange-500 bg-[#232323]">
+      <a href="support.html" class="flex items-center gap-2 text-orange-500 font-bold py-2 px-3 rounded-lg border border-orange-500 bg-[#232323]" data-i18n="header-support">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
         <span class="hidden md:inline">Поддержка</span>
       </a>
-      <!-- Language Switcher Dropdown (в навбаре) -->
+      <!-- Language Switcher Dropdown (только RU/EN) -->
       <div id="lang-switcher" class="relative flex items-center gap-2 select-none">
         <button id="lang-dropdown-btn" class="flex items-center gap-2 px-3 py-2 bg-[#232323] rounded-lg border border-gray-700 text-white hover:bg-[#2c2c2c] focus:outline-none text-base">
           <svg class="w-6 h-6 text-gray-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 0 20M12 2a15.3 15.3 0 0 0 0 20"/></svg>
           <span id="lang-current" class="font-semibold">Русский</span>
           <svg class="w-5 h-5 ml-1 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
         </button>
-        <div id="lang-dropdown" class="hidden absolute right-0 mt-2 w-60 bg-[#232323] border border-gray-700 rounded-lg shadow-lg py-1 z-50">
-          <!-- Языки будут добавлены через JS -->
+        <div id="lang-dropdown" class="hidden absolute right-0 mt-2 w-40 bg-[#232323] border border-gray-700 rounded-lg shadow-lg py-1 z-50">
+          <button type="button" class="w-full text-left px-5 py-3 text-base hover:bg-[#181818] text-white flex items-center gap-2" data-lang="ru">Русский</button>
+          <button type="button" class="w-full text-left px-5 py-3 text-base hover:bg-[#181818] text-white flex items-center gap-2" data-lang="en">English</button>
         </div>
       </div>
     </div>

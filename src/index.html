@@ -1261,7 +1261,7 @@ Array.from(document.querySelectorAll('.faq-answer')).forEach(ans => {
 });
 </script>
   
-
+<script>
 // --- ЛОГИКА ПЕРЕКЛЮЧЕНИЯ ЯЗЫКА (RU/EN) ---
 const translations = {
   ru: { 'header-advantages': 'Преимущества', 'header-tariffs': 'Тарифы', 'header-download': 'Скачать', 'header-support': 'Поддержка', 'faq-title': 'Часто задаваемые вопросы', 'try-free': 'Попробовать бесплатно' },
@@ -1298,71 +1298,73 @@ document.addEventListener('click', function(e) {
   }
 });
 // --- КОНЕЦ ЛОГИКИ ПЕРЕКЛЮЧЕНИЯ ЯЗЫКА ---
-      // 2. Смена темы (тёмная/светлая/системная)
-      const body = document.getElementById('main-body');
-      function setTheme(theme) {
-        if (theme === 'light') {
-          body.classList.add('light');
-          body.style.background = '#f7f7f9';
-          body.style.color = '#232323';
-          document.documentElement.style.setProperty('--tw-bg-opacity', '1');
-        } else if (theme === 'dark') {
-          body.classList.remove('light');
-          body.style.background = '#181818';
-          body.style.color = '';
-          document.documentElement.style.setProperty('--tw-bg-opacity', '1');
-        } else { // system
-          body.classList.remove('light');
-          body.style.background = window.matchMedia('(prefers-color-scheme: dark)').matches ? '#181818' : '#f7f7f9';
-          body.style.color = '';
-        }
-        localStorage.setItem('theme', theme);
-        // Обновить надпись на кнопке
-        const themeCurrent = document.getElementById('theme-current');
-        if (theme === 'light') themeCurrent.textContent = 'Светлая';
-        else if (theme === 'dark') themeCurrent.textContent = 'Тёмная';
-        else themeCurrent.textContent = 'Системная тема';
-      }
-      // Клики по пунктам меню темы (ТОЛЬКО по data-theme)
-      document.querySelectorAll('#theme-dropdown [data-theme]').forEach(btn => {
-        btn.addEventListener('click', function(e) {
-          e.stopPropagation();
-          setTheme(this.getAttribute('data-theme'));
-          document.getElementById('theme-dropdown').classList.add('hidden');
-        });
-      });
-      // Применить тему при загрузке
-      const savedTheme = localStorage.getItem('theme');
-      if (savedTheme) setTheme(savedTheme);
-      else setTheme('system');
-      // --- Theme dropdown (footer) ---
-      const themeSwitcherBtn = document.getElementById('theme-switcher-btn');
-      const themeDropdown = document.getElementById('theme-dropdown');
-      const themeSwitcherGroup = document.getElementById('theme-switcher-group');
-      if (themeSwitcherBtn && themeDropdown && themeSwitcherGroup) {
-        function toggleThemeDropdown(e) {
-          e.stopPropagation();
-          themeDropdown.classList.toggle('hidden');
-          themeDropdown.classList.toggle('dropdown-open');
-        }
-        function closeThemeDropdown() {
-          themeDropdown.classList.add('hidden');
-          themeDropdown.classList.remove('dropdown-open');
-        }
-        themeSwitcherBtn.addEventListener('click', toggleThemeDropdown);
-        document.addEventListener('click', function(e) {
-          if (!themeSwitcherGroup.contains(e.target)) closeThemeDropdown();
-        });
-        // Исправить позиционирование (всегда вверх)
-        themeDropdown.style.bottom = '100%';
-        themeDropdown.style.top = 'auto';
-        themeDropdown.style.marginBottom = '0.5rem';
-        themeDropdown.style.zIndex = '1000';
-      }
-      // --- Language dropdown (navbar) ---
-      // (оставить только один рабочий блок, остальные удалить)
-    });
-
+</script>
+<script>
+// 2. Смена темы (тёмная/светлая/системная)
+const body = document.getElementById('main-body');
+function setTheme(theme) {
+  if (theme === 'light') {
+    body.classList.add('light');
+    body.style.background = '#f7f7f9';
+    body.style.color = '#232323';
+    document.documentElement.style.setProperty('--tw-bg-opacity', '1');
+  } else if (theme === 'dark') {
+    body.classList.remove('light');
+    body.style.background = '#181818';
+    body.style.color = '';
+    document.documentElement.style.setProperty('--tw-bg-opacity', '1');
+  } else { // system
+    body.classList.remove('light');
+    body.style.background = window.matchMedia('(prefers-color-scheme: dark)').matches ? '#181818' : '#f7f7f9';
+    body.style.color = '';
+  }
+  localStorage.setItem('theme', theme);
+  // Обновить надпись на кнопке
+  const themeCurrent = document.getElementById('theme-current');
+  if (theme === 'light') themeCurrent.textContent = 'Светлая';
+  else if (theme === 'dark') themeCurrent.textContent = 'Тёмная';
+  else themeCurrent.textContent = 'Системная тема';
+}
+// Клики по пунктам меню темы (ТОЛЬКО по data-theme)
+document.querySelectorAll('#theme-dropdown [data-theme]').forEach(btn => {
+  btn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    setTheme(this.getAttribute('data-theme'));
+    document.getElementById('theme-dropdown').classList.add('hidden');
+  });
+});
+// Применить тему при загрузке
+const savedTheme = localStorage.getItem('theme');
+if (savedTheme) setTheme(savedTheme);
+else setTheme('system');
+// --- Theme dropdown (footer) ---
+const themeSwitcherBtn = document.getElementById('theme-switcher-btn');
+const themeDropdown = document.getElementById('theme-dropdown');
+const themeSwitcherGroup = document.getElementById('theme-switcher-group');
+if (themeSwitcherBtn && themeDropdown && themeSwitcherGroup) {
+  function toggleThemeDropdown(e) {
+    e.stopPropagation();
+    themeDropdown.classList.toggle('hidden');
+    themeDropdown.classList.toggle('dropdown-open');
+  }
+  function closeThemeDropdown() {
+    themeDropdown.classList.add('hidden');
+    themeDropdown.classList.remove('dropdown-open');
+  }
+  themeSwitcherBtn.addEventListener('click', toggleThemeDropdown);
+  document.addEventListener('click', function(e) {
+    if (!themeSwitcherGroup.contains(e.target)) closeThemeDropdown();
+  });
+  // Исправить позиционирование (всегда вверх)
+  themeDropdown.style.bottom = '100%';
+  themeDropdown.style.top = 'auto';
+  themeDropdown.style.marginBottom = '0.5rem';
+  themeDropdown.style.zIndex = '1000';
+}
+// --- Language dropdown (navbar) ---
+// (оставить только один рабочий блок, остальные удалить)
+</script>
+<script>
     // Promo banner close logic
     document.addEventListener('DOMContentLoaded', function() {
       const promoBanner = document.getElementById('promo-banner');

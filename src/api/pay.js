@@ -28,7 +28,7 @@ export default async function handler(req, res) {
     };
     console.log('WATA BODY:', wataBody);
 
-    const resp = await fetch('https://wata.pro/api/v1/invoice/create', {
+    const resp = await fetch('https://api.wata.pro/api/v1/invoice/create', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -25,6 +25,13 @@
       transform: translateY(-4px) scale(1.03);
       box-shadow: 0 10px 32px 0 #a259ff44, 0 2px 16px 0 #ff880088, 0 0 0 2px #a259ff22;
     }
+    #lang-dropdown {
+      top: 100% !important;
+      bottom: auto !important;
+      margin-top: 0.5rem !important;
+      margin-bottom: 0 !important;
+      z-index: 1050 !important;
+    }
   </style>
 </head>
 <body class="min-h-screen flex flex-col text-white" id="main-body">
@@ -169,9 +176,9 @@
         <img src="assets/trader.gif" alt="BazaraVPN" class="mx-auto w-52 h-52 object-contain drop-shadow-lg transition-transform duration-200 group-hover:scale-105 cursor-pointer" draggable="false" style="filter: drop-shadow(0 8px 32px #a259ff55);">
       </a>
       <h1 class="text-5xl md:text-6xl font-extrabold mb-4">
-        <span class="text-orange-400">Поддержка Bazara</span><span class="text-white">VPN</span>
+        <span class="text-orange-400" data-i18n="support-title">Поддержка Bazara</span><span class="text-white">VPN</span>
       </h1>
-      <div class="text-xl md:text-2xl text-[#B8B8B8] mb-6 max-w-xl mx-auto leading-relaxed" style="max-width:600px;line-height:1.7;">
+      <div class="text-xl md:text-2xl text-[#B8B8B8] mb-6 max-w-xl mx-auto leading-relaxed" style="max-width:600px;line-height:1.7;" data-i18n="support-desc">
         Всё для вашей уверенности: быстрые ответы, база знаний, обсуждение и личный чат с поддержкой. Мы всегда на связи!
       </div>
     </section>
@@ -179,27 +186,27 @@
     <section class="w-full max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 mb-20 px-4">
       <div class="bg-[#232323] rounded-[2.2rem] shadow-xl p-10 flex flex-col items-center text-center fade-up card-hover" style="animation-delay:0.2s; box-shadow: 0 8px 32px 0 #00000044, 0 2px 8px 0 #a259ff22;">
         <img src="assets/faq-3d.png" alt="FAQ" class="w-20 h-20 mb-6 select-none pointer-events-none mx-auto" draggable="false">
-        <div class="text-2xl font-extrabold text-white mb-2">FAQ</div>
-        <div class="text-[16px] text-[#B8B8B8] mb-5">Ответы на самые частые вопросы о BazaraVPN.</div>
-        <button class="w-full max-w-xs py-4 px-0 rounded-2xl font-bold text-lg text-white shadow-lg transition-all duration-200 bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700 mt-0" onclick="location.href='faq.html'">Открыть FAQ</button>
+        <div class="text-2xl font-extrabold text-white mb-2" data-i18n="support-faq-title">FAQ</div>
+        <div class="text-[16px] text-[#B8B8B8] mb-5" data-i18n="support-faq-desc">Ответы на самые частые вопросы о BazaraVPN.</div>
+        <button class="w-full max-w-xs py-4 px-0 rounded-2xl font-bold text-lg text-white shadow-lg transition-all duration-200 bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700 mt-0" onclick="location.href='faq.html'" data-i18n="support-faq-btn">Открыть FAQ</button>
       </div>
       <div class="bg-[#232323] rounded-[2.2rem] shadow-xl p-10 flex flex-col items-center text-center fade-up card-hover" style="animation-delay:0.3s; box-shadow: 0 8px 32px 0 #00000044, 0 2px 8px 0 #a259ff22;">
         <img src="assets/kb-3d.png" alt="База знаний" class="w-20 h-20 mb-6 select-none pointer-events-none mx-auto" draggable="false">
-        <div class="text-2xl font-extrabold text-white mb-2">База знаний</div>
-        <div class="text-[16px] text-[#B8B8B8] mb-5">Всё, что нужно знать о BazaraVPN и наших продуктах.</div>
-        <button class="w-full max-w-xs py-4 px-0 rounded-2xl font-bold text-lg text-white shadow-lg transition-all duration-200 bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700 mt-0" onclick="location.href='kb.html'">Открыть базу знаний</button>
+        <div class="text-2xl font-extrabold text-white mb-2" data-i18n="support-kb-title">База знаний</div>
+        <div class="text-[16px] text-[#B8B8B8] mb-5" data-i18n="support-kb-desc">Всё, что нужно знать о BazaraVPN и наших продуктах.</div>
+        <button class="w-full max-w-xs py-4 px-0 rounded-2xl font-bold text-lg text-white shadow-lg transition-all duration-200 bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700 mt-0" onclick="location.href='kb.html'" data-i18n="support-kb-btn">Открыть базу знаний</button>
       </div>
       <div class="bg-[#232323] rounded-[2.2rem] shadow-xl p-10 flex flex-col items-center text-center fade-up card-hover" style="animation-delay:0.4s; box-shadow: 0 8px 32px 0 #00000044, 0 2px 8px 0 #a259ff22;">
         <img src="assets/chat-3d.png" alt="Обсудить" class="w-20 h-20 mb-6 select-none pointer-events-none mx-auto" draggable="false">
-        <div class="text-2xl font-extrabold text-white mb-2">Обсудить</div>
-        <div class="text-[16px] text-[#B8B8B8] mb-5">Присоединяйтесь к обсуждению с командой и пользователями BazaraVPN.</div>
-        <button class="w-full max-w-xs py-4 px-0 rounded-2xl font-bold text-lg text-white shadow-lg transition-all duration-200 bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700 mt-0" onclick="location.href='discuss.html'">Перейти к обсуждению</button>
+        <div class="text-2xl font-extrabold text-white mb-2" data-i18n="support-discuss-title">Обсудить</div>
+        <div class="text-[16px] text-[#B8B8B8] mb-5" data-i18n="support-discuss-desc">Присоединяйтесь к обсуждению с командой и пользователями BazaraVPN.</div>
+        <button class="w-full max-w-xs py-4 px-0 rounded-2xl font-bold text-lg text-white shadow-lg transition-all duration-200 bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700 mt-0" onclick="location.href='discuss.html'" data-i18n="support-discuss-btn">Перейти к обсуждению</button>
       </div>
       <div class="bg-[#232323] rounded-[2.2rem] shadow-xl p-10 flex flex-col items-center text-center fade-up card-hover" style="animation-delay:0.5s; box-shadow: 0 8px 32px 0 #00000044, 0 2px 8px 0 #a259ff22;">
         <img src="assets/bug-3d.png" alt="Сообщить об ошибке" class="w-20 h-20 mb-6 select-none pointer-events-none mx-auto" draggable="false">
-        <div class="text-2xl font-extrabold text-white mb-2">Сообщить об ошибке</div>
-        <div class="text-[16px] text-[#B8B8B8] mb-5">Оставьте отзыв или сообщите о проблеме — мы всегда на связи!</div>
-        <button class="w-full max-w-xs py-4 px-0 rounded-2xl font-bold text-lg text-white shadow-lg transition-all duration-200 bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700 mt-0" onclick="console.log('Error btn'); openErrorModal()">Сообщить об ошибке</button>
+        <div class="text-2xl font-extrabold text-white mb-2" data-i18n="support-bug-title">Сообщить об ошибке</div>
+        <div class="text-[16px] text-[#B8B8B8] mb-5" data-i18n="support-bug-desc">Оставьте отзыв или сообщите о проблеме — мы всегда на связи!</div>
+        <button class="w-full max-w-xs py-4 px-0 rounded-2xl font-bold text-lg text-white shadow-lg transition-all duration-200 bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700 mt-0" onclick="console.log('Error btn'); openErrorModal()" data-i18n="support-bug-btn">Сообщить об ошибке</button>
       </div>
     </section>
     <div class="flex justify-center mt-8 mb-4">
@@ -463,6 +470,20 @@ document.addEventListener('DOMContentLoaded', function() {
       'footer-contacts': 'Контакты',
       'footer-privacy': 'Политика',
       'footer-copyright': '© 2024 BazaraVPN',
+      'support-title': 'Поддержка Bazara',
+      'support-desc': 'Всё для вашей уверенности: быстрые ответы, база знаний, обсуждение и личный чат с поддержкой. Мы всегда на связи!',
+      'support-faq-title': 'FAQ',
+      'support-faq-desc': 'Ответы на самые частые вопросы о BazaraVPN.',
+      'support-faq-btn': 'Открыть FAQ',
+      'support-kb-title': 'База знаний',
+      'support-kb-desc': 'Всё, что нужно знать о BazaraVPN и наших продуктах.',
+      'support-kb-btn': 'Открыть базу знаний',
+      'support-discuss-title': 'Обсудить',
+      'support-discuss-desc': 'Присоединяйтесь к обсуждению с командой и пользователями BazaraVPN.',
+      'support-discuss-btn': 'Перейти к обсуждению',
+      'support-bug-title': 'Сообщить об ошибке',
+      'support-bug-desc': 'Оставьте отзыв или сообщите о проблеме — мы всегда на связи!',
+      'support-bug-btn': 'Сообщить об ошибке',
     },
     en: {
       'header-advantages': 'Advantages',
@@ -486,6 +507,20 @@ document.addEventListener('DOMContentLoaded', function() {
       'footer-contacts': 'Contacts',
       'footer-privacy': 'Privacy',
       'footer-copyright': '© 2024 BazaraVPN',
+      'support-title': 'Bazara Support',
+      'support-desc': 'Everything for your confidence: quick answers, knowledge base, discussion, and direct chat with support. We are always in touch!',
+      'support-faq-title': 'FAQ',
+      'support-faq-desc': 'Answers to the most common questions about BazaraVPN.',
+      'support-faq-btn': 'Open FAQ',
+      'support-kb-title': 'Knowledge Base',
+      'support-kb-desc': 'Everything you need to know about BazaraVPN and our products.',
+      'support-kb-btn': 'Open Knowledge Base',
+      'support-discuss-title': 'Discuss',
+      'support-discuss-desc': 'Join the discussion with the team and BazaraVPN users.',
+      'support-discuss-btn': 'Go to discussion',
+      'support-bug-title': 'Report a bug',
+      'support-bug-desc': 'Leave feedback or report a problem — we are always in touch!',
+      'support-bug-btn': 'Report a bug',
     }
   };
   const langBtn = document.getElementById('lang-dropdown-btn');

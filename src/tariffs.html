@@ -142,6 +142,14 @@
         opacity: 0;
       }
     }
+    #mega-advantages, #mega-download {
+      border: 1.5px solid #232323 !important;
+      box-shadow: 0 4px 24px 0 #00000022 !important;
+    }
+    #mega-advantages, #mega-download {
+      z-index: 1002 !important;
+    }
+    #main-navbar { z-index: 1003 !important; }
   </style>
 </head>
 <body class="text-white min-h-screen flex flex-col" id="main-body">
@@ -244,12 +252,12 @@
       <div class="flex items-center gap-6">
         <img src="assets/tort.png" alt="Торт" class="w-32 h-32 md:w-40 md:h-40 select-none" draggable="false">
         <div class="flex flex-col gap-1">
-          <span class="text-3xl md:text-4xl font-extrabold text-white">Открытие BazaraVPN</span>
-          <span class="text-xl md:text-2xl font-semibold text-white">20% скидка на все тарифы!<br><span class='text-base text-white font-normal'>Только до 31 мая</span></span>
+          <span class="text-3xl md:text-4xl font-extrabold text-white" data-i18n="tariff-banner-title">Открытие BazaraVPN</span>
+          <span class="text-xl md:text-2xl font-semibold text-white" data-i18n="tariff-banner-desc">20% скидка на все тарифы!<br><span class='text-base text-white font-normal'>Только до 31 мая</span></span>
         </div>
       </div>
       <div class="flex flex-col items-center">
-        <span class="bg-white text-orange-600 font-bold px-7 py-3 rounded-2xl text-2xl shadow-lg">Жми!</span>
+        <span class="bg-white text-orange-600 font-bold px-7 py-3 rounded-2xl text-2xl shadow-lg" data-i18n="tariff-banner-btn">Жми!</span>
       </div>
     </div>
     <script>
@@ -312,13 +320,13 @@
     <section class="w-full flex justify-center items-center py-16 px-4 fade-up">
       <div id="vpn-main-block" class="w-full max-w-6xl bg-[#232323] rounded-3xl shadow-2xl flex flex-col md:flex-row items-center md:items-stretch gap-16 md:gap-0 p-14 md:p-20 border border-[#333] fade-up" style="min-height:440px; opacity:1; transform:none; transition:opacity 0.7s, transform 0.7s;">
         <div class="flex-1 flex flex-col justify-center items-start">
-          <h2 class="text-4xl md:text-5xl font-extrabold text-white mb-6">VPN для важных задач</h2>
-          <p class="text-xl md:text-2xl text-white mb-8 max-w-lg">Быстро. Безопасно. Анонимно.<br>Доступ к любимым сайтам и сервисам по всему миру — без ограничений и слежки. Всё по-базарному просто!</p>
+          <h2 class="text-4xl md:text-5xl font-extrabold text-white mb-6" data-i18n="tariff-main-title">VPN для важных задач</h2>
+          <p class="text-xl md:text-2xl text-white mb-8 max-w-lg" data-i18n="tariff-main-desc">Быстро. Безопасно. Анонимно.<br>Доступ к любимым сайтам и сервисам по всему миру — без ограничений и слежки. Всё по-базарному просто!</p>
           <div class="flex gap-4">
-            <button id="open-payment-modal-year" class="rounded-xl px-8 py-4 text-lg font-bold bg-gradient-to-r from-orange-500 to-purple-500 text-white shadow-lg hover:scale-105 transition-transform explode-btn">2290₽/год</button>
-            <button id="open-payment-modal-month" class="rounded-xl px-8 py-4 text-lg font-bold border-2 border-orange-400 text-orange-500 bg-[#232323] shadow hover:bg-orange-900 hover:scale-105 transition-transform explode-btn">399₽/мес</button>
-            <button id="new-payment-modal-year" style="display:none;opacity:0;pointer-events:none;transform:translateY(40px);" class="rounded-xl px-8 py-4 text-lg font-bold bg-gradient-to-r from-orange-500 to-purple-500 text-white shadow-lg hover:scale-105 transition-transform fade-up">1989₽/год</button>
-            <button id="new-payment-modal-month" style="display:none;opacity:0;pointer-events:none;transform:translateY(40px);" class="rounded-xl px-8 py-4 text-lg font-bold border-2 border-orange-400 text-orange-500 bg-[#232323] shadow hover:bg-orange-900 hover:scale-105 transition-transform fade-up">289₽/мес</button>
+            <button id="open-payment-modal-year" class="rounded-xl px-8 py-4 text-lg font-bold bg-gradient-to-r from-orange-500 to-purple-500 text-white shadow-lg hover:scale-105 transition-transform explode-btn" data-i18n="tariff-btn-year">2290₽/год</button>
+            <button id="open-payment-modal-month" class="rounded-xl px-8 py-4 text-lg font-bold border-2 border-orange-400 text-orange-500 bg-[#232323] shadow hover:bg-orange-900 hover:scale-105 transition-transform explode-btn" data-i18n="tariff-btn-month">399₽/мес</button>
+            <button id="new-payment-modal-year" style="display:none;opacity:0;pointer-events:none;transform:translateY(40px);" class="rounded-xl px-8 py-4 text-lg font-bold bg-gradient-to-r from-orange-500 to-purple-500 text-white shadow-lg hover:scale-105 transition-transform fade-up" data-i18n="tariff-btn-year-new">1989₽/год</button>
+            <button id="new-payment-modal-month" style="display:none;opacity:0;pointer-events:none;transform:translateY(40px);" class="rounded-xl px-8 py-4 text-lg font-bold border-2 border-orange-400 text-orange-500 bg-[#232323] shadow hover:bg-orange-900 hover:scale-105 transition-transform fade-up" data-i18n="tariff-btn-month-new">289₽/мес</button>
           </div>
         </div>
         <div class="flex-1 flex justify-center items-center">
@@ -333,9 +341,9 @@
           <img src="assets/gift-3d.png" alt="Подарок" class="w-24 h-24 md:w-32 md:h-32 select-none" draggable="false">
         </div>
         <div class="flex-1 flex flex-col items-start">
-          <h3 class="text-2xl md:text-3xl font-extrabold text-white mb-2">Попробуйте BazaraVPN бесплатно</h3>
-          <p class="text-base md:text-lg text-white mb-5">3 дня полной защиты — без оплаты. без карты.<br>Оцени качество — а потом решишь сам.</p>
-          <button class="bg-orange-500 hover:bg-orange-600 text-white font-bold text-lg rounded-xl" style="border-radius:1.1rem; min-width:260px; padding:1.1rem 2.5rem; box-shadow:0 2px 16px 0 #ff880088; transition:box-shadow 0.22s,background 0.18s;">Активировать пробную версию</button>
+          <h3 class="text-2xl md:text-3xl font-extrabold text-white mb-2" data-i18n="tariff-try-title">Попробуйте BazaraVPN бесплатно</h3>
+          <p class="text-base md:text-lg text-white mb-5" data-i18n="tariff-try-desc">3 дня полной защиты — без оплаты. без карты.<br>Оцени качество — а потом решишь сам.</p>
+          <button class="bg-orange-500 hover:bg-orange-600 text-white font-bold text-lg rounded-xl" style="border-radius:1.1rem; min-width:260px; padding:1.1rem 2.5rem; box-shadow:0 2px 16px 0 #ff880088; transition:box-shadow 0.22s,background 0.18s;" data-i18n="tariff-try-btn">Активировать пробную версию</button>
         </div>
       </div>
     </section>
@@ -343,8 +351,8 @@
     <!-- Apps Section (devices illustration) -->
     <section class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-10 mb-20 px-4 fade-up" id="apps-block">
       <div class="flex-1 flex flex-col items-start md:items-start text-left mb-8 md:mb-0">
-        <h2 class="text-3xl font-bold text-orange-400 mb-4">Приложения для всех устройств</h2>
-        <p class="text-lg text-white mb-6 max-w-lg">BazaraVPN работает на Windows, macOS, Android, iOS и даже на роутерах. Защитите все свои устройства одним кликом!</p>
+        <h2 class="text-3xl font-bold text-orange-400 mb-4" data-i18n="tariff-apps-title">Приложения для всех устройств</h2>
+        <p class="text-lg text-white mb-6 max-w-lg" data-i18n="tariff-apps-desc">BazaraVPN работает на Windows, macOS, Android, iOS и даже на роутерах. Защитите все свои устройства одним кликом!</p>
         <div class="flex flex-wrap gap-4">
           <a href="install-windows.html" class="device-anim bg-orange-500 text-white font-semibold px-4 py-2 rounded-lg flex items-center gap-2 shadow-lg hover:bg-orange-600 transition"><img src="assets/windows.png" alt="Windows" class="w-7 h-7">Windows</a>
           <a href="install-macos.html" class="device-anim bg-orange-500 text-white font-semibold px-4 py-2 rounded-lg flex items-center gap-2 shadow-lg hover:bg-orange-600 transition"><img src="assets/apple.png" alt="macOS" class="w-7 h-7">macOS</a>
@@ -360,15 +368,15 @@
     <!-- Guarantee Block -->
     <div class="guarantee-block flex items-center gap-4 fade-up" id="guarantee-block">
       <div>
-        <div class="text-2xl font-bold mb-1">30-дневная гарантия возврата денег</div>
-        <div class="text-lg">Если что-то не понравится — вернём деньги без лишних вопросов. Просто напиши в поддержку!</div>
+        <div class="text-2xl font-bold mb-1" data-i18n="tariff-guarantee-title">30-дневная гарантия возврата денег</div>
+        <div class="text-lg" data-i18n="tariff-guarantee-desc">Если что-то не понравится — вернём деньги без лишних вопросов. Просто напиши в поддержку!</div>
       </div>
     </div>
     <!-- Testimonial -->
     <div class="testimonial fade-up" id="testimonial-block" style="position:relative;">
-      Пользуюсь BazaraVPN уже год — скорость отличная, поддержка отвечает быстро, а тарифы реально выгодные!
-      <div class="mt-2 text-orange-400 font-bold">— Настоящий пользователь</div>
-      <span style="position:absolute;right:1.2rem;bottom:0.2rem;font-size:2.5rem;color:#ff8800;">"
+      <span data-i18n="tariff-testimonial">Пользуюсь BazaraVPN уже год — скорость отличная, поддержка отвечает быстро, а тарифы реально выгодные!</span>
+      <div class="mt-2 text-orange-400 font-bold" data-i18n="tariff-testimonial-user">— Настоящий пользователь</div>
+      <span style="position:absolute;right:1.2rem;bottom:0.2rem;font-size:2.5rem;color:#ff8800;">"</span>
     </div>
   </main>
   <!-- FOOTER (универсальный) -->
@@ -611,7 +619,24 @@
           'header-countries-desc': 'США, Турция, Япония, Германия, Франция, и другие.',
           'header-devices': 'Устройства',
           'header-devices-desc': 'Windows, macOS, Android, iOS, роутеры.',
-          // ... можно добавить переводы для тарифных блоков ...
+          'tariff-banner-title': 'Открытие BazaraVPN',
+          'tariff-banner-desc': '20% скидка на все тарифы!<br><span class=\'text-base text-white font-normal\'>Только до 31 мая</span>',
+          'tariff-banner-btn': 'Жми!',
+          'tariff-main-title': 'VPN для важных задач',
+          'tariff-main-desc': 'Быстро. Безопасно. Анонимно.<br>Доступ к любимым сайтам и сервисам по всему миру — без ограничений и слежки. Всё по-базарному просто!',
+          'tariff-btn-year': '2290₽/год',
+          'tariff-btn-month': '399₽/мес',
+          'tariff-btn-year-new': '1989₽/год',
+          'tariff-btn-month-new': '289₽/мес',
+          'tariff-try-title': 'Попробуйте BazaraVPN бесплатно',
+          'tariff-try-desc': '3 дня полной защиты — без оплаты. без карты.<br>Оцени качество — а потом решишь сам.',
+          'tariff-try-btn': 'Активировать пробную версию',
+          'tariff-apps-title': 'Приложения для всех устройств',
+          'tariff-apps-desc': 'BazaraVPN работает на Windows, macOS, Android, iOS и даже на роутерах. Защитите все свои устройства одним кликом!',
+          'tariff-guarantee-title': '30-дневная гарантия возврата денег',
+          'tariff-guarantee-desc': 'Если что-то не понравится — вернём деньги без лишних вопросов. Просто напиши в поддержку!',
+          'tariff-testimonial': 'Пользуюсь BazaraVPN уже год — скорость отличная, поддержка отвечает быстро, а тарифы реально выгодные!',
+          'tariff-testimonial-user': '— Настоящий пользователь',
         },
         en: {
           'header-advantages': 'Advantages',
@@ -632,7 +657,24 @@
           'header-countries-desc': 'USA, Turkey, Japan, Germany, France, and more.',
           'header-devices': 'Devices',
           'header-devices-desc': 'Windows, macOS, Android, iOS, routers.',
-          // ... можно добавить переводы для тарифных блоков ...
+          'tariff-banner-title': 'BazaraVPN Launch',
+          'tariff-banner-desc': '20% discount on all tariffs!<br><span class=\'text-base text-white font-normal\'>Only until May 31</span>',
+          'tariff-banner-btn': 'Go!',
+          'tariff-main-title': 'VPN for important tasks',
+          'tariff-main-desc': 'Fast. Secure. Anonymous.<br>Access your favorite sites and services worldwide — no limits, no tracking. As simple as it gets!',
+          'tariff-btn-year': '2290₽/year',
+          'tariff-btn-month': '399₽/month',
+          'tariff-btn-year-new': '1989₽/year',
+          'tariff-btn-month-new': '289₽/month',
+          'tariff-try-title': 'Try BazaraVPN for free',
+          'tariff-try-desc': '3 days of full protection — no payment, no card.<br>Try the quality — then decide for yourself.',
+          'tariff-try-btn': 'Activate trial',
+          'tariff-apps-title': 'Apps for all devices',
+          'tariff-apps-desc': 'BazaraVPN works on Windows, macOS, Android, iOS, and even routers. Protect all your devices with one click!',
+          'tariff-guarantee-title': '30-day money-back guarantee',
+          'tariff-guarantee-desc': 'If you don\'t like something — we\'ll refund your money, no questions asked. Just contact support!',
+          'tariff-testimonial': 'I\'ve been using BazaraVPN for a year — great speed, fast support, and really good prices!',
+          'tariff-testimonial-user': '— Real user',
         }
       };
       const langBtn = document.getElementById('lang-dropdown-btn');

@@ -522,6 +522,67 @@
     trialBtn.addEventListener('click', openTgAuthModal);
   }
   </script>
+  <!-- === WATA.PRO ОПЛАТА: рабочий блок === -->
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJQdWJsaWNJZCI6IjNhMTk3OTk3LTlmYzUtZmZkMS0wZGFjLTljYTM1NDZiNWE2ZSIsIlRva2VuVmVyc2lvbiI6IjIiLCJleHAiOjE3NzkzNjQ5ODEsImlzcyI6Imh0dHBzOi8vYXBpLndhdGEucHJvIiwiYXVkIjoiaHR0cHM6Ly9hcGkud2F0YS5wcm8vYXBpL2gyaCJ9.BWlLZN9ktkrccefuwU3KZoOlyHP3VJdFwPQRdxXmBuk";
+    let selectedPayMethod = null;
+    const payBtn = document.getElementById('pay-btn');
+    const payBtnText = document.getElementById('pay-btn-text');
+    const payBtnPrice = document.getElementById('pay-btn-price');
+    const payMethods = [
+      document.getElementById('pay-sbp'),
+      document.getElementById('pay-card'),
+      document.getElementById('pay-crypto')
+    ];
+    payMethods.forEach(btn => {
+      if (!btn) return;
+      btn.onclick = () => {
+        payMethods.forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        selectedPayMethod = btn.id;
+        payBtn.disabled = false;
+      };
+    });
+    payBtn.onclick = async function() {
+      if (selectedPayMethod === 'pay-sbp') {
+        await createInvoice('sbp');
+      } else if (selectedPayMethod === 'pay-card') {
+        await createInvoice('card');
+      } else if (selectedPayMethod === 'pay-crypto') {
+        alert('Скоро будет доступно!');
+      }
+    };
+    async function createInvoice(method) {
+      try {
+        const resp = await fetch('https://wata.pro/api/v1/invoice/create', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + API_KEY
+          },
+          body: JSON.stringify({
+            amount: Number(payBtnPrice.textContent.replace(/[^\d]/g, '')),
+            method: method,
+            order_id: 'bazara_' + Math.floor(Math.random()*1000000),
+            description: 'Подписка BazaraVPN',
+            terminal_id: '3a197997-9fc7-6a0e-0da2-768404f400d7'
+          })
+        });
+        const data = await resp.json();
+        if (data && data.invoice_url) {
+          window.open(data.invoice_url, '_blank');
+        } else {
+          alert('Ошибка при создании счёта!');
+          console.log('Wata.pro error:', data);
+        }
+      } catch (e) {
+        alert('Ошибка соединения!');
+        console.log('Wata.pro fetch error:', e);
+      }
+    }
+  });
+  </script>
   <script>
     // Анимация появления блоков при скролле
     function revealOnScroll() {

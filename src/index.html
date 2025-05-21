@@ -1383,15 +1383,6 @@ function setLang(lang) {
     }
   });
   renderReviews();
-  // Повторно назначаем обработчик, если элемент был пересоздан
-  const langBtnNew = document.getElementById('lang-dropdown-btn');
-  if (langBtnNew && !langBtnNew._langClick) {
-    langBtnNew.onclick = function(e) {
-      e.stopPropagation();
-      langDropdown.classList.toggle('hidden');
-    };
-    langBtnNew._langClick = true;
-  }
 }
 let lang = localStorage.getItem('lang') || 'ru';
 setLang(lang);

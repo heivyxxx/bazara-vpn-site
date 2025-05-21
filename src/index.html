@@ -1400,7 +1400,7 @@ Array.from(document.querySelectorAll('.faq-answer')).forEach(ans => {
       });
       // Закрытие по клику вне меню
       document.addEventListener('click', function(e) {
-        if (!langSwitcher.contains(e.target)) {
+        if (!langSwitcher || !langSwitcher.contains(e.target)) {
           langDropdown.classList.add('hidden');
           langDropdown.classList.remove('dropdown-open');
         }
@@ -1650,7 +1650,7 @@ Array.from(document.querySelectorAll('.faq-answer')).forEach(ans => {
         langDropdown.classList.toggle('hidden');
       });
       document.addEventListener('click', function(e) {
-        if (!langSwitcher.contains(e.target)) {
+        if (!langSwitcher || !langSwitcher.contains(e.target)) {
           langDropdown.classList.add('hidden');
           langDropdown.classList.remove('dropdown-open');
         }

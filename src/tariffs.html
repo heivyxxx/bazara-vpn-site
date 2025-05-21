@@ -391,13 +391,13 @@
     <!-- Контакты -->
     <a href="contacts.html" class="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-[#181818] transition text-lg font-semibold">
       <img src="assets/mail-3d.png" alt="Контакты" class="w-7 h-7" style="object-fit:contain;">
-      <span>Контакты</span>
+      <span data-i18n="footer-contacts">Контакты</span>
     </a>
-    <div class="text-center text-lg font-medium">© 2024 BazaraVPN</div>
+    <div class="text-center text-lg font-medium" data-i18n="footer-copyright">© 2024 BazaraVPN</div>
     <!-- Политика -->
     <a href="privacy.html" class="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-[#181818] transition text-lg font-semibold">
       <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8 8h8v8H8z"/></svg>
-      <span>Политика</span>
+      <span data-i18n="footer-privacy">Политика</span>
     </a>
     <!-- Соцсети -->
     <div class="flex items-center gap-5">
@@ -644,6 +644,9 @@
           'tariff-guarantee-desc': 'Если что-то не понравится — вернём деньги без лишних вопросов. Просто напиши в поддержку!',
           'tariff-testimonial': 'Пользуюсь BazaraVPN уже год — скорость отличная, поддержка отвечает быстро, а тарифы реально выгодные!',
           'tariff-testimonial-user': '— Настоящий пользователь',
+          'footer-contacts': 'Контакты',
+          'footer-privacy': 'Политика',
+          'footer-copyright': '© 2024 BazaraVPN',
         },
         en: {
           'header-advantages': 'Advantages',
@@ -682,6 +685,9 @@
           'tariff-guarantee-desc': 'If you don\'t like something — we\'ll refund your money, no questions asked. Just contact support!',
           'tariff-testimonial': 'I\'ve been using BazaraVPN for a year — great speed, fast support, and really good prices!',
           'tariff-testimonial-user': '— Real user',
+          'footer-contacts': 'Contacts',
+          'footer-privacy': 'Privacy',
+          'footer-copyright': '© 2024 BazaraVPN',
         }
       };
       const langBtn = document.getElementById('lang-dropdown-btn');

@@ -1236,12 +1236,27 @@
 </section>
 
 <script>
-// FAQ: раскрытие/сворачивание по клику, без подсветки и без классов hidden
+// FAQ: раскрытие/сворачивание по клику через inline-стили (maxHeight, opacity), без hidden и классов
 Array.from(document.querySelectorAll('.faq-question')).forEach(btn => {
   btn.addEventListener('click', function() {
     const item = btn.closest('.faq-item');
-    item.classList.toggle('open');
+    const answer = item.querySelector('.faq-answer');
+    if (!answer) return;
+    if (answer.style.maxHeight && answer.style.maxHeight !== '0px') {
+      answer.style.maxHeight = '0px';
+      answer.style.opacity = '0';
+      item.classList.remove('open');
+    } else {
+      answer.style.maxHeight = answer.scrollHeight + 'px';
+      answer.style.opacity = '1';
+      item.classList.add('open');
+    }
   });
+});
+// При загрузке: все ответы скрыты
+Array.from(document.querySelectorAll('.faq-answer')).forEach(ans => {
+  ans.style.maxHeight = '0px';
+  ans.style.opacity = '0';
 });
 </script>
   

@@ -401,23 +401,19 @@
   <div class="bg-gradient-to-br from-[#232323] via-[#181818] to-[#2d1a00] rounded-3xl shadow-2xl max-w-3xl w-full h-[80vh] relative animate-fade-in flex flex-col border-4 border-orange-500/30" id="support-chat-modal" style="box-shadow:0 8px 48px 0 #ff880022,0 2px 0 #a259ff;">
     <button id="close-support-chat" class="absolute top-5 right-7 text-gray-400 hover:text-orange-400 text-4xl font-bold transition-all">&times;</button>
     <div class="flex items-center gap-3 px-10 pt-8 pb-4 border-b border-orange-700">
-      <svg class="w-12 h-12 text-orange-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 48 48">
-        <circle cx="24" cy="24" r="20" stroke-width="3"/>
-        <path d="M24 32v-4" stroke-width="3"/>
-        <circle cx="24" cy="18" r="3" fill="currentColor"/>
-      </svg>
-      <span class="text-3xl font-extrabold text-orange-400">Чат поддержки</span>
-      <span class="ml-auto text-base text-gray-400 font-semibold">Онлайн</span>
+      <img src="assets/trader.gif" alt="Support" class="w-12 h-12 rounded-full" style="object-fit:contain;" />
+      <span class="text-3xl font-extrabold text-orange-400" data-i18n="support-chat-title">Чат поддержки</span>
+      <span class="ml-auto text-base text-gray-400 font-semibold" data-i18n="support-chat-online">Онлайн</span>
     </div>
     <div id="support-chat-messages" class="flex-1 overflow-y-auto px-10 py-6 space-y-4 bg-[#181818] rounded-b-3xl flex flex-col" style="min-height:0;">
       <div class="flex items-start gap-3">
         <div class="bg-gradient-to-br from-orange-500 to-purple-700 rounded-full w-12 h-12 flex items-center justify-center text-white font-bold text-lg shadow-lg">S</div>
-        <div class="bg-[#232323] rounded-2xl px-5 py-3 text-white max-w-[70%] shadow border border-orange-500 text-base">Здравствуйте! Чем можем помочь?</div>
+        <div class="bg-[#232323] rounded-2xl px-5 py-3 text-white max-w-[70%] shadow border border-orange-500 text-base" data-i18n="support-chat-greeting">Здравствуйте! Чем можем помочь?</div>
       </div>
     </div>
     <form id="support-chat-form" class="flex gap-3 p-8 border-t border-orange-700 bg-[#232323] rounded-b-3xl">
-      <input id="support-chat-input" type="text" class="flex-1 bg-[#181818] border border-gray-700 rounded-xl p-4 text-white text-lg" placeholder="Введите сообщение..." autocomplete="off" required>
-      <button type="submit" class="bg-gradient-to-r from-orange-500 to-purple-700 hover:from-orange-600 hover:to-purple-800 text-white font-bold py-3 px-8 rounded-xl text-lg transition-all shadow-lg">Отправить</button>
+      <input id="support-chat-input" type="text" class="flex-1 bg-[#181818] border border-gray-700 rounded-xl p-4 text-white text-lg" placeholder="Введите сообщение..." autocomplete="off" required data-i18n-placeholder="support-chat-placeholder">
+      <button type="submit" class="bg-gradient-to-r from-orange-500 to-purple-700 hover:from-orange-600 hover:to-purple-800 text-white font-bold py-3 px-8 rounded-xl text-lg transition-all shadow-lg" data-i18n="support-chat-send">Отправить</button>
     </form>
   </div>
 </div>

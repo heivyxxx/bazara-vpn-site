@@ -588,6 +588,15 @@
         payBtn.disabled = false;
       };
     });
+    payBtn.onclick = async function() {
+      if (selectedPayMethod === 'pay-sbp') {
+        await createInvoice('sbp');
+      } else if (selectedPayMethod === 'pay-card') {
+        await createInvoice('card');
+      } else if (selectedPayMethod === 'pay-crypto') {
+        alert('Скоро будет доступно!');
+      }
+    };
   </script>
   <script>
     // Fade-up анимация для блока VPN при уходе баннера

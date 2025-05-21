@@ -51,6 +51,6 @@ export default async function handler(req, res) {
     res.status(resp.status).json(data);
   } catch (e) {
     console.error('PAY API ERROR:', e);
-    res.status(500).json({ error: 'Server error', details: e.message });
+    res.status(500).json({ error: 'Server error', details: e.message, stack: e.stack });
   }
 } 

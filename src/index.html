@@ -938,7 +938,7 @@
         <path d="M170 80v60l40 20" stroke="#fff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
         <circle cx="170" cy="140" r="16" fill="#fff" fill-opacity="0.15"/>
       </svg>
-      <div class="absolute left-32 bottom-72 bg-[#232323ee] text-white text-base px-4 py-1.5 rounded-lg shadow-lg opacity-0 pointer-events-none greeting-anim whitespace-nowrap" style="transition: opacity 0.5s; z-index:3;">Привет! Чем могу помочь?</div>
+      <div class="absolute left-32 bottom-72 bg-[#232323ee] text-white text-base px-4 py-1.5 rounded-lg shadow-lg opacity-0 pointer-events-none greeting-anim whitespace-nowrap" style="transition: opacity 0.5s; z-index:3;" data-i18n="greeting-bubble">Привет! Чем могу помочь?</div>
     </div>
   </div>
 </section>
@@ -1139,99 +1139,43 @@
   <div>
     <!-- ВОПРОС 1 -->
     <div class="faq-item">
-      <button class="faq-question" type="button">
-        Как работает BazaraVPN?
-        <span class="faq-arrow">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 10 12 16 18 10"/></svg>
-        </span>
-      </button>
-      <div class="faq-answer">
-        BazaraVPN защищает вашу конфиденциальность в Интернете, скрывая ваш настоящий IP-адрес. Когда ваше виртуальное местоположение скрыто, отслеживать, ограничивать или продавать вашу онлайн-активность становится намного сложнее.
-      </div>
+      <button class="faq-question" type="button" data-i18n="faq-q1">Как работает BazaraVPN?</button>
+      <div class="faq-answer" data-i18n="faq-a1">BazaraVPN защищает вашу конфиденциальность в Интернете, скрывая ваш настоящий IP-адрес. Когда ваше виртуальное местоположение скрыто, отслеживать, ограничивать или продавать вашу онлайн-активность становится намного сложнее.</div>
     </div>
     <!-- ВОПРОС 2 -->
     <div class="faq-item">
-      <button class="faq-question" type="button">
-        Как установить BazaraVPN?
-        <span class="faq-arrow">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 10 12 16 18 10"/></svg>
-        </span>
-      </button>
-      <div class="faq-answer">
-        Чтобы установить BazaraVPN, скачайте приложение для вашего устройства и следуйте нашему руководству по настройке. Затем просто войдите в свой аккаунт, и вы будете готовы к подключению.
-      </div>
+      <button class="faq-question" type="button" data-i18n="faq-q2">Как установить BazaraVPN?</button>
+      <div class="faq-answer" data-i18n="faq-a2">Чтобы установить BazaraVPN, скачайте приложение для вашего устройства и следуйте нашему руководству по настройке. Затем просто войдите в свой аккаунт, и вы будете готовы к подключению.</div>
     </div>
     <!-- ВОПРОС 3 -->
     <div class="faq-item">
-      <button class="faq-question" type="button">
-        Можно ли пользоваться бесплатно?
-        <span class="faq-arrow">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 10 12 16 18 10"/></svg>
-        </span>
-      </button>
-      <div class="faq-answer">
-        Да, у нас есть бесплатный пробный период и базовые функции без оплаты.
-      </div>
+      <button class="faq-question" type="button" data-i18n="faq-q3">Можно ли пользоваться бесплатно?</button>
+      <div class="faq-answer" data-i18n="faq-a3">Да, у нас есть бесплатный пробный период и базовые функции без оплаты.</div>
     </div>
     <!-- ВОПРОС 4 -->
     <div class="faq-item">
-      <button class="faq-question" type="button">
-        Какие устройства поддерживаются?
-        <span class="faq-arrow">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 10 12 16 18 10"/></svg>
-        </span>
-      </button>
-      <div class="faq-answer">
-        Windows, macOS, Android, iOS, роутеры и другие.
-      </div>
+      <button class="faq-question" type="button" data-i18n="faq-q4">Какие устройства поддерживаются?</button>
+      <div class="faq-answer" data-i18n="faq-a4">Windows, macOS, Android, iOS, роутеры и другие.</div>
     </div>
     <!-- ВОПРОС 5 -->
     <div class="faq-item">
-      <button class="faq-question" type="button">
-        Можно ли смотреть Netflix и другие стриминги?
-        <span class="faq-arrow">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 10 12 16 18 10"/></svg>
-        </span>
-      </button>
-      <div class="faq-answer">
-        Да, BazaraVPN позволяет обходить блокировки и смотреть любые стриминговые сервисы.
-      </div>
+      <button class="faq-question" type="button" data-i18n="faq-q5">Можно ли смотреть Netflix и другие стриминги?</button>
+      <div class="faq-answer" data-i18n="faq-a5">Да, BazaraVPN позволяет обходить блокировки и смотреть любые стриминговые сервисы.</div>
     </div>
     <!-- ВОПРОС 6 -->
     <div class="faq-item">
-      <button class="faq-question" type="button">
-        Сколько устройств можно подключить?
-        <span class="faq-arrow">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 10 12 16 18 10"/></svg>
-        </span>
-      </button>
-      <div class="faq-answer">
-        До 5 устройств одновременно на одном аккаунте.
-      </div>
+      <button class="faq-question" type="button" data-i18n="faq-q6">Сколько устройств можно подключить?</button>
+      <div class="faq-answer" data-i18n="faq-a6">До 5 устройств одновременно на одном аккаунте.</div>
     </div>
     <!-- ВОПРОС 7 -->
     <div class="faq-item">
-      <button class="faq-question" type="button">
-        Как оплатить подписку?
-        <span class="faq-arrow">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 10 12 16 18 10"/></svg>
-        </span>
-      </button>
-      <div class="faq-answer">
-        Мы принимаем карты, криптовалюту и другие способы оплаты.
-      </div>
+      <button class="faq-question" type="button" data-i18n="faq-q7">Как оплатить подписку?</button>
+      <div class="faq-answer" data-i18n="faq-a7">Мы принимаем карты, криптовалюту и другие способы оплаты.</div>
     </div>
     <!-- ВОПРОС 8 -->
     <div class="faq-item">
-      <button class="faq-question" type="button">
-        Законно ли использовать VPN?
-        <span class="faq-arrow">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 10 12 16 18 10"/></svg>
-        </span>
-      </button>
-      <div class="faq-answer">
-        В большинстве стран — да. Но проверьте законы вашей страны.
-      </div>
+      <button class="faq-question" type="button" data-i18n="faq-q8">Законно ли использовать VPN?</button>
+      <div class="faq-answer" data-i18n="faq-a8">В большинстве стран — да. Но проверьте законы вашей страны.</div>
     </div>
   </div>
 </section>
@@ -1314,6 +1258,7 @@ document.addEventListener('DOMContentLoaded', function() {
       'feature-speed': 'Скорость до 1 Гбит/с',
       'feature-nologs': 'Без логов и слежки',
       'feature-devices': 'До 5 устройств',
+      'greeting-bubble': 'Привет! Чем могу помочь?',
     },
     en: {
       "hero-title-orange": "Bazara",
@@ -1364,6 +1309,7 @@ document.addEventListener('DOMContentLoaded', function() {
       "feature-speed": "Speed up to 1 Gbps",
       "feature-nologs": "No logs or tracking",
       "feature-devices": "Up to 5 devices",
+      "greeting-bubble": "Hi! How can I help you?",
     }
   };
   const langBtn = document.getElementById('lang-dropdown-btn');

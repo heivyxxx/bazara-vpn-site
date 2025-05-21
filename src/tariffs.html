@@ -589,5 +589,92 @@
       }
     });
   </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const translations = {
+        ru: {
+          'header-advantages': 'Преимущества',
+          'header-tariffs': 'Тарифы',
+          'header-download': 'Скачать',
+          'header-support': 'Поддержка',
+          'header-what-vpn': 'Что такое VPN?',
+          'header-what-vpn-desc': 'VPN — это технология для анонимности, безопасности и обхода блокировок в интернете.',
+          'header-why-bazara': 'Почему BazaraVPN?',
+          'header-why-bazara-desc': 'Без логов, высокая скорость, поддержка стриминга и торрентов, современные протоколы.',
+          'header-all-features': 'Все функции',
+          'header-all-features-desc': 'Мультиустройство, защита Wi-Fi, смена IP, доступ к контенту по всему миру.',
+          'header-servers': 'VPN-серверы',
+          'header-servers-desc': 'Сервера в 10+ странах для стабильного и быстрого соединения.',
+          'header-streaming': 'VPN для стриминга',
+          'header-streaming-desc': 'Смотрите Netflix, Hulu, Disney+ и другие сервисы без ограничений.',
+          'header-countries': 'Страны',
+          'header-countries-desc': 'США, Турция, Япония, Германия, Франция, и другие.',
+          'header-devices': 'Устройства',
+          'header-devices-desc': 'Windows, macOS, Android, iOS, роутеры.',
+          // ... можно добавить переводы для тарифных блоков ...
+        },
+        en: {
+          'header-advantages': 'Advantages',
+          'header-tariffs': 'Tariffs',
+          'header-download': 'Download',
+          'header-support': 'Support',
+          'header-what-vpn': 'What is VPN?',
+          'header-what-vpn-desc': 'VPN is a technology for anonymity, security, and bypassing internet blocks.',
+          'header-why-bazara': 'Why BazaraVPN?',
+          'header-why-bazara-desc': 'No logs, high speed, streaming and torrent support, modern protocols.',
+          'header-all-features': 'All features',
+          'header-all-features-desc': 'Multi-device, Wi-Fi protection, IP change, access to content worldwide.',
+          'header-servers': 'VPN servers',
+          'header-servers-desc': 'Servers in 10+ countries for stable and fast connection.',
+          'header-streaming': 'VPN for streaming',
+          'header-streaming-desc': 'Watch Netflix, Hulu, Disney+ and other services without limits.',
+          'header-countries': 'Countries',
+          'header-countries-desc': 'USA, Turkey, Japan, Germany, France, and more.',
+          'header-devices': 'Devices',
+          'header-devices-desc': 'Windows, macOS, Android, iOS, routers.',
+          // ... можно добавить переводы для тарифных блоков ...
+        }
+      };
+      const langBtn = document.getElementById('lang-dropdown-btn');
+      const langDropdown = document.getElementById('lang-dropdown');
+      const langCurrent = document.getElementById('lang-current');
+      const langSwitcher = document.getElementById('lang-switcher');
+      function setLang(lang) {
+        localStorage.setItem('lang', lang);
+        if (langCurrent) langCurrent.textContent = lang === 'ru' ? 'Русский' : 'English';
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+          const key = el.getAttribute('data-i18n');
+          if (translations[lang][key]) {
+            if (/<[a-z][\s\S]*>/i.test(translations[lang][key])) {
+              el.innerHTML = translations[lang][key];
+            } else {
+              el.textContent = translations[lang][key];
+            }
+          }
+        });
+        if (typeof renderReviews === 'function') renderReviews();
+      }
+      let lang = localStorage.getItem('lang') || 'ru';
+      setLang(lang);
+      if (langBtn && langDropdown) {
+        langBtn.onclick = function(e) {
+          e.stopPropagation();
+          langDropdown.classList.toggle('hidden');
+        };
+        langDropdown.querySelectorAll('[data-lang]').forEach(btn => {
+          btn.onclick = function(e) {
+            e.stopPropagation();
+            setLang(this.getAttribute('data-lang'));
+            langDropdown.classList.add('hidden');
+          };
+        });
+        document.addEventListener('click', function(e) {
+          if (langDropdown && langSwitcher && !langSwitcher.contains(e.target)) {
+            langDropdown.classList.add('hidden');
+          }
+        });
+      }
+    });
+  </script>
 </body>
 </html> 

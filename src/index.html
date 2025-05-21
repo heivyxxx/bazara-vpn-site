@@ -1262,182 +1262,42 @@ Array.from(document.querySelectorAll('.faq-answer')).forEach(ans => {
 </script>
   
 
-  <script>
-    const baseEn = {
-      'hero-title': 'BazaraVPN',
-      'hero-sub': 'Fast. Secure. Anonymous.',
-      'try-free': 'Try for free',
-      'adv-nologs': 'no logs',
-      'adv-speed': 'high speed',
-      'adv-countries': 'up to 10 countries',
-      'adv-devices': 'up to 5 devices',
-      'tariff-1': '1 month',
-      'tariff-2': '3 months',
-      'tariff-3': '12 months',
-      'price-1': '299₽',
-      'price-2': '899₽',
-      'price-3': '2199₽',
-      'desc-devices': 'up to 5 devices',
-      'desc-traffic': 'Unlimited traffic',
-      'desc-netflix': 'Netflix access',
-      'desc-torrent': 'Torrents allowed',
-      'buy': 'Buy',
-      'windows': 'Windows',
-      'macos': 'macOS',
-      'android': 'Android',
-      'ios': 'iOS',
-      'referral': 'Referral program',
-      'faq': 'FAQ',
-    };
-    const translations = {
-      en: baseEn,
-      ru: {
-        'hero-title': 'BazaraVPN',
-        'hero-sub': 'Быстро. Безопасно. Анонимно.',
-        'try-free': 'Попробовать бесплатно',
-        'adv-nologs': 'без логов',
-        'adv-speed': 'высокая скорость',
-        'adv-countries': 'до 10 стран',
-        'adv-devices': 'до 5 устройств',
-        'tariff-1': '1 месяц',
-        'tariff-2': '3 месяца',
-        'tariff-3': '12 месяцев',
-        'price-1': '299₽',
-        'price-2': '899₽',
-        'price-3': '2199₽',
-        'desc-devices': 'до 5 устройств',
-        'desc-traffic': 'Безлимитный трафик',
-        'desc-netflix': 'Доступ к Netflix',
-        'desc-torrent': 'Торренты разрешены',
-        'buy': 'Купить',
-        'windows': 'Windows',
-        'macos': 'macOS',
-        'android': 'Android',
-        'ios': 'iOS',
-        'referral': 'Реферальная программа',
-        'faq': 'Часто задаваемые вопросы',
-        'header-advantages': 'Преимущества',
-        'header-tariffs': 'Тарифы',
-        'header-download': 'Скачать',
-        'header-support': 'Поддержка',
-        'faq-title': 'Часто задаваемые вопросы',
-      },
-      id: baseEn,
-      da: baseEn,
-      de: baseEn,
-      es: baseEn,
-      'es-419': baseEn,
-      fr: baseEn,
-      it: baseEn,
-      lt: baseEn,
-      nl: baseEn,
-      no: baseEn,
-      pl: baseEn,
-      pt: baseEn,
-      'pt-br': baseEn,
-      fi: baseEn,
-      sv: baseEn,
-      tr: baseEn,
-      uk: baseEn,
-      he: baseEn,
-      ko: baseEn,
-      ar: baseEn,
-      ja: baseEn,
-      'zh-cn': baseEn,
-      'zh-tw': baseEn,
-    };
-    // Для всех остальных языков используем английский
-    ['id','da','de','es','es-419','fr','it','lt','nl','no','pl','pt','pt-br','fi','sv','tr','uk','he','ko','ar','ja','zh-cn','zh-tw'].forEach(l => {
-      translations[l] = baseEn;
-    });
-    const langNames = {
-      id: 'Bahasa Indonesia',
-      da: 'Dansk',
-      de: 'Deutsch',
-      en: 'English',
-      es: 'Español',
-      'es-419': 'Español Latinoamericano',
-      fr: 'Français',
-      it: 'Italiano',
-      lt: 'Lietuvių',
-      nl: 'Nederlands',
-      no: 'Norsk',
-      pl: 'Polski',
-      pt: 'Português',
-      'pt-br': 'Português Brasileiro',
-      fi: 'Suomi',
-      sv: 'Svenska',
-      tr: 'Türkçe',
-      ru: 'Русский',
-      uk: 'Українська',
-      he: 'עברית',
-      ko: '한국어',
-      ar: 'العربية',
-      ja: '日本語',
-      'zh-cn': '简体中文',
-      'zh-tw': '繁體中文（台灣）'
-    };
-    let lang = 'ru';
-    // Dropdown logic
-    const langBtn = document.getElementById('lang-dropdown-btn');
-    const langDropdown = document.getElementById('lang-dropdown');
-    const langCurrent = document.getElementById('lang-current');
-    langBtn.onclick = function(e) {
-      e.stopPropagation();
-      langDropdown.classList.toggle('hidden');
-    };
-    document.addEventListener('click', function() {
-      langDropdown.classList.add('hidden');
-    });
-    langDropdown.querySelectorAll('[data-lang]').forEach(el => {
-      el.onclick = function(e) {
-        e.stopPropagation();
-        lang = this.getAttribute('data-lang');
-        langCurrent.textContent = langNames[lang] || lang;
-        langDropdown.classList.add('hidden');
-        // Теперь реально меняем язык сайта для любого языка
-        document.querySelectorAll('[data-i18n]').forEach(el => {
-          const key = el.getAttribute('data-i18n');
-          if (key === 'hero-title') return;
-          if (translations[lang][key]) el.textContent = translations[lang][key];
-        });
-      };
-    });
-    window.addEventListener('DOMContentLoaded', () => {
-      document.querySelectorAll('[data-i18n]').forEach(el => {
-        const key = el.getAttribute('data-i18n');
-        if (key === 'hero-title') return;
-        if (translations[lang][key]) el.textContent = translations[lang][key];
-      });
-
-      // 2. Обработчик открытия/закрытия дропдауна
-      langBtn.addEventListener('click', function(e) {
-        e.stopPropagation();
-        langDropdown.classList.toggle('hidden');
-        langDropdown.classList.toggle('dropdown-open');
-      });
-      // Закрытие по клику вне меню
-      document.addEventListener('click', function(e) {
-        if (!langSwitcher || !langSwitcher.contains(e.target)) {
-          langDropdown.classList.add('hidden');
-          langDropdown.classList.remove('dropdown-open');
-        }
-      });
-      // 3. Обработчик выбора языка
-      langDropdown.addEventListener('click', function(e) {
-        const btn = e.target.closest('[data-lang]');
-        if (btn) {
-          lang = btn.getAttribute('data-lang');
-          langCurrent.textContent = langNames[lang] || lang;
-          langDropdown.classList.add('hidden');
-          langDropdown.classList.remove('dropdown-open');
-          document.querySelectorAll('[data-i18n]').forEach(el => {
-            const key = el.getAttribute('data-i18n');
-            if (key === 'hero-title') return;
-            if (translations[lang][key]) el.textContent = translations[lang][key];
-          });
-        }
-      });
+// --- ЛОГИКА ПЕРЕКЛЮЧЕНИЯ ЯЗЫКА (RU/EN) ---
+const translations = {
+  ru: { 'header-advantages': 'Преимущества', 'header-tariffs': 'Тарифы', 'header-download': 'Скачать', 'header-support': 'Поддержка', 'faq-title': 'Часто задаваемые вопросы', 'try-free': 'Попробовать бесплатно' },
+  en: { 'header-advantages': 'Advantages', 'header-tariffs': 'Tariffs', 'header-download': 'Download', 'header-support': 'Support', 'faq-title': 'Frequently Asked Questions', 'try-free': 'Try for free' }
+};
+const langBtn = document.getElementById('lang-dropdown-btn');
+const langDropdown = document.getElementById('lang-dropdown');
+const langCurrent = document.getElementById('lang-current');
+const langSwitcher = document.getElementById('lang-switcher');
+function setLang(lang) {
+  localStorage.setItem('lang', lang);
+  langCurrent.textContent = lang === 'ru' ? 'Русский' : 'English';
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (translations[lang][key]) el.textContent = translations[lang][key];
+  });
+}
+let lang = localStorage.getItem('lang') || 'ru';
+setLang(lang);
+langBtn.onclick = function(e) {
+  e.stopPropagation();
+  langDropdown.classList.toggle('hidden');
+};
+langDropdown.querySelectorAll('[data-lang]').forEach(btn => {
+  btn.onclick = function(e) {
+    e.stopPropagation();
+    setLang(this.getAttribute('data-lang'));
+    langDropdown.classList.add('hidden');
+  };
+});
+document.addEventListener('click', function(e) {
+  if (langDropdown && langSwitcher && !langSwitcher.contains(e.target)) {
+    langDropdown.classList.add('hidden');
+  }
+});
+// --- КОНЕЦ ЛОГИКИ ПЕРЕКЛЮЧЕНИЯ ЯЗЫКА ---
       // 2. Смена темы (тёмная/светлая/системная)
       const body = document.getElementById('main-body');
       function setTheme(theme) {

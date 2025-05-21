@@ -1381,18 +1381,7 @@ Array.from(document.querySelectorAll('.faq-answer')).forEach(ans => {
         if (key === 'hero-title') return;
         if (translations[lang][key]) el.textContent = translations[lang][key];
       });
-      // 1. Автозаполнение языков в выпадающем меню
-      if (langDropdown && langDropdown.children.length < 2) {
-        const popularLangs = ['ru','en','de','fr','es','it','tr','uk','pl','zh-cn','ja'];
-        popularLangs.forEach(l => {
-          const btn = document.createElement('button');
-          btn.type = 'button';
-          btn.className = 'w-full text-left px-5 py-3 text-base hover:bg-[#181818] text-white flex items-center gap-2';
-          btn.setAttribute('data-lang', l);
-          btn.innerHTML = `<span>${langNames[l] || l}</span>${l==='ru' ? '<span class=\"ml-2 text-xs bg-orange-500 text-white rounded px-2 py-0.5\">Текущий</span>' : ''}`;
-          langDropdown.appendChild(btn);
-        });
-      }
+
       // 2. Обработчик открытия/закрытия дропдауна
       langBtn.addEventListener('click', function(e) {
         e.stopPropagation();

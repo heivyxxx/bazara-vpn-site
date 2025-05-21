@@ -546,14 +546,27 @@
     const payBtnText = document.getElementById('pay-btn-text');
     const payBtnPrice = document.getElementById('pay-btn-price');
     function showModal(type, isNew) {
+      const modalTitle = document.getElementById('modal-tariff-title');
+      const payBtnText = document.getElementById('pay-btn-text');
+      let lang = localStorage.getItem('lang') || 'ru';
       if (type === 'year') {
         modalTitle.setAttribute('data-i18n', 'modal-pay-title-year');
-        payBtnText.textContent = 'Оплатить';
-        payBtnPrice.textContent = isNew ? '1989₽' : '2290₽';
       } else {
         modalTitle.setAttribute('data-i18n', 'modal-pay-title-month');
-        payBtnText.textContent = 'Оплатить';
-        payBtnPrice.textContent = isNew ? '289₽' : '399₽';
+      }
+      // Обновляем текст кнопки оплаты через data-i18n и перевод
+      if (payBtnText) {
+        payBtnText.setAttribute('data-i18n', 'modal-pay-btn');
+        if (translations[lang] && translations[lang]['modal-pay-btn']) {
+          payBtnText.textContent = translations[lang]['modal-pay-btn'];
+        }
+      }
+      if (typeof translations !== 'undefined') {
+        if (modalTitle) {
+          if (translations[lang][modalTitle.getAttribute('data-i18n')]) {
+            modalTitle.textContent = translations[lang][modalTitle.getAttribute('data-i18n')];
+          }
+        }
       }
       modalBg.classList.remove('hidden');
       modalBg.classList.add('opacity-100');

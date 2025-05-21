@@ -1262,107 +1262,87 @@ Array.from(document.querySelectorAll('.faq-answer')).forEach(ans => {
 </script>
   
 <script>
-// --- ЛОГИКА ПЕРЕКЛЮЧЕНИЯ ЯЗЫКА (RU/EN) ---
+// ... существующий translations ...
 const translations = {
   ru: {
-    'hero-title-orange': 'Bazara',
-    'hero-title-white': 'VPN',
-    'hero-subtitle': 'Быстро. Безопасно. Анонимно. <br><span class=\'text-gray-300 text-lg block mt-4\'>VPN, который не спрашивает лишнего и не грузит мозги. Просто включил — и ты уже в безопасности. Всё по-базарному просто!</span>',
-    'try-free': 'Попробовать бесплатно',
-    'card-1-title': 'Свобода без компромиссов',
-    'card-1-text': 'Тысячи пользователей выбрали BazaraVPN, чтобы вернуть себе контроль и спокойствие. Рейтинг 4.9/5 — не просто так.',
-    'card-2-title': 'Доступ без границ',
-    'card-2-text': 'Открывай сайты, стримы и приложения из любой точки мира — быстро, стабильно и безопасно.',
-    'card-3-title': 'Универсальная защита',
-    'card-3-text': 'BazaraVPN работает на всех популярных устройствах: Windows, macOS, Android, iOS и даже роутерах.',
-    'reviews-title': 'Отзывы пользователей',
-    'leave-review': 'Оставить отзыв',
-    'block-1-title': 'Всегда на связи.\nДаже когда весь мир против.',
-    'block-1-text': 'BazaraVPN подключает тебя к миру — без слежки, блокировок и прерываний. Работай, чиль, смотри YouTube и телегу, даже если кто-то решил "запретить".',
-    'block-2-title': 'Оставайся в тени.\nВсегда.',
-    'block-2-text': 'Никакого отслеживания, логов и рекламных трекеров. Твой трафик шифруется, а личные данные остаются твоими. BazaraVPN — как ниндзя в интернете, только круче.',
-    'block-3-title': 'Ничего лишнего.\nТолько результат.',
-    'block-3-text': 'BazaraVPN запускается с одного нажатия и сразу работает. Без регистрации, без настройки, без вопросов. Нажал "подключить" — и ты уже в безопасности.',
-    'how-title': 'Как это работает?',
-    'how-1-title': 'Установите BazaraVPN за пару секунд',
-    'how-1-text': 'Скачайте приложение на любое устройство: Windows, Mac, Android или iOS. Всё просто: открыл, поставил, зашёл. Без лишних настроек и сложных инструкций. Даже бабушка справится (если надо — справимся за неё ).',
-    'how-2-title': 'Выберите страну — и в путь',
-    'how-2-text': 'Откройте BazaraVPN, выберите нужную страну из списка и нажмите одну кнопку. Всё — ты в безопасности, трафик шифруется, контент разблокирован. Автоматически. Мгновенно. Всегда стабильно.',
-    'how-3-title': 'Никаких границ. Ни в интернете, ни в жизни.',
-    'how-3-text': 'Смотри стримы, работай, учись, скачивай и просто живи — где угодно. BazaraVPN открывает весь интернет и даёт тебе свободу без цензуры, блокировок и замедлений.',
-    'faq-title': 'Часто задаваемые вопросы',
-    'faq-q1': 'Как работает BazaraVPN?',
-    'faq-a1': 'BazaraVPN защищает вашу конфиденциальность в Интернете, скрывая ваш настоящий IP-адрес. Когда ваше виртуальное местоположение скрыто, отслеживать, ограничивать или продавать вашу онлайн-активность становится намного сложнее.',
-    'faq-q2': 'Как установить BazaraVPN?',
-    'faq-a2': 'Чтобы установить BazaraVPN, скачайте приложение для вашего устройства и следуйте нашему руководству по настройке. Затем просто войдите в свой аккаунт, и вы будете готовы к подключению.',
-    'faq-q3': 'Можно ли пользоваться бесплатно?',
-    'faq-a3': 'Да, у нас есть бесплатный пробный период и базовые функции без оплаты.',
-    'faq-q4': 'Какие устройства поддерживаются?',
-    'faq-a4': 'Windows, macOS, Android, iOS, роутеры и другие.',
-    'faq-q5': 'Можно ли смотреть Netflix и другие стриминги?',
-    'faq-a5': 'Да, BazaraVPN позволяет обходить блокировки и смотреть любые стриминговые сервисы.',
-    'faq-q6': 'Сколько устройств можно подключить?',
-    'faq-a6': 'До 5 устройств одновременно на одном аккаунте.',
-    'faq-q7': 'Как оплатить подписку?',
-    'faq-a7': 'Мы принимаем карты, криптовалюту и другие способы оплаты.',
-    'faq-q8': 'Законно ли использовать VPN?',
-    'faq-a8': 'В большинстве стран — да. Но проверьте законы вашей страны.',
-    'feature-speed': 'Скорость до 1 Гбит/с',
-    'feature-nologs': 'Без логов и слежки',
-    'feature-devices': 'До 5 устройств',
+    // ... существующие ключи ...
+    'review-1-name': 'Игорь',
+    'review-1-text': 'Отличный VPN, пользуюсь в Турции уже год, всё работает, доволен!',
+    'review-2-name': 'Анна',
+    'review-2-text': 'Работает с любыми устройствами, очень довольна!',
+    'review-3-name': 'Sam',
+    'review-3-text': 'Хорошая скорость, много серверов. Рекомендую всем!',
+    // ... остальные отзывы ...
   },
   en: {
-    "hero-title-orange": "Bazara",
-    "hero-title-white": "VPN",
-    "hero-subtitle": "Fast. Secure. Anonymous. <br><span class='text-gray-300 text-lg block mt-4'>A VPN that doesn't ask unnecessary questions and doesn't overload your brain. Just turn it on — and you're already safe. It's as simple as it gets!</span>",
-    "try-free": "Try for free",
-    "card-1-title": "Freedom without compromise",
-    "card-1-text": "Thousands of users chose BazaraVPN to regain control and peace of mind. 4.9/5 rating — not for nothing.",
-    "card-2-title": "Access without borders",
-    "card-2-text": "Open sites, streams, and apps from anywhere in the world — fast, stable, and secure.",
-    "card-3-title": "Universal protection",
-    "card-3-text": "BazaraVPN works on all popular devices: Windows, macOS, Android, iOS, and even routers.",
-    "reviews-title": "User reviews",
-    "leave-review": "Leave a review",
-    "block-1-title": "Always connected.\nEven when the world is against you.",
-    "block-1-text": "BazaraVPN connects you to the world — no tracking, blocks, or interruptions. Work, chill, watch YouTube and Telegram, even if someone decided to 'ban' it.",
-    "block-2-title": "Stay in the shadows.\nAlways.",
-    "block-2-text": "No tracking, logs, or ad trackers. Your traffic is encrypted, and your personal data stays yours. BazaraVPN is like a ninja on the internet, only cooler.",
-    "block-3-title": "Nothing extra. Only results.",
-    "block-3-text": "BazaraVPN starts with one click and works right away. No registration, no setup, no questions. Click 'connect' — and you're already safe.",
-    "how-title": "How does it work?",
-    "how-1-title": "Install BazaraVPN in seconds",
-    "how-1-text": "Download the app for any device: Windows, Mac, Android, or iOS. It's simple: open, install, log in. No extra settings or complicated instructions. Even grandma can handle it (and if not — we'll help her).",
-    "how-2-title": "Choose a country — and go",
-    "how-2-text": "Open BazaraVPN, select the country you need from the list, and press one button. That's it — you're safe, traffic is encrypted, content is unblocked. Automatically. Instantly. Always stable.",
-    "how-3-title": "No borders. On the internet or in life.",
-    "how-3-text": "Watch streams, work, study, download, and just live — anywhere. BazaraVPN opens up the whole internet and gives you freedom without censorship, blocks, or slowdowns.",
-    "faq-title": "Frequently Asked Questions",
-    "faq-q1": "How does BazaraVPN work?",
-    "faq-a1": "BazaraVPN protects your privacy online by hiding your real IP address. When your virtual location is hidden, it's much harder to track, restrict, or sell your online activity.",
-    "faq-q2": "How to install BazaraVPN?",
-    "faq-a2": "To install BazaraVPN, download the app for your device and follow our setup guide. Then just log in to your account and you're ready to connect.",
-    "faq-q3": "Can I use it for free?",
-    "faq-a3": "Yes, we have a free trial period and basic features without payment.",
-    "faq-q4": "Which devices are supported?",
-    "faq-a4": "Windows, macOS, Android, iOS, routers, and more.",
-    "faq-q5": "Can I watch Netflix and other streaming services?",
-    "faq-a5": "Yes, BazaraVPN allows you to bypass blocks and watch any streaming services.",
-    "faq-q6": "How many devices can I connect?",
-    "faq-a6": "Up to 5 devices simultaneously on one account.",
-    "faq-q7": "How do I pay for a subscription?",
-    "faq-a7": "We accept cards, cryptocurrency, and other payment methods.",
-    "faq-q8": "Is it legal to use a VPN?",
-    "faq-a8": "In most countries — yes. But check your local laws.",
-    "feature-speed": "Speed up to 1 Gbps",
-    "feature-nologs": "No logs or tracking",
-    "feature-devices": "Up to 5 devices",
+    // ... существующие ключи ...
+    "review-1-name": "Igor",
+    "review-1-text": "Great VPN, been using it in Turkey for a year, everything works, I'm happy!",
+    "review-2-name": "Anna",
+    "review-2-text": "Works with any device, very satisfied!",
+    "review-3-name": "Sam",
+    "review-3-text": "Good speed, many servers. Recommend to everyone!",
+    // ... остальные отзывы ...
   }
 };
-const langBtn = document.getElementById('lang-dropdown-btn');
-const langDropdown = document.getElementById('lang-dropdown');
-const langCurrent = document.getElementById('lang-current');
-const langSwitcher = document.getElementById('lang-switcher');
+// ... existing code ...
+// В JS-рендере отзывов:
+const reviews = [
+  {
+    nameKey: 'review-1-name',
+    avatar: 'static/avatars/avatar1.png',
+    stars: 4,
+    textKey: 'review-1-text'
+  },
+  {
+    nameKey: 'review-2-name',
+    avatar: 'static/avatars/avatar2.png',
+    stars: 5,
+    textKey: 'review-2-text'
+  },
+  {
+    nameKey: 'review-3-name',
+    avatar: 'static/avatars/avatar3.png',
+    stars: 4,
+    textKey: 'review-3-text'
+  },
+  // ... остальные отзывы ...
+];
+function renderReviews() {
+  visible = getVisible();
+  track.innerHTML = '';
+  for (let i = 0; i < reviews.length; i++) {
+    let cls = 'review-card-3d';
+    if (i === current + Math.floor(visible/2)) cls += ' active';
+    else if (i === current + Math.floor(visible/2) - 1) cls += ' left';
+    else if (i === current + Math.floor(visible/2) + 1) cls += ' right';
+    else cls += '';
+    if (i >= current && i < current + visible) {
+      const r = reviews[i];
+      const stars = Array(5).fill(0).map((_, j) => `<svg class="w-5 h-5 ${j < r.stars ? 'text-orange-400' : 'text-orange-400 opacity-50'}" fill="currentColor" viewBox="0 0 20 20"><polygon points="10,1 12.59,7.36 19.51,7.64 14,12.14 15.82,19.02 10,15.27 4.18,19.02 6,12.14 0.49,7.64 7.41,7.36"/></svg>`).join('');
+      track.innerHTML += `
+        <div class="${cls}">
+          <div class="flex items-center gap-3 mb-2">
+            <img src="${r.avatar}" class="w-12 h-12 rounded-full shadow" alt="${translations[lang][r.nameKey]}">
+            <div>
+              <div class="font-semibold text-white text-lg">${translations[lang][r.nameKey]}</div>
+              <div class="flex gap-0.5 mt-1">${stars}</div>
+            </div>
+          </div>
+          <p class="text-gray-300 text-base mt-2">${translations[lang][r.textKey]}</p>
+        </div>
+      `;
+    }
+  }
+  setTimeout(() => {
+    const card = track.querySelector('.review-card-3d');
+    if (card) {
+      const totalWidth = card.offsetWidth * visible + 32 * (visible - 1);
+      track.style.transform = `translateX(calc(50% - ${totalWidth/2}px))`;
+    }
+  }, 10);
+}
+// При смене языка перерисовываем отзывы
 function setLang(lang) {
   localStorage.setItem('lang', lang);
   langCurrent.textContent = lang === 'ru' ? 'Русский' : 'English';
@@ -1370,26 +1350,9 @@ function setLang(lang) {
     const key = el.getAttribute('data-i18n');
     if (translations[lang][key]) el.textContent = translations[lang][key];
   });
+  renderReviews();
 }
-let lang = localStorage.getItem('lang') || 'ru';
-setLang(lang);
-langBtn.onclick = function(e) {
-  e.stopPropagation();
-  langDropdown.classList.toggle('hidden');
-};
-langDropdown.querySelectorAll('[data-lang]').forEach(btn => {
-  btn.onclick = function(e) {
-    e.stopPropagation();
-    setLang(this.getAttribute('data-lang'));
-    langDropdown.classList.add('hidden');
-  };
-});
-document.addEventListener('click', function(e) {
-  if (langDropdown && langSwitcher && !langSwitcher.contains(e.target)) {
-    langDropdown.classList.add('hidden');
-  }
-});
-// --- КОНЕЦ ЛОГИКИ ПЕРЕКЛЮЧЕНИЯ ЯЗЫКА ---
+// ... existing code ...
 </script>
 <script>
 // 2. Смена темы (тёмная/светлая/системная)

@@ -555,18 +555,16 @@
     };
     async function createInvoice(method) {
       try {
-        const resp = await fetch('https://wata.pro/api/v1/invoice/create', {
+        const resp = await fetch('/api/pay', {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + API_KEY
+            'Content-Type': 'application/json'
           },
           body: JSON.stringify({
             amount: Number(payBtnPrice.textContent.replace(/[^\d]/g, '')),
             method: method,
             order_id: 'bazara_' + Math.floor(Math.random()*1000000),
-            description: 'Подписка BazaraVPN',
-            terminal_id: '3a197997-9fc7-6a0e-0da2-768404f400d7'
+            description: 'Подписка BazaraVPN'
           })
         });
         const data = await resp.json();
@@ -661,18 +659,16 @@
     };
     async function createInvoice(method) {
       try {
-        const resp = await fetch('https://wata.pro/api/v1/invoice/create', {
+        const resp = await fetch('/api/pay', {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + API_KEY
+            'Content-Type': 'application/json'
           },
           body: JSON.stringify({
             amount: Number(payBtnPrice.textContent.replace(/[^\d]/g, '')),
             method: method,
             order_id: 'bazara_' + Math.floor(Math.random()*1000000),
-            description: 'Подписка BazaraVPN',
-            terminal_id: '3a197997-9fc7-6a0e-0da2-768404f400d7'
+            description: 'Подписка BazaraVPN'
           })
         });
         const data = await resp.json();

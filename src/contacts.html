@@ -66,37 +66,30 @@
       </div>
     </div>
   </nav>
-  <main class="flex-1 flex flex-col pt-20">
-    <h1 class="contact-title" data-i18n="contacts-title">Связаться с поддержкой</h1>
-    <div class="contact-card">
-      <img src="assets/mail-3d.png" alt="Почта" class="contact-icon">
-      <div class="contact-desc" data-i18n="contacts-mail-desc">Почта поддержки:</div>
-      <a href="mailto:support@bazaravpn.com" class="contact-link">support@bazaravpn.com</a>
-    </div>
-    <div class="contact-card">
-      <svg class="contact-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 4L12 20l-3-7-7-3z"/></svg>
-      <div class="contact-desc" data-i18n="contacts-tg-desc">Telegram-чат поддержки:</div>
-      <a href="https://t.me/bazaravpn_support" class="contact-link" target="_blank">@bazaravpn_support</a>
-    </div>
-    <div class="contact-card">
-      <svg class="contact-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="6"/><circle cx="12" cy="12" r="5"/><circle cx="17" cy="7" r="1.5"/></svg>
-      <div class="contact-desc" data-i18n="contacts-inst-desc">Instagram:</div>
-      <a href="#" class="contact-link" target="_blank">@bazaravpn</a>
-    </div>
-    <div class="contact-card">
-      <svg class="contact-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="6"/><path d="M7 9c1.5 2.5 3.5 4 5 4s3.5-1.5 5-4"/></svg>
-      <div class="contact-desc" data-i18n="contacts-vk-desc">ВКонтакте:</div>
-      <a href="#" class="contact-link" target="_blank">vk.com/bazaravpn</a>
-    </div>
-    <div class="contact-card">
-      <svg class="contact-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="4"/><polygon points="10,9 16,12 10,15" fill="currentColor"/></svg>
-      <div class="contact-desc" data-i18n="contacts-yt-desc">YouTube:</div>
-      <a href="#" class="contact-link" target="_blank" data-i18n="contacts-yt-link">YouTube канал</a>
-    </div>
-    <div class="contact-card">
-      <svg class="contact-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 2v15.5a3.5 3.5 0 1 0 3.5-3.5H14V9a5 5 0 0 0 5 5"/></svg>
-      <div class="contact-desc" data-i18n="contacts-tt-desc">TikTok:</div>
-      <a href="#" class="contact-link" target="_blank">@bazaravpn</a>
+  <main class="flex-1 flex flex-col pt-20 items-center justify-center">
+    <div class="w-full max-w-md mx-auto flex flex-col items-center text-center bg-[#232323] rounded-3xl shadow-2xl px-6 py-10 mt-10 mb-8">
+      <img src="assets/telephon.png" alt="Телефон" class="w-28 h-28 mx-auto mb-4 select-none pointer-events-none" draggable="false">
+      <div class="text-lg md:text-xl text-[#B8B8B8] mb-7" data-i18n="contacts-question">
+        Возникли вопросы, нужна помощь или совет?<br>Напишите нам — наш саппорт всегда готов помочь!
+      </div>
+      <div class="flex flex-wrap justify-center gap-8 mb-8 w-full">
+        <div class="flex flex-col items-center min-w-[110px]">
+          <img src="assets/mail-3d.png" alt="Почта" class="w-16 h-16 mb-2 select-none pointer-events-none" draggable="false">
+          <div class="font-bold text-lg mb-1" data-i18n="contacts-mail">Эл. почта</div>
+          <div class="text-base text-[#ff8800] font-semibold mb-1">support@bazara.ru</div>
+        </div>
+        <div class="flex flex-col items-center min-w-[110px]">
+          <img src="assets/telegram.png" alt="Telegram" class="w-16 h-16 mb-2 select-none pointer-events-none" draggable="false">
+          <div class="font-bold text-lg mb-1" data-i18n="contacts-tg">Телеграм</div>
+          <div class="text-base text-[#ff8800] font-semibold mb-1">@bazaravpn</div>
+        </div>
+        <div class="flex flex-col items-center min-w-[110px]">
+          <img src="assets/ofis.png" alt="Офис" class="w-16 h-16 mb-2 select-none pointer-events-none" draggable="false">
+          <div class="font-bold text-lg mb-1" data-i18n="contacts-office">Офис</div>
+          <div class="text-base text-[#ff8800] font-semibold mb-1" data-i18n="contacts-office-addr">г. Москва, ул. Базарная, 7</div>
+        </div>
+      </div>
+      <button class="mt-2 w-full max-w-xs py-4 rounded-2xl font-bold text-lg text-white shadow-lg transition-all duration-200 bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700" data-i18n="contacts-btn">Связаться</button>
     </div>
   </main>
   <!-- FOOTER -->
@@ -128,14 +121,12 @@
           'footer-contacts': 'Контакты',
           'footer-privacy': 'Политика',
           'footer-copyright': '© 2024 BazaraVPN',
-          'contacts-title': 'Связаться с поддержкой',
-          'contacts-mail-desc': 'Почта поддержки:',
-          'contacts-tg-desc': 'Telegram-чат поддержки:',
-          'contacts-inst-desc': 'Instagram:',
-          'contacts-vk-desc': 'ВКонтакте:',
-          'contacts-yt-desc': 'YouTube:',
-          'contacts-yt-link': 'YouTube канал',
-          'contacts-tt-desc': 'TikTok:',
+          'contacts-question': 'Возникли вопросы, нужна помощь или совет?<br>Напишите нам — наш саппорт всегда готов помочь!',
+          'contacts-mail': 'Эл. почта',
+          'contacts-tg': 'Телеграм',
+          'contacts-office': 'Офис',
+          'contacts-office-addr': 'г. Москва, ул. Базарная, 7',
+          'contacts-btn': 'Связаться',
         },
         en: {
           'header-advantages': 'Advantages',
@@ -145,14 +136,12 @@
           'footer-contacts': 'Contacts',
           'footer-privacy': 'Privacy',
           'footer-copyright': '© 2024 BazaraVPN',
-          'contacts-title': 'Contact Support',
-          'contacts-mail-desc': 'Support email:',
-          'contacts-tg-desc': 'Telegram support chat:',
-          'contacts-inst-desc': 'Instagram:',
-          'contacts-vk-desc': 'VK:',
-          'contacts-yt-desc': 'YouTube:',
-          'contacts-yt-link': 'YouTube channel',
-          'contacts-tt-desc': 'TikTok:',
+          'contacts-question': 'Have questions, need help or advice?<br>Write to us — our support is always ready to help!',
+          'contacts-mail': 'Email',
+          'contacts-tg': 'Telegram',
+          'contacts-office': 'Office',
+          'contacts-office-addr': 'Moscow, Bazarnaya St., 7',
+          'contacts-btn': 'Contact us',
         }
       };
       const langBtn = document.getElementById('lang-dropdown-btn');

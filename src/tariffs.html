@@ -551,23 +551,17 @@
       let lang = localStorage.getItem('lang') || 'ru';
       if (type === 'year') {
         modalTitle.setAttribute('data-i18n', 'modal-pay-title-year');
+        payBtnPrice.textContent = isNew ? '1989₽' : '2290₽';
       } else {
         modalTitle.setAttribute('data-i18n', 'modal-pay-title-month');
+        payBtnPrice.textContent = isNew ? '289₽' : '399₽';
       }
-      // Обновляем текст кнопки оплаты через data-i18n и перевод
+      // Только выставляем data-i18n, не трогаем textContent
       if (payBtnText) {
         payBtnText.setAttribute('data-i18n', 'modal-pay-btn');
-        if (translations[lang] && translations[lang]['modal-pay-btn']) {
-          payBtnText.textContent = translations[lang]['modal-pay-btn'];
-        }
       }
-      if (typeof translations !== 'undefined') {
-        if (modalTitle) {
-          if (translations[lang][modalTitle.getAttribute('data-i18n')]) {
-            modalTitle.textContent = translations[lang][modalTitle.getAttribute('data-i18n')];
-          }
-        }
-      }
+      // Обновляем все data-i18n на нужный язык
+      if (typeof setLang === 'function') setLang(lang);
       modalBg.classList.remove('hidden');
       modalBg.classList.add('opacity-100');
     }

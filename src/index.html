@@ -919,9 +919,9 @@
     <p class="text-2xl md:text-3xl text-white mb-10 max-w-xl fade-up-main" style="animation-delay:0.18s" data-i18n="hero-subtitle">Быстро. Безопасно. Анонимно. <br><span class='text-gray-300 text-lg block mt-4'>VPN, который не спрашивает лишнего и не грузит мозги. Просто включил — и ты уже в безопасности. Всё по-базарному просто!</span></p>
     <a href="tariffs.html" class="btn-glow mb-6 text-xl md:text-2xl py-5 px-12 fade-up-main" style="animation-delay:0.32s" data-i18n="try-free">Попробовать бесплатно</a>
     <ul class="flex flex-wrap gap-6 mt-6 fade-up-main" style="animation-delay:0.44s">
-      <li class="flex items-center gap-2 text-white text-lg"><svg class="w-6 h-6 text-orange-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>Скорость до 1 Гбит/с</li>
-      <li class="flex items-center gap-2 text-white text-lg"><svg class="w-6 h-6 text-orange-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Без логов и слежки</li>
-      <li class="flex items-center gap-2 text-white text-lg"><svg class="w-6 h-6 text-orange-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8 12h8"/><path d="M12 8v8"/></svg>До 5 устройств</li>
+      <li class="flex items-center gap-2 text-white text-lg" data-i18n="feature-speed"><svg class="w-6 h-6 text-orange-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>Скорость до 1 Гбит/с</li>
+      <li class="flex items-center gap-2 text-white text-lg" data-i18n="feature-nologs"><svg class="w-6 h-6 text-orange-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Без логов и слежки</li>
+      <li class="flex items-center gap-2 text-white text-lg" data-i18n="feature-devices"><svg class="w-6 h-6 text-orange-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8 12h8"/><path d="M12 8v8"/></svg>До 5 устройств</li>
     </ul>
   </div>
   <div class="flex-1 flex justify-center items-center fade-up-main" style="animation-delay:0.56s">
@@ -1306,7 +1306,10 @@ const translations = {
     'faq-q7': 'Как оплатить подписку?',
     'faq-a7': 'Мы принимаем карты, криптовалюту и другие способы оплаты.',
     'faq-q8': 'Законно ли использовать VPN?',
-    'faq-a8': 'В большинстве стран — да. Но проверьте законы вашей страны.'
+    'faq-a8': 'В большинстве стран — да. Но проверьте законы вашей страны.',
+    'feature-speed': 'Скорость до 1 Гбит/с',
+    'feature-nologs': 'Без логов и слежки',
+    'feature-devices': 'До 5 устройств',
   },
   en: {
     "hero-title-orange": "Bazara",
@@ -1350,7 +1353,10 @@ const translations = {
     "faq-q7": "How do I pay for a subscription?",
     "faq-a7": "We accept cards, cryptocurrency, and other payment methods.",
     "faq-q8": "Is it legal to use a VPN?",
-    "faq-a8": "In most countries — yes. But check your local laws."
+    "faq-a8": "In most countries — yes. But check your local laws.",
+    "feature-speed": "Speed up to 1 Gbps",
+    "feature-nologs": "No logs or tracking",
+    "feature-devices": "Up to 5 devices",
   }
 };
 const langBtn = document.getElementById('lang-dropdown-btn');

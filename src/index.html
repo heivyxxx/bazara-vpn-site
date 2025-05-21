@@ -1493,40 +1493,6 @@ if (themeSwitcherBtn && themeDropdown && themeSwitcherGroup) {
       });
     });
 
-    document.addEventListener('DOMContentLoaded', function() {
-      const langBtn = document.getElementById('lang-dropdown-btn');
-      const langDropdown = document.getElementById('lang-dropdown');
-      const langCurrent = document.getElementById('lang-current');
-      const langs = [
-        { code: 'ru', name: 'Русский' },
-        { code: 'en', name: 'English' },
-      ];
-      // Заполняем меню языков
-      langDropdown.innerHTML = '';
-      langs.forEach(l => {
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'w-full text-left px-5 py-3 text-base hover:bg-[#181818] text-white flex items-center gap-2';
-        btn.textContent = l.name;
-        btn.onclick = function(e) {
-          e.stopPropagation();
-          langCurrent.textContent = l.name;
-          langDropdown.classList.add('hidden');
-        };
-        langDropdown.appendChild(btn);
-      });
-      // Открытие/закрытие по клику
-      langBtn.addEventListener('click', function(e) {
-        e.stopPropagation();
-        langDropdown.classList.toggle('hidden');
-      });
-      document.addEventListener('click', function(e) {
-        if (!langSwitcher || !langSwitcher.contains(e.target)) {
-          langDropdown.classList.add('hidden');
-          langDropdown.classList.remove('dropdown-open');
-        }
-      });
-    });
 
     // 3D Reviews Carousel (фикс: всегда 3 видимых, новые отзывы, без мыла)
     document.addEventListener('DOMContentLoaded', function() {

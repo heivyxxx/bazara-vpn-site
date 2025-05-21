@@ -385,18 +385,15 @@
   <div class="bg-gradient-to-br from-[#232323] via-[#181818] to-[#2d1a00] rounded-3xl shadow-2xl p-0 max-w-md w-full relative animate-fade-in flex flex-col border-4 border-orange-500/30" id="error-modal" style="box-shadow:0 8px 48px 0 #ff880022,0 2px 0 #a259ff;">
     <button id="close-error-modal" class="absolute top-3 right-3 text-gray-400 hover:text-orange-400 text-3xl font-bold transition-all">&times;</button>
     <div class="flex items-center gap-3 px-8 pt-8 pb-2">
-      <svg class="w-10 h-10 text-orange-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 48 48">
-        <circle cx="24" cy="24" r="20" stroke-width="3"/>
-        <rect x="16" y="16" width="16" height="8" rx="2" stroke-width="3"/>
-      </svg>
-      <span class="text-2xl font-extrabold text-orange-400">Сообщить о проблеме</span>
+      <img src="assets/bug-3d.png" alt="bug" class="w-10 h-10" style="object-fit:contain;" />
+      <span class="text-2xl font-extrabold text-orange-400" data-i18n="error-modal-title">Сообщить о проблеме</span>
     </div>
     <form id="error-form" class="flex flex-col gap-4 px-8 py-6">
-      <textarea class="bg-[#181818] border border-gray-700 rounded-xl p-3 text-white resize-none min-h-[80px]" placeholder="Опишите проблему или ошибку..." required></textarea>
-      <input type="email" class="bg-[#181818] border border-gray-700 rounded-xl p-3 text-white" placeholder="Ваш email (необязательно)">
-      <button type="submit" class="bg-gradient-to-r from-orange-500 to-purple-700 hover:from-orange-600 hover:to-purple-800 text-white font-bold py-2 px-6 rounded-xl transition-all shadow-lg">Отправить</button>
+      <textarea class="bg-[#181818] border border-gray-700 rounded-xl p-3 text-white resize-none min-h-[80px]" placeholder="Опишите проблему или ошибку..." required data-i18n-placeholder="error-modal-placeholder"></textarea>
+      <input type="email" class="bg-[#181818] border border-gray-700 rounded-xl p-3 text-white" placeholder="Ваш email (необязательно)" data-i18n-placeholder="error-modal-email">
+      <button type="submit" class="bg-gradient-to-r from-orange-500 to-purple-700 hover:from-orange-600 hover:to-purple-800 text-white font-bold py-2 px-6 rounded-xl transition-all shadow-lg" data-i18n="error-modal-send">Отправить</button>
     </form>
-    <div id="error-success" class="hidden text-green-400 mt-4 text-center font-bold text-lg">Спасибо! Ваше сообщение отправлено.</div>
+    <div id="error-success" class="hidden text-green-400 mt-4 text-center font-bold text-lg" data-i18n="error-modal-success">Спасибо! Ваше сообщение отправлено.</div>
   </div>
 </div>
 <!-- Support Chat Modal -->
@@ -484,6 +481,11 @@ document.addEventListener('DOMContentLoaded', function() {
       'support-bug-title': 'Сообщить об ошибке',
       'support-bug-desc': 'Оставьте отзыв или сообщите о проблеме — мы всегда на связи!',
       'support-bug-btn': 'Сообщить об ошибке',
+      'error-modal-title': 'Сообщить о проблеме',
+      'error-modal-placeholder': 'Опишите проблему или ошибку...',
+      'error-modal-email': 'Ваш email (необязательно)',
+      'error-modal-send': 'Отправить',
+      'error-modal-success': 'Спасибо! Ваше сообщение отправлено.',
     },
     en: {
       'header-advantages': 'Advantages',
@@ -521,6 +523,11 @@ document.addEventListener('DOMContentLoaded', function() {
       'support-bug-title': 'Report a bug',
       'support-bug-desc': 'Leave feedback or report a problem — we are always in touch!',
       'support-bug-btn': 'Report a bug',
+      'error-modal-title': 'Report a problem',
+      'error-modal-placeholder': 'Describe the problem or bug...',
+      'error-modal-email': 'Your email (optional)',
+      'error-modal-send': 'Send',
+      'error-modal-success': 'Thank you! Your message has been sent.',
     }
   };
   const langBtn = document.getElementById('lang-dropdown-btn');
@@ -538,6 +545,13 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
           el.textContent = translations[lang][key];
         }
+      }
+    });
+    // Переводим плейсхолдеры
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+      const key = el.getAttribute('data-i18n-placeholder');
+      if (translations[lang][key]) {
+        el.placeholder = translations[lang][key];
       }
     });
   }

@@ -1494,46 +1494,6 @@ if (themeSwitcherBtn && themeDropdown && themeSwitcherGroup) {
       });
     });
 
-    // FAQ accordion logic + loader dots (мультиоткрытие)
-    document.addEventListener('DOMContentLoaded', function() {
-      const questions = Array.from(document.querySelectorAll('.faq-question'));
-      const answers = Array.from(document.querySelectorAll('.faq-answer'));
-      // Добавим loader в каждую faq-answer
-      answers.forEach(ans => {
-        const loader = document.createElement('div');
-        loader.className = 'faq-loader hidden';
-        loader.innerHTML = '<span class="faq-loader-dot"></span><span class="faq-loader-dot"></span><span class="faq-loader-dot"></span>';
-        ans.parentElement.appendChild(loader);
-      });
-      function updateLoaders() {
-        const anyOpen = answers.some(a => !a.classList.contains('hidden'));
-        answers.forEach((a, i) => {
-          const loader = a.parentElement.querySelector('.faq-loader');
-          if (a.classList.contains('hidden') && anyOpen) {
-            loader.classList.remove('hidden');
-          } else {
-            loader.classList.add('hidden');
-          }
-        });
-      }
-      questions.forEach((btn, idx) => {
-        btn.addEventListener('click', function() {
-          const answer = answers[idx];
-          const icon = this.querySelector('.faq-icon');
-          if (answer.classList.contains('hidden')) {
-            answer.classList.remove('hidden');
-            icon.textContent = '–';
-          } else {
-            answer.classList.add('hidden');
-            icon.textContent = '+';
-          }
-          updateLoaders();
-        });
-      });
-      // При загрузке: если все закрыты — скрыть все loader
-      updateLoaders();
-    });
-
     // Модалка для отзыва
     document.addEventListener('DOMContentLoaded', function() {
       const openBtn = document.getElementById('open-review-modal');

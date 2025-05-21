@@ -199,6 +199,43 @@
   </script>
   <script>
   document.addEventListener('DOMContentLoaded', function() {
+    // --- Мега-меню "Скачать" (фикс выпадения)
+    const downloadMenu = document.getElementById('download-menu');
+    const megaDownload = document.getElementById('mega-download');
+    if (downloadMenu && megaDownload) {
+      let overMenu = false;
+      let overDropdown = false;
+      downloadMenu.addEventListener('mouseenter', () => {
+        overMenu = true;
+        megaDownload.classList.add('flex');
+        megaDownload.classList.remove('hidden');
+      });
+      downloadMenu.addEventListener('mouseleave', () => {
+        setTimeout(() => {
+          if (!overDropdown) {
+            megaDownload.classList.remove('flex');
+            megaDownload.classList.add('hidden');
+          }
+        }, 80);
+        overMenu = false;
+      });
+      megaDownload.addEventListener('mouseenter', () => {
+        overDropdown = true;
+        megaDownload.classList.add('flex');
+        megaDownload.classList.remove('hidden');
+      });
+      megaDownload.addEventListener('mouseleave', () => {
+        setTimeout(() => {
+          if (!overMenu) {
+            megaDownload.classList.remove('flex');
+            megaDownload.classList.add('hidden');
+          }
+        }, 80);
+        overDropdown = false;
+      });
+    }
+
+    // --- Языковой переключатель (универсальный)
     const translations = {
       ru: {
         'header-advantages': 'Преимущества',

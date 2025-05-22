@@ -26,7 +26,7 @@ export default async function handler(req, res) {
       orderId: order_id,
       successRedirectUrl: "https://bazara-vpn-site.vercel.app/success",
       failRedirectUrl: "https://bazara-vpn-site.vercel.app/fail",
-      expirationDateTime: new Date(Date.now() + 3*60*60*1000).toISOString()
+      expirationDateTime: "2025-05-24T12:00:00.000Z"
     };
     console.log('WATA BODY:', wataBody);
 

@@ -61,6 +61,37 @@ export default async function handler(req, res) {
 
     console.log('WATA RESPONSE:', data);
 
+    if (method === 'crypto') {
+      try {
+        const npResp = await fetch('https://api.nowpayments.io/v1/invoice', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': 'DR8ERAS-3S84CGC-QANNK8Q-GH71ZCQ'
+          },
+          body: JSON.stringify({
+            price_amount: 2290,
+            price_currency: 'rub',
+            pay_currency: 'usdt',
+            order_id: order_id,
+            order_description: description,
+            success_url: 'https://bazara-vpn-site.vercel.app/success',
+            cancel_url: 'https://bazara-vpn-site.vercel.app/fail'
+          })
+        });
+        const npData = await npResp.json();
+        if (npData && npData.invoice_url) {
+          return res.status(200).json({ url: npData.invoice_url });
+        } else {
+          console.log('NOWPayments error:', npData);
+          return res.status(500).json({ error: 'NOWPayments error', details: npData });
+        }
+      } catch (e) {
+        console.log('NOWPayments fetch error:', e);
+        return res.status(500).json({ error: 'NOWPayments fetch error', details: e.message });
+      }
+    }
+
     res.status(resp.status).json(data);
   } catch (e) {
     console.error('PAY API ERROR:', e);

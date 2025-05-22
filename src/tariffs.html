@@ -545,38 +545,49 @@
       };
     });
     payBtn.onclick = async function() {
+      console.log('payBtn clicked', selectedPayMethod);
       if (selectedPayMethod === 'pay-sbp') {
         await createInvoice('sbp');
       } else if (selectedPayMethod === 'pay-card') {
         await createInvoice('card');
       } else if (selectedPayMethod === 'pay-crypto') {
-        alert('Скоро будет доступно!');
+        await createInvoice('crypto');
       }
     };
     async function createInvoice(method) {
       try {
+        let body = {
+          amount: Number(payBtnPrice.textContent.replace(/[^\d]/g, '')),
+          method: method,
+          order_id: 'bazara_' + Math.floor(Math.random()*1000000),
+          description: 'Подписка BazaraVPN'
+        };
+        if (method === 'crypto') {
+          body = {
+            method: 'crypto',
+            amount: 2290,
+            order_id: 'vpn_' + Date.now(),
+            description: 'Тариф BazaraVPN — Годовой'
+          };
+        }
         const resp = await fetch('/api/pay', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({
-            amount: Number(payBtnPrice.textContent.replace(/[^\d]/g, '')),
-            method: method,
-            order_id: 'bazara_' + Math.floor(Math.random()*1000000),
-            description: 'Подписка BazaraVPN'
-          })
+          body: JSON.stringify(body)
         });
         const data = await resp.json();
+        console.log('Pay response:', data);
         if (data && data.url) {
           window.open(data.url, '_blank');
         } else {
           alert('Ошибка при создании счёта!');
-          console.log('Wata.pro error:', data);
+          console.log('Wata.pro/NOWPayments error:', data);
         }
       } catch (e) {
         alert('Ошибка соединения!');
-        console.log('Wata.pro fetch error:', e);
+        console.log('Pay fetch error:', e);
       }
     }
   });
@@ -654,33 +665,43 @@
       } else if (selectedPayMethod === 'pay-card') {
         await createInvoice('card');
       } else if (selectedPayMethod === 'pay-crypto') {
-        alert('Скоро будет доступно!');
+        await createInvoice('crypto');
       }
     };
     async function createInvoice(method) {
       try {
+        let body = {
+          amount: Number(payBtnPrice.textContent.replace(/[^\d]/g, '')),
+          method: method,
+          order_id: 'bazara_' + Math.floor(Math.random()*1000000),
+          description: 'Подписка BazaraVPN'
+        };
+        if (method === 'crypto') {
+          body = {
+            method: 'crypto',
+            amount: 2290,
+            order_id: 'vpn_' + Date.now(),
+            description: 'Тариф BazaraVPN — Годовой'
+          };
+        }
         const resp = await fetch('/api/pay', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({
-            amount: Number(payBtnPrice.textContent.replace(/[^\d]/g, '')),
-            method: method,
-            order_id: 'bazara_' + Math.floor(Math.random()*1000000),
-            description: 'Подписка BazaraVPN'
-          })
+          body: JSON.stringify(body)
         });
         const data = await resp.json();
+        console.log('Pay response:', data);
         if (data && data.url) {
           window.open(data.url, '_blank');
         } else {
           alert('Ошибка при создании счёта!');
-          console.log('Wata.pro error:', data);
+          console.log('Wata.pro/NOWPayments error:', data);
         }
       } catch (e) {
         alert('Ошибка соединения!');
-        console.log('Wata.pro fetch error:', e);
+        console.log('Pay fetch error:', e);
       }
     }
   </script>

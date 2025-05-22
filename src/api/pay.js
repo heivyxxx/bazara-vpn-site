@@ -42,8 +42,10 @@ export default async function handler(req, res) {
     try {
       data = JSON.parse(text);
     } catch (e) {
-      console.error('WATA RESPONSE NOT JSON:', text);
-      throw new Error('Wata.pro returned non-JSON: ' + text);
+      return res.status(500).json({
+        error: 'Wata.pro returned non-JSON',
+        wataResponse: text
+      });
     }
 
     console.log('WATA RESPONSE:', data);

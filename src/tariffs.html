@@ -568,8 +568,8 @@
           })
         });
         const data = await resp.json();
-        if (data && data.invoice_url) {
-          window.open(data.invoice_url, '_blank');
+        if (data && data.url) {
+          window.open(data.url, '_blank');
         } else {
           alert('Ошибка при создании счёта!');
           console.log('Wata.pro error:', data);
@@ -672,8 +672,8 @@
           })
         });
         const data = await resp.json();
-        if (data && data.invoice_url) {
-          window.open(data.invoice_url, '_blank');
+        if (data && data.url) {
+          window.open(data.url, '_blank');
         } else {
           alert('Ошибка при создании счёта!');
           console.log('Wata.pro error:', data);

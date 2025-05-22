@@ -18,17 +18,19 @@ export default async function handler(req, res) {
     }
     console.log('PAY API BODY:', body);
 
-    const { amount, method, order_id, description } = body;
+    const { amount, order_id, description } = body;
     const wataBody = {
-      amount,
-      method,
-      order_id,
-      description,
-      terminal_id: TERMINAL_ID
+      amount: Number(amount),
+      currency: "RUB",
+      description: description,
+      orderId: order_id,
+      successRedirectUrl: "https://bazara-vpn-site.vercel.app/success",
+      failRedirectUrl: "https://bazara-vpn-site.vercel.app/fail",
+      expirationDateTime: new Date(Date.now() + 60*60*1000).toISOString()
     };
     console.log('WATA BODY:', wataBody);
 
-    const resp = await fetch('https://api.wata.pro/api/v1/invoice/create', {
+    const resp = await fetch('https://api.wata.pro/api/h2h/links', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

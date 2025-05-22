@@ -4,6 +4,8 @@ export default async function handler(req, res) {
   }
   const API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJQdWJsaWNJZCI6IjNhMTk3OTk3LTlmYzUtZmZkMS0wZGFjLTljYTM1NDZiNWE2ZSIsIlRva2VuVmVyc2lvbiI6IjIiLCJleHAiOjE3NzkzNjQ5ODEsImlzcyI6Imh0dHBzOi8vYXBpLndhdGEucHJvIiwiYXVkIjoiaHR0cHM6Ly9hcGkud2F0YS5wcm8vYXBpL2gyaCJ9.BWlLZN9ktkrccefuwU3KZoOlyHP3VJdFwPQRdxXmBuk";
   const TERMINAL_ID = "3a197997-9fc7-6a0e-0da2-768404f400d7";
+  const API_KEY_CARD = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJQdWJsaWNJZCI6IjNhMTk0YTQ4LWM4NGItZGY1Ny04MzE5LTcwYTk0ZGRlNDMyOCIsIlRva2VuVmVyc2lvbiI6IjIiLCJleHAiOjE3Nzk0NDI4MzcsImlzcyI6Imh0dHBzOi8vYXBpLndhdGEucHJvIiwiYXVkIjoiaHR0cHM6Ly9hcGkud2F0YS5wcm8vYXBpL2gyaCJ9.55DqWnd0aJmkQB7953hpEDbKOXwQYTqg61MgAHJ5toU";
+  const TERMINAL_ID_CARD = "3a194a48-c84f-49ea-ec2c-ea1ecadccc33";
   try {
     let body = req.body;
     if (!body || typeof body === 'string') {
@@ -18,12 +20,19 @@ export default async function handler(req, res) {
     }
     console.log('PAY API BODY:', body);
 
-    const { amount, order_id, description } = body;
+    const { amount, order_id, description, method } = body;
+    let apiKey = API_KEY;
+    let terminalId = TERMINAL_ID;
+    if (method === 'card') {
+      apiKey = API_KEY_CARD;
+      terminalId = TERMINAL_ID_CARD;
+    }
     const wataBody = {
       amount: Number(amount),
       currency: "RUB",
       description: description,
       orderId: order_id,
+      terminalId: terminalId,
       successRedirectUrl: "https://bazara-vpn-site.vercel.app/success",
       failRedirectUrl: "https://bazara-vpn-site.vercel.app/fail",
       expirationDateTime: new Date(Date.now() + 24*60*60*1000).toISOString()
@@ -34,7 +43,7 @@ export default async function handler(req, res) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + API_KEY
+        'Authorization': 'Bearer ' + apiKey
       },
       body: JSON.stringify(wataBody)
     });

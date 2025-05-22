@@ -70,7 +70,7 @@ export default async function handler(req, res) {
             'x-api-key': 'DR8ERAS-3S84CGC-QANNK8Q-GH71ZCQ'
           },
           body: JSON.stringify({
-            price_amount: 2290,
+            price_amount: Number(amount),
             price_currency: 'rub',
             pay_currency: 'btc',
             order_id: order_id,

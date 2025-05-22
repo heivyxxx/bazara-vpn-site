@@ -563,12 +563,9 @@
           description: 'Подписка BazaraVPN'
         };
         if (method === 'crypto') {
-          body = {
-            method: 'crypto',
-            amount: 2290,
-            order_id: 'vpn_' + Date.now(),
-            description: 'Тариф BazaraVPN — Годовой'
-          };
+          body.method = 'crypto';
+          body.order_id = 'vpn_' + Date.now();
+          body.description = 'Тариф BazaraVPN — ' + document.getElementById('modal-tariff-title').textContent;
         }
         const resp = await fetch('/api/pay', {
           method: 'POST',
@@ -677,12 +674,9 @@
           description: 'Подписка BazaraVPN'
         };
         if (method === 'crypto') {
-          body = {
-            method: 'crypto',
-            amount: 2290,
-            order_id: 'vpn_' + Date.now(),
-            description: 'Тариф BazaraVPN — Годовой'
-          };
+          body.method = 'crypto';
+          body.order_id = 'vpn_' + Date.now();
+          body.description = 'Тариф BazaraVPN — ' + document.getElementById('modal-tariff-title').textContent;
         }
         const resp = await fetch('/api/pay', {
           method: 'POST',

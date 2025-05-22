@@ -72,7 +72,7 @@ export default async function handler(req, res) {
           body: JSON.stringify({
             price_amount: 2290,
             price_currency: 'rub',
-            pay_currency: 'usdt',
+            pay_currency: 'btc',
             order_id: order_id,
             order_description: description,
             success_url: 'https://bazara-vpn-site.vercel.app/success',

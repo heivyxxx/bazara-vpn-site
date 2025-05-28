@@ -333,7 +333,7 @@
             <button id="open-payment-modal-year" class="rounded-xl px-8 py-4 text-lg font-bold bg-gradient-to-r from-orange-500 to-purple-500 text-white shadow-lg hover:scale-105 transition-transform explode-btn" data-i18n="tariff-btn-year">2290₽/год</button>
             <button id="open-payment-modal-month" class="rounded-xl px-8 py-4 text-lg font-bold border-2 border-orange-400 text-orange-500 bg-[#232323] shadow hover:bg-orange-900 hover:scale-105 transition-transform explode-btn" data-i18n="tariff-btn-month">399₽/мес</button>
             <button id="new-payment-modal-year" style="display:none;opacity:0;pointer-events:none;transform:translateY(40px);" class="rounded-xl px-8 py-4 text-lg font-bold bg-gradient-to-r from-orange-500 to-purple-500 text-white shadow-lg hover:scale-105 transition-transform fade-up" data-i18n="tariff-btn-year-new">1989₽/год</button>
-            <button id="new-payment-modal-month" style="display:none;opacity:0;pointer-events:none;transform:translateY(40px);" class="rounded-xl px-8 py-4 text-lg font-bold border-2 border-orange-400 text-orange-500 bg-[#232323] shadow hover:bg-orange-900 hover:scale-105 transition-transform fade-up" data-i18n="tariff-btn-month-new">1₽/мес</button>
+            <button id="new-payment-modal-month" style="display:none;opacity:0;pointer-events:none;transform:translateY(40px);" class="rounded-xl px-8 py-4 text-lg font-bold border-2 border-orange-400 text-orange-500 bg-[#232323] shadow hover:bg-orange-900 hover:scale-105 transition-transform fade-up" data-i18n="tariff-btn-month-new">50₽/мес</button>
           </div>
         </div>
         <div class="flex-1 flex justify-center items-center">
@@ -621,7 +621,7 @@
         payBtnPrice.textContent = isNew ? '1989₽' : '2290₽';
       } else {
         modalTitle.setAttribute('data-i18n', 'modal-pay-title-month');
-        payBtnPrice.textContent = isNew ? '1₽' : '399₽';
+        payBtnPrice.textContent = isNew ? '50₽' : '399₽';
       }
       // Только выставляем data-i18n, не трогаем textContent
       if (payBtnText) {
@@ -752,7 +752,7 @@
           'tariff-btn-year': '2290₽/год',
           'tariff-btn-month': '399₽/мес',
           'tariff-btn-year-new': '1989₽/год',
-          'tariff-btn-month-new': '1₽/мес',
+          'tariff-btn-month-new': '50₽/мес',
           'tariff-try-title': 'Попробуйте BazaraVPN бесплатно',
           'tariff-try-desc': '3 дня полной защиты — без оплаты. без карты.<br>Оцени качество — а потом решишь сам.',
           'tariff-try-btn': 'Активировать пробную версию',
@@ -808,7 +808,7 @@
           'tariff-btn-year': '2290₽/year',
           'tariff-btn-month': '399₽/month',
           'tariff-btn-year-new': '1989₽/year',
-          'tariff-btn-month-new': '1₽/month',
+          'tariff-btn-month-new': '50₽/month',
           'tariff-try-title': 'Try BazaraVPN for free',
           'tariff-try-desc': '3 days of full protection — no payment, no card.<br>Try the quality — then decide for yourself.',
           'tariff-try-btn': 'Activate trial',

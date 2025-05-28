@@ -452,17 +452,22 @@
     </div>
   </div>
   <!-- /Модалка оплаты -->
-  <!-- Модалка Telegram авторизации -->
-  <div id="tg-auth-modal-bg" class="fixed inset-0 bg-black bg-opacity-60 z-50 hidden flex items-center justify-center transition-opacity duration-300">
-    <div class="bg-[#232323] rounded-3xl shadow-2xl p-10 md:p-16 w-full max-w-lg relative flex flex-col gap-8 animate-fade-in" style="min-width:340px; min-height:420px; align-items:center; justify-content:center;">
-      <button id="close-tg-auth-modal" class="absolute top-5 right-5 w-10 h-10 flex items-center justify-center rounded-full bg-[#181818] hover:bg-[#2c2c2c] text-2xl text-gray-400">&times;</button>
-      <div class="flex flex-col items-center gap-4 w-full">
-        <h3 class="text-3xl font-extrabold text-white mb-2 text-center" data-i18n="modal-tg-title">Авторизация через Telegram</h3>
-        <p class="text-white text-center mb-4 text-lg max-w-md" data-i18n="modal-tg-desc">Войдите через Telegram, чтобы получить пробную ссылку на BazaraVPN.<br>Это безопасно, быстро и не требует ввода номера телефона или пароля.</p>
-        <div class="flex justify-center items-center w-full min-h-[64px]" style="min-height:64px;">
-          <div id="telegram-login-btn" class="w-full flex justify-center"></div>
+  <!-- Модалка генерации ссылки -->
+  <div id="link-modal-bg" class="fixed inset-0 bg-black bg-opacity-60 z-50 hidden flex items-center justify-center transition-opacity duration-300">
+    <div class="bg-[#232323] rounded-3xl shadow-2xl p-8 md:p-12 w-full max-w-xl relative flex flex-col gap-8 animate-fade-in" style="min-width:340px; min-height:260px; align-items:center; justify-content:center;">
+      <button id="close-link-modal" class="absolute top-5 right-5 w-10 h-10 flex items-center justify-center rounded-full bg-[#181818] hover:bg-[#2c2c2c] text-2xl text-gray-400">&times;</button>
+      <div id="link-modal-content" class="w-full flex flex-col items-center justify-center">
+        <div id="link-loading-block" class="flex flex-col items-center gap-4">
+          <svg class="animate-spin w-12 h-12 text-orange-400" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg>
+          <div class="text-xl font-bold text-white mt-2">🕐 Подождите, ваша ссылка генерируется…</div>
+          <div class="text-base text-gray-400">Обычно это занимает 5-15 секунд</div>
         </div>
-        <div id="tg-auth-result" class="text-white text-center mt-4 text-lg" data-i18n="modal-tg-result"></div>
+        <div id="link-ready-block" class="hidden flex-col items-center gap-4">
+          <div class="text-xl font-bold text-orange-400 mb-2">🎉 Ваша подписка готова!</div>
+          <div id="generated-link" class="bg-[#181818] rounded-xl px-4 py-3 text-orange-400 font-mono text-base mb-3 select-all" style="word-break:break-all;"></div>
+          <button id="copy-link-btn" class="bg-gradient-to-r from-orange-500 to-purple-500 text-white font-bold rounded-xl px-6 py-3 text-lg shadow hover:scale-105 transition-transform">Скопировать</button>
+          <div id="copy-link-success" class="text-green-400 mt-2 hidden">Скопировано!</div>
+        </div>
       </div>
     </div>
   </div>
@@ -578,6 +583,7 @@
         console.log('Pay response:', data);
         if (data && data.url) {
           window.open(data.url, '_blank');
+          setTimeout(() => { window.openLinkModal && window.openLinkModal(); }, 500);
         } else {
           alert('Ошибка при создании счёта!');
           console.log('Wata.pro/NOWPayments error:', data);
@@ -689,6 +695,7 @@
         console.log('Pay response:', data);
         if (data && data.url) {
           window.open(data.url, '_blank');
+          setTimeout(() => { window.openLinkModal && window.openLinkModal(); }, 500);
         } else {
           alert('Ошибка при создании счёта!');
           console.log('Wata.pro/NOWPayments error:', data);
@@ -914,6 +921,70 @@
           }, 80);
           overDropdown = false;
         });
+      }
+    });
+  </script>
+  <script>
+    // Модалка генерации ссылки
+    function openLinkModal() {
+      const modalBg = document.getElementById('link-modal-bg');
+      const loadingBlock = document.getElementById('link-loading-block');
+      const readyBlock = document.getElementById('link-ready-block');
+      const linkDiv = document.getElementById('generated-link');
+      const copyBtn = document.getElementById('copy-link-btn');
+      const copySuccess = document.getElementById('copy-link-success');
+      loadingBlock.classList.remove('hidden');
+      readyBlock.classList.add('hidden');
+      linkDiv.textContent = '';
+      copySuccess.classList.add('hidden');
+      modalBg.classList.remove('hidden');
+      modalBg.classList.add('opacity-100');
+      let polling = true;
+      async function pollLink() {
+        try {
+          const resp = await fetch('/api/generate');
+          if (resp.ok) {
+            const data = await resp.json();
+            if (data && data.link) {
+              loadingBlock.classList.add('hidden');
+              readyBlock.classList.remove('hidden');
+              linkDiv.textContent = data.link;
+              copyBtn.onclick = function() {
+                navigator.clipboard.writeText(data.link).then(() => {
+                  copySuccess.classList.remove('hidden');
+                  setTimeout(() => copySuccess.classList.add('hidden'), 1500);
+                });
+              };
+              polling = false;
+              return;
+            }
+          }
+        } catch (e) {}
+        if (polling) setTimeout(pollLink, 5000);
+      }
+      pollLink();
+      document.getElementById('close-link-modal').onclick = function() {
+        modalBg.classList.add('hidden');
+        modalBg.classList.remove('opacity-100');
+        polling = false;
+      };
+      modalBg.onclick = function(e) {
+        if (e.target === modalBg) {
+          modalBg.classList.add('hidden');
+          modalBg.classList.remove('opacity-100');
+          polling = false;
+        }
+      };
+    }
+    // После успешной оплаты открываем модалку генерации ссылки
+    window.openLinkModal = openLinkModal;
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('afterpay') === '1') {
+        window.openLinkModal && window.openLinkModal();
+        window.history.replaceState({}, document.title, window.location.pathname);
       }
     });
   </script>

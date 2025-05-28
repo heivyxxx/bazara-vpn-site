@@ -33,7 +33,7 @@ export default async function handler(req, res) {
       description: description,
       orderId: order_id,
       terminalId: terminalId,
-      successRedirectUrl: "https://bazara-vpn-site.vercel.app/api/generate",
+      successRedirectUrl: "https://bazara-vpn-site.vercel.app/tariffs.html?afterpay=1",
       failRedirectUrl: "https://bazara-vpn-site.vercel.app/fail",
       expirationDateTime: new Date(Date.now() + 24*60*60*1000).toISOString()
     };
@@ -75,7 +75,7 @@ export default async function handler(req, res) {
             pay_currency: 'btc',
             order_id: order_id,
             order_description: description,
-            success_url: 'https://bazara-vpn-site.vercel.app/api/generate',
+            success_url: 'https://bazara-vpn-site.vercel.app/tariffs.html?afterpay=1',
             cancel_url: 'https://bazara-vpn-site.vercel.app/fail'
           })
         });

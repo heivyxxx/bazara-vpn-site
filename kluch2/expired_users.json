@@ -271,5 +271,61 @@
     "proxy_path": "roEf5khbBY2ufxS",
     "api_key": "ebe672ba-936a-4b84-b45a-9825295e9f87",
     "end_date": "2025-06-27"
+  },
+  {
+    "uuid": "5af43ddf-a736-4660-8ac4-dc964a6f4a20",
+    "domain": "vpnbazara.ru",
+    "proxy_path": "kmSdgvmDQSXB",
+    "api_key": "fe8140e9-02a7-4790-8c22-30aac9647fd4",
+    "end_date": "2025-06-27"
+  },
+  {
+    "uuid": "bcdb1655-8ba0-43d8-a50c-768a638273d0",
+    "domain": "vpn.bazaravpn.ru",
+    "proxy_path": "x5do6FZ5R1Cz3m6vyONSpMCWKPuUD",
+    "api_key": "6c2400c0-918c-4a9f-8a59-9df23838e4e6",
+    "end_date": "2025-06-27"
+  },
+  {
+    "uuid": "8fba894b-8d86-486d-9156-99219ba8abac",
+    "domain": "germany.bazaravpn.ru",
+    "proxy_path": "JdbX7yhT37znZZ",
+    "api_key": "27bc6d11-a699-4360-811c-260c3c0b37d3",
+    "end_date": "2025-06-27"
+  },
+  {
+    "uuid": "09063523-2989-49b3-86ed-18841c23911a",
+    "domain": "turkey.bazaravpn.ru",
+    "proxy_path": "yYEIuX3jX61MXzSQhSsY4",
+    "api_key": "65478704-ac79-4636-a036-892e5aa65584",
+    "end_date": "2025-06-27"
+  },
+  {
+    "uuid": "4a0abbf0-9103-419e-bc22-75ffbdc7e0ed",
+    "domain": "japan.bazaravpn.ru",
+    "proxy_path": "fZ7s2sPOFD8NyUrv",
+    "api_key": "fabcc56a-f2db-4d15-ac14-6d4b7d2f691f",
+    "end_date": "2025-06-27"
+  },
+  {
+    "uuid": "c3c32079-3855-4cca-85ad-0da75dc1d609",
+    "domain": "amsterdam.bazaravpn.ru",
+    "proxy_path": "NGtiWweDZOri3gilZ8C7Rdcq",
+    "api_key": "3391f3ff-6675-4076-8927-e75e1ac3b5e2",
+    "end_date": "2025-06-27"
+  },
+  {
+    "uuid": "fc38d7d2-b0d1-4823-b548-7da9ed4b2138",
+    "domain": "usa.bazaravpn.ru",
+    "proxy_path": "DKtwf29IZL72EISGNode",
+    "api_key": "b21ba2e8-e5e9-48b5-9d21-846feae0ac48",
+    "end_date": "2025-06-27"
+  },
+  {
+    "uuid": "14d53851-f283-4e74-8551-69d3ac9427b4",
+    "domain": "afrika.bazaravpn.ru",
+    "proxy_path": "roEf5khbBY2ufxS",
+    "api_key": "ebe672ba-936a-4b84-b45a-9825295e9f87",
+    "end_date": "2025-06-27"
   }
 ]

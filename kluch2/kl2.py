@@ -1,3 +1,6 @@
+import sys
+import io
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 import requests
 import base64
 import urllib3
@@ -221,7 +224,7 @@ for idx, server in enumerate(SERVERS):
 
 # --- Генерация красивого имени файла ---
 def get_next_filename():
-    base = "🌍BazaraVPN 1M-"
+    base = "BazaraVPN 1M-"
     folder = "public"
     nums = []
     for fname in os.listdir(folder):

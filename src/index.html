@@ -1745,16 +1745,23 @@ document.addEventListener('DOMContentLoaded', function() {
       const name = document.getElementById('review-name').value.trim();
       const text = document.getElementById('review-text').value.trim();
       const rating = parseInt(document.getElementById('review-rating').value, 10);
+      const stars = document.querySelectorAll('#review-stars .star');
+      if (!name || !text || !rating || rating < 1 || rating > 5) {
+        alert('Пожалуйста, заполните все поля и выберите оценку от 1 до 5 звёзд.');
+        return;
+      }
       try {
         await db.collection('reviews').add({
           name,
           text,
           rating,
           createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-          status: 'pending'
+          status: 'moderation'
         });
         document.getElementById('review-success').classList.remove('hidden');
         reviewForm.reset();
+        stars.forEach(s => s.classList.remove('selected'));
+        document.getElementById('review-rating').value = 0;
         setTimeout(() => {
           document.getElementById('review-success').classList.add('hidden');
           document.getElementById('review-modal-bg').classList.add('hidden');

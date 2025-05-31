@@ -1536,11 +1536,11 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         star.addEventListener('mouseleave', function() {
           stars.forEach((s, j) => {
-            s.classList.toggle('selected', j < ratingInput.value);
+            s.classList.toggle('selected', j < Number(ratingInput.value));
           });
         });
         star.addEventListener('click', function() {
-          ratingInput.value = i + 1;
+          ratingInput.value = (i + 1).toString(); // Явно строкой
           stars.forEach((s, j) => {
             s.classList.toggle('selected', j <= i);
           });
@@ -1549,19 +1549,37 @@ document.addEventListener('DOMContentLoaded', function() {
       // Сброс выделения при открытии
       openBtn.addEventListener('click', function() {
         stars.forEach(s => s.classList.remove('selected'));
-        ratingInput.value = 0;
+        ratingInput.value = '0';
       });
-      // Форма отправки (заглушка)
-      document.getElementById('review-form').addEventListener('submit', function(e) {
+      // Форма отправки
+      document.getElementById('review-form').addEventListener('submit', async function(e) {
         e.preventDefault();
-        document.getElementById('review-success').classList.remove('hidden');
-        this.reset();
-        stars.forEach(s => s.classList.remove('selected'));
-        ratingInput.value = 0;
-        setTimeout(() => {
-          document.getElementById('review-success').classList.add('hidden');
-          modalBg.classList.add('hidden');
-        }, 1800);
+        const name = document.getElementById('review-name').value.trim();
+        const text = document.getElementById('review-text').value.trim();
+        const rating = parseInt(document.getElementById('review-rating').value, 10);
+        if (!name || !text || !rating || rating < 1 || rating > 5) {
+          alert('Пожалуйста, заполните все поля и выберите оценку от 1 до 5 звёзд.');
+          return;
+        }
+        try {
+          await db.collection('reviews').add({
+            name,
+            text,
+            rating,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            status: 'moderation'
+          });
+          document.getElementById('review-success').classList.remove('hidden');
+          this.reset();
+          stars.forEach(s => s.classList.remove('selected'));
+          ratingInput.value = '0';
+          setTimeout(() => {
+            document.getElementById('review-success').classList.add('hidden');
+            document.getElementById('review-modal-bg').classList.add('hidden');
+          }, 1800);
+        } catch (err) {
+          alert('Ошибка отправки отзыва. Попробуйте позже.');
+        }
       });
     });
 

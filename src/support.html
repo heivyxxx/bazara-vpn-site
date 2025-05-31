@@ -37,6 +37,8 @@
       border: 2px solid #444;
       transition: border 0.18s, box-shadow 0.18s, background 0.18s;
       user-select: none;
+      width: 100%;
+      max-width: 100%;
     }
     .reply-block:hover, .reply-block:focus {
       border-color: #ff8800;
@@ -47,6 +49,24 @@
       border-color: #ff8800;
       background: #232323;
       box-shadow: 0 0 0 2px #ff8800cc;
+    }
+    @media (min-width: 600px) {
+      .reply-block {
+        width: 48%;
+        min-width: 220px;
+        display: flex;
+      }
+      .reply-block + .reply-block {
+        margin-left: 4%;
+      }
+    }
+    @media (max-width: 599px) {
+      .reply-block {
+        width: 100%;
+        min-width: 0;
+        margin-left: 0 !important;
+        margin-bottom: 10px;
+      }
     }
     .custom-select {
       border: 2px solid #fff !important;
@@ -432,12 +452,12 @@
         <input type="text" class="bg-[#181818] border border-gray-700 rounded-xl p-4 text-white text-lg" placeholder="Ваше имя (необязательно)" id="issue-name">
         <div class="flex flex-col gap-2">
           <label class="font-extrabold text-white text-xl text-center mb-2">Как с вами связаться?</label>
-          <div class="flex gap-6 justify-center">
-            <div id="reply-chat-block" class="reply-block flex flex-col items-center justify-center gap-2 px-6 py-4 rounded-2xl border-2 border-gray-700 cursor-pointer transition-all" style="min-width:140px;" tabindex="0">
+          <div class="flex gap-6 justify-center flex-wrap md:flex-nowrap md:gap-6">
+            <div id="reply-chat-block" class="reply-block flex flex-col items-center justify-center gap-2 px-6 py-4 rounded-2xl border-2 border-gray-700 cursor-pointer transition-all w-full md:w-[48%] min-w-[140px] md:min-w-[220px] max-w-full" tabindex="0">
               <img src="assets/chat-3d.png" alt="chat" class="w-12 h-12 mb-1 select-none pointer-events-none" draggable="false" />
               <span class="font-bold text-lg">В чате</span>
             </div>
-            <div id="reply-email-block" class="reply-block flex flex-col items-center justify-center gap-2 px-6 py-4 rounded-2xl border-2 border-gray-700 cursor-pointer transition-all" style="min-width:140px;" tabindex="0">
+            <div id="reply-email-block" class="reply-block flex flex-col items-center justify-center gap-2 px-6 py-4 rounded-2xl border-2 border-gray-700 cursor-pointer transition-all w-full md:w-[48%] min-w-[140px] md:min-w-[220px] max-w-full" tabindex="0">
               <img src="assets/mail-3d.png" alt="mail" class="w-12 h-12 mb-1 select-none pointer-events-none" draggable="false" />
               <span class="font-bold text-lg">По email</span>
             </div>

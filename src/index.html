@@ -1528,29 +1528,38 @@ document.addEventListener('DOMContentLoaded', function() {
       // Звёзды рейтинга
       const stars = document.querySelectorAll('#review-stars .star');
       const ratingInput = document.getElementById('review-rating');
+      function updateStars(rating) {
+        stars.forEach((star, i) => {
+          if (i < rating) {
+            star.classList.add('selected');
+            star.style.color = '#ff8800'; // ярко-оранжевый
+            star.style.opacity = '1';
+          } else {
+            star.classList.remove('selected');
+            star.style.color = '#bbb'; // серый
+            star.style.opacity = '0.5';
+          }
+        });
+      }
       stars.forEach((star, i) => {
         star.addEventListener('mouseenter', function() {
-          stars.forEach((s, j) => {
-            s.classList.toggle('selected', j <= i);
-          });
+          updateStars(i + 1);
         });
         star.addEventListener('mouseleave', function() {
-          stars.forEach((s, j) => {
-            s.classList.toggle('selected', j < Number(ratingInput.value));
-          });
+          updateStars(Number(ratingInput.value));
         });
         star.addEventListener('click', function() {
-          ratingInput.value = (i + 1).toString(); // Явно строкой
-          stars.forEach((s, j) => {
-            s.classList.toggle('selected', j <= i);
-          });
+          ratingInput.value = (i + 1).toString();
+          updateStars(i + 1);
         });
       });
       // Сброс выделения при открытии
       openBtn.addEventListener('click', function() {
-        stars.forEach(s => s.classList.remove('selected'));
         ratingInput.value = '0';
+        updateStars(0);
       });
+      // При загрузке — сбросить звёзды
+      updateStars(Number(ratingInput.value));
       // Форма отправки
       document.getElementById('review-form').addEventListener('submit', async function(e) {
         e.preventDefault();

@@ -632,11 +632,30 @@ document.addEventListener('DOMContentLoaded', function() {
   // --- ЖАЛОБЫ/ОШИБКИ ---
   const errorForm = document.getElementById('error-form');
   if (errorForm) {
+    // Удаляем старые обработчики (если вдруг были)
+    errorForm.onsubmit = null;
+    let isSubmitting = false;
     errorForm.addEventListener('submit', async function(e) {
       e.preventDefault();
+      if (isSubmitting) return;
+      isSubmitting = true;
+      const submitBtn = errorForm.querySelector('button[type="submit"]');
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.style.opacity = '0.6';
+      }
       const textarea = this.querySelector('textarea');
       const email = this.querySelector('input[type="email"]').value.trim();
       const text = textarea.value.trim();
+      if (!text) {
+        alert('Пожалуйста, опишите проблему.');
+        isSubmitting = false;
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.style.opacity = '';
+        }
+        return;
+      }
       try {
         await db.collection('issues').add({
           text,
@@ -651,7 +670,14 @@ document.addEventListener('DOMContentLoaded', function() {
           document.getElementById('error-modal-bg').classList.add('hidden');
         }, 1800);
       } catch (err) {
-        alert('Ошибка отправки. Попробуйте позже.');
+        console.error('Ошибка отправки жалобы:', err);
+        // alert('Ошибка отправки. Попробуйте позже.');
+      } finally {
+        isSubmitting = false;
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.style.opacity = '';
+        }
       }
     });
   }

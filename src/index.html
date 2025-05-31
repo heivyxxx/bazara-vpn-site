@@ -1600,7 +1600,7 @@ document.addEventListener('DOMContentLoaded', function() {
           }, 1800);
         } catch (err) {
           console.error('Ошибка отправки отзыва:', err);
-          alert('Ошибка отправки отзыва. Попробуйте позже.');
+          // alert('Ошибка отправки отзыва. Попробуйте позже.'); // убрано по просьбе пользователя
         } finally {
           isSubmitting = false;
           submitBtn.disabled = false;

@@ -583,5 +583,79 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 </script>
+<!-- Firebase App (core) -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<!-- Firestore -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script>
+  // Рабочий конфиг из firebaseConfig.js
+  const firebaseConfig = {
+    apiKey: "AIzaSyAouTEXN2lQapElxCEtmebO21t19i2WYns",
+    authDomain: "bazara-vpn-admin.firebaseapp.com",
+    projectId: "bazara-vpn-admin",
+    storageBucket: "bazara-vpn-admin.appspot.com",
+    messagingSenderId: "856281360473",
+    appId: "1:856281360473:web:1b01584e7830672dcb2948"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // --- ЧАТ ПОДДЕРЖКИ ---
+  const supportChatForm = document.getElementById('support-chat-form');
+  if (supportChatForm) {
+    supportChatForm.onsubmit = async function(e) {
+      e.preventDefault();
+      const input = document.getElementById('support-chat-input');
+      const msg = input.value.trim();
+      if (!msg) return;
+      try {
+        await db.collection('supportChats').add({
+          message: msg,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+          status: 'new'
+        });
+        // UI: добавить сообщение в чат (оставляю твой код)
+        const messages = document.getElementById('support-chat-messages');
+        const userMsg = document.createElement('div');
+        userMsg.className = 'flex items-start gap-3 justify-end';
+        userMsg.innerHTML = `<div class="bg-[#181818] rounded-xl px-4 py-2 text-white max-w-[70%] shadow border border-orange-500">${msg.replace(/</g,'&lt;')}</div><div class="bg-gradient-to-br from-orange-500 to-purple-700 rounded-full w-10 h-10 flex items-center justify-center text-white font-bold text-lg">Вы</div>`;
+        messages.appendChild(userMsg);
+        input.value = '';
+        messages.scrollTop = messages.scrollHeight;
+      } catch (err) {
+        alert('Ошибка отправки сообщения. Попробуйте позже.');
+      }
+    };
+  }
+  // --- ЖАЛОБЫ/ОШИБКИ ---
+  const errorForm = document.getElementById('error-form');
+  if (errorForm) {
+    errorForm.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const textarea = this.querySelector('textarea');
+      const email = this.querySelector('input[type="email"]').value.trim();
+      const text = textarea.value.trim();
+      try {
+        await db.collection('issues').add({
+          text,
+          email,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+          status: 'new'
+        });
+        document.getElementById('error-success').classList.remove('hidden');
+        this.reset();
+        setTimeout(() => {
+          document.getElementById('error-success').classList.add('hidden');
+          document.getElementById('error-modal-bg').classList.add('hidden');
+        }, 1800);
+      } catch (err) {
+        alert('Ошибка отправки. Попробуйте позже.');
+      }
+    });
+  }
+});
+</script>
 </body>
 </html> 

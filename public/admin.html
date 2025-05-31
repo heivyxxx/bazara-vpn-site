@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BazaraVPN — Админка</title>
+  <link rel="icon" href="/favicon.ico">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { background: #181818; min-height: 100vh; }
+    .admin-card {
+      background: #232323;
+      border-radius: 1.5rem;
+      box-shadow: 0 2px 24px 0 #ff880088;
+      transition: box-shadow 0.22s, transform 0.18s, border 0.18s;
+      cursor: pointer;
+    }
+    .admin-card:hover {
+      box-shadow: 0 8px 32px 0 #ff8800cc, 0 2px 8px 0 #a259ff88;
+      border-color: #ff8800;
+      transform: translateY(-4px) scale(1.03);
+    }
+    .badge {
+      background: #ff3b3b;
+      color: #fff;
+      font-weight: bold;
+      border-radius: 9999px;
+      padding: 0.3em 0.9em;
+      font-size: 1.1rem;
+      box-shadow: 0 0 0 2px #232323;
+      display: inline-block;
+      min-width: 2.2em;
+      text-align: center;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center text-white">
+  <main class="w-full max-w-3xl mx-auto flex flex-col gap-10 py-16 px-4">
+    <!-- Верхний блок -->
+    <div onclick="location.href='/admin/support'" class="admin-card flex items-center justify-between px-8 py-8 mb-4 w-full cursor-pointer group border-2 border-transparent">
+      <div class="flex items-center gap-6">
+        <!-- Иконка гарнитуры -->
+        <div class="bg-[#181818] rounded-full p-4 flex items-center justify-center shadow-lg">
+          <svg class="w-12 h-12 text-orange-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4 12V10a8 8 0 1 1 16 0v2"/><rect x="2" y="12" width="20" height="8" rx="4"/><path d="M6 16v2a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2v-2"/></svg>
+        </div>
+        <div>
+          <div class="text-2xl font-extrabold text-white mb-1">Поддержка</div>
+          <div class="text-lg text-gray-300">Напишите клиенту в чат</div>
+        </div>
+      </div>
+      <span class="badge text-lg" id="support-badge">0</span>
+    </div>
+    <!-- Нижние два блока -->
+    <div class="flex gap-8 w-full">
+      <!-- Решение проблем -->
+      <div onclick="location.href='/admin/issues'" class="admin-card flex-1 flex items-center justify-between px-7 py-7 cursor-pointer group border-2 border-transparent">
+        <div class="flex items-center gap-5">
+          <div class="bg-[#181818] rounded-full p-3 flex items-center justify-center shadow-lg">
+            <svg class="w-10 h-10 text-orange-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 15c1.333-1 2.667-1 4 0"/><circle cx="9" cy="10" r="1"/><circle cx="15" cy="10" r="1"/></svg>
+          </div>
+          <div>
+            <div class="text-xl font-bold text-white mb-1">Решение проблем</div>
+            <div class="text-base text-gray-300">Решите проблему клиента</div>
+          </div>
+        </div>
+        <span class="badge" id="issues-badge">0</span>
+      </div>
+      <!-- Отзывы -->
+      <div onclick="location.href='/admin/reviews'" class="admin-card flex-1 flex items-center justify-between px-7 py-7 cursor-pointer group border-2 border-transparent">
+        <div class="flex items-center gap-5">
+          <div class="bg-[#181818] rounded-full p-3 flex items-center justify-center shadow-lg">
+            <svg class="w-10 h-10 text-purple-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9.5 17,14.5 18.5,22 12,18.5 5.5,22 7,14.5 2,9.5 9,9"/></svg>
+          </div>
+          <div>
+            <div class="text-xl font-bold text-white mb-1">Отзывы</div>
+            <div class="text-base text-gray-300">Проверьте новые отзывы</div>
+          </div>
+        </div>
+        <span class="badge" id="reviews-badge">0</span>
+      </div>
+    </div>
+  </main>
+  <script>
+  function updateBadges() {
+    document.getElementById('support-badge').textContent = localStorage.getItem('supportCount') || '0';
+    document.getElementById('issues-badge').textContent = localStorage.getItem('issuesCount') || '0';
+    document.getElementById('reviews-badge').textContent = localStorage.getItem('reviewsCount') || '0';
+  }
+  window.addEventListener('storage', updateBadges);
+  setInterval(updateBadges, 5000);
+  document.addEventListener('DOMContentLoaded', updateBadges);
+  </script>
+</body>
+</html> 

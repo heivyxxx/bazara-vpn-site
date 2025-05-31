@@ -54,23 +54,24 @@
       color: #fff !important;
       transition: border 0.22s, color 0.22s, box-shadow 0.22s;
       box-shadow: none !important;
+      outline: none !important;
     }
     .custom-select:focus {
       border: 2px solid #fff !important;
       box-shadow: 0 0 0 2px #ff8800cc !important;
     }
     .custom-select option {
-      background: #232323 !important;
+      background: #292929 !important;
       color: #fff !important;
       transition: color 0.18s, background 0.18s;
     }
     .custom-select option:hover, .custom-select option:focus {
       color: #ff8800 !important;
-      background: #232323 !important;
+      background: #292929 !important;
     }
     .custom-select option:checked {
       color: #ff8800 !important;
-      background: #232323 !important;
+      background: #292929 !important;
     }
   </style>
 </head>
@@ -430,14 +431,14 @@
       <form id="error-form" class="flex flex-col gap-6 px-10 py-4">
         <input type="text" class="bg-[#181818] border border-gray-700 rounded-xl p-4 text-white text-lg" placeholder="Ваше имя (необязательно)" id="issue-name">
         <div class="flex flex-col gap-2">
-          <label class="font-semibold text-white mb-1">Как с вами связаться?</label>
+          <label class="font-extrabold text-white text-xl text-center mb-2">Как с вами связаться?</label>
           <div class="flex gap-6 justify-center">
             <div id="reply-chat-block" class="reply-block flex flex-col items-center justify-center gap-2 px-6 py-4 rounded-2xl border-2 border-gray-700 cursor-pointer transition-all" style="min-width:140px;" tabindex="0">
-              <svg class="w-9 h-9 text-orange-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              <img src="assets/chat-3d.png" alt="chat" class="w-12 h-12 mb-1 select-none pointer-events-none" draggable="false" />
               <span class="font-bold text-lg">В чате</span>
             </div>
             <div id="reply-email-block" class="reply-block flex flex-col items-center justify-center gap-2 px-6 py-4 rounded-2xl border-2 border-gray-700 cursor-pointer transition-all" style="min-width:140px;" tabindex="0">
-              <svg class="w-9 h-9 text-purple-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="4"/><polygon points="10,9 16,12 10,15" fill="currentColor"/></svg>
+              <img src="assets/mail-3d.png" alt="mail" class="w-12 h-12 mb-1 select-none pointer-events-none" draggable="false" />
               <span class="font-bold text-lg">По email</span>
             </div>
           </div>
@@ -445,7 +446,7 @@
         </div>
         <input type="email" class="bg-[#181818] border border-gray-700 rounded-xl p-4 text-white text-lg" placeholder="Ваш email (если выбрали email)" id="issue-email">
         <div class="flex flex-col gap-2">
-          <label class="font-semibold text-white mb-1">Категория проблемы</label>
+          <label class="font-extrabold text-white text-xl text-center mb-2">Категория проблемы</label>
           <div class="relative">
             <select id="issue-category" class="custom-select bg-[#181818] border border-white rounded-xl p-4 text-white text-lg cursor-pointer focus:border-white focus:ring-2 focus:ring-orange-400 transition-all w-full appearance-none">
               <option value="VPN не подключается">VPN не подключается</option>
@@ -715,7 +716,7 @@
         const text = document.getElementById('issue-text').value.trim();
         const replyType = document.getElementById('reply-type-value').value;
         // Валидация
-        if (!replyType) {
+        if (replyType !== 'chat' && replyType !== 'email') {
           alert('Пожалуйста, выберите способ ответа: в чате или по email.');
           isSubmitting = false;
           if (submitBtn) { submitBtn.disabled = false; submitBtn.style.opacity = ''; }

@@ -7,11 +7,11 @@ import { auth, db } from "../../../firebaseConfig";
 
 interface Review {
   id: string;
-  userId: string;
+  name: string;
   text: string;
-  stars: number;
+  rating: number;
   status: string;
-  createdAt: number;
+  createdAt: any;
 }
 
 export default function ReviewsPage() {
@@ -38,16 +38,20 @@ export default function ReviewsPage() {
       if (d.status === "moderation") {
         arr.push({
           id: docu.id,
-          userId: d.userId,
-          text: d.text,
-          stars: d.stars,
+          name: d.name || "Аноним",
+          text: d.text || "",
+          rating: d.rating || 0,
           status: d.status,
-          createdAt: d.createdAt
+          createdAt: d.createdAt || null
         });
       }
     });
     // Сортировка: свежие сверху
-    arr.sort((a, b) => b.createdAt - a.createdAt);
+    arr.sort((a, b) => {
+      const aTime = a.createdAt && a.createdAt.toDate ? a.createdAt.toDate().getTime() : 0;
+      const bTime = b.createdAt && b.createdAt.toDate ? b.createdAt.toDate().getTime() : 0;
+      return bTime - aTime;
+    });
     setReviews(arr);
   };
 
@@ -76,9 +80,9 @@ export default function ReviewsPage() {
       {reviews.map((review) => (
         <div key={review.id} className="review-card flex flex-col gap-3">
           <div className="flex items-center gap-4 mb-1">
-            <div className="font-bold text-lg text-purple-400 flex-1">{review.userId || "Аноним"}</div>
-            <div className="stars">{'★'.repeat(review.stars)}{'☆'.repeat(5-review.stars)}</div>
-            <div className="text-sm text-gray-400">{new Date(review.createdAt).toLocaleString()}</div>
+            <div className="font-bold text-lg text-purple-400 flex-1">{review.name || "Аноним"}</div>
+            <div className="stars">{'★'.repeat(review.rating)}{'☆'.repeat(5-review.rating)}</div>
+            <div className="text-sm text-gray-400">{review.createdAt && review.createdAt.toDate ? review.createdAt.toDate().toLocaleString() : "-"}</div>
           </div>
           <div className="text-base mb-2">{review.text}</div>
           <div className="flex gap-2">

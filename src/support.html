@@ -48,6 +48,30 @@
       background: #232323;
       box-shadow: 0 0 0 2px #ff8800cc;
     }
+    .custom-select {
+      border: 2px solid #fff !important;
+      background: #181818 !important;
+      color: #fff !important;
+      transition: border 0.22s, color 0.22s, box-shadow 0.22s;
+      box-shadow: none !important;
+    }
+    .custom-select:focus {
+      border: 2px solid #fff !important;
+      box-shadow: 0 0 0 2px #ff8800cc !important;
+    }
+    .custom-select option {
+      background: #232323 !important;
+      color: #fff !important;
+      transition: color 0.18s, background 0.18s;
+    }
+    .custom-select option:hover, .custom-select option:focus {
+      color: #ff8800 !important;
+      background: #232323 !important;
+    }
+    .custom-select option:checked {
+      color: #ff8800 !important;
+      background: #232323 !important;
+    }
   </style>
 </head>
 <body class="min-h-screen flex flex-col text-white" id="main-body">
@@ -399,12 +423,11 @@
   <!-- Error Modal (NEW) -->
   <div id="error-modal-bg" class="fixed inset-0 z-50 bg-black bg-opacity-70 flex items-center justify-center hidden transition-all duration-300">
     <div class="bg-gradient-to-br from-[#232323] via-[#181818] to-[#2d1a00] rounded-3xl shadow-2xl p-0 max-w-2xl w-full relative animate-fade-in flex flex-col border-4 border-orange-500/30" id="error-modal" style="box-shadow:0 8px 48px 0 #ff880022,0 2px 0 #a259ff; min-width: 440px; max-width: 520px;">
-      <button id="close-error-modal" class="absolute top-3 right-3 text-gray-400 hover:text-orange-400 text-3xl font-bold transition-all">&times;</button>
-      <div class="flex items-center gap-3 px-8 pt-8 pb-2">
-        <img src="assets/bug-3d.png" alt="bug" class="w-10 h-10" style="object-fit:contain;" />
-        <span class="text-2xl font-extrabold text-orange-400">Сообщить о проблеме</span>
+      <div class="flex flex-col items-center justify-center pt-8 pb-2">
+        <img src="assets/bug-3d.png" alt="bug" class="w-20 h-20 mb-2" style="object-fit:contain;" />
+        <span class="text-3xl font-extrabold text-orange-400 text-center mb-2">Сообщить о проблеме</span>
       </div>
-      <form id="error-form" class="flex flex-col gap-6 px-10 py-8">
+      <form id="error-form" class="flex flex-col gap-6 px-10 py-4">
         <input type="text" class="bg-[#181818] border border-gray-700 rounded-xl p-4 text-white text-lg" placeholder="Ваше имя (необязательно)" id="issue-name">
         <div class="flex flex-col gap-2">
           <label class="font-semibold text-white mb-1">Как с вами связаться?</label>
@@ -423,12 +446,15 @@
         <input type="email" class="bg-[#181818] border border-gray-700 rounded-xl p-4 text-white text-lg" placeholder="Ваш email (если выбрали email)" id="issue-email">
         <div class="flex flex-col gap-2">
           <label class="font-semibold text-white mb-1">Категория проблемы</label>
-          <select id="issue-category" class="bg-[#181818] border border-gray-700 rounded-xl p-4 text-white text-lg cursor-pointer focus:border-orange-500 transition-all">
-            <option value="VPN не подключается">VPN не подключается</option>
-            <option value="Проблема с оплатой">Проблема с оплатой</option>
-            <option value="Ошибка на сайте">Ошибка на сайте</option>
-            <option value="Другое">Другое</option>
-          </select>
+          <div class="relative">
+            <select id="issue-category" class="custom-select bg-[#181818] border border-white rounded-xl p-4 text-white text-lg cursor-pointer focus:border-white focus:ring-2 focus:ring-orange-400 transition-all w-full appearance-none">
+              <option value="VPN не подключается">VPN не подключается</option>
+              <option value="Проблема с оплатой">Проблема с оплатой</option>
+              <option value="Ошибка на сайте">Ошибка на сайте</option>
+              <option value="Другое">Другое</option>
+            </select>
+            <svg class="pointer-events-none absolute right-5 top-1/2 -translate-y-1/2 w-6 h-6 text-white opacity-70" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
         </div>
         <textarea class="bg-[#181818] border border-gray-700 rounded-xl p-4 text-white text-lg resize-none min-h-[100px]" placeholder="Опишите проблему..." id="issue-text" required></textarea>
         <button type="submit" class="bg-gradient-to-r from-orange-500 to-purple-700 hover:from-orange-600 hover:to-purple-800 text-white font-bold py-3 px-8 rounded-xl text-lg transition-all shadow-lg">Отправить</button>

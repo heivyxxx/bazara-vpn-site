@@ -24,8 +24,8 @@ export default function AdminHome() {
     if (loading) return;
     // Получаем количество непрочитанных чатов
     getDocs(query(collection(db, "supportChats"), where("status", "==", "unread"))).then(snap => setSupportCount(snap.size));
-    // Получаем количество активных проблем
-    getDocs(query(collection(db, "issues"), where("status", "==", "open"))).then(snap => setIssuesCount(snap.size));
+    // Получаем количество активных проблем (new + pending)
+    getDocs(query(collection(db, "issues"), where("status", "in", ["new", "pending"]))).then(snap => setIssuesCount(snap.size));
     // Получаем количество немодерированных отзывов
     getDocs(query(collection(db, "reviews"), where("status", "==", "moderation"))).then(snap => setReviewsCount(snap.size));
   }, [loading]);

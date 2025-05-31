@@ -380,308 +380,343 @@
       }
     });
   </script>
-  <!-- Error Modal -->
-<div id="error-modal-bg" class="fixed inset-0 z-50 bg-black bg-opacity-70 flex items-center justify-center hidden transition-all duration-300">
-  <div class="bg-gradient-to-br from-[#232323] via-[#181818] to-[#2d1a00] rounded-3xl shadow-2xl p-0 max-w-md w-full relative animate-fade-in flex flex-col border-4 border-orange-500/30" id="error-modal" style="box-shadow:0 8px 48px 0 #ff880022,0 2px 0 #a259ff;">
-    <button id="close-error-modal" class="absolute top-3 right-3 text-gray-400 hover:text-orange-400 text-3xl font-bold transition-all">&times;</button>
-    <div class="flex items-center gap-3 px-8 pt-8 pb-2">
-      <img src="assets/bug-3d.png" alt="bug" class="w-10 h-10" style="object-fit:contain;" />
-      <span class="text-2xl font-extrabold text-orange-400" data-i18n="error-modal-title">Сообщить о проблеме</span>
-    </div>
-    <form id="error-form" class="flex flex-col gap-4 px-8 py-6">
-      <textarea class="bg-[#181818] border border-gray-700 rounded-xl p-3 text-white resize-none min-h-[80px]" placeholder="Опишите проблему или ошибку..." required data-i18n-placeholder="error-modal-placeholder"></textarea>
-      <input type="email" class="bg-[#181818] border border-gray-700 rounded-xl p-3 text-white" placeholder="Ваш email (необязательно)" data-i18n-placeholder="error-modal-email">
-      <button type="submit" class="bg-gradient-to-r from-orange-500 to-purple-700 hover:from-orange-600 hover:to-purple-800 text-white font-bold py-2 px-6 rounded-xl transition-all shadow-lg" data-i18n="error-modal-send">Отправить</button>
-    </form>
-    <div id="error-success" class="hidden text-green-400 mt-4 text-center font-bold text-lg" data-i18n="error-modal-success">Спасибо! Ваше сообщение отправлено.</div>
-  </div>
-</div>
-<!-- Support Chat Modal -->
-<div id="support-chat-modal-bg" class="fixed inset-0 z-50 bg-black bg-opacity-70 flex items-center justify-center hidden transition-all duration-300">
-  <div class="bg-gradient-to-br from-[#232323] via-[#181818] to-[#2d1a00] rounded-3xl shadow-2xl max-w-3xl w-full h-[80vh] relative animate-fade-in flex flex-col border-4 border-orange-500/30" id="support-chat-modal" style="box-shadow:0 8px 48px 0 #ff880022,0 2px 0 #a259ff;">
-    <button id="close-support-chat" class="absolute top-5 right-7 text-gray-400 hover:text-orange-400 text-4xl font-bold transition-all">&times;</button>
-    <div class="flex items-center gap-3 px-10 pt-8 pb-4 border-b border-orange-700">
-      <img src="assets/trader.gif" alt="Support" class="w-12 h-12 rounded-full" style="object-fit:contain;" />
-      <span class="text-3xl font-extrabold text-orange-400" data-i18n="support-chat-title">Чат поддержки</span>
-      <span class="ml-auto text-base text-gray-400 font-semibold" data-i18n="support-chat-online">Онлайн</span>
-    </div>
-    <div id="support-chat-messages" class="flex-1 overflow-y-auto px-10 py-6 space-y-4 bg-[#181818] rounded-b-3xl flex flex-col" style="min-height:0;">
-      <div class="flex items-start gap-3">
-        <div class="bg-gradient-to-br from-orange-500 to-purple-700 rounded-full w-12 h-12 flex items-center justify-center text-white font-bold text-lg shadow-lg">S</div>
-        <div class="bg-[#232323] rounded-2xl px-5 py-3 text-white max-w-[70%] shadow border border-orange-500 text-base" data-i18n="support-chat-greeting">Здравствуйте! Чем можем помочь?</div>
+  <!-- Error Modal (NEW) -->
+  <div id="error-modal-bg" class="fixed inset-0 z-50 bg-black bg-opacity-70 flex items-center justify-center hidden transition-all duration-300">
+    <div class="bg-gradient-to-br from-[#232323] via-[#181818] to-[#2d1a00] rounded-3xl shadow-2xl p-0 max-w-xl w-full relative animate-fade-in flex flex-col border-4 border-orange-500/30" id="error-modal" style="box-shadow:0 8px 48px 0 #ff880022,0 2px 0 #a259ff; min-width: 380px;">
+      <button id="close-error-modal" class="absolute top-3 right-3 text-gray-400 hover:text-orange-400 text-3xl font-bold transition-all">&times;</button>
+      <div class="flex items-center gap-3 px-8 pt-8 pb-2">
+        <img src="assets/bug-3d.png" alt="bug" class="w-10 h-10" style="object-fit:contain;" />
+        <span class="text-2xl font-extrabold text-orange-400">Сообщить о проблеме</span>
       </div>
+      <form id="error-form" class="flex flex-col gap-4 px-8 py-6">
+        <input type="text" class="bg-[#181818] border border-gray-700 rounded-xl p-3 text-white" placeholder="Ваше имя (необязательно)" id="issue-name">
+        <div class="flex flex-col gap-2">
+          <label class="font-semibold text-white">Как с вами связаться?</label>
+          <div class="flex gap-4">
+            <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="replyType" value="chat" class="reply-type-radio"> В чате</label>
+            <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="replyType" value="email" class="reply-type-radio"> По email</label>
+          </div>
+        </div>
+        <input type="email" class="bg-[#181818] border border-gray-700 rounded-xl p-3 text-white" placeholder="Ваш email (если выбрали email)" id="issue-email">
+        <div class="flex flex-col gap-2">
+          <label class="font-semibold text-white">Категория проблемы</label>
+          <select id="issue-category" class="bg-[#181818] border border-gray-700 rounded-xl p-3 text-white">
+            <option value="VPN не подключается">VPN не подключается</option>
+            <option value="Проблема с оплатой">Проблема с оплатой</option>
+            <option value="Ошибка на сайте">Ошибка на сайте</option>
+            <option value="Другое">Другое</option>
+          </select>
+        </div>
+        <textarea class="bg-[#181818] border border-gray-700 rounded-xl p-3 text-white resize-none min-h-[80px]" placeholder="Опишите проблему..." id="issue-text" required></textarea>
+        <button type="submit" class="bg-gradient-to-r from-orange-500 to-purple-700 hover:from-orange-600 hover:to-purple-800 text-white font-bold py-2 px-6 rounded-xl transition-all shadow-lg">Отправить</button>
+      </form>
+      <div id="error-success" class="hidden text-green-400 mt-4 text-center font-bold text-lg">Спасибо! Ваше сообщение отправлено.</div>
     </div>
-    <form id="support-chat-form" class="flex gap-3 p-8 border-t border-orange-700 bg-[#232323] rounded-b-3xl">
-      <input id="support-chat-input" type="text" class="flex-1 bg-[#181818] border border-gray-700 rounded-xl p-4 text-white text-lg" placeholder="Введите сообщение..." autocomplete="off" required data-i18n-placeholder="support-chat-placeholder">
-      <button type="submit" class="bg-gradient-to-r from-orange-500 to-purple-700 hover:from-orange-600 hover:to-purple-800 text-white font-bold py-3 px-8 rounded-xl text-lg transition-all shadow-lg" data-i18n="support-chat-send">Отправить</button>
-    </form>
   </div>
-</div>
-<script>
-document.getElementById('close-support-chat').onclick = function() {
-  document.getElementById('support-chat-modal-bg').classList.add('hidden');
-};
-document.getElementById('support-chat-modal-bg').addEventListener('click', function(e) {
-  if (e.target === this) this.classList.add('hidden');
-});
-document.getElementById('support-chat-form').onsubmit = function(e) {
-  e.preventDefault();
-  const input = document.getElementById('support-chat-input');
-  const messages = document.getElementById('support-chat-messages');
-  const msg = input.value.trim();
-  if (!msg) return;
-  const userMsg = document.createElement('div');
-  userMsg.className = 'flex items-start gap-3 justify-end';
-  userMsg.innerHTML = `<div class="bg-[#181818] rounded-xl px-4 py-2 text-white max-w-[70%] shadow border border-orange-500">${msg.replace(/</g,'&lt;')}</div><div class="bg-gradient-to-br from-orange-500 to-purple-700 rounded-full w-10 h-10 flex items-center justify-center text-white font-bold text-lg">Вы</div>`;
-  messages.appendChild(userMsg);
-  input.value = '';
-  messages.scrollTop = messages.scrollHeight;
-};
-</script>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  const translations = {
-    ru: {
-      'header-advantages': 'Преимущества',
-      'header-tariffs': 'Тарифы',
-      'header-download': 'Скачать',
-      'header-support': 'Поддержка',
-      'header-what-vpn': 'Что такое VPN?',
-      'header-what-vpn-desc': 'VPN — это технология для анонимности, безопасности и обхода блокировок в интернете.',
-      'header-why-bazara': 'Почему BazaraVPN?',
-      'header-why-bazara-desc': 'Без логов, высокая скорость, поддержка стриминга и торрентов, современные протоколы.',
-      'header-all-features': 'Все функции',
-      'header-all-features-desc': 'Мультиустройство, защита Wi-Fi, смена IP, доступ к контенту по всему миру.',
-      'header-servers': 'VPN-серверы',
-      'header-servers-desc': 'Сервера в 10+ странах для стабильного и быстрого соединения.',
-      'header-streaming': 'VPN для стриминга',
-      'header-streaming-desc': 'Смотрите Netflix, Hulu, Disney+ и другие сервисы без ограничений.',
-      'header-countries': 'Страны',
-      'header-countries-desc': 'США, Турция, Япония, Германия, Франция, и другие.',
-      'header-devices': 'Устройства',
-      'header-devices-desc': 'Windows, macOS, Android, iOS, роутеры.',
-      'footer-contacts': 'Контакты',
-      'footer-privacy': 'Политика',
-      'footer-copyright': '© 2024 BazaraVPN',
-      'support-title': 'Поддержка Bazara',
-      'support-desc': 'Всё для вашей уверенности: быстрые ответы, база знаний, обсуждение и личный чат с поддержкой. Мы всегда на связи!',
-      'support-faq-title': 'FAQ',
-      'support-faq-desc': 'Ответы на самые частые вопросы о BazaraVPN.',
-      'support-faq-btn': 'Открыть FAQ',
-      'support-kb-title': 'База знаний',
-      'support-kb-desc': 'Всё, что нужно знать о BazaraVPN и наших продуктах.',
-      'support-kb-btn': 'Открыть базу знаний',
-      'support-discuss-title': 'Обсудить',
-      'support-discuss-desc': 'Присоединяйтесь к обсуждению с командой и пользователями BazaraVPN.',
-      'support-discuss-btn': 'Перейти к обсуждению',
-      'support-bug-title': 'Сообщить об ошибке',
-      'support-bug-desc': 'Оставьте отзыв или сообщите о проблеме — мы всегда на связи!',
-      'support-bug-btn': 'Сообщить об ошибке',
-      'error-modal-title': 'Сообщить о проблеме',
-      'error-modal-placeholder': 'Опишите проблему или ошибку...',
-      'error-modal-email': 'Ваш email (необязательно)',
-      'error-modal-send': 'Отправить',
-      'error-modal-success': 'Спасибо! Ваше сообщение отправлено.',
-      'support-chat-title': 'Чат поддержки',
-      'support-chat-online': 'Онлайн',
-      'support-chat-greeting': 'Здравствуйте! Чем можем помочь?',
-      'support-chat-placeholder': 'Введите сообщение...',
-      'support-chat-send': 'Отправить',
-    },
-    en: {
-      'header-advantages': 'Advantages',
-      'header-tariffs': 'Tariffs',
-      'header-download': 'Download',
-      'header-support': 'Support',
-      'header-what-vpn': 'What is VPN?',
-      'header-what-vpn-desc': 'VPN is a technology for anonymity, security, and bypassing internet blocks.',
-      'header-why-bazara': 'Why BazaraVPN?',
-      'header-why-bazara-desc': 'No logs, high speed, streaming and torrent support, modern protocols.',
-      'header-all-features': 'All features',
-      'header-all-features-desc': 'Multi-device, Wi-Fi protection, IP change, access to content worldwide.',
-      'header-servers': 'VPN servers',
-      'header-servers-desc': 'Servers in 10+ countries for stable and fast connection.',
-      'header-streaming': 'VPN for streaming',
-      'header-streaming-desc': 'Watch Netflix, Hulu, Disney+ and other services without limits.',
-      'header-countries': 'Countries',
-      'header-countries-desc': 'USA, Turkey, Japan, Germany, France, and more.',
-      'header-devices': 'Devices',
-      'header-devices-desc': 'Windows, macOS, Android, iOS, routers.',
-      'footer-contacts': 'Contacts',
-      'footer-privacy': 'Privacy',
-      'footer-copyright': '© 2024 BazaraVPN',
-      'support-title': 'Bazara Support',
-      'support-desc': 'Everything for your confidence: quick answers, knowledge base, discussion, and direct chat with support. We are always in touch!',
-      'support-faq-title': 'FAQ',
-      'support-faq-desc': 'Answers to the most common questions about BazaraVPN.',
-      'support-faq-btn': 'Open FAQ',
-      'support-kb-title': 'Knowledge Base',
-      'support-kb-desc': 'Everything you need to know about BazaraVPN and our products.',
-      'support-kb-btn': 'Open Knowledge Base',
-      'support-discuss-title': 'Discuss',
-      'support-discuss-desc': 'Join the discussion with the team and BazaraVPN users.',
-      'support-discuss-btn': 'Go to discussion',
-      'support-bug-title': 'Report a bug',
-      'support-bug-desc': 'Leave feedback or report a problem — we are always in touch!',
-      'support-bug-btn': 'Report a bug',
-      'error-modal-title': 'Report a problem',
-      'error-modal-placeholder': 'Describe the problem or bug...',
-      'error-modal-email': 'Your email (optional)',
-      'error-modal-send': 'Send',
-      'error-modal-success': 'Thank you! Your message has been sent.',
-      'support-chat-title': 'Support Chat',
-      'support-chat-online': 'Online',
-      'support-chat-greeting': 'Hello! How can we help you?',
-      'support-chat-placeholder': 'Type your message...',
-      'support-chat-send': 'Send',
+  <!-- Support Chat Modal -->
+  <div id="support-chat-modal-bg" class="fixed inset-0 z-50 bg-black bg-opacity-70 flex items-center justify-center hidden transition-all duration-300">
+    <div class="bg-gradient-to-br from-[#232323] via-[#181818] to-[#2d1a00] rounded-3xl shadow-2xl max-w-3xl w-full h-[80vh] relative animate-fade-in flex flex-col border-4 border-orange-500/30" id="support-chat-modal" style="box-shadow:0 8px 48px 0 #ff880022,0 2px 0 #a259ff;">
+      <button id="close-support-chat" class="absolute top-5 right-7 text-gray-400 hover:text-orange-400 text-4xl font-bold transition-all">&times;</button>
+      <div class="flex items-center gap-3 px-10 pt-8 pb-4 border-b border-orange-700">
+        <img src="assets/trader.gif" alt="Support" class="w-12 h-12 rounded-full" style="object-fit:contain;" />
+        <span class="text-3xl font-extrabold text-orange-400" data-i18n="support-chat-title">Чат поддержки</span>
+        <span class="ml-auto text-base text-gray-400 font-semibold" data-i18n="support-chat-online">Онлайн</span>
+      </div>
+      <div id="support-chat-messages" class="flex-1 overflow-y-auto px-10 py-6 space-y-4 bg-[#181818] rounded-b-3xl flex flex-col" style="min-height:0;">
+        <div class="flex items-start gap-3">
+          <div class="bg-gradient-to-br from-orange-500 to-purple-700 rounded-full w-12 h-12 flex items-center justify-center text-white font-bold text-lg shadow-lg">S</div>
+          <div class="bg-[#232323] rounded-2xl px-5 py-3 text-white max-w-[70%] shadow border border-orange-500 text-base" data-i18n="support-chat-greeting">Здравствуйте! Чем можем помочь?</div>
+        </div>
+      </div>
+      <form id="support-chat-form" class="flex gap-3 p-8 border-t border-orange-700 bg-[#232323] rounded-b-3xl">
+        <input id="support-chat-input" type="text" class="flex-1 bg-[#181818] border border-gray-700 rounded-xl p-4 text-white text-lg" placeholder="Введите сообщение..." autocomplete="off" required data-i18n-placeholder="support-chat-placeholder">
+        <button type="submit" class="bg-gradient-to-r from-orange-500 to-purple-700 hover:from-orange-600 hover:to-purple-800 text-white font-bold py-3 px-8 rounded-xl text-lg transition-all shadow-lg" data-i18n="support-chat-send">Отправить</button>
+      </form>
+    </div>
+  </div>
+  <script>
+  document.getElementById('close-support-chat').onclick = function() {
+    document.getElementById('support-chat-modal-bg').classList.add('hidden');
+  };
+  document.getElementById('support-chat-modal-bg').addEventListener('click', function(e) {
+    if (e.target === this) this.classList.add('hidden');
+  });
+  document.getElementById('support-chat-form').onsubmit = function(e) {
+    e.preventDefault();
+    const input = document.getElementById('support-chat-input');
+    const messages = document.getElementById('support-chat-messages');
+    const msg = input.value.trim();
+    if (!msg) return;
+    const userMsg = document.createElement('div');
+    userMsg.className = 'flex items-start gap-3 justify-end';
+    userMsg.innerHTML = `<div class="bg-[#181818] rounded-xl px-4 py-2 text-white max-w-[70%] shadow border border-orange-500">${msg.replace(/</g,'&lt;')}</div><div class="bg-gradient-to-br from-orange-500 to-purple-700 rounded-full w-10 h-10 flex items-center justify-center text-white font-bold text-lg">Вы</div>`;
+    messages.appendChild(userMsg);
+    input.value = '';
+    messages.scrollTop = messages.scrollHeight;
+  };
+  </script>
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const translations = {
+      ru: {
+        'header-advantages': 'Преимущества',
+        'header-tariffs': 'Тарифы',
+        'header-download': 'Скачать',
+        'header-support': 'Поддержка',
+        'header-what-vpn': 'Что такое VPN?',
+        'header-what-vpn-desc': 'VPN — это технология для анонимности, безопасности и обхода блокировок в интернете.',
+        'header-why-bazara': 'Почему BazaraVPN?',
+        'header-why-bazara-desc': 'Без логов, высокая скорость, поддержка стриминга и торрентов, современные протоколы.',
+        'header-all-features': 'Все функции',
+        'header-all-features-desc': 'Мультиустройство, защита Wi-Fi, смена IP, доступ к контенту по всему миру.',
+        'header-servers': 'VPN-серверы',
+        'header-servers-desc': 'Сервера в 10+ странах для стабильного и быстрого соединения.',
+        'header-streaming': 'VPN для стриминга',
+        'header-streaming-desc': 'Смотрите Netflix, Hulu, Disney+ и другие сервисы без ограничений.',
+        'header-countries': 'Страны',
+        'header-countries-desc': 'США, Турция, Япония, Германия, Франция, и другие.',
+        'header-devices': 'Устройства',
+        'header-devices-desc': 'Windows, macOS, Android, iOS, роутеры.',
+        'footer-contacts': 'Контакты',
+        'footer-privacy': 'Политика',
+        'footer-copyright': '© 2024 BazaraVPN',
+        'support-title': 'Поддержка Bazara',
+        'support-desc': 'Всё для вашей уверенности: быстрые ответы, база знаний, обсуждение и личный чат с поддержкой. Мы всегда на связи!',
+        'support-faq-title': 'FAQ',
+        'support-faq-desc': 'Ответы на самые частые вопросы о BazaraVPN.',
+        'support-faq-btn': 'Открыть FAQ',
+        'support-kb-title': 'База знаний',
+        'support-kb-desc': 'Всё, что нужно знать о BazaraVPN и наших продуктах.',
+        'support-kb-btn': 'Открыть базу знаний',
+        'support-discuss-title': 'Обсудить',
+        'support-discuss-desc': 'Присоединяйтесь к обсуждению с командой и пользователями BazaraVPN.',
+        'support-discuss-btn': 'Перейти к обсуждению',
+        'support-bug-title': 'Сообщить об ошибке',
+        'support-bug-desc': 'Оставьте отзыв или сообщите о проблеме — мы всегда на связи!',
+        'support-bug-btn': 'Сообщить об ошибке',
+        'error-modal-title': 'Сообщить о проблеме',
+        'error-modal-placeholder': 'Опишите проблему или ошибку...',
+        'error-modal-email': 'Ваш email (необязательно)',
+        'error-modal-send': 'Отправить',
+        'error-modal-success': 'Спасибо! Ваше сообщение отправлено.',
+        'support-chat-title': 'Чат поддержки',
+        'support-chat-online': 'Онлайн',
+        'support-chat-greeting': 'Здравствуйте! Чем можем помочь?',
+        'support-chat-placeholder': 'Введите сообщение...',
+        'support-chat-send': 'Отправить',
+      },
+      en: {
+        'header-advantages': 'Advantages',
+        'header-tariffs': 'Tariffs',
+        'header-download': 'Download',
+        'header-support': 'Support',
+        'header-what-vpn': 'What is VPN?',
+        'header-what-vpn-desc': 'VPN is a technology for anonymity, security, and bypassing internet blocks.',
+        'header-why-bazara': 'Why BazaraVPN?',
+        'header-why-bazara-desc': 'No logs, high speed, streaming and torrent support, modern protocols.',
+        'header-all-features': 'All features',
+        'header-all-features-desc': 'Multi-device, Wi-Fi protection, IP change, access to content worldwide.',
+        'header-servers': 'VPN servers',
+        'header-servers-desc': 'Servers in 10+ countries for stable and fast connection.',
+        'header-streaming': 'VPN for streaming',
+        'header-streaming-desc': 'Watch Netflix, Hulu, Disney+ and other services without limits.',
+        'header-countries': 'Countries',
+        'header-countries-desc': 'USA, Turkey, Japan, Germany, France, and more.',
+        'header-devices': 'Devices',
+        'header-devices-desc': 'Windows, macOS, Android, iOS, routers.',
+        'footer-contacts': 'Contacts',
+        'footer-privacy': 'Privacy',
+        'footer-copyright': '© 2024 BazaraVPN',
+        'support-title': 'Bazara Support',
+        'support-desc': 'Everything for your confidence: quick answers, knowledge base, discussion, and direct chat with support. We are always in touch!',
+        'support-faq-title': 'FAQ',
+        'support-faq-desc': 'Answers to the most common questions about BazaraVPN.',
+        'support-faq-btn': 'Open FAQ',
+        'support-kb-title': 'Knowledge Base',
+        'support-kb-desc': 'Everything you need to know about BazaraVPN and our products.',
+        'support-kb-btn': 'Open Knowledge Base',
+        'support-discuss-title': 'Discuss',
+        'support-discuss-desc': 'Join the discussion with the team and BazaraVPN users.',
+        'support-discuss-btn': 'Go to discussion',
+        'support-bug-title': 'Report a bug',
+        'support-bug-desc': 'Leave feedback or report a problem — we are always in touch!',
+        'support-bug-btn': 'Report a bug',
+        'error-modal-title': 'Report a problem',
+        'error-modal-placeholder': 'Describe the problem or bug...',
+        'error-modal-email': 'Your email (optional)',
+        'error-modal-send': 'Send',
+        'error-modal-success': 'Thank you! Your message has been sent.',
+        'support-chat-title': 'Support Chat',
+        'support-chat-online': 'Online',
+        'support-chat-greeting': 'Hello! How can we help you?',
+        'support-chat-placeholder': 'Type your message...',
+        'support-chat-send': 'Send',
+      }
+    };
+    const langBtn = document.getElementById('lang-dropdown-btn');
+    const langDropdown = document.getElementById('lang-dropdown');
+    const langCurrent = document.getElementById('lang-current');
+    const langSwitcher = document.getElementById('lang-switcher');
+    function setLang(lang) {
+      localStorage.setItem('lang', lang);
+      if (langCurrent) langCurrent.textContent = lang === 'ru' ? 'Русский' : 'English';
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (translations[lang][key]) {
+          if (/<[a-z][\s\S]*>/i.test(translations[lang][key])) {
+            el.innerHTML = translations[lang][key];
+          } else {
+            el.textContent = translations[lang][key];
+          }
+        }
+      });
+      // Переводим плейсхолдеры
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        if (translations[lang][key]) {
+          el.placeholder = translations[lang][key];
+        }
+      });
     }
-  };
-  const langBtn = document.getElementById('lang-dropdown-btn');
-  const langDropdown = document.getElementById('lang-dropdown');
-  const langCurrent = document.getElementById('lang-current');
-  const langSwitcher = document.getElementById('lang-switcher');
-  function setLang(lang) {
-    localStorage.setItem('lang', lang);
-    if (langCurrent) langCurrent.textContent = lang === 'ru' ? 'Русский' : 'English';
-    document.querySelectorAll('[data-i18n]').forEach(el => {
-      const key = el.getAttribute('data-i18n');
-      if (translations[lang][key]) {
-        if (/<[a-z][\s\S]*>/i.test(translations[lang][key])) {
-          el.innerHTML = translations[lang][key];
-        } else {
-          el.textContent = translations[lang][key];
-        }
-      }
-    });
-    // Переводим плейсхолдеры
-    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-      const key = el.getAttribute('data-i18n-placeholder');
-      if (translations[lang][key]) {
-        el.placeholder = translations[lang][key];
-      }
-    });
-  }
-  let lang = localStorage.getItem('lang') || 'ru';
-  setLang(lang);
-  if (langBtn && langDropdown) {
-    langBtn.onclick = function(e) {
-      e.stopPropagation();
-      langDropdown.classList.toggle('hidden');
-    };
-    langDropdown.querySelectorAll('[data-lang]').forEach(btn => {
-      btn.onclick = function(e) {
+    let lang = localStorage.getItem('lang') || 'ru';
+    setLang(lang);
+    if (langBtn && langDropdown) {
+      langBtn.onclick = function(e) {
         e.stopPropagation();
-        setLang(this.getAttribute('data-lang'));
-        langDropdown.classList.add('hidden');
+        langDropdown.classList.toggle('hidden');
       };
-    });
-    document.addEventListener('click', function(e) {
-      if (langDropdown && langSwitcher && !langSwitcher.contains(e.target)) {
-        langDropdown.classList.add('hidden');
-      }
-    });
-  }
-});
-</script>
-<!-- Firebase App (core) -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<!-- Firestore -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-<script>
-  // Рабочий конфиг из firebaseConfig.js
-  const firebaseConfig = {
-    apiKey: "AIzaSyAouTEXN2lQapElxCEtmebO21t19i2WYns",
-    authDomain: "bazara-vpn-admin.firebaseapp.com",
-    projectId: "bazara-vpn-admin",
-    storageBucket: "bazara-vpn-admin.appspot.com",
-    messagingSenderId: "856281360473",
-    appId: "1:856281360473:web:1b01584e7830672dcb2948"
-  };
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
-</script>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  // --- ЧАТ ПОДДЕРЖКИ ---
-  const supportChatForm = document.getElementById('support-chat-form');
-  if (supportChatForm) {
-    supportChatForm.onsubmit = async function(e) {
-      e.preventDefault();
-      const input = document.getElementById('support-chat-input');
-      const msg = input.value.trim();
-      if (!msg) return;
-      try {
-        await db.collection('supportChats').add({
-          message: msg,
-          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-          status: 'new'
-        });
-        // UI: добавить сообщение в чат (оставляю твой код)
-        const messages = document.getElementById('support-chat-messages');
-        const userMsg = document.createElement('div');
-        userMsg.className = 'flex items-start gap-3 justify-end';
-        userMsg.innerHTML = `<div class="bg-[#181818] rounded-xl px-4 py-2 text-white max-w-[70%] shadow border border-orange-500">${msg.replace(/</g,'&lt;')}</div><div class="bg-gradient-to-br from-orange-500 to-purple-700 rounded-full w-10 h-10 flex items-center justify-center text-white font-bold text-lg">Вы</div>`;
-        messages.appendChild(userMsg);
-        input.value = '';
-        messages.scrollTop = messages.scrollHeight;
-      } catch (err) {
-        alert('Ошибка отправки сообщения. Попробуйте позже.');
-      }
+      langDropdown.querySelectorAll('[data-lang]').forEach(btn => {
+        btn.onclick = function(e) {
+          e.stopPropagation();
+          setLang(this.getAttribute('data-lang'));
+          langDropdown.classList.add('hidden');
+        };
+      });
+      document.addEventListener('click', function(e) {
+        if (langDropdown && langSwitcher && !langSwitcher.contains(e.target)) {
+          langDropdown.classList.add('hidden');
+        }
+      });
+    }
+  });
+  </script>
+  <!-- Firebase App (core) -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <!-- Firestore -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script>
+    // Рабочий конфиг из firebaseConfig.js
+    const firebaseConfig = {
+      apiKey: "AIzaSyAouTEXN2lQapElxCEtmebO21t19i2WYns",
+      authDomain: "bazara-vpn-admin.firebaseapp.com",
+      projectId: "bazara-vpn-admin",
+      storageBucket: "bazara-vpn-admin.appspot.com",
+      messagingSenderId: "856281360473",
+      appId: "1:856281360473:web:1b01584e7830672dcb2948"
     };
-  }
-  // --- ЖАЛОБЫ/ОШИБКИ ---
-  const errorForm = document.getElementById('error-form');
-  if (errorForm) {
-    // Удаляем старые обработчики (если вдруг были)
-    errorForm.onsubmit = null;
-    let isSubmitting = false;
-    errorForm.addEventListener('submit', async function(e) {
-      e.preventDefault();
-      if (isSubmitting) return;
-      isSubmitting = true;
-      const submitBtn = errorForm.querySelector('button[type="submit"]');
-      if (submitBtn) {
-        submitBtn.disabled = true;
-        submitBtn.style.opacity = '0.6';
-      }
-      const textarea = this.querySelector('textarea');
-      const email = this.querySelector('input[type="email"]').value.trim();
-      const text = textarea.value.trim();
-      if (!text) {
-        alert('Пожалуйста, опишите проблему.');
-        isSubmitting = false;
-        if (submitBtn) {
-          submitBtn.disabled = false;
-          submitBtn.style.opacity = '';
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+  </script>
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // --- ЧАТ ПОДДЕРЖКИ ---
+    const supportChatForm = document.getElementById('support-chat-form');
+    if (supportChatForm) {
+      supportChatForm.onsubmit = async function(e) {
+        e.preventDefault();
+        const input = document.getElementById('support-chat-input');
+        const msg = input.value.trim();
+        if (!msg) return;
+        try {
+          await db.collection('supportChats').add({
+            message: msg,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            status: 'new'
+          });
+          // UI: добавить сообщение в чат (оставляю твой код)
+          const messages = document.getElementById('support-chat-messages');
+          const userMsg = document.createElement('div');
+          userMsg.className = 'flex items-start gap-3 justify-end';
+          userMsg.innerHTML = `<div class="bg-[#181818] rounded-xl px-4 py-2 text-white max-w-[70%] shadow border border-orange-500">${msg.replace(/</g,'&lt;')}</div><div class="bg-gradient-to-br from-orange-500 to-purple-700 rounded-full w-10 h-10 flex items-center justify-center text-white font-bold text-lg">Вы</div>`;
+          messages.appendChild(userMsg);
+          input.value = '';
+          messages.scrollTop = messages.scrollHeight;
+        } catch (err) {
+          alert('Ошибка отправки сообщения. Попробуйте позже.');
         }
-        return;
-      }
-      try {
-        await db.collection('issues').add({
-          text,
-          email,
-          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-          status: 'new'
-        });
-        document.getElementById('error-success').classList.remove('hidden');
-        this.reset();
-        setTimeout(() => {
-          document.getElementById('error-success').classList.add('hidden');
-          document.getElementById('error-modal-bg').classList.add('hidden');
-        }, 1800);
-      } catch (err) {
-        console.error('Ошибка отправки жалобы:', err);
-        // alert('Ошибка отправки. Попробуйте позже.');
-      } finally {
-        isSubmitting = false;
+      };
+    }
+    // --- ЖАЛОБЫ/ОШИБКИ ---
+    const errorForm = document.getElementById('error-form');
+    if (errorForm) {
+      // Удаляем старые обработчики (если вдруг были)
+      errorForm.onsubmit = null;
+      let isSubmitting = false;
+      errorForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        if (isSubmitting) return;
+        isSubmitting = true;
+        const submitBtn = errorForm.querySelector('button[type="submit"]');
         if (submitBtn) {
-          submitBtn.disabled = false;
-          submitBtn.style.opacity = '';
+          submitBtn.disabled = true;
+          submitBtn.style.opacity = '0.6';
         }
-      }
-    });
-  }
-});
-</script>
+        const name = document.getElementById('issue-name').value.trim();
+        const email = document.getElementById('issue-email').value.trim();
+        const category = document.getElementById('issue-category').value;
+        const text = document.getElementById('issue-text').value.trim();
+        const replyType = Array.from(document.getElementsByName('replyType')).find(r => r.checked)?.value;
+        // Валидация
+        if (!replyType) {
+          alert('Пожалуйста, выберите способ ответа: в чате или по email.');
+          isSubmitting = false;
+          if (submitBtn) { submitBtn.disabled = false; submitBtn.style.opacity = ''; }
+          return;
+        }
+        if (!text) {
+          alert('Пожалуйста, опишите проблему.');
+          isSubmitting = false;
+          if (submitBtn) { submitBtn.disabled = false; submitBtn.style.opacity = ''; }
+          return;
+        }
+        if (replyType === 'email' && !email) {
+          alert('Пожалуйста, укажите email для ответа.');
+          isSubmitting = false;
+          if (submitBtn) { submitBtn.disabled = false; submitBtn.style.opacity = ''; }
+          return;
+        }
+        try {
+          await db.collection('issues').add({
+            name: name || '',
+            email: email || '',
+            category,
+            text,
+            replyType,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            status: 'new'
+          });
+          document.getElementById('error-success').classList.remove('hidden');
+          this.reset();
+          setTimeout(() => {
+            document.getElementById('error-success').classList.add('hidden');
+            document.getElementById('error-modal-bg').classList.add('hidden');
+            if (replyType === 'chat') {
+              // Открыть чат после отправки
+              if (typeof openSupportChatModal === 'function') openSupportChatModal();
+            }
+          }, 1800);
+        } catch (err) {
+          console.error('Ошибка отправки жалобы:', err);
+        } finally {
+          isSubmitting = false;
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.style.opacity = '';
+          }
+        }
+      });
+    }
+  });
+  </script>
 </body>
 </html> 

@@ -7,9 +7,12 @@ import { auth, db } from "../../../firebaseConfig";
 
 interface Issue {
   id: string;
-  userId: string;
+  name?: string;
+  email?: string;
+  category?: string;
   text: string;
-  createdAt: number;
+  replyType?: string;
+  createdAt: any;
   status: string;
   attachments?: string[];
 }
@@ -37,8 +40,11 @@ export default function IssuesPage() {
       const d = docu.data();
       arr.push({
         id: docu.id,
-        userId: d.userId,
+        name: d.name || '',
+        email: d.email || '',
+        category: d.category || '',
         text: d.text,
+        replyType: d.replyType || '',
         createdAt: d.createdAt,
         status: d.status,
         attachments: d.attachments || []
@@ -66,7 +72,7 @@ export default function IssuesPage() {
     await fetchIssues();
   };
 
-  const activeCount = issues.filter(i => i.status === "pending").length;
+  const activeCount = issues.filter(i => i.status === "new" || i.status === "pending").length;
 
   if (loading) return <div className="min-h-screen flex items-center justify-center text-2xl">Загрузка...</div>;
 
@@ -83,8 +89,12 @@ export default function IssuesPage() {
       {issues.map((issue) => (
         <div key={issue.id} className={`issue-card flex flex-col gap-3 ${issue.status === "delayed" ? "opacity-70" : ""}`}>
           <div className="flex items-center gap-4 mb-1">
-            <div className={`font-bold text-lg ${issue.status === "delayed" ? "text-purple-400" : "text-orange-400"} flex-1`}>{issue.userId || "Аноним"}</div>
-            <div className="text-sm text-gray-400">{new Date(issue.createdAt).toLocaleString()}</div>
+            <div className={`font-bold text-lg ${issue.status === "delayed" ? "text-purple-400" : "text-orange-400"} flex-1`}>{issue.name ? issue.name : "Аноним"}</div>
+            <div className="text-sm text-gray-400">{issue.createdAt && issue.createdAt.toDate ? issue.createdAt.toDate().toLocaleString() : (issue.createdAt ? new Date(issue.createdAt).toLocaleString() : "-")}</div>
+          </div>
+          <div className="flex items-center gap-3 mb-1">
+            {issue.category && <span className="px-3 py-1 bg-orange-900 text-orange-300 rounded-xl text-xs font-semibold">{issue.category}</span>}
+            {issue.email && <span className="px-3 py-1 bg-purple-900 text-purple-300 rounded-xl text-xs font-semibold">{issue.email}</span>}
           </div>
           <div className="text-base mb-2">{issue.text}</div>
           {issue.attachments && issue.attachments.length > 0 && (
@@ -104,7 +114,12 @@ export default function IssuesPage() {
             {issue.status === "delayed" && (
               <button className="issue-btn" onClick={() => setStatus(issue.id, "resolved")}>✅ Решено</button>
             )}
-            <button className="issue-btn" onClick={() => router.push(`/admin/support?userId=${issue.userId}`)}>✉️ Ответить</button>
+            {issue.replyType === "chat" && (
+              <button className="issue-btn" onClick={() => router.push(`/admin/support?userId=${issue.id}`)}>✉️ Ответить в чате</button>
+            )}
+            {issue.replyType === "email" && issue.email && (
+              <button className="issue-btn" onClick={() => {navigator.clipboard.writeText(issue.email); alert('Email скопирован!')}}>📧 Ответить по email</button>
+            )}
           </div>
         </div>
       ))}

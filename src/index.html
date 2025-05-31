@@ -1767,36 +1767,39 @@ document.addEventListener('DOMContentLoaded', function() {
   // ... существующий код ...
   const reviewForm = document.getElementById('review-form');
   if (reviewForm) {
-    reviewForm.addEventListener('submit', async function(e) {
-      e.preventDefault();
-      const name = document.getElementById('review-name').value.trim();
-      const text = document.getElementById('review-text').value.trim();
-      const rating = parseInt(document.getElementById('review-rating').value, 10);
-      const stars = document.querySelectorAll('#review-stars .star');
-      if (!name || !text || !rating || rating < 1 || rating > 5) {
-        alert('Пожалуйста, заполните все поля и выберите оценку от 1 до 5 звёзд.');
-        return;
-      }
-      try {
-        await db.collection('reviews').add({
-          name,
-          text,
-          rating,
-          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-          status: 'moderation'
-        });
-        document.getElementById('review-success').classList.remove('hidden');
-        reviewForm.reset();
-        stars.forEach(s => s.classList.remove('selected'));
-        document.getElementById('review-rating').value = 0;
-        setTimeout(() => {
-          document.getElementById('review-success').classList.add('hidden');
-          document.getElementById('review-modal-bg').classList.add('hidden');
-        }, 1800);
-      } catch (err) {
-        alert('Ошибка отправки отзыва. Попробуйте позже.');
-      }
-    });
+    // --- ФИКС: не навешивать обработчик submit дважды ---
+    if (!window.__reviewFormHandlerAdded) {
+      document.getElementById('review-form').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const name = document.getElementById('review-name').value.trim();
+        const text = document.getElementById('review-text').value.trim();
+        const rating = parseInt(document.getElementById('review-rating').value, 10);
+        if (!name || !text || !rating || rating < 1 || rating > 5) {
+          alert('Пожалуйста, заполните все поля и выберите оценку от 1 до 5 звёзд.');
+          return;
+        }
+        try {
+          await db.collection('reviews').add({
+            name,
+            text,
+            rating,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            status: 'moderation'
+          });
+          document.getElementById('review-success').classList.remove('hidden');
+          this.reset();
+          updateStars(0);
+          document.getElementById('review-rating').value = '0';
+          setTimeout(() => {
+            document.getElementById('review-success').classList.add('hidden');
+            document.getElementById('review-modal-bg').classList.add('hidden');
+          }, 1800);
+        } catch (err) {
+          alert('Ошибка отправки отзыва. Попробуйте позже.');
+        }
+      });
+      window.__reviewFormHandlerAdded = true;
+    }
   }
 });
 </script>

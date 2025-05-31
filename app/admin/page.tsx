@@ -27,7 +27,7 @@ export default function AdminHome() {
     // Получаем количество активных проблем
     getDocs(query(collection(db, "issues"), where("status", "==", "open"))).then(snap => setIssuesCount(snap.size));
     // Получаем количество немодерированных отзывов
-    getDocs(query(collection(db, "reviews"), where("status", "==", "pending"))).then(snap => setReviewsCount(snap.size));
+    getDocs(query(collection(db, "reviews"), where("status", "==", "moderation"))).then(snap => setReviewsCount(snap.size));
   }, [loading]);
 
   if (loading) return <div className="min-h-screen flex items-center justify-center text-2xl">Загрузка...</div>;

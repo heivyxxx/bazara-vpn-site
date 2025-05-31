@@ -105,14 +105,13 @@ export default function IssuesPage() {
             </div>
           )}
           <div className="flex gap-2">
+            {(issue.status === "new" || issue.status === "pending" || issue.status === "delayed") && (
+              <button className="issue-btn" onClick={() => setStatus(issue.id, "resolved")}>✅ Решено</button>
+            )}
             {issue.status === "pending" && (
               <>
-                <button className="issue-btn" onClick={() => setStatus(issue.id, "resolved")}>✅ Решено</button>
                 <button className="issue-btn" onClick={() => setStatus(issue.id, "delayed")}>🕒 Отложить</button>
               </>
-            )}
-            {issue.status === "delayed" && (
-              <button className="issue-btn" onClick={() => setStatus(issue.id, "resolved")}>✅ Решено</button>
             )}
             {issue.replyType === "chat" && (
               <button className="issue-btn" onClick={() => router.push(`/admin/support?userId=${issue.id}`)}>✉️ Ответить в чате</button>

@@ -86,7 +86,7 @@ export default function IssuesPage() {
       {issues.length === 0 && (
         <div className="text-gray-400 text-center mt-10">Нет жалоб</div>
       )}
-      {issues.map((issue) => (
+      {issues.filter(issue => issue.status !== 'resolved').map((issue) => (
         <div key={issue.id} className={`issue-card flex flex-col gap-3 ${issue.status === "delayed" ? "opacity-70" : ""}`}>
           <div className="flex items-center gap-4 mb-1">
             <div className={`font-bold text-lg ${issue.status === "delayed" ? "text-purple-400" : "text-orange-400"} flex-1`}>{issue.name ? issue.name : "Аноним"}</div>

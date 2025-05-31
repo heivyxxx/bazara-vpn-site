@@ -32,6 +32,22 @@
       margin-bottom: 0 !important;
       z-index: 1050 !important;
     }
+    .reply-block {
+      background: #23232a;
+      border: 2px solid #444;
+      transition: border 0.18s, box-shadow 0.18s, background 0.18s;
+      user-select: none;
+    }
+    .reply-block:hover, .reply-block:focus {
+      border-color: #ff8800;
+      background: #232323;
+      box-shadow: 0 0 0 2px #ff8800aa;
+    }
+    .reply-block.selected, .reply-block[aria-selected="true"] {
+      border-color: #ff8800;
+      background: #232323;
+      box-shadow: 0 0 0 2px #ff8800cc;
+    }
   </style>
 </head>
 <body class="min-h-screen flex flex-col text-white" id="main-body">
@@ -382,33 +398,40 @@
   </script>
   <!-- Error Modal (NEW) -->
   <div id="error-modal-bg" class="fixed inset-0 z-50 bg-black bg-opacity-70 flex items-center justify-center hidden transition-all duration-300">
-    <div class="bg-gradient-to-br from-[#232323] via-[#181818] to-[#2d1a00] rounded-3xl shadow-2xl p-0 max-w-xl w-full relative animate-fade-in flex flex-col border-4 border-orange-500/30" id="error-modal" style="box-shadow:0 8px 48px 0 #ff880022,0 2px 0 #a259ff; min-width: 380px;">
+    <div class="bg-gradient-to-br from-[#232323] via-[#181818] to-[#2d1a00] rounded-3xl shadow-2xl p-0 max-w-2xl w-full relative animate-fade-in flex flex-col border-4 border-orange-500/30" id="error-modal" style="box-shadow:0 8px 48px 0 #ff880022,0 2px 0 #a259ff; min-width: 440px; max-width: 520px;">
       <button id="close-error-modal" class="absolute top-3 right-3 text-gray-400 hover:text-orange-400 text-3xl font-bold transition-all">&times;</button>
       <div class="flex items-center gap-3 px-8 pt-8 pb-2">
         <img src="assets/bug-3d.png" alt="bug" class="w-10 h-10" style="object-fit:contain;" />
         <span class="text-2xl font-extrabold text-orange-400">Сообщить о проблеме</span>
       </div>
-      <form id="error-form" class="flex flex-col gap-4 px-8 py-6">
-        <input type="text" class="bg-[#181818] border border-gray-700 rounded-xl p-3 text-white" placeholder="Ваше имя (необязательно)" id="issue-name">
+      <form id="error-form" class="flex flex-col gap-6 px-10 py-8">
+        <input type="text" class="bg-[#181818] border border-gray-700 rounded-xl p-4 text-white text-lg" placeholder="Ваше имя (необязательно)" id="issue-name">
         <div class="flex flex-col gap-2">
-          <label class="font-semibold text-white">Как с вами связаться?</label>
-          <div class="flex gap-4">
-            <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="replyType" value="chat" class="reply-type-radio"> В чате</label>
-            <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="replyType" value="email" class="reply-type-radio"> По email</label>
+          <label class="font-semibold text-white mb-1">Как с вами связаться?</label>
+          <div class="flex gap-6 justify-center">
+            <div id="reply-chat-block" class="reply-block flex flex-col items-center justify-center gap-2 px-6 py-4 rounded-2xl border-2 border-gray-700 cursor-pointer transition-all" style="min-width:140px;" tabindex="0">
+              <svg class="w-9 h-9 text-orange-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              <span class="font-bold text-lg">В чате</span>
+            </div>
+            <div id="reply-email-block" class="reply-block flex flex-col items-center justify-center gap-2 px-6 py-4 rounded-2xl border-2 border-gray-700 cursor-pointer transition-all" style="min-width:140px;" tabindex="0">
+              <svg class="w-9 h-9 text-purple-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="4"/><polygon points="10,9 16,12 10,15" fill="currentColor"/></svg>
+              <span class="font-bold text-lg">По email</span>
+            </div>
           </div>
+          <input type="hidden" name="replyType" id="reply-type-value">
         </div>
-        <input type="email" class="bg-[#181818] border border-gray-700 rounded-xl p-3 text-white" placeholder="Ваш email (если выбрали email)" id="issue-email">
+        <input type="email" class="bg-[#181818] border border-gray-700 rounded-xl p-4 text-white text-lg" placeholder="Ваш email (если выбрали email)" id="issue-email">
         <div class="flex flex-col gap-2">
-          <label class="font-semibold text-white">Категория проблемы</label>
-          <select id="issue-category" class="bg-[#181818] border border-gray-700 rounded-xl p-3 text-white">
+          <label class="font-semibold text-white mb-1">Категория проблемы</label>
+          <select id="issue-category" class="bg-[#181818] border border-gray-700 rounded-xl p-4 text-white text-lg cursor-pointer focus:border-orange-500 transition-all">
             <option value="VPN не подключается">VPN не подключается</option>
             <option value="Проблема с оплатой">Проблема с оплатой</option>
             <option value="Ошибка на сайте">Ошибка на сайте</option>
             <option value="Другое">Другое</option>
           </select>
         </div>
-        <textarea class="bg-[#181818] border border-gray-700 rounded-xl p-3 text-white resize-none min-h-[80px]" placeholder="Опишите проблему..." id="issue-text" required></textarea>
-        <button type="submit" class="bg-gradient-to-r from-orange-500 to-purple-700 hover:from-orange-600 hover:to-purple-800 text-white font-bold py-2 px-6 rounded-xl transition-all shadow-lg">Отправить</button>
+        <textarea class="bg-[#181818] border border-gray-700 rounded-xl p-4 text-white text-lg resize-none min-h-[100px]" placeholder="Опишите проблему..." id="issue-text" required></textarea>
+        <button type="submit" class="bg-gradient-to-r from-orange-500 to-purple-700 hover:from-orange-600 hover:to-purple-800 text-white font-bold py-3 px-8 rounded-xl text-lg transition-all shadow-lg">Отправить</button>
       </form>
       <div id="error-success" class="hidden text-green-400 mt-4 text-center font-bold text-lg">Спасибо! Ваше сообщение отправлено.</div>
     </div>
@@ -649,7 +672,6 @@
     // --- ЖАЛОБЫ/ОШИБКИ ---
     const errorForm = document.getElementById('error-form');
     if (errorForm) {
-      // Удаляем старые обработчики (если вдруг были)
       errorForm.onsubmit = null;
       let isSubmitting = false;
       errorForm.addEventListener('submit', async function(e) {
@@ -665,7 +687,7 @@
         const email = document.getElementById('issue-email').value.trim();
         const category = document.getElementById('issue-category').value;
         const text = document.getElementById('issue-text').value.trim();
-        const replyType = Array.from(document.getElementsByName('replyType')).find(r => r.checked)?.value;
+        const replyType = document.getElementById('reply-type-value').value;
         // Валидация
         if (!replyType) {
           alert('Пожалуйста, выберите способ ответа: в чате или по email.');
@@ -695,6 +717,15 @@
             createdAt: firebase.firestore.FieldValue.serverTimestamp(),
             status: 'new'
           });
+          if (replyType === 'chat' && text) {
+            await db.collection('supportChats').add({
+              message: text,
+              name: name || '',
+              email: email || '',
+              createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+              status: 'new'
+            });
+          }
           document.getElementById('error-success').classList.remove('hidden');
           this.reset();
           setTimeout(() => {

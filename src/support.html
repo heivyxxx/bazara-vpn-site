@@ -444,7 +444,9 @@
           </div>
           <input type="hidden" name="replyType" id="reply-type-value">
         </div>
-        <input type="email" class="bg-[#181818] border border-gray-700 rounded-xl p-4 text-white text-lg" placeholder="Ваш email (если выбрали email)" id="issue-email">
+        <div id="issue-email-wrapper" style="display:none;">
+          <input type="email" class="bg-[#181818] border border-gray-700 rounded-xl p-4 text-white text-lg" placeholder="Ваш email (если выбрали email)" id="issue-email">
+        </div>
         <div class="flex flex-col gap-2">
           <label class="font-extrabold text-white text-xl text-center mb-2">Категория проблемы</label>
           <div class="relative">
@@ -698,81 +700,30 @@
     }
     // --- ЖАЛОБЫ/ОШИБКИ ---
     const errorForm = document.getElementById('error-form');
-    if (errorForm) {
-      errorForm.onsubmit = null;
-      let isSubmitting = false;
-      errorForm.addEventListener('submit', async function(e) {
-        e.preventDefault();
-        if (isSubmitting) return;
-        isSubmitting = true;
-        const submitBtn = errorForm.querySelector('button[type="submit"]');
-        if (submitBtn) {
-          submitBtn.disabled = true;
-          submitBtn.style.opacity = '0.6';
-        }
-        const name = document.getElementById('issue-name').value.trim();
-        const email = document.getElementById('issue-email').value.trim();
-        const category = document.getElementById('issue-category').value;
-        const text = document.getElementById('issue-text').value.trim();
-        const replyType = document.getElementById('reply-type-value').value;
-        // Валидация
-        if (replyType !== 'chat' && replyType !== 'email') {
-          alert('Пожалуйста, выберите способ ответа: в чате или по email.');
-          isSubmitting = false;
-          if (submitBtn) { submitBtn.disabled = false; submitBtn.style.opacity = ''; }
-          return;
-        }
-        if (!text) {
-          alert('Пожалуйста, опишите проблему.');
-          isSubmitting = false;
-          if (submitBtn) { submitBtn.disabled = false; submitBtn.style.opacity = ''; }
-          return;
-        }
-        if (replyType === 'email' && !email) {
-          alert('Пожалуйста, укажите email для ответа.');
-          isSubmitting = false;
-          if (submitBtn) { submitBtn.disabled = false; submitBtn.style.opacity = ''; }
-          return;
-        }
-        try {
-          await db.collection('issues').add({
-            name: name || '',
-            email: email || '',
-            category,
-            text,
-            replyType,
-            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-            status: 'new'
-          });
-          if (replyType === 'chat' && text) {
-            await db.collection('supportChats').add({
-              message: text,
-              name: name || '',
-              email: email || '',
-              createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-              status: 'new'
-            });
-          }
-          document.getElementById('error-success').classList.remove('hidden');
-          this.reset();
-          setTimeout(() => {
-            document.getElementById('error-success').classList.add('hidden');
-            document.getElementById('error-modal-bg').classList.add('hidden');
-            if (replyType === 'chat') {
-              // Открыть чат после отправки
-              if (typeof openSupportChatModal === 'function') openSupportChatModal();
-            }
-          }, 1800);
-        } catch (err) {
-          console.error('Ошибка отправки жалобы:', err);
-        } finally {
-          isSubmitting = false;
-          if (submitBtn) {
-            submitBtn.disabled = false;
-            submitBtn.style.opacity = '';
-          }
-        }
-      });
+    // --- ДОБАВЛЯЮ ЛОГИКУ ПОКАЗА EMAIL ---
+    const replyChatBlock = document.getElementById('reply-chat-block');
+    const replyEmailBlock = document.getElementById('reply-email-block');
+    const replyTypeValue = document.getElementById('reply-type-value');
+    const issueEmailWrapper = document.getElementById('issue-email-wrapper');
+    const issueEmail = document.getElementById('issue-email');
+    function selectReplyType(type) {
+      if (type === 'chat') {
+        replyChatBlock.classList.add('selected');
+        replyEmailBlock.classList.remove('selected');
+        replyTypeValue.value = 'chat';
+        issueEmailWrapper.style.display = 'none';
+        if (issueEmail) issueEmail.value = '';
+      } else if (type === 'email') {
+        replyEmailBlock.classList.add('selected');
+        replyChatBlock.classList.remove('selected');
+        replyTypeValue.value = 'email';
+        issueEmailWrapper.style.display = '';
+      }
+    }
+    if (replyChatBlock && replyEmailBlock) {
+      replyChatBlock.addEventListener('click', function() { selectReplyType('chat'); });
+      replyEmailBlock.addEventListener('click', function() { selectReplyType('email'); });
+      // По умолчанию ничего не выбрано, можно выбрать что-то по умолчанию если нужно
     }
   });
   </script>

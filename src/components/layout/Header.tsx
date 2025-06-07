@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { useState, useEffect } from 'react';
+import { useLang } from '@/lib/LanguageContext';
 
 const translations = {
   ru: {
@@ -26,17 +26,7 @@ const translations = {
 };
 
 export const Header = () => {
-  const [lang, setLang] = useState('ru');
-
-  useEffect(() => {
-    const stored = typeof window !== 'undefined' ? localStorage.getItem('lang') : null;
-    if (stored && (stored === 'ru' || stored === 'en')) setLang(stored);
-  }, []);
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') localStorage.setItem('lang', lang);
-  }, [lang]);
-
+  const { lang, setLang } = useLang();
   const t = translations[lang];
 
   return (

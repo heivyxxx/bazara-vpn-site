@@ -1,8 +1,6 @@
 "use client";
 
 import { Hero } from '@/components/features/hero/Hero';
-import { DownloadMenu } from '@/components/features/download/DownloadMenu';
-import { Guarantee } from '@/components/features/guarantee/Guarantee';
 import { PromoCards } from '@/components/features/promo/PromoCards';
 import { Reviews } from '@/components/features/reviews/Reviews';
 import { Features } from '@/components/features/blocks/Features';
@@ -25,8 +23,6 @@ export default function HomePage() {
       <Header />
       <main className="min-h-screen bg-[#1A1A1A]">
         <Hero />
-        <DownloadMenu />
-        <Guarantee />
         <PromoCards />
         <Reviews />
         <Features />

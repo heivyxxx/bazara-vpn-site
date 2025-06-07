@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ReviewModal } from './ReviewModal';
@@ -72,6 +72,8 @@ export const Reviews = () => {
   const [loading, setLoading] = useState(true);
   const { lang } = useLang();
   const t = reviewsTexts[lang];
+  const prevRef = useRef<HTMLButtonElement>(null);
+  const nextRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const fetchReviews = async () => {
@@ -150,7 +152,15 @@ export const Reviews = () => {
         <div className="relative reviews-carousel-3d">
           <Swiper
             modules={[Navigation, A11y]}
-            navigation
+            navigation={{ prevEl: prevRef.current, nextEl: nextRef.current }}
+            onInit={swiper => {
+              // @ts-ignore
+              swiper.params.navigation.prevEl = prevRef.current;
+              // @ts-ignore
+              swiper.params.navigation.nextEl = nextRef.current;
+              swiper.navigation.init();
+              swiper.navigation.update();
+            }}
             spaceBetween={32}
             slidesPerView={1}
             breakpoints={{
@@ -170,6 +180,12 @@ export const Reviews = () => {
                 />
               </SwiperSlide>
             ))}
+            <button ref={prevRef} className="absolute left-[-32px] top-1/2 -translate-y-1/2 z-10 w-14 h-14 rounded-full bg-gradient-to-br from-orange-500 to-purple-600 shadow-lg flex items-center justify-center text-white text-3xl transition hover:scale-110 border-4 border-[#181818]" style={{boxShadow:'0 4px 24px #ff880055'}}>
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+            </button>
+            <button ref={nextRef} className="absolute right-[-32px] top-1/2 -translate-y-1/2 z-10 w-14 h-14 rounded-full bg-gradient-to-br from-orange-500 to-purple-600 shadow-lg flex items-center justify-center text-white text-3xl transition hover:scale-110 border-4 border-[#181818]" style={{boxShadow:'0 4px 24px #ff880055'}}>
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
           </Swiper>
         </div>
       )}

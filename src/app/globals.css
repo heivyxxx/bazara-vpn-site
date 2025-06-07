@@ -5,3 +5,15 @@
 body {
   @apply bg-dark text-white font-sans;
 } 
+
+.btn-glow {
+  background: linear-gradient(90deg, #ff8800 0%, #a259ff 100%);
+  color: #fff;
+  box-shadow: 0 0 32px 0 #ff880055, 0 2px 8px 0 #a259ff22;
+  transition: box-shadow 0.22s, background 0.18s, transform 0.18s;
+}
+.btn-glow:hover {
+  background: linear-gradient(90deg, #ff8800 10%, #a259ff 90%);
+  box-shadow: 0 0 48px 0 #ff8800aa, 0 4px 16px 0 #a259ff44;
+  transform: scale(1.04);
+} 

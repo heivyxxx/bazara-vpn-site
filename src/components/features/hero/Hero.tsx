@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import { Button } from '@/components/ui/Button';
 import { useLang } from '@/lib/LanguageContext';
+import Link from 'next/link';
 
 const HeroFeature = ({ icon, text }: { icon: React.ReactNode; text: string }) => (
   <li className="flex items-center gap-2 text-white text-lg">
@@ -98,14 +99,14 @@ export const Hero = () => {
           </span>
         </p>
 
-        <Button 
-          size="lg"
-          className="mb-6 text-xl md:text-2xl py-5 px-12 fade-up-main btn-glow"
-          style={{ animationDelay: '0.32s' }}
-          onClick={() => document.getElementById('tariffs')?.scrollIntoView({ behavior: 'smooth' })}
-        >
-          {t.btn}
-        </Button>
+        <Link href="/tariffs" passHref legacyBehavior>
+          <a
+            className="mb-6 text-xl md:text-2xl py-5 px-12 fade-up-main btn-glow block text-center"
+            style={{ animationDelay: '0.32s', borderRadius: '1.1rem', minWidth: 260, boxShadow: '0 2px 16px 0 #ff880088' }}
+          >
+            {t.btn}
+          </a>
+        </Link>
 
         <ul 
           className="flex flex-wrap gap-6 mt-6 fade-up-main"

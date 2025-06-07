@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ReviewModal } from './ReviewModal';
 import { User } from '@/lib/types';
+import { useLang } from '@/lib/LanguageContext';
 
 interface ReviewCardProps {
   avatar: string;
@@ -45,9 +46,24 @@ const ReviewCard = ({ avatar, name, rating, text, date }: ReviewCardProps) => (
   </div>
 );
 
+const reviewsTexts = {
+  ru: {
+    title: 'Отзывы пользователей',
+    leave: 'Оставить отзыв',
+    noReviews: 'Пока нет отзывов',
+  },
+  en: {
+    title: 'User reviews',
+    leave: 'Leave a review',
+    noReviews: 'No reviews yet',
+  },
+};
+
 export const Reviews = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [user, setUser] = useState<User | null>(null);
+  const { lang } = useLang();
+  const t = reviewsTexts[lang];
 
   // Демо отзывы (в реальности будут загружаться из Firebase)
   const reviews = [
@@ -105,7 +121,7 @@ export const Reviews = () => {
     <section className="max-w-5xl mx-auto my-16 px-4">
       <div className="flex items-center justify-between mb-8">
         <h2 className="text-3xl font-bold text-orange-400">
-          Отзывы пользователей
+          {t.title}
         </h2>
         <div className="flex gap-4">
           <Link 
@@ -122,7 +138,7 @@ export const Reviews = () => {
               <path d="M12 20h9"/>
               <path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19.5 3 21l1.5-4L16.5 3.5Z"/>
             </svg>
-            Оставить отзыв
+            {t.leave}
           </button>
         </div>
       </div>

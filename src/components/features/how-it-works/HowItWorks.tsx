@@ -1,6 +1,7 @@
 "use client";
 
 import Image from 'next/image';
+import { useLang } from '@/lib/LanguageContext';
 
 interface StepCardProps {
   image: string;
@@ -29,7 +30,29 @@ const StepCard = ({ image, title, description }: StepCardProps) => (
   </div>
 );
 
+const howItWorksTexts = {
+  ru: {
+    title: 'Как это работает?',
+    steps: [
+      'Скачай приложение',
+      'Введи ключ',
+      'Подключись к VPN',
+    ],
+  },
+  en: {
+    title: 'How does it work?',
+    steps: [
+      'Download the app',
+      'Enter the key',
+      'Connect to VPN',
+    ],
+  },
+};
+
 export const HowItWorks = () => {
+  const { lang } = useLang();
+  const t = howItWorksTexts[lang];
+
   const steps = [
     {
       image: "/assets/install.png",
@@ -51,7 +74,7 @@ export const HowItWorks = () => {
   return (
     <section className="max-w-6xl mx-auto my-20 px-4">
       <h2 className="text-3xl font-bold text-orange-400 mb-10 text-center">
-        Как это работает?
+        {t.title}
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
         {steps.map((step, index) => (

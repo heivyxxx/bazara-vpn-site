@@ -1,6 +1,7 @@
 "use client";
 
 import Image from 'next/image';
+import { useLang } from '@/lib/LanguageContext';
 
 interface FeatureBlockProps {
   title: string;
@@ -22,34 +23,60 @@ const FeatureBlock = ({
   reverse = false,
   gradientFrom = "orange-400",
   gradientTo = "purple-500"
-}: FeatureBlockProps) => (
-  <section className="w-full bg-[#181818] py-16 px-4">
-    <div className={`max-w-6xl mx-auto flex flex-col md:flex-row items-center md:items-stretch gap-10 md:gap-16 ${reverse ? 'md:flex-row-reverse' : ''}`}>
-      <div className="flex-1 flex flex-col justify-center text-center md:text-left">
-        <h2 className="text-3xl md:text-5xl font-extrabold text-white mb-6 leading-tight">
-          <span className={`text-transparent bg-clip-text bg-gradient-to-r from-${gradientFrom} to-${gradientTo}`}>
-            {title}
-          </span>
-          <br />
-          <span>{subtitle}</span>
-        </h2>
-        <div className="text-lg md:text-2xl text-gray-200 font-medium leading-snug">
-          {description}
+}: FeatureBlockProps) => {
+  const { lang } = useLang();
+  const t = featuresTexts[lang];
+
+  return (
+    <section className="w-full bg-[#181818] py-16 px-4">
+      <div className={`max-w-6xl mx-auto flex flex-col md:flex-row items-center md:items-stretch gap-10 md:gap-16 ${reverse ? 'md:flex-row-reverse' : ''}`}>
+        <div className="flex-1 flex flex-col justify-center text-center md:text-left">
+          <h2 className="text-3xl md:text-5xl font-extrabold text-white mb-6 leading-tight">
+            <span className={`text-transparent bg-clip-text bg-gradient-to-r from-${gradientFrom} to-${gradientTo}`}>
+              {title}
+            </span>
+            <br />
+            <span>{subtitle}</span>
+          </h2>
+          <div className="text-lg md:text-2xl text-gray-200 font-medium leading-snug">
+            {description}
+          </div>
+        </div>
+        <div className="flex-1 flex items-center justify-center">
+          <Image 
+            src={image} 
+            alt={imageAlt}
+            width={512}
+            height={512}
+            className="w-full max-w-xs md:max-w-md lg:max-w-lg object-contain drop-shadow-xl select-none"
+            draggable={false}
+          />
         </div>
       </div>
-      <div className="flex-1 flex items-center justify-center">
-        <Image 
-          src={image} 
-          alt={imageAlt}
-          width={512}
-          height={512}
-          className="w-full max-w-xs md:max-w-md lg:max-w-lg object-contain drop-shadow-xl select-none"
-          draggable={false}
-        />
-      </div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};
+
+const featuresTexts = {
+  ru: {
+    title: 'Возможности',
+    items: [
+      'Мультиустройство',
+      'Защита Wi-Fi',
+      'Смена IP',
+      'Доступ к контенту по всему миру',
+    ],
+  },
+  en: {
+    title: 'Features',
+    items: [
+      'Multi-device',
+      'Wi-Fi protection',
+      'IP change',
+      'Access to content worldwide',
+    ],
+  },
+};
 
 export const Features = () => {
   const features = [

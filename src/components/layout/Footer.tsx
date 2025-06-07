@@ -9,11 +9,13 @@ const footerTexts = {
     contacts: 'Контакты',
     privacy: 'Политика',
     copyright: '© 2024 BazaraVPN',
+    footerSupport: 'Поддержка',
   },
   en: {
     contacts: 'Contacts',
     privacy: 'Privacy',
     copyright: '© 2024 BazaraVPN',
+    footerSupport: 'Support',
   },
 };
 

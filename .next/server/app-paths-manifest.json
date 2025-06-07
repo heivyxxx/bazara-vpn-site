@@ -1,0 +1,14 @@
+{
+  "/_not-found/page": "app/_not-found/page.js",
+  "/admin/issues/page": "app/admin/issues/page.js",
+  "/admin/links/page": "app/admin/links/page.js",
+  "/admin/login/page": "app/admin/login/page.js",
+  "/admin/page": "app/admin/page.js",
+  "/admin/panel/page": "app/admin/panel/page.js",
+  "/admin/reviews/page": "app/admin/reviews/page.js",
+  "/api/reviews/route": "app/api/reviews/route.js",
+  "/page": "app/page.js",
+  "/admin/support/page": "app/admin/support/page.js",
+  "/download/page": "app/download/page.js",
+  "/api/auth/telegram/route": "app/api/auth/telegram/route.js"
+}

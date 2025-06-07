@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BazaraVPN — Тарифы</title>
+  <link rel="icon" href="favicon.ico">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { background: #181818; min-height: 100vh; }
+    .tariff-card {
+      transition: box-shadow 0.22s, transform 0.18s, border 0.18s;
+      box-shadow: 0 2px 16px 0 #a259ff22;
+    }
+    .tariff-card:hover {
+      box-shadow: 0 8px 32px 0 #ff8800cc, 0 2px 8px 0 #a259ff88;
+      border-color: #ff8800;
+      transform: translateY(-6px) scale(1.04) rotate(-1deg);
+      z-index: 2;
+    }
+    .btn-glow {
+      background: linear-gradient(90deg, #ff8800 0%, #a259ff 100%);
+      color: #fff;
+      box-shadow: 0 0 16px 0 #ff880088, 0 2px 8px 0 #a259ff44;
+      font-weight: 700;
+      font-size: 1.18rem;
+      border: none;
+      border-radius: 1.1rem;
+      padding: 1.1rem 2.5rem;
+      transition: box-shadow 0.22s, transform 0.18s, background 0.18s;
+      outline: none;
+      position: relative;
+      z-index: 1;
+    }
+    .btn-glow:hover, .btn-glow:focus {
+      box-shadow: 0 0 32px 0 #ff8800cc, 0 4px 16px 0 #a259ff88;
+      background: linear-gradient(90deg, #ff8800 10%, #a259ff 90%);
+      transform: scale(1.06);
+    }
+    .fade-up { opacity: 0; transform: translateY(40px); transition: opacity 0.7s, transform 0.7s; }
+    .fade-up.visible { opacity: 1; transform: none; }
+    .tariff-badge { position: absolute; top: -18px; left: 50%; transform: translateX(-50%); background: linear-gradient(90deg,#ff8800,#a259ff); color: #fff; font-weight: bold; border-radius: 1.2rem; padding: 0.4rem 1.2rem; font-size: 1.1rem; box-shadow: 0 2px 12px 0 #ff880044; letter-spacing: 0.02em; }
+    .device-anim { transition: transform 0.5s cubic-bezier(.77,0,.18,1); }
+    .device-anim:hover { transform: scale(1.13) rotate(-6deg); filter: drop-shadow(0 0 16px #ff8800cc); }
+    .svg-check { stroke-dasharray: 24; stroke-dashoffset: 24; animation: checkmark 1.2s cubic-bezier(.77,0,.18,1) forwards; }
+    @keyframes checkmark { to { stroke-dashoffset: 0; } }
+    .guarantee-block { background: linear-gradient(90deg,#ff8800 0%,#a259ff 100%); color: #fff; border-radius: 1.5rem; box-shadow: 0 2px 16px 0 #ff880088; padding: 2.2rem 2rem 2rem 2rem; margin-top: 2.5rem; }
+    .guarantee-block .emoji { font-size: 2.2rem; margin-right: 0.7rem; }
+    .testimonial {
+      background: rgba(255,255,255,0.07);
+      border-radius: 1.2rem;
+      padding: 1.5rem 2rem;
+      margin-top: 2.5rem;
+      box-shadow: 0 2px 12px 0 #a259ff22;
+      color: #fff;
+      font-size: 1.15rem;
+      font-style: italic;
+      position: relative;
+    }
+    .testimonial:before { display:none; }
+    .testimonial:after { display:none; }
+    .tariff-list {
+      list-style: none;
+      padding-left: 0;
+    }
+    .tariff-list li {
+      position: relative;
+      padding-left: 1.5em;
+      margin-bottom: 0.5em;
+      display: flex;
+      align-items: center;
+    }
+    .tariff-list li:before {
+      content: '';
+      display: inline-block;
+      width: 0.9em;
+      height: 0.9em;
+      background: #a259ff;
+      margin-right: 0.7em;
+      margin-left: 0.1em;
+      flex-shrink: 0;
+      border-radius: 0.15em;
+      box-shadow: 0 0 0 2px #232323;
+    }
+    .tariff-list {
+      margin-top: 0.5em;
+      margin-bottom: 0.5em;
+    }
+    .tariff-card .tariff-list {
+      min-height: 7.5em;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    @keyframes fadeInModal {
+      from { opacity: 0; transform: scale(0.97) translateY(24px); }
+      to { opacity: 1; transform: none; }
+    }
+    .animate-fade-in {
+      animation: fadeInModal 0.38s cubic-bezier(.77,0,.18,1);
+    }
+    .pay-method {
+      background: #181818;
+      color: #fff;
+      border-radius: 1rem;
+      padding: 1.25rem 0;
+      font-weight: 600;
+      font-size: 1.1rem;
+      text-align: center;
+      transition: background 0.18s, box-shadow 0.18s, border 0.18s;
+      border: 2.5px solid transparent;
+      cursor: pointer;
+    }
+    .pay-method:hover {
+      background: #333;
+    }
+    .pay-method.selected {
+      border: 2.5px solid;
+      border-image: linear-gradient(90deg, #ff8800 0%, #a259ff 100%) 1;
+      box-shadow: 0 0 0 2px #ff880055;
+      border-radius: 1rem !important;
+    }
+    .explode-btn {
+      position: relative;
+      z-index: 1;
+      transition: transform 0.3s, opacity 0.3s;
+    }
+    .explode-piece {
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      background: linear-gradient(90deg, #ff8800 0%, #a259ff 100%);
+      border-radius: 6px;
+      opacity: 1;
+      pointer-events: none;
+      z-index: 10;
+      animation: explode-fall 1.2s forwards;
+    }
+    @keyframes explode-fall {
+      to {
+        transform: translateY(120px) scale(0.7) rotate(40deg);
+        opacity: 0;
+      }
+    }
+    #mega-advantages, #mega-download {
+      border: 1.5px solid #232323 !important;
+      box-shadow: 0 4px 24px 0 #00000022 !important;
+    }
+    #mega-advantages, #mega-download {
+      z-index: 1002 !important;
+    }
+    #main-navbar { z-index: 1003 !important; }
+    #lang-dropdown {
+      top: 100% !important;
+      bottom: auto !important;
+      margin-top: 0.5rem !important;
+      margin-bottom: 0 !important;
+      z-index: 1050 !important;
+    }
+  </style>
+</head>
+<body class="text-white min-h-screen flex flex-col" id="main-body">
+  <!-- HEADER (универсальный) -->
+  <nav class="fixed top-0 left-0 w-full z-20 bg-[#181818] shadow-sm border-b border-orange-900" id="main-navbar">
+    <div class="max-w-6xl mx-auto flex items-center justify-between py-4 px-4 md:px-8 text-lg gap-8">
+      <!-- Логотип -->
+      <div class="flex items-center gap-3 logo-home cursor-pointer flex-shrink-0">
+        <a href="index.html" class="flex items-center gap-3">
+          <img src="/assets/logo-bazara.png" alt="BazaraVPN Logo" class="h-10 w-10">
+          <span class="text-3xl font-bold text-orange-500">Bazara<span class="text-white">VPN</span></span>
+        </a>
+      </div>
+      <!-- Десктоп-меню -->
+      <div class="hidden md:flex flex-1 justify-center">
+        <ul class="flex items-center gap-8 font-semibold">
+          <li class="relative group" id="advantages-menu">
+            <a href="index.html#advantages" class="text-white hover:text-orange-500 transition flex items-center gap-1 py-2 px-2 rounded-lg" data-i18n="header-advantages">
+              Преимущества
+              <svg class="w-5 h-5 text-orange-400 group-hover:rotate-180 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+            </a>
+            <!-- MegaMenu -->
+            <div id="mega-advantages" class="hidden group-hover:flex group-focus-within:flex absolute left-0 top-full mt-3 w-[700px] bg-[#232323] border border-orange-700 rounded-2xl shadow-2xl p-6 z-50 text-white animate-fade-in flex gap-8">
+              <div class="flex-1 min-w-[220px] flex flex-col gap-4">
+                <div>
+                  <div class="font-bold text-lg text-orange-400 mb-1" data-i18n="header-what-vpn">Что такое VPN?</div>
+                  <div class="text-gray-200 text-sm" data-i18n="header-what-vpn-desc">VPN — это технология для анонимности, безопасности и обхода блокировок в интернете.</div>
+                </div>
+                <div>
+                  <div class="font-bold text-lg text-orange-400 mb-1" data-i18n="header-why-bazara">Почему BazaraVPN?</div>
+                  <div class="text-gray-200 text-sm" data-i18n="header-why-bazara-desc">Без логов, высокая скорость, поддержка стриминга и торрентов, современные протоколы.</div>
+                </div>
+                <div>
+                  <div class="font-bold text-lg text-orange-400 mb-1" data-i18n="header-all-features">Все функции</div>
+                  <div class="text-gray-200 text-sm" data-i18n="header-all-features-desc">Мультиустройство, защита Wi-Fi, смена IP, доступ к контенту по всему миру.</div>
+                </div>
+                <div>
+                  <div class="font-bold text-lg text-orange-400 mb-1" data-i18n="header-servers">VPN-серверы</div>
+                  <div class="text-gray-200 text-sm" data-i18n="header-servers-desc">Сервера в 10+ странах для стабильного и быстрого соединения.</div>
+                </div>
+              </div>
+              <div class="flex-1 min-w-[220px] flex flex-col gap-4">
+                <div>
+                  <div class="font-bold text-lg text-orange-400 mb-1" data-i18n="header-streaming">VPN для стриминга</div>
+                  <div class="text-gray-200 text-sm" data-i18n="header-streaming-desc">Смотрите Netflix, Hulu, Disney+ и другие сервисы без ограничений.</div>
+                </div>
+                <div>
+                  <div class="font-bold text-lg text-orange-400 mb-1" data-i18n="header-countries">Страны</div>
+                  <div class="text-gray-200 text-sm" data-i18n="header-countries-desc">США, Турция, Япония, Германия, Франция, и другие.</div>
+                </div>
+                <div>
+                  <div class="font-bold text-lg text-orange-400 mb-1" data-i18n="header-devices">Устройства</div>
+                  <div class="text-gray-200 text-sm" data-i18n="header-devices-desc">Windows, macOS, Android, iOS, роутеры.</div>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li><a href="tariffs.html" class="text-white hover:text-orange-500 transition py-2 px-2 rounded-lg" data-i18n="header-tariffs">Тарифы</a></li>
+          <li><a href="/download" class="px-4 py-2 hover:bg-[#181818] cursor-pointer" data-i18n="header-download">Скачать</a></li>
+        </ul>
+      </div>
+      <!-- Десктоп поддержка и язык -->
+      <div class="hidden md:flex items-center gap-6 flex-shrink-0">
+        <a href="support.html" class="flex items-center gap-2 text-orange-500 font-bold py-2 px-3 rounded-lg border border-orange-500 bg-[#232323]" data-i18n="header-support">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <span class="hidden md:inline">Поддержка</span>
+        </a>
+        <div id="lang-switcher" class="relative flex items-center gap-2 select-none">
+          <button id="lang-dropdown-btn" class="flex items-center gap-2 px-3 py-2 bg-[#232323] rounded-lg border border-gray-700 text-white hover:bg-[#2c2c2c] focus:outline-none text-base">
+            <svg class="w-6 h-6 text-gray-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 0 20M12 2a15.3 15.3 0 0 0 0 20"/></svg>
+            <span id="lang-current" class="font-semibold">Русский</span>
+            <svg class="w-5 h-5 ml-1 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div id="lang-dropdown" class="hidden absolute right-0 mt-2 w-40 bg-[#232323] border border-gray-700 rounded-lg shadow-lg py-1 z-50">
+            <button type="button" class="w-full text-left px-5 py-3 text-base hover:bg-[#181818] text-white flex items-center gap-2" data-lang="ru">Русский</button>
+            <button type="button" class="w-full text-left px-5 py-3 text-base hover:bg-[#181818] text-white flex items-center gap-2" data-lang="en">English</button>
+          </div>
+        </div>
+      </div>
+      <!-- Мобильный бургер -->
+      <button id="burger-btn" class="block md:hidden text-white focus:outline-none" aria-label="Открыть меню">
+        <svg class="w-9 h-9" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </div>
+    <!-- Мобильное меню -->
+    <div id="mobile-menu" class="fixed inset-0 bg-black bg-opacity-80 z-50 flex-col items-center justify-start pt-24 px-6 hidden md:hidden">
+      <div class="flex flex-col gap-6 w-full max-w-xs mx-auto bg-[#232323] rounded-2xl p-6 shadow-2xl">
+        <a href="index.html#advantages" class="block text-lg font-bold text-white py-2 px-4 rounded-lg hover:bg-[#181818]" data-i18n="header-advantages">Преимущества</a>
+        <a href="tariffs.html" class="block text-lg font-bold text-white py-2 px-4 rounded-lg hover:bg-[#181818]" data-i18n="header-tariffs">Тарифы</a>
+        <a href="/download" class="block text-lg font-bold text-white py-2 px-4 rounded-lg hover:bg-[#181818]" data-i18n="header-download">Скачать</a>
+        <a href="support.html" class="block text-lg font-bold text-orange-400 py-2 px-4 rounded-lg border border-orange-500 bg-[#181818]" data-i18n="header-support">Поддержка</a>
+        <div class="flex flex-col gap-2 mt-2">
+          <div class="text-gray-400 text-sm font-semibold mb-1">Язык</div>
+          <button type="button" class="w-full text-left px-4 py-3 text-base rounded-lg bg-[#181818] text-white font-semibold border border-gray-700" onclick="setLang('ru')">Русский</button>
+          <button type="button" class="w-full text-left px-4 py-3 text-base rounded-lg bg-[#181818] text-white font-semibold border border-gray-700" onclick="setLang('en')">English</button>
+        </div>
+        <button id="close-mobile-menu" class="mt-4 w-full py-3 rounded-lg bg-[#181818] text-gray-400 font-bold text-lg border border-gray-700">Закрыть</button>
+      </div>
+    </div>
+  </nav>
+  <script>
+  // Мобильное меню бургер
+  const burgerBtn = document.getElementById('burger-btn');
+  const mobileMenu = document.getElementById('mobile-menu');
+  const closeMobileMenu = document.getElementById('close-mobile-menu');
+  burgerBtn && burgerBtn.addEventListener('click', function() {
+    mobileMenu.classList.remove('hidden');
+  });
+  closeMobileMenu && closeMobileMenu.addEventListener('click', function() {
+    mobileMenu.classList.add('hidden');
+  });
+  mobileMenu && mobileMenu.addEventListener('click', function(e) {
+    if (e.target === mobileMenu) mobileMenu.classList.add('hidden');
+  });
+  </script>
+  <main class="flex-1 flex flex-col items-center bg-transparent pt-32 pb-16">
+    <!-- Banner -->
+    <div id="promo-banner" class="w-full max-w-5xl mx-auto rounded-2xl bg-gradient-to-r from-[#7b2ff2] to-[#f357a8] flex items-center justify-between px-8 py-7 mb-10 shadow-lg cursor-pointer transition-opacity duration-500 fade-up">
+      <div class="flex items-center gap-6">
+        <img src="assets/tort.png" alt="Торт" class="w-32 h-32 md:w-40 md:h-40 select-none" draggable="false">
+        <div class="flex flex-col gap-1">
+          <span class="text-3xl md:text-4xl font-extrabold text-white" data-i18n="tariff-banner-title">Открытие BazaraVPN</span>
+          <span class="text-xl md:text-2xl font-semibold text-white" data-i18n="tariff-banner-desc">20% скидка на все тарифы!<br><span class='text-base text-white font-normal'>Только до 31 мая</span></span>
+        </div>
+      </div>
+      <div class="flex flex-col items-center">
+        <span class="bg-white text-orange-600 font-bold px-7 py-3 rounded-2xl text-2xl shadow-lg" data-i18n="tariff-banner-btn">Жми!</span>
+      </div>
+    </div>
+    <script>
+      // Плавное скрытие баннера при клике и анимация рассыпания кнопок
+      document.addEventListener('DOMContentLoaded', function() {
+        var banner = document.getElementById('promo-banner');
+        var btnYear = document.getElementById('open-payment-modal-year');
+        var btnMonth = document.getElementById('open-payment-modal-month');
+        var newBtnYear = document.getElementById('new-payment-modal-year');
+        var newBtnMonth = document.getElementById('new-payment-modal-month');
+        function explodeButton(btn) {
+          if (!btn) return;
+          btn.style.visibility = 'hidden';
+          var rect = btn.getBoundingClientRect();
+          var parentRect = btn.parentElement.getBoundingClientRect();
+          for (var i = 0; i < 12; i++) {
+            var piece = document.createElement('div');
+            piece.className = 'explode-piece';
+            piece.style.left = (btn.offsetLeft + btn.offsetWidth/2 - 12 + Math.random()*btn.offsetWidth/2*(Math.random()>0.5?1:-1)) + 'px';
+            piece.style.top = (btn.offsetTop + btn.offsetHeight/2 - 12 + Math.random()*btn.offsetHeight/2*(Math.random()>0.5?1:-1)) + 'px';
+            piece.style.background = i%2===0 ? 'linear-gradient(90deg, #ff8800 0%, #a259ff 100%)' : '#232323';
+            piece.style.animationDelay = (Math.random()*0.2)+'s';
+            btn.parentElement.appendChild(piece);
+            setTimeout(function(p){ p.remove(); }, 1300, piece);
+          }
+        }
+        if (banner) {
+          banner.addEventListener('click', function() {
+            banner.style.opacity = '0';
+            setTimeout(function() { banner.style.display = 'none'; }, 500);
+            explodeButton(btnYear);
+            explodeButton(btnMonth);
+            setTimeout(function() {
+              if (btnYear) btnYear.style.display = 'none';
+              if (btnMonth) btnMonth.style.display = 'none';
+              if (newBtnYear) {
+                newBtnYear.style.display = '';
+                setTimeout(function(){
+                  newBtnYear.style.transition = 'opacity 0.7s, transform 0.7s';
+                  newBtnYear.style.opacity = 1;
+                  newBtnYear.style.transform = 'none';
+                  newBtnYear.style.pointerEvents = 'auto';
+                }, 50);
+              }
+              if (newBtnMonth) {
+                newBtnMonth.style.display = '';
+                setTimeout(function(){
+                  newBtnMonth.style.transition = 'opacity 0.7s, transform 0.7s';
+                  newBtnMonth.style.opacity = 1;
+                  newBtnMonth.style.transform = 'none';
+                  newBtnMonth.style.pointerEvents = 'auto';
+                }, 50);
+              }
+            }, 900);
+          });
+        }
+      });
+    </script>
+    <!-- Новый тарифный блок в стиле Яндекс 360 -->
+    <section class="w-full flex justify-center items-center py-16 px-4 fade-up">
+      <div id="vpn-main-block" class="w-full max-w-6xl bg-[#232323] rounded-3xl shadow-2xl flex flex-col md:flex-row items-center md:items-stretch gap-16 md:gap-0 p-14 md:p-20 border border-[#333] fade-up" style="min-height:440px; opacity:1; transform:none; transition:opacity 0.7s, transform 0.7s;">
+        <div class="flex-1 flex flex-col justify-center items-start">
+          <h2 class="text-4xl md:text-5xl font-extrabold text-white mb-6" data-i18n="tariff-main-title">VPN для важных задач</h2>
+          <p class="text-xl md:text-2xl text-white mb-8 max-w-lg" data-i18n="tariff-main-desc">Быстро. Безопасно. Анонимно.<br>Доступ к любимым сайтам и сервисам по всему миру — без ограничений и слежки. Всё по-базарному просто!</p>
+          <div class="flex gap-4">
+            <button id="open-payment-modal-year" class="rounded-xl px-8 py-4 text-lg font-bold bg-gradient-to-r from-orange-500 to-purple-500 text-white shadow-lg hover:scale-105 transition-transform explode-btn" data-i18n="tariff-btn-year">2290₽/год</button>
+            <button id="open-payment-modal-month" class="rounded-xl px-8 py-4 text-lg font-bold border-2 border-orange-400 text-orange-500 bg-[#232323] shadow hover:bg-orange-900 hover:scale-105 transition-transform explode-btn" data-i18n="tariff-btn-month">399₽/мес</button>
+            <button id="new-payment-modal-year" style="display:none;opacity:0;pointer-events:none;transform:translateY(40px);" class="rounded-xl px-8 py-4 text-lg font-bold bg-gradient-to-r from-orange-500 to-purple-500 text-white shadow-lg hover:scale-105 transition-transform fade-up" data-i18n="tariff-btn-year-new">1989₽/год</button>
+            <button id="new-payment-modal-month" style="display:none;opacity:0;pointer-events:none;transform:translateY(40px);" class="rounded-xl px-8 py-4 text-lg font-bold border-2 border-orange-400 text-orange-500 bg-[#232323] shadow hover:bg-orange-900 hover:scale-105 transition-transform fade-up" data-i18n="tariff-btn-month-new">50₽/мес</button>
+            <button id="test-success-btn" style="margin-top: 1.5rem; background: #444; color: #fff; border: none; border-radius: 1rem; padding: 0.7rem 2rem; font-size: 1rem; cursor: pointer; opacity: 0.7;" title="Тест успешной оплаты (dev)">Тест успешной оплаты</button>
+            <script>
+              document.getElementById('test-success-btn').onclick = function() {
+                // Открываем модалку генерации ссылки, как после реальной оплаты
+                window.openLinkModal && window.openLinkModal();
+              };
+            </script>
+          </div>
+        </div>
+        <div class="flex-1 flex justify-center items-center">
+          <img src="assets/vpn-3d.png" alt="VPN 3D" class="w-[640px] h-[540px] object-contain select-none" draggable="false">
+        </div>
+      </div>
+    </section>
+    <!-- Блок: Попробуйте BazaraVPN бесплатно -->
+    <section class="w-full flex justify-center items-center py-10 px-4 fade-up">
+      <div class="w-full max-w-4xl bg-[#232323] rounded-3xl shadow-xl flex flex-col md:flex-row items-center gap-8 md:gap-12 p-8 md:p-12 border border-[#232323]">
+        <div class="flex-shrink-0 flex items-center justify-center">
+          <img src="assets/gift-3d.png" alt="Подарок" class="w-24 h-24 md:w-32 md:h-32 select-none" draggable="false">
+        </div>
+        <div class="flex-1 flex flex-col items-start">
+          <h3 class="text-2xl md:text-3xl font-extrabold text-white mb-2" data-i18n="tariff-try-title">Попробуйте BazaraVPN бесплатно</h3>
+          <p class="text-base md:text-lg text-white mb-5" data-i18n="tariff-try-desc">3 дня полной защиты — без оплаты. без карты.<br>Оцени качество — а потом решишь сам.</p>
+          <button class="bg-orange-500 hover:bg-orange-600 text-white font-bold text-lg rounded-xl" style="border-radius:1.1rem; min-width:260px; padding:1.1rem 2.5rem; box-shadow:0 2px 16px 0 #ff880088; transition:box-shadow 0.22s,background 0.18s;" data-i18n="tariff-try-btn">Активировать пробную версию</button>
+        </div>
+      </div>
+    </section>
+    <!-- /Блок: Попробуйте BazaraVPN бесплатно -->
+    <!-- Apps Section (devices illustration) -->
+    <section class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-10 mb-20 px-4 fade-up" id="apps-block">
+      <div class="flex-1 flex flex-col items-start md:items-start text-left mb-8 md:mb-0">
+        <h2 class="text-3xl font-bold text-orange-400 mb-4" data-i18n="tariff-apps-title">Приложения для всех устройств</h2>
+        <p class="text-lg text-white mb-6 max-w-lg" data-i18n="tariff-apps-desc">BazaraVPN работает на Windows, macOS, Android, iOS и даже на роутерах. Защитите все свои устройства одним кликом!</p>
+        <div class="flex flex-wrap gap-4">
+          <a href="install-windows.html" class="device-anim bg-orange-500 text-white font-semibold px-4 py-2 rounded-lg flex items-center gap-2 shadow-lg hover:bg-orange-600 transition"><img src="assets/windows.png" alt="Windows" class="w-7 h-7">Windows</a>
+          <a href="install-macos.html" class="device-anim bg-orange-500 text-white font-semibold px-4 py-2 rounded-lg flex items-center gap-2 shadow-lg hover:bg-orange-600 transition"><img src="assets/apple.png" alt="macOS" class="w-7 h-7">macOS</a>
+          <a href="install-android.html" class="device-anim bg-orange-500 text-white font-semibold px-4 py-2 rounded-lg flex items-center gap-2 shadow-lg hover:bg-orange-600 transition"><img src="assets/android.png" alt="Android" class="w-7 h-7">Android</a>
+          <a href="install-ios.html" class="device-anim bg-orange-500 text-white font-semibold px-4 py-2 rounded-lg flex items-center gap-2 shadow-lg hover:bg-orange-600 transition"><img src="assets/apple.png" alt="iOS" class="w-7 h-7">iOS</a>
+          <a href="install-linux.html" class="device-anim bg-orange-500 text-white font-semibold px-4 py-2 rounded-lg flex items-center gap-2 shadow-lg hover:bg-orange-600 transition"><img src="assets/linux.png" alt="Linux" class="w-7 h-7" style="filter:invert(1);">Linux</a>
+        </div>
+      </div>
+      <div class="flex-1 flex justify-center items-center">
+        <img src="assets/devices.png" alt="Все устройства" class="w-[680px] h-[360px] object-contain select-none" draggable="false">
+      </div>
+    </section>
+    <!-- Guarantee Block -->
+    <div class="guarantee-block flex items-center gap-4 fade-up" id="guarantee-block">
+      <div>
+        <div class="text-2xl font-bold mb-1" data-i18n="tariff-guarantee-title">30-дневная гарантия возврата денег</div>
+        <div class="text-lg" data-i18n="tariff-guarantee-desc">Если что-то не понравится — вернём деньги без лишних вопросов. Просто напиши в поддержку!</div>
+      </div>
+    </div>
+    <!-- Testimonial -->
+    <div class="testimonial fade-up" id="testimonial-block" style="position:relative;">
+      <span data-i18n="tariff-testimonial">Пользуюсь BazaraVPN уже год — скорость отличная, поддержка отвечает быстро, а тарифы реально выгодные!</span>
+      <div class="mt-2 text-orange-400 font-bold" data-i18n="tariff-testimonial-user">— Настоящий пользователь</div>
+      <span style="position:absolute;right:1.2rem;bottom:0.2rem;font-size:2.5rem;color:#ff8800;">"</span>
+    </div>
+  </main>
+  <!-- FOOTER (универсальный) -->
+  <footer class="w-full bg-[#232323] border-t border-[#333] py-6 px-4 flex flex-col md:flex-row items-center justify-center gap-6 md:gap-10 text-gray-200 text-base mt-auto text-center">
+    <a href="contacts.html" class="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-[#181818] transition text-lg font-semibold">
+      <img src="assets/mail-3d.png" alt="Контакты" class="w-7 h-7" style="object-fit:contain;">
+      <span data-i18n="footer-contacts">Контакты</span>
+    </a>
+    <a href="privacy.html" class="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-[#181818] transition text-lg font-semibold">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8 8h8v8H8z"/></svg>
+      <span data-i18n="footer-privacy">Политика</span>
+    </a>
+    <div class="text-center text-lg font-medium" data-i18n="footer-copyright">© 2024 BazaraVPN</div>
+    <div class="flex items-center gap-5">
+      <a href="https://t.me/bazaraVPN" class="hover:text-orange-400" aria-label="Telegram" target="_blank" rel="noopener"><svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 4L12 20l-3-7-7-3z"/></svg></a>
+      <a href="https://www.instagram.com/bazaravpn/" class="hover:text-orange-400" aria-label="Instagram" target="_blank" rel="noopener"><svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="6"/><circle cx="12" cy="12" r="5"/><circle cx="17" cy="7" r="1.5"/></svg></a>
+      <a href="https://www.youtube.com/@BazaraVPN" class="hover:text-orange-400" aria-label="YouTube" target="_blank" rel="noopener"><svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="4"/><polygon points="10,9 16,12 10,15" fill="currentColor"/></svg></a>
+      <a href="https://www.tiktok.com/@bazaravpn1?lang=ru-RU" class="hover:text-orange-400" aria-label="TikTok" target="_blank" rel="noopener"><svg class="w-7 h-7" viewBox="0 0 24 24" fill="none"><path d="M16.5 3a4.5 4.5 0 0 0 4.5 4.5v2A6.5 6.5 0 0 1 14.5 3h2zm-2 0v12.5a3.5 3.5 0 1 1-3.5-3.5h1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    </div>
+  </footer>
+  <!-- Модалка оплаты для выбранного тарифа -->
+  <div id="payment-modal-bg" class="fixed inset-0 bg-black bg-opacity-60 z-50 hidden flex items-center justify-center transition-opacity duration-300">
+    <div class="bg-[#232323] rounded-3xl shadow-2xl p-8 md:p-12 w-full max-w-2xl relative flex flex-col gap-8 animate-fade-in" style="min-width:340px; min-height:340px;">
+      <button id="close-payment-modal" class="absolute top-5 right-5 w-10 h-10 flex items-center justify-center rounded-full bg-[#181818] hover:bg-[#2c2c2c] text-2xl text-gray-400">&times;</button>
+      <div class="flex items-center gap-4 mb-2">
+        <div class="w-14 h-14 rounded-full bg-[#181818] flex items-center justify-center text-2xl font-bold text-orange-500">BV</div>
+        <div>
+          <div class="font-bold text-lg text-white" data-i18n="modal-pay-account">Ваш аккаунт</div>
+          <div class="text-gray-400 text-sm">user@bazaravpn.ru</div>
+        </div>
+      </div>
+      <div id="modal-tariff-title" class="font-extrabold text-2xl text-white mb-2" data-i18n="modal-pay-title-year">Тариф "BazaraVPN" — Годовой</div>
+      <div class="grid grid-cols-2 gap-4 mb-6">
+        <div class="flex items-center gap-3 bg-[#181818] rounded-xl px-5 py-4 text-lg text-white font-semibold shadow">
+          <svg class="w-7 h-7 text-orange-400" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M12 3C17 5 21 5 21 10C21 19 12 21 12 21C12 21 3 19 3 10C3 5 7 5 12 3Z"/></svg>
+          <span data-i18n="modal-pay-feature-security">Безопасность</span>
+        </div>
+        <div class="flex items-center gap-3 bg-[#181818] rounded-xl px-5 py-4 text-lg text-white font-semibold shadow">
+          <svg class="w-7 h-7 text-orange-400" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M12 6v12M6 12h12"/></svg>
+          <span data-i18n="modal-pay-feature-unlim">Безлимит</span>
+        </div>
+        <div class="flex items-center gap-3 bg-[#181818] rounded-xl px-5 py-4 text-lg text-white font-semibold shadow">
+          <svg class="w-7 h-7 text-orange-400" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M8 21h8"/></svg>
+          <span data-i18n="modal-pay-feature-devices">5 устройств</span>
+        </div>
+        <div class="flex items-center gap-3 bg-[#181818] rounded-xl px-5 py-4 text-lg text-white font-semibold shadow">
+          <svg class="w-7 h-7 text-orange-400" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 12l2.5 2.5L16 9"/></svg>
+          <span data-i18n="modal-pay-feature-netflix">Доступ к Netflix</span>
+        </div>
+      </div>
+      <div class="flex gap-4 mb-4">
+        <div class="flex-1 pay-method" id="pay-sbp" data-i18n="modal-pay-sbp">СБП</div>
+        <div class="flex-1 pay-method" id="pay-card" data-i18n="modal-pay-card">Добавить карту</div>
+        <div class="flex-1 pay-method" id="pay-crypto" data-i18n="modal-pay-crypto">Крипта</div>
+      </div>
+      <div class="mb-4 w-full">
+        <input id="pay-email" type="email" required placeholder="Ваш email для получения ссылки" class="w-full max-w-xs mx-auto rounded-lg px-4 py-3 text-base text-white font-semibold bg-[#181818] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-400" style="margin-bottom:8px; display:block;" />
+      </div>
+      <button id="pay-btn" class="relative w-full py-4 rounded-xl font-bold text-lg text-white bg-[#444] flex justify-center items-center px-8 hover:bg-orange-500 transition-colors duration-200 cursor-pointer" disabled>
+        <span id="pay-btn-text" class="mx-auto" data-i18n="modal-pay-btn">Оплатить</span>
+        <span id="pay-btn-price" class="absolute right-8">2290₽</span>
+      </button>
+      <div class="text-xs text-gray-400 mt-2" data-i18n="modal-pay-agree">Нажимая кнопку "Оплатить", вы соглашаетесь с условиями <a href="#" class="underline">лицензионного соглашения</a>.</div>
+    </div>
+  </div>
+  <!-- /Модалка оплаты -->
+  <!-- Модалка генерации ссылки — асинхронная логика с polling -->
+  <div id="link-modal-bg" class="fixed inset-0 bg-black bg-opacity-60 z-50 hidden flex items-center justify-center transition-opacity duration-300">
+    <div class="bg-[#232323] rounded-3xl shadow-2xl p-8 md:p-12 w-full max-w-xl relative flex flex-col gap-8 animate-fade-in" style="min-width:340px; min-height:260px; align-items:center; justify-content:center;">
+      <button id="close-link-modal" class="absolute top-5 right-5 w-10 h-10 flex items-center justify-center rounded-full bg-[#181818] hover:bg-[#2c2c2c] text-2xl text-gray-400">&times;</button>
+      <div id="link-loading-block" class="flex flex-col items-center gap-4">
+        <svg class="animate-spin w-12 h-12 text-orange-400" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg>
+        <div class="text-xl font-bold text-white mt-2">🕐 Подождите, ваша ссылка генерируется…</div>
+        <div class="text-base text-gray-400 text-center">Обычно это занимает до 3 минут.<br>Вы можете закрыть это окно — мы отправим данные от подписки вам на почту.</div>
+      </div>
+      <div id="link-ready-block" class="hidden flex-col items-center gap-4" style="align-items:center;">
+        <div class="text-2xl font-extrabold text-white mb-3 text-center" style="font-size:2rem;">Ваша подписка готова!</div>
+        <div id="generated-link" class="bg-[#232323] rounded-xl px-6 py-4 text-white font-mono text-lg mb-4 select-all text-center" style="word-break:break-all; max-width: 100%;"> </div>
+        <button id="copy-link-btn" class="w-full max-w-xs bg-gradient-to-r from-orange-500 to-purple-500 text-white font-bold rounded-xl px-8 py-4 text-xl shadow hover:scale-105 transition-transform mb-2" style="display:block; margin:0 auto;">Скопировать</button>
+        <div id="copy-link-success" class="text-green-400 mt-2 hidden text-center">Скопировано!</div>
+      </div>
+    </div>
+  </div>
+  <script>
+  function onTelegramAuth(user) {
+    fetch('/api/telegram_auth', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(user)
+    })
+    .then(r => r.json())
+    .then(data => {
+      document.getElementById('tg-auth-result').textContent = data.message + (data.link ? ('\n' + data.link) : '');
+    })
+    .catch(() => {
+      document.getElementById('tg-auth-result').textContent = 'Ошибка соединения с сервером.';
+    });
+  }
+  // Динамическое добавление/удаление Telegram-виджета
+  const tgAuthModalBg = document.getElementById('tg-auth-modal-bg');
+  const closeTgAuthModal = document.getElementById('close-tg-auth-modal');
+  function openTgAuthModal() {
+    tgAuthModalBg.classList.remove('hidden');
+    setTimeout(() => tgAuthModalBg.classList.add('opacity-100'), 10);
+    // Добавляем Telegram-виджет только при открытии
+    const btn = document.getElementById('telegram-login-btn');
+    if (btn && !btn.querySelector('script#tg-login-script')) {
+      btn.innerHTML = '';
+      const script = document.createElement('script');
+      script.src = 'https://telegram.org/js/telegram-widget.js?7';
+      script.async = true;
+      script.setAttribute('data-telegram-login', 'BazaraVpnLoginBot');
+      script.setAttribute('data-size', 'large');
+      script.setAttribute('data-userpic', 'false');
+      script.setAttribute('data-radius', '14');
+      script.setAttribute('data-request-access', 'write');
+      script.setAttribute('data-onauth', 'onTelegramAuth(user)');
+      script.id = 'tg-login-script';
+      btn.appendChild(script);
+    }
+  }
+  function closeTgAuthModalFn() {
+    tgAuthModalBg.classList.add('hidden');
+    tgAuthModalBg.classList.remove('opacity-100');
+    // Удаляем Telegram-виджет при закрытии
+    const btn = document.getElementById('telegram-login-btn');
+    if (btn) btn.innerHTML = '';
+    document.getElementById('tg-auth-result').textContent = '';
+  }
+  if (closeTgAuthModal) closeTgAuthModal.onclick = closeTgAuthModalFn;
+  if (tgAuthModalBg) tgAuthModalBg.addEventListener('click', (e) => {
+    if (e.target === tgAuthModalBg) closeTgAuthModalFn();
+  });
+  // Открытие модалки Telegram авторизации по клику на кнопку 'Активировать пробную версию'
+  const trialBtn = document.querySelector('button.bg-orange-500');
+  if (trialBtn && tgAuthModalBg) {
+    trialBtn.addEventListener('click', openTgAuthModal);
+  }
+  </script>
+  <!-- === WATA.PRO ОПЛАТА: рабочий блок === -->
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJQdWJsaWNJZCI6IjNhMTk3OTk3LTlmYzUtZmZkMS0wZGFjLTljYTM1NDZiNWE2ZSIsIlRva2VuVmVyc2lvbiI6IjIiLCJleHAiOjE3NzkzNjQ5ODEsImlzcyI6Imh0dHBzOi8vYXBpLndhdGEucHJvIiwiYXVkIjoiaHR0cHM6Ly9hcGkud2F0YS5wcm8vYXBpL2gyaCJ9.BWlLZN9ktkrccefuwU3KZoOlyHP3VJdFwPQRdxXmBuk";
+    let selectedPayMethod = null;
+    const payBtn = document.getElementById('pay-btn');
+    const payBtnText = document.getElementById('pay-btn-text');
+    const payBtnPrice = document.getElementById('pay-btn-price');
+    const payMethods = [
+      document.getElementById('pay-sbp'),
+      document.getElementById('pay-card'),
+      document.getElementById('pay-crypto')
+    ];
+    payMethods.forEach(btn => {
+      if (!btn) return;
+      btn.onclick = () => {
+        payMethods.forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        selectedPayMethod = btn.id;
+        payBtn.disabled = false;
+      };
+    });
+    payBtn.onclick = async function() {
+      const emailInput = document.getElementById('pay-email');
+      const email = emailInput ? emailInput.value.trim() : '';
+      if (!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+        emailInput.classList.add('ring-2', 'ring-red-500');
+        emailInput.focus();
+        return;
+      } else {
+        emailInput.classList.remove('ring-2', 'ring-red-500');
+      }
+      console.log('payBtn clicked', selectedPayMethod);
+      if (selectedPayMethod === 'pay-sbp') {
+        await createInvoice('sbp', email);
+      } else if (selectedPayMethod === 'pay-card') {
+        await createInvoice('card', email);
+      } else if (selectedPayMethod === 'pay-crypto') {
+        await createInvoice('crypto', email);
+      }
+    };
+    async function createInvoice(method, email) {
+      try {
+        let body = {
+          amount: Number(payBtnPrice.textContent.replace(/[^\d]/g, '')),
+          method: method,
+          order_id: 'bazara_' + Math.floor(Math.random()*1000000),
+          description: 'Подписка BazaraVPN',
+          email: email
+        };
+        // Определяем package_days по тарифу
+        const price = Number(payBtnPrice.textContent.replace(/[^\d]/g, ''));
+        if (price === 2290 || price === 1989) {
+          body.package_days = 365;
+        } else if (price === 399 || price === 50) {
+          body.package_days = 30;
+        }
+        if (method === 'crypto') {
+          body.method = 'crypto';
+          body.order_id = 'vpn_' + Date.now();
+          body.description = 'Тариф BazaraVPN — ' + document.getElementById('modal-tariff-title').textContent;
+        }
+        const resp = await fetch('/api/pay', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(body)
+        });
+        const data = await resp.json();
+        console.log('Pay response:', data);
+        if (data && data.url) {
+          window.open(data.url, '_blank');
+          // setTimeout(() => { window.openLinkModal && window.openLinkModal(); }, 500); // УДАЛЕНО: генерация ссылки только после успешной оплаты
+        } else {
+          alert('Ошибка при создании счёта!');
+          console.log('Wata.pro/NOWPayments error:', data);
+        }
+      } catch (e) {
+        alert('Ошибка соединения!');
+        console.log('Pay fetch error:', e);
+      }
+    }
+  });
+  </script>
+  <script>
+    // Анимация появления блоков при скролле
+    function revealOnScroll() {
+      document.querySelectorAll('.fade-up').forEach(el => {
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight - 40) {
+          el.classList.add('visible');
+        }
+      });
+    }
+    window.addEventListener('scroll', revealOnScroll);
+    window.addEventListener('DOMContentLoaded', revealOnScroll);
+    // Открытие модалки оплаты по клику на кнопки тарифов с подстановкой данных
+    const openYear = document.getElementById('open-payment-modal-year');
+    const openMonth = document.getElementById('open-payment-modal-month');
+    const newBtnYear = document.getElementById('new-payment-modal-year');
+    const newBtnMonth = document.getElementById('new-payment-modal-month');
+    const modalBg = document.getElementById('payment-modal-bg');
+    const closeModal = document.getElementById('close-payment-modal');
+    const modalTitle = document.getElementById('modal-tariff-title');
+    const payBtn = document.getElementById('pay-btn');
+    const payBtnText = document.getElementById('pay-btn-text');
+    const payBtnPrice = document.getElementById('pay-btn-price');
+    function showModal(type, isNew) {
+      const modalTitle = document.getElementById('modal-tariff-title');
+      const payBtnText = document.getElementById('pay-btn-text');
+      let lang = localStorage.getItem('lang') || 'ru';
+      if (type === 'year') {
+        modalTitle.setAttribute('data-i18n', 'modal-pay-title-year');
+        modalTitle.textContent = 'Тариф "BazaraVPN" — Годовой';
+        payBtnPrice.textContent = isNew ? '1989₽' : '2290₽';
+      } else {
+        modalTitle.setAttribute('data-i18n', 'modal-pay-title-month');
+        modalTitle.textContent = 'Тариф "BazaraVPN" — Месячный';
+        payBtnPrice.textContent = isNew ? '50₽' : '399₽';
+      }
+      if (payBtnText) {
+        payBtnText.setAttribute('data-i18n', 'modal-pay-btn');
+      }
+      if (typeof setLang === 'function') setLang(lang);
+      modalBg.classList.remove('hidden');
+      modalBg.classList.add('opacity-100');
+    }
+    if (openYear) openYear.onclick = () => showModal('year', false);
+    if (openMonth) openMonth.onclick = () => showModal('month', false);
+    if (newBtnYear) newBtnYear.onclick = () => showModal('year', true);
+    if (newBtnMonth) newBtnMonth.onclick = () => showModal('month', true);
+    if (closeModal) closeModal.onclick = () => {
+      modalBg.classList.add('hidden');
+      modalBg.classList.remove('opacity-100');
+    };
+    if (modalBg) modalBg.onclick = (e) => { if (e.target === modalBg) { modalBg.classList.add('hidden'); modalBg.classList.remove('opacity-100'); } };
+    // Выделение выбранного способа оплаты
+    const payMethods = [
+      document.getElementById('pay-sbp'),
+      document.getElementById('pay-card'),
+      document.getElementById('pay-crypto')
+    ];
+    payMethods.forEach(btn => {
+      if (!btn) return;
+      btn.onclick = () => {
+        payMethods.forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        payBtn.disabled = false;
+      };
+    });
+    payBtn.onclick = async function() {
+      const emailInput = document.getElementById('pay-email');
+      const email = emailInput ? emailInput.value.trim() : '';
+      if (!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+        emailInput.classList.add('ring-2', 'ring-red-500');
+        emailInput.focus();
+        return;
+      } else {
+        emailInput.classList.remove('ring-2', 'ring-red-500');
+      }
+      console.log('payBtn clicked', selectedPayMethod);
+      if (selectedPayMethod === 'pay-sbp') {
+        await createInvoice('sbp', email);
+      } else if (selectedPayMethod === 'pay-card') {
+        await createInvoice('card', email);
+      } else if (selectedPayMethod === 'pay-crypto') {
+        await createInvoice('crypto', email);
+      }
+    };
+    async function createInvoice(method, email) {
+      try {
+        let body = {
+          amount: Number(payBtnPrice.textContent.replace(/[^\d]/g, '')),
+          method: method,
+          order_id: 'bazara_' + Math.floor(Math.random()*1000000),
+          description: 'Подписка BazaraVPN',
+          email: email
+        };
+        // Определяем package_days по тарифу
+        const price = Number(payBtnPrice.textContent.replace(/[^\d]/g, ''));
+        if (price === 2290 || price === 1989) {
+          body.package_days = 365;
+        } else if (price === 399 || price === 50) {
+          body.package_days = 30;
+        }
+        if (method === 'crypto') {
+          body.method = 'crypto';
+          body.order_id = 'vpn_' + Date.now();
+          body.description = 'Тариф BazaraVPN — ' + document.getElementById('modal-tariff-title').textContent;
+        }
+        const resp = await fetch('/api/pay', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(body)
+        });
+        const data = await resp.json();
+        console.log('Pay response:', data);
+        if (data && data.url) {
+          window.open(data.url, '_blank');
+          // setTimeout(() => { window.openLinkModal && window.openLinkModal(); }, 500); // УДАЛЕНО: генерация ссылки только после успешной оплаты
+        } else {
+          alert('Ошибка при создании счёта!');
+          console.log('Wata.pro/NOWPayments error:', data);
+        }
+      } catch (e) {
+        alert('Ошибка соединения!');
+        console.log('Pay fetch error:', e);
+      }
+    }
+  </script>
+  <script>
+    // Fade-up анимация для блока VPN при уходе баннера
+    document.addEventListener('DOMContentLoaded', function() {
+      var banner = document.getElementById('promo-banner');
+      var vpnBlock = document.getElementById('vpn-main-block');
+      if (banner && vpnBlock) {
+        banner.addEventListener('transitionend', function(e) {
+          if (banner.style.opacity === '0') {
+            // Сначала оставляем блок на месте, потом плавно поднимаем
+            var startRect = vpnBlock.getBoundingClientRect();
+            vpnBlock.style.transition = 'none';
+            vpnBlock.style.opacity = 0;
+            vpnBlock.style.transform = 'translateY(40px)';
+            setTimeout(function(){
+              vpnBlock.style.transition = 'opacity 0.7s, transform 0.7s';
+              vpnBlock.style.opacity = 1;
+              vpnBlock.style.transform = 'none';
+            }, 100);
+          }
+        });
+      }
+    });
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const translations = {
+        ru: {
+          'header-advantages': 'Преимущества',
+          'header-tariffs': 'Тарифы',
+          'header-download': 'Скачать',
+          'header-support': 'Поддержка',
+          'header-what-vpn': 'Что такое VPN?',
+          'header-what-vpn-desc': 'VPN — это технология для анонимности, безопасности и обхода блокировок в интернете.',
+          'header-why-bazara': 'Почему BazaraVPN?',
+          'header-why-bazara-desc': 'Без логов, высокая скорость, поддержка стриминга и торрентов, современные протоколы.',
+          'header-all-features': 'Все функции',
+          'header-all-features-desc': 'Мультиустройство, защита Wi-Fi, смена IP, доступ к контенту по всему миру.',
+          'header-servers': 'VPN-серверы',
+          'header-servers-desc': 'Сервера в 10+ странах для стабильного и быстрого соединения.',
+          'header-streaming': 'VPN для стриминга',
+          'header-streaming-desc': 'Смотрите Netflix, Hulu, Disney+ и другие сервисы без ограничений.',
+          'header-countries': 'Страны',
+          'header-countries-desc': 'США, Турция, Япония, Германия, Франция, и другие.',
+          'header-devices': 'Устройства',
+          'header-devices-desc': 'Windows, macOS, Android, iOS, роутеры.',
+          'tariff-banner-title': 'Открытие BazaraVPN',
+          'tariff-banner-desc': '20% скидка на все тарифы!<br><span class=\'text-base text-white font-normal\'>Только до 31 мая</span>',
+          'tariff-banner-btn': 'Жми!',
+          'tariff-main-title': 'VPN для важных задач',
+          'tariff-main-desc': 'Быстро. Безопасно. Анонимно.<br>Доступ к любимым сайтам и сервисам по всему миру — без ограничений и слежки. Всё по-базарному просто!',
+          'tariff-btn-year': '2290₽/год',
+          'tariff-btn-month': '399₽/мес',
+          'tariff-btn-year-new': '1989₽/год',
+          'tariff-btn-month-new': '50₽/мес',
+          'tariff-try-title': 'Попробуйте BazaraVPN бесплатно',
+          'tariff-try-desc': '3 дня полной защиты — без оплаты. без карты.<br>Оцени качество — а потом решишь сам.',
+          'tariff-try-btn': 'Активировать пробную версию',
+          'tariff-apps-title': 'Приложения для всех устройств',
+          'tariff-apps-desc': 'BazaraVPN работает на Windows, macOS, Android, iOS и даже на роутерах. Защитите все свои устройства одним кликом!',
+          'tariff-guarantee-title': '30-дневная гарантия возврата денег',
+          'tariff-guarantee-desc': 'Если что-то не понравится — вернём деньги без лишних вопросов. Просто напиши в поддержку!',
+          'tariff-testimonial': 'Пользуюсь BazaraVPN уже год — скорость отличная, поддержка отвечает быстро, а тарифы реально выгодные!',
+          'tariff-testimonial-user': '— Настоящий пользователь',
+          'footer-contacts': 'Контакты',
+          'footer-privacy': 'Политика',
+          'footer-copyright': '© 2024 BazaraVPN',
+          'modal-pay-account': 'Ваш аккаунт',
+          'modal-pay-title-year': 'Тариф "BazaraVPN" — Годовой',
+          'modal-pay-title-month': 'Тариф "BazaraVPN" — Месячный',
+          'modal-pay-feature-security': 'Безопасность',
+          'modal-pay-feature-unlim': 'Безлимит',
+          'modal-pay-feature-devices': '5 устройств',
+          'modal-pay-feature-netflix': 'Доступ к Netflix',
+          'modal-pay-sbp': 'СБП',
+          'modal-pay-card': 'Добавить карту',
+          'modal-pay-crypto': 'Крипта',
+          'modal-pay-btn': 'Оплатить',
+          'modal-pay-agree': 'Нажимая кнопку "Оплатить", вы соглашаетесь с условиями <a href="#" class="underline">лицензионного соглашения</a>.',
+          'modal-tg-title': 'Авторизация через Telegram',
+          'modal-tg-desc': 'Войдите через Telegram, чтобы получить пробную ссылку на BazaraVPN.<br>Это безопасно, быстро и не требует ввода номера телефона или пароля.',
+          'modal-tg-result': '',
+        },
+        en: {
+          'header-advantages': 'Advantages',
+          'header-tariffs': 'Tariffs',
+          'header-download': 'Download',
+          'header-support': 'Support',
+          'header-what-vpn': 'What is VPN?',
+          'header-what-vpn-desc': 'VPN is a technology for anonymity, security, and bypassing internet blocks.',
+          'header-why-bazara': 'Why BazaraVPN?',
+          'header-why-bazara-desc': 'No logs, high speed, streaming and torrent support, modern protocols.',
+          'header-all-features': 'All features',
+          'header-all-features-desc': 'Multi-device, Wi-Fi protection, IP change, access to content worldwide.',
+          'header-servers': 'VPN servers',
+          'header-servers-desc': 'Servers in 10+ countries for stable and fast connection.',
+          'header-streaming': 'VPN for streaming',
+          'header-streaming-desc': 'Watch Netflix, Hulu, Disney+ and other services without limits.',
+          'header-countries': 'Countries',
+          'header-countries-desc': 'USA, Turkey, Japan, Germany, France, and more.',
+          'header-devices': 'Devices',
+          'header-devices-desc': 'Windows, macOS, Android, iOS, routers.',
+          'tariff-banner-title': 'BazaraVPN Launch',
+          'tariff-banner-desc': '20% discount on all tariffs!<br><span class=\'text-base text-white font-normal\'>Only until May 31</span>',
+          'tariff-banner-btn': 'Go!',
+          'tariff-main-title': 'VPN for important tasks',
+          'tariff-main-desc': 'Fast. Secure. Anonymous.<br>Access your favorite sites and services worldwide — no limits, no tracking. As simple as it gets!',
+          'tariff-btn-year': '2290₽/year',
+          'tariff-btn-month': '399₽/month',
+          'tariff-btn-year-new': '1989₽/year',
+          'tariff-btn-month-new': '50₽/month',
+          'tariff-try-title': 'Try BazaraVPN for free',
+          'tariff-try-desc': '3 days of full protection — no payment, no card.<br>Try the quality — then decide for yourself.',
+          'tariff-try-btn': 'Activate trial',
+          'tariff-apps-title': 'Apps for all devices',
+          'tariff-apps-desc': 'BazaraVPN works on Windows, macOS, Android, iOS, and even routers. Protect all your devices with one click!',
+          'tariff-guarantee-title': '30-day money-back guarantee',
+          'tariff-guarantee-desc': 'If you don\'t like something — we\'ll refund your money, no questions asked. Just contact support!',
+          'tariff-testimonial': 'I\'ve been using BazaraVPN for a year — great speed, fast support, and really good prices!',
+          'tariff-testimonial-user': '— Real user',
+          'footer-contacts': 'Contacts',
+          'footer-privacy': 'Privacy',
+          'footer-copyright': '© 2024 BazaraVPN',
+          'modal-pay-account': 'Your account',
+          'modal-pay-title-year': 'BazaraVPN Plan — Yearly',
+          'modal-pay-title-month': 'BazaraVPN Plan — Monthly',
+          'modal-pay-feature-security': 'Security',
+          'modal-pay-feature-unlim': 'Unlimited',
+          'modal-pay-feature-devices': '5 devices',
+          'modal-pay-feature-netflix': 'Netflix access',
+          'modal-pay-sbp': 'SBP',
+          'modal-pay-card': 'Add card',
+          'modal-pay-crypto': 'Crypto',
+          'modal-pay-btn': 'Pay',
+          'modal-pay-agree': 'By clicking "Pay", you agree to the <a href="#" class="underline">license agreement</a>.',
+          'modal-tg-title': 'Login via Telegram',
+          'modal-tg-desc': 'Log in with Telegram to get a trial link for BazaraVPN.<br>It\'s safe, fast, and does not require a phone number or password.',
+          'modal-tg-result': '',
+        }
+      };
+      const langBtn = document.getElementById('lang-dropdown-btn');
+      const langDropdown = document.getElementById('lang-dropdown');
+      const langCurrent = document.getElementById('lang-current');
+      const langSwitcher = document.getElementById('lang-switcher');
+      function setLang(lang) {
+        localStorage.setItem('lang', lang);
+        if (langCurrent) langCurrent.textContent = lang === 'ru' ? 'Русский' : 'English';
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+          const key = el.getAttribute('data-i18n');
+          if (translations[lang][key]) {
+            if (/<[a-z][\s\S]*>/i.test(translations[lang][key])) {
+              el.innerHTML = translations[lang][key];
+            } else {
+              el.textContent = translations[lang][key];
+            }
+          }
+        });
+        if (typeof renderReviews === 'function') renderReviews();
+      }
+      let lang = localStorage.getItem('lang') || 'ru';
+      setLang(lang);
+      if (langBtn && langDropdown) {
+        langBtn.onclick = function(e) {
+          e.stopPropagation();
+          langDropdown.classList.toggle('hidden');
+        };
+        langDropdown.querySelectorAll('[data-lang]').forEach(btn => {
+          btn.onclick = function(e) {
+            e.stopPropagation();
+            setLang(this.getAttribute('data-lang'));
+            langDropdown.classList.add('hidden');
+          };
+        });
+        document.addEventListener('click', function(e) {
+          if (langDropdown && langSwitcher && !langSwitcher.contains(e.target)) {
+            langDropdown.classList.add('hidden');
+          }
+        });
+      }
+    });
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const downloadMenu = document.getElementById('download-menu');
+      const megaDownload = document.getElementById('mega-download');
+      if (downloadMenu && megaDownload) {
+        let overMenu = false;
+        let overDropdown = false;
+        downloadMenu.addEventListener('mouseenter', () => {
+          overMenu = true;
+          megaDownload.classList.add('flex');
+          megaDownload.classList.remove('hidden');
+        });
+        downloadMenu.addEventListener('mouseleave', () => {
+          setTimeout(() => {
+            if (!overDropdown) {
+              megaDownload.classList.remove('flex');
+              megaDownload.classList.add('hidden');
+            }
+          }, 80);
+          overMenu = false;
+        });
+        megaDownload.addEventListener('mouseenter', () => {
+          overDropdown = true;
+          megaDownload.classList.add('flex');
+          megaDownload.classList.remove('hidden');
+        });
+        megaDownload.addEventListener('mouseleave', () => {
+          setTimeout(() => {
+            if (!overMenu) {
+              megaDownload.classList.remove('flex');
+              megaDownload.classList.add('hidden');
+            }
+          }, 80);
+          overDropdown = false;
+        });
+      }
+    });
+  </script>
+  <script>
+    // Генерация короткого ключа для ссылки
+    function genRandomKey(len = 8) {
+      const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      let out = '';
+      for (let i = 0; i < len; ++i) out += chars[Math.floor(Math.random() * chars.length)];
+      return out;
+    }
+    // Модалка генерации ссылки — асинхронная логика с polling
+    function openLinkModal(days) {
+      const modalBg = document.getElementById('link-modal-bg');
+      const loadingBlock = document.getElementById('link-loading-block');
+      const readyBlock = document.getElementById('link-ready-block');
+      const linkDiv = document.getElementById('generated-link');
+      const copyBtn = document.getElementById('copy-link-btn');
+      const copySuccess = document.getElementById('copy-link-success');
+      loadingBlock.classList.remove('hidden');
+      readyBlock.classList.add('hidden');
+      linkDiv.textContent = '';
+      copySuccess.classList.add('hidden');
+      modalBg.classList.remove('hidden');
+      modalBg.classList.add('opacity-100');
+      let polling = true;
+      let interval = null;
+      let taskId = null;
+      // 1. Запрос на генерацию
+      const generatedTaskId = genRandomKey(8);
+      const body = { task_id: generatedTaskId, creator: 'user' };
+      if (typeof days === 'number' && days > 0) body.package_days = days;
+      fetch('https://vpn.bazara.app/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      })
+        .then(resp => resp.json())
+        .then(data => {
+          if (data && data.status === 'ok') {
+            const link = `https://vpn.bazara.app/vless/${generatedTaskId}`;
+            loadingBlock.classList.add('hidden');
+            readyBlock.classList.remove('hidden');
+            linkDiv.textContent = link;
+            copyBtn.onclick = function() {
+              navigator.clipboard.writeText(link).then(() => {
+                copySuccess.classList.remove('hidden');
+                setTimeout(() => copySuccess.classList.add('hidden'), 1500);
+              });
+            };
+          } else {
+            loadingBlock.querySelector('div').textContent = 'Ошибка запуска генерации. Попробуйте позже.';
+          }
+        })
+        .catch(() => {
+          loadingBlock.querySelector('div').textContent = 'Ошибка соединения с сервером.';
+        });
+      document.getElementById('close-link-modal').onclick = function() {
+        modalBg.classList.add('hidden');
+        modalBg.classList.remove('opacity-100');
+        polling = false;
+        if (interval) clearInterval(interval);
+      };
+      modalBg.onclick = function(e) {
+        if (e.target === modalBg) {
+          modalBg.classList.add('hidden');
+          modalBg.classList.remove('opacity-100');
+          polling = false;
+          if (interval) clearInterval(interval);
+        }
+      };
+    }
+    // После успешной оплаты открываем модалку генерации ссылки
+    window.openLinkModal = openLinkModal;
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('afterpay') === '1') {
+        window.openLinkModal && window.openLinkModal();
+        window.history.replaceState({}, document.title, window.location.pathname);
+      }
+    });
+  </script>
+  <!-- Модалка для ввода количества дней тестовой подписки -->
+  <div id="test-days-modal-bg" class="fixed inset-0 bg-black bg-opacity-60 z-50 hidden flex items-center justify-center transition-opacity duration-300">
+    <div class="bg-[#232323] rounded-3xl shadow-2xl p-8 w-full max-w-xs flex flex-col items-center animate-fade-in">
+      <div class="text-xl font-bold text-white mb-4">На сколько дней выдать подписку?</div>
+      <input id="test-days-input" type="number" min="1" max="9999" placeholder="Например, 30" class="w-full rounded-lg px-4 py-3 text-base text-white font-semibold bg-[#181818] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-400 mb-6" style="text-align:center;" />
+      <button id="test-days-confirm" class="w-full bg-gradient-to-r from-orange-500 to-purple-500 text-white font-bold rounded-xl px-6 py-3 text-lg shadow hover:scale-105 transition-transform mb-2">Подтвердить</button>
+      <button id="test-days-cancel" class="w-full bg-[#444] text-white font-semibold rounded-xl px-6 py-2 text-base mt-2 hover:bg-[#222] transition">Отмена</button>
+    </div>
+  </div>
+  <script>
+  (function() {
+    const testBtn = document.getElementById('test-success-btn');
+    const modalBg = document.getElementById('test-days-modal-bg');
+    const input = document.getElementById('test-days-input');
+    const confirm = document.getElementById('test-days-confirm');
+    const cancel = document.getElementById('test-days-cancel');
+    if (testBtn && modalBg && input && confirm && cancel) {
+      testBtn.onclick = function() {
+        input.value = '';
+        modalBg.classList.remove('hidden');
+        setTimeout(() => modalBg.classList.add('opacity-100'), 10);
+        input.focus();
+      };
+      confirm.onclick = function() {
+        const days = parseInt(input.value, 10);
+        if (!days || days < 1) {
+          input.classList.add('ring-2', 'ring-red-500');
+          input.focus();
+          return;
+        }
+        input.classList.remove('ring-2', 'ring-red-500');
+        modalBg.classList.add('hidden');
+        modalBg.classList.remove('opacity-100');
+        // Передаём days в openLinkModal
+        if (window.openLinkModal) window.openLinkModal(days);
+      };
+      cancel.onclick = function() {
+        modalBg.classList.add('hidden');
+        modalBg.classList.remove('opacity-100');
+      };
+      modalBg.addEventListener('click', function(e) {
+        if (e.target === modalBg) {
+          modalBg.classList.add('hidden');
+          modalBg.classList.remove('opacity-100');
+        }
+      });
+      input.onkeydown = function(e) {
+        if (e.key === 'Enter') confirm.onclick();
+      };
+    }
+  })();
+  </script>
+  <!-- --- Вызов /api/afterpay после успешной оплаты --- -->
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('afterpay') === '1') {
+      const email = localStorage.getItem('pay_email');
+      const package_days = localStorage.getItem('pay_package_days');
+      const task_id = localStorage.getItem('pay_task_id');
+      if (email && package_days && task_id) {
+        fetch('/api/afterpay', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, package_days, task_id })
+        }).then(r => r.json()).then(data => {
+          console.log('VPN link generation:', data);
+          // Можно показать пользователю сообщение об отправке письма
+        });
+      }
+    }
+  });
+  </script>
+</body>
+</html> 

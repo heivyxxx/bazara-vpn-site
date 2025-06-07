@@ -1,0 +1,1828 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BazaraVPN — Быстро. Безопасно. Анонимно.</title>
+  <meta name="description" content="BazaraVPN — обход блокировок, защита данных и высокая скорость. VPN для Windows, macOS, Android, iOS.">
+  <meta name="keywords" content="VPN, BazaraVPN, анонимность, обход блокировок, безопасность, Windows, macOS, Android, iOS, WireGuard, OpenVPN, Netflix, купить VPN">
+  <meta name="author" content="BazaraVPN">
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://bazaravpn.com/">
+  <meta property="og:title" content="BazaraVPN — Быстро. Безопасно. Анонимно.">
+  <meta property="og:description" content="Обход блокировок, защита данных и высокая скорость. VPN для всех устройств.">
+  <meta property="og:image" content="/logo.png">
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://bazaravpn.com/">
+  <meta name="twitter:title" content="BazaraVPN — Быстро. Безопасно. Анонимно.">
+  <meta name="twitter:description" content="Обход блокировок, защита данных и высокая скорость. VPN для всех устройств.">
+  <meta name="twitter:image" content="/logo.png">
+  <link rel="icon" href="/favicon.ico">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { background: #181818; min-height: 100vh; display: flex; flex-direction: column; }
+    #main-page { flex: 1 0 auto; }
+    footer { flex-shrink: 0; }
+    @keyframes fade-in { from { opacity: 0; transform: translateY(10px);} to { opacity: 1; transform: none; } }
+    .animate-fade-in { animation: fade-in 0.2s ease; }
+    .dropdown-open { display: block !important; }
+    /* --- Добавлено для плавных анимаций --- */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(40px);}
+      to   { opacity: 1; transform: none;}
+    }
+    @keyframes fadeIn {
+      from { opacity: 0;}
+      to   { opacity: 1;}
+    }
+    .animate-fade-up {
+      animation: fadeUp 0.8s cubic-bezier(.77,0,.18,1) forwards;
+      animation-play-state: paused;
+    }
+    .animate-fade-in-slow {
+      animation: fadeIn 1.2s cubic-bezier(.77,0,.18,1) forwards;
+      animation-play-state: paused;
+    }
+    /* Только анимируемые элементы изначально невидимы */
+    .will-animate { opacity: 0; }
+    .will-animate.revealed { opacity: 1; }
+    /* Светлая тема — качественная адаптация */
+    body.light {
+      background: #f7f7f9 !important;
+      color: #232323 !important;
+    }
+    body.light nav,
+    body.light #main-navbar {
+      background: #fff !important;
+      color: #232323 !important;
+      border-bottom: 1.5px solid #e5e7eb !important;
+    }
+    body.light footer {
+      background: #fff !important;
+      color: #232323 !important;
+      border-top: 1.5px solid #e5e7eb !important;
+    }
+    body.light .bg-\[\#232323\],
+    body.light .bg-\[\#181818\] {
+      background: #fff !important;
+      color: #232323 !important;
+    }
+    body.light .text-white {
+      color: #232323 !important;
+    }
+    body.light .text-gray-300,
+    body.light .text-gray-200,
+    body.light .text-gray-100 {
+      color: #444 !important;
+    }
+    body.light .border-orange-700 {
+      border-color: #ff8800 !important;
+    }
+    body.light .shadow-lg,
+    body.light .shadow-2xl {
+      box-shadow: 0 2px 16px 0 rgba(0,0,0,0.07) !important;
+    }
+    body.light .rounded-2xl,
+    body.light .rounded-lg {
+      background: #fff !important;
+    }
+    body.light .hover\:bg-\[\#181818\]:hover {
+      background: #f2f2f2 !important;
+    }
+    body.light .bg-gradient-to-r,
+    body.light .bg-gradient-to-br {
+      /* оставить градиенты как есть */
+    }
+    body.light .text-orange-400 {
+      color: #ff8800 !important;
+    }
+    body.light .text-orange-500 {
+      color: #ff8800 !important;
+    }
+    body.light .border-orange-900 {
+      border-color: #ff8800 !important;
+    }
+    body.light .border-gray-700 {
+      border-color: #e5e7eb !important;
+    }
+    body.light .bg-\[\#2c2c2c\] {
+      background: #f2f2f2 !important;
+    }
+    body.light .bg-\[\#232323\] {
+      background: #fff !important;
+    }
+    body.light .bg-\[\#181818\] {
+      background: #fff !important;
+    }
+    body.light .text-base,
+    body.light .text-lg,
+    body.light .text-xl,
+    body.light .text-2xl,
+    body.light .text-3xl,
+    body.light .text-4xl {
+      color: #232323 !important;
+    }
+    body.light .hover\:bg-\[\#181818\]:hover {
+      background: #f2f2f2 !important;
+    }
+    body.light .hover\:bg-\[\#232323\]:hover {
+      background: #f2f2f2 !important;
+    }
+    body.light .hover\:bg-orange-100:hover {
+      background: #fff3e0 !important;
+    }
+    body.light .border-gray-700 {
+      border-color: #e5e7eb !important;
+    }
+    body.light .bg-\[\#232323\] .text-white {
+      color: #232323 !important;
+    }
+    body.light .bg-\[\#232323\] .text-gray-300 {
+      color: #444 !important;
+    }
+    body.light .bg-\[\#232323\] .text-gray-200 {
+      color: #444 !important;
+    }
+    body.light .bg-\[\#232323\] .text-orange-400 {
+      color: #ff8800 !important;
+    }
+    body.light .bg-\[\#232323\] .font-bold {
+      color: #232323 !important;
+    }
+    body.light .bg-\[\#232323\] .font-extrabold {
+      color: #232323 !important;
+    }
+    body.light .bg-\[\#232323\] .font-semibold {
+      color: #232323 !important;
+    }
+    body.light .bg-\[\#232323\] .text-base {
+      color: #232323 !important;
+    }
+    body.light .bg-\[\#232323\] .text-lg {
+      color: #232323 !important;
+    }
+    body.light .bg-\[\#232323\] .text-xl {
+      color: #232323 !important;
+    }
+    body.light .bg-\[\#232323\] .text-2xl {
+      color: #232323 !important;
+    }
+    body.light .bg-\[\#232323\] .text-3xl {
+      color: #232323 !important;
+    }
+    body.light .bg-\[\#232323\] .text-4xl {
+      color: #232323 !important;
+    }
+    .faq-loader {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      height: 2.5rem;
+      padding-left: 2rem;
+      gap: 0.3em;
+    }
+    .faq-loader-dot {
+      width: 0.6em;
+      height: 0.6em;
+      border-radius: 50%;
+      background: #ff8800;
+      opacity: 0.7;
+      animation: faq-dot-bounce 1.2s infinite both;
+    }
+    .faq-loader-dot:nth-child(2) { animation-delay: 0.2s; }
+    .faq-loader-dot:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes faq-dot-bounce {
+      0%, 80%, 100% { transform: scale(1); opacity: 0.7; }
+      40% { transform: scale(1.4); opacity: 1; }
+    }
+    /* ...существующий CSS... */
+    .reviews-carousel {
+      position: relative;
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+      overflow: hidden;
+      perspective: 1200px;
+      min-height: 320px;
+    }
+    .reviews-track {
+      display: flex;
+      transition: transform 0.7s cubic-bezier(.77,0,.18,1), filter 0.5s;
+      will-change: transform;
+      gap: 2rem;
+    }
+    .review-card-3d {
+      min-width: 340px;
+      max-width: 360px;
+      background: #232323;
+      border-radius: 1.5rem;
+      box-shadow: 0 8px 32px 0 rgba(0,0,0,0.18), 0 1.5px 0 #ff8800;
+      padding: 2rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      transform-style: preserve-3d;
+      transition: box-shadow 0.3s, transform 0.7s cubic-bezier(.77,0,.18,1), filter 0.5s;
+      filter: none;
+      opacity: 1;
+    }
+    .review-card-3d.active {
+      box-shadow: 0 12px 40px 0 rgba(255,136,0,0.18), 0 2px 0 #ff8800;
+      transform: scale(1.06) translateZ(40px) rotateY(0deg);
+      z-index: 2;
+      filter: none;
+      opacity: 1;
+    }
+    .review-card-3d.left,
+    .review-card-3d.right {
+      transform: scale(0.96) translateZ(-40px) rotateY(var(--angle));
+      filter: none;
+      z-index: 1;
+      opacity: 1;
+    }
+    .review-card-3d.left { --angle: 18deg; }
+    .review-card-3d.right { --angle: -18deg; }
+    .review-card-3d:not(.active):not(.left):not(.right) {
+      display: none !important;
+    }
+    /* --- FIX: светлая тема для отзывов --- */
+    body.light .review-card-3d {
+      background: #fff !important;
+      color: #232323 !important;
+      box-shadow: 0 8px 32px 0 rgba(255,136,0,0.10), 0 1.5px 0 #ff8800 !important;
+    }
+    body.light .review-card-3d .text-white,
+    body.light .review-card-3d .font-semibold,
+    body.light .review-card-3d .font-bold,
+    body.light .review-card-3d .font-extrabold {
+      color: #232323 !important;
+    }
+    body.light .review-card-3d .text-gray-300,
+    body.light .review-card-3d .text-gray-200,
+    body.light .review-card-3d .text-gray-100 {
+      color: #444 !important;
+    }
+    body.light .review-card-3d svg.text-orange-400 {
+      color: #ff8800 !important;
+      fill: #ff8800 !important;
+    }
+    body.light .review-card-3d .flex.items-center.gap-3 img {
+      filter: none !important;
+      background: #eee !important;
+      border: 1.5px solid #ff880022;
+    }
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 48px;
+      height: 48px;
+      background: rgba(60,60,60,0.7);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #bbb;
+      font-size: 2rem;
+      cursor: pointer;
+      z-index: 10;
+      border: 2px solid #444;
+      transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+      box-shadow: 0 2px 8px 0 rgba(0,0,0,0.12);
+      user-select: none;
+    }
+    .carousel-arrow:hover {
+      background: #ff8800;
+      color: #fff;
+      box-shadow: 0 4px 16px 0 rgba(255,136,0,0.18);
+    }
+    .carousel-arrow.left { left: -32px; }
+    .carousel-arrow.right { right: -32px; }
+    @media (max-width: 900px) {
+      .review-card-3d { min-width: 90vw; max-width: 95vw; }
+      .reviews-track { gap: 1rem; }
+      .carousel-arrow.left { left: 0; }
+      .carousel-arrow.right { right: 0; }
+    }
+    @media (max-width: 600px) {
+      .review-card-3d { min-width: 98vw; max-width: 99vw; }
+      .carousel-arrow { width: 40px; height: 40px; font-size: 1.5rem; }
+    }
+    /* --- Кастом для модалки отзыва --- */
+    #review-modal-bg {
+      background: rgba(10,10,15,0.82) !important;
+      backdrop-filter: blur(4px);
+    }
+    .review-modal {
+      background: linear-gradient(135deg, #232323 80%, #2d1a00 100%);
+      border-radius: 2.2rem;
+      box-shadow: 0 8px 48px 0 rgba(255,136,0,0.13), 0 2px 0 #ff8800;
+      padding: 2.8rem 2.2rem 2.2rem 2.2rem;
+      width: 100%;
+      max-width: 480px;
+      min-width: 0;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 2.2rem;
+      position: relative;
+      animation: fade-in 0.25s cubic-bezier(.77,0,.18,1);
+    }
+    .review-modal h2 {
+      font-size: 2.2rem;
+      font-weight: 900;
+      text-align: center;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(90deg, #ff8800 0%, #a259ff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .review-modal label {
+      color: #fff;
+      font-weight: 700;
+      font-size: 1.08rem;
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.01em;
+    }
+    .review-modal input,
+    .review-modal textarea {
+      background: #181818;
+      border: 1.5px solid #444;
+      border-radius: 1.1rem;
+      color: #fff;
+      font-size: 1.08rem;
+      padding: 1.1rem 1.2rem;
+      margin-bottom: 0.2rem;
+      transition: border 0.2s, box-shadow 0.2s;
+      box-shadow: 0 2px 12px 0 rgba(255,136,0,0.04);
+    }
+    .review-modal input:focus,
+    .review-modal textarea:focus {
+      border-color: #ff8800;
+      outline: none;
+      box-shadow: 0 0 0 2px #ff8800a0;
+    }
+    .review-modal textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+    .review-modal .review-stars {
+      display: flex;
+      gap: 0.5em;
+      margin-top: 0.2em;
+      margin-bottom: 0.5em;
+    }
+    .review-modal .star {
+      font-size: 2.2rem;
+      color: #ff8800;
+      opacity: 0.5;
+      background: none;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.18s, opacity 0.18s;
+      will-change: transform, opacity;
+      padding: 0 0.1em;
+    }
+    .review-modal .star.selected,
+    .review-modal .star:hover,
+    .review-modal .star.selected ~ .star {
+      opacity: 1 !important;
+      transform: scale(1.18) rotate(-6deg);
+      text-shadow: 0 2px 8px #ff8800a0;
+    }
+    .review-modal .star:active {
+      transform: scale(0.95) rotate(0deg);
+    }
+    .review-modal .review-success {
+      color: #4ade80;
+      font-weight: 700;
+      text-align: center;
+      font-size: 1.1rem;
+      margin-top: 0.5em;
+    }
+    .review-modal .close-btn {
+      position: absolute;
+      top: 1.2rem;
+      right: 1.2rem;
+      font-size: 2.2rem;
+      color: #bbb;
+      background: none;
+      border: none;
+      cursor: pointer;
+      transition: color 0.18s;
+      z-index: 2;
+    }
+    .review-modal .close-btn:hover {
+      color: #ff8800;
+    }
+    .review-modal .submit-btn {
+      background: linear-gradient(90deg, #ff8800 0%, #a259ff 100%);
+      color: #fff;
+      font-weight: 700;
+      font-size: 1.18rem;
+      border: none;
+      border-radius: 1.1rem;
+      padding: 1.1rem 0;
+      width: 100%;
+      margin-top: 0.8em;
+      box-shadow: 0 2px 16px 0 rgba(255,136,0,0.13);
+      transition: background 0.18s, box-shadow 0.18s;
+      cursor: pointer;
+    }
+    .review-modal .submit-btn:hover {
+      background: linear-gradient(90deg, #ff8800 0%, #a259ff 80%);
+      box-shadow: 0 4px 24px 0 rgba(255,136,0,0.18);
+    }
+    @media (max-width: 600px) {
+      .review-modal {
+        padding: 1.2rem 0.5rem 1.2rem 0.5rem;
+        max-width: 98vw;
+      }
+      .review-modal h2 {
+        font-size: 1.5rem;
+      }
+    }
+    body.light #review-modal-bg {
+      background: rgba(255,255,255,0.85) !important;
+    }
+    body.light .review-modal {
+      background: linear-gradient(135deg, #fff 80%, #fff3e0 100%);
+      box-shadow: 0 8px 48px 0 rgba(255,136,0,0.10), 0 2px 0 #ff8800;
+    }
+    body.light .review-modal label {
+      color: #232323;
+    }
+    body.light .review-modal input,
+    body.light .review-modal textarea {
+      background: #f7f7f9;
+      color: #232323;
+      border: 1.5px solid #e5e7eb;
+    }
+    body.light .review-modal input:focus,
+    body.light .review-modal textarea:focus {
+      border-color: #ff8800;
+      box-shadow: 0 0 0 2px #ff8800a0;
+    }
+    body.light .review-modal .star {
+      color: #ff8800;
+      text-shadow: none;
+    }
+    body.light .review-modal .close-btn {
+      color: #888;
+    }
+    body.light .review-modal .close-btn:hover {
+      color: #ff8800;
+    }
+    body.light .review-modal .submit-btn {
+      background: linear-gradient(90deg, #ff8800 0%, #a259ff 100%);
+      color: #fff;
+    }
+    #lang-dropdown {
+      max-height: 340px;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: #ff8800 #232323;
+      top: 100% !important;
+      bottom: auto !important;
+      margin-top: 0.5rem !important;
+      margin-bottom: 0 !important;
+    }
+    #lang-dropdown::-webkit-scrollbar {
+      width: 8px;
+      background: #232323;
+    }
+    #lang-dropdown::-webkit-scrollbar-thumb {
+      background: #ff8800;
+      border-radius: 6px;
+    }
+    /* --- Светлая тема для promo-info-cards --- */
+    body.light #promo-info-cards .bg-\[\#232323\] {
+      background: #fff !important;
+      color: #232323 !important;
+    }
+    body.light #promo-info-cards .bg-\[\#181818\] {
+      background: #f7f7f9 !important;
+    }
+    body.light #promo-info-cards .text-white {
+      color: #232323 !important;
+    }
+    body.light #promo-info-cards .text-gray-300 {
+      color: #444 !important;
+    }
+    body.light #promo-info-cards .border-orange-700 {
+      border-color: #ff8800 !important;
+    }
+    .btn-glow {
+      background: linear-gradient(90deg, #ff8800 0%, #a259ff 100%);
+      color: #fff;
+      box-shadow: 0 0 16px 0 #ff880088, 0 2px 8px 0 #a259ff44;
+      font-weight: 700;
+      font-size: 1.18rem;
+      border: none;
+      border-radius: 1.1rem;
+      padding: 1.1rem 2.5rem;
+      transition: box-shadow 0.22s, transform 0.18s, background 0.18s;
+      outline: none;
+      position: relative;
+      z-index: 1;
+    }
+    .btn-glow:hover, .btn-glow:focus {
+      box-shadow: 0 0 32px 0 #ff8800cc, 0 4px 16px 0 #a259ff88;
+      background: linear-gradient(90deg, #ff8800 10%, #a259ff 90%);
+      transform: scale(1.06);
+    }
+    /* Мелкие детали */
+    .faq-question {
+      transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+    }
+    .faq-question:hover {
+      background: #181818;
+      color: #ff8800;
+      box-shadow: 0 2px 12px 0 #ff880044;
+    }
+    #promo-cards-adguard-style .group,
+    #tariffs-page .rounded-2xl {
+      transition: box-shadow 0.18s, transform 0.18s;
+    }
+    #promo-cards-adguard-style .group:hover,
+    #tariffs-page .rounded-2xl:hover {
+      box-shadow: 0 4px 24px 0 #ff8800cc, 0 2px 8px 0 #a259ff88;
+      transform: translateY(-4px) scale(1.03);
+    }
+    /* Плавная смена темы */
+    body, #main-navbar, footer, .bg-\[\#232323\], .bg-\[\#181818\] {
+      transition: background 0.4s, color 0.4s;
+    }
+    .benefits-bar {
+      background: #202020;
+      border-radius: 1.2rem;
+      box-shadow: 0 2px 12px 0 #0000000a;
+      border: 1.5px solid #232323;
+      display: flex;
+      justify-content: space-between;
+      align-items: stretch;
+      padding: 18px 0;
+      margin-bottom: 2.5rem;
+      gap: 0;
+    }
+    .benefit-item {
+      flex: 1 1 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 0;
+      transition: background 0.18s;
+      cursor: default;
+      padding: 0 4px;
+    }
+    .benefit-item svg {
+      opacity: 0.8;
+      margin-bottom: 6px;
+      transition: opacity 0.18s, color 0.18s;
+    }
+    .benefit-item span {
+      color: #ccc;
+      font-size: 0.98rem;
+      text-align: center;
+      line-height: 1.2;
+      transition: color 0.18s;
+    }
+    .benefit-item:hover svg,
+    .benefit-item:focus svg {
+      opacity: 1;
+      color: #ff8800;
+    }
+    .benefit-item:hover span,
+    .benefit-item:focus span {
+      color: #ff8800;
+    }
+    @media (max-width: 900px) {
+      .benefits-bar { flex-wrap: wrap; padding: 10px 0;}
+      .benefit-item { flex: 1 1 50%; margin-bottom: 10px;}
+    }
+    @media (max-width: 600px) {
+      .benefits-bar { flex-direction: column; align-items: stretch; }
+      .benefit-item { flex: 1 1 100%; margin-bottom: 10px;}
+    }
+    .contact-cta {
+      background: #23232a;
+      border-radius: 1.2rem;
+      box-shadow: 0 2px 16px 0 #00000014;
+      border: 1.5px solid #333;
+      padding: 2.2rem 1.5rem 2rem 1.5rem;
+      margin-bottom: 2.5rem;
+      text-align: center;
+      color: #fff;
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .contact-cta h2 {
+      font-size: 1.6rem;
+      font-weight: 800;
+      margin-bottom: 0.7rem;
+      color: #fff;
+    }
+    .contact-cta p {
+      color: #e0e0e0;
+      font-size: 1.08rem;
+      margin-bottom: 1.5rem;
+    }
+    .contact-cta .btn-cta {
+      background: #23232a;
+      color: #ff8800;
+      border: 1.5px solid #444;
+      border-radius: 1.1rem;
+      font-weight: 700;
+      font-size: 1.08rem;
+      padding: 0.9rem 2.2rem;
+      box-shadow: 0 2px 8px 0 #0002;
+      transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+      outline: none;
+    }
+    .contact-cta .btn-cta:hover, .contact-cta .btn-cta:focus {
+      background: #18181f;
+      color: #fff;
+      box-shadow: 0 4px 16px 0 #ff880044;
+      border-color: #ff8800;
+    }
+    /* Убираем оранжевые рамки и добавляем лёгкую тень для выпадающих меню и блоков */
+    #mega-advantages, #mega-download,
+    .border-orange-700, .border-2.border-orange-700,
+    section[id*='faq-page'] .border-orange-700,
+    section[id*='kb-page'] .border-orange-700,
+    section[id*='discuss-page'] .border-orange-700,
+    .bg-gradient-to-r.from-orange-500.to-orange-400 {
+      border: none !important;
+      box-shadow: 0 4px 24px 0 #00000022 !important;
+    }
+    .faq-item {
+      border-bottom: 1px solid #232323;
+    }
+    .faq-item:last-child {
+      border-bottom: none;
+    }
+    .faq-question {
+      width: 100%;
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 1.18rem;
+      font-weight: 700;
+      text-align: left;
+      padding: 1.1rem 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      outline: none;
+      transition: none;
+      box-shadow: none !important;
+    }
+    .faq-question:hover, .faq-question:focus, .faq-item.open .faq-question {
+      color: #fff;
+      background: none;
+      box-shadow: none !important;
+      border: none !important;
+    }
+    .faq-arrow {
+      display: inline-block;
+      transition: transform 0.3s cubic-bezier(.77,0,.18,1);
+      margin-left: 8px;
+    }
+    .faq-item.open .faq-arrow {
+      transform: rotate(180deg);
+    }
+    .faq-answer {
+      color: #dddddd;
+      font-size: 1.05rem;
+      line-height: 1.6;
+      background: none;
+      overflow: hidden;
+      max-height: 0;
+      opacity: 0;
+      min-height: 0;
+      transition: max-height 0.5s cubic-bezier(.77,0,.18,1), opacity 0.4s cubic-bezier(.77,0,.18,1);
+      padding: 0 0;
+      will-change: max-height, opacity;
+    }
+    .faq-item.open .faq-answer {
+      opacity: 1;
+      max-height: 400px;
+      min-height: 32px;
+      padding: 0.2rem 0 1.1rem 0;
+    }
+    @media (max-width: 600px) {
+      .faq-question {
+        font-size: 1rem;
+        padding: 0.7rem 0;
+      }
+      .faq-answer {
+        font-size: 0.95rem;
+        padding-bottom: 0.5rem;
+      }
+    }
+  </style>
+  <!-- Google Analytics (закомментировано) -->
+  <!--
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-XXXXXXXXX-X"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-XXXXXXXXX-X');
+  </script>
+  -->
+  <!-- Yandex.Metrika (закомментировано) -->
+  <!--
+  <script type="text/javascript" >
+    (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+    m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)}
+    )(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+    ym(XXXXXXX, "init", {
+        clickmap:true,
+        trackLinks:true,
+        accurateTrackBounce:true
+    });
+  </script>
+  <noscript><div><img src="https://mc.yandex.ru/watch/XXXXXXX" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+  -->
+  <!-- Firebase App (core) -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <!-- Firestore -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script>
+    // Рабочий конфиг из firebaseConfig.js
+    const firebaseConfig = {
+      apiKey: "AIzaSyAouTEXN2lQapElxCEtmebO21t19i2WYns",
+      authDomain: "bazara-vpn-admin.firebaseapp.com",
+      projectId: "bazara-vpn-admin",
+      storageBucket: "bazara-vpn-admin.appspot.com",
+      messagingSenderId: "856281360473",
+      appId: "1:856281360473:web:1b01584e7830672dcb2948"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+  </script>
+</head>
+<body class="min-h-screen flex flex-col bg-[#181818] text-gray-100" id="main-body">
+  <!-- HEADER -->
+  <!-- Header/Navbar (универсальный для всех страниц) -->
+<nav class="fixed top-0 left-0 w-full z-20 bg-[#181818] shadow-sm border-b border-orange-900" id="main-navbar">
+  <div class="max-w-6xl mx-auto flex items-center justify-between py-4 px-4 md:px-8 text-lg gap-8">
+    <!-- Логотип -->
+    <div class="flex items-center gap-3 logo-home cursor-pointer flex-shrink-0">
+      <a href="index.html" class="flex items-center gap-3">
+        <img src="/assets/logo-bazara.png" alt="BazaraVPN Logo" class="h-10 w-10">
+        <span class="text-3xl font-bold text-orange-500">Bazara<span class="text-white">VPN</span></span>
+      </a>
+    </div>
+    <!-- Десктоп-меню -->
+    <div class="hidden md:flex flex-1 justify-center">
+      <ul class="flex items-center gap-8 font-semibold">
+        <li class="relative group" id="advantages-menu">
+          <a href="index.html#advantages" class="text-white hover:text-orange-500 transition flex items-center gap-1 py-2 px-2 rounded-lg" data-i18n="header-advantages">
+            Преимущества
+            <svg class="w-5 h-5 text-orange-400 group-hover:rotate-180 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+          </a>
+          <!-- MegaMenu -->
+          <div id="mega-advantages" class="hidden group-hover:flex group-focus-within:flex absolute left-0 top-full mt-3 w-[700px] bg-[#232323] border border-orange-700 rounded-2xl shadow-2xl p-6 z-50 text-white animate-fade-in flex gap-8">
+            <div class="flex-1 min-w-[220px] flex flex-col gap-4">
+              <div>
+                <div class="font-bold text-lg text-orange-400 mb-1">Что такое VPN?</div>
+                <div class="text-gray-200 text-sm">VPN — это технология для анонимности, безопасности и обхода блокировок в интернете.</div>
+              </div>
+              <div>
+                <div class="font-bold text-lg text-orange-400 mb-1">Почему BazaraVPN?</div>
+                <div class="text-gray-200 text-sm">Без логов, высокая скорость, поддержка стриминга и торрентов, современные протоколы.</div>
+              </div>
+              <div>
+                <div class="font-bold text-lg text-orange-400 mb-1">Все функции</div>
+                <div class="text-gray-200 text-sm">Мультиустройство, защита Wi-Fi, смена IP, доступ к контенту по всему миру.</div>
+              </div>
+              <div>
+                <div class="font-bold text-lg text-orange-400 mb-1">VPN-серверы</div>
+                <div class="text-gray-200 text-sm">Сервера в 10+ странах для стабильного и быстрого соединения.</div>
+              </div>
+            </div>
+            <div class="flex-1 min-w-[220px] flex flex-col gap-4">
+              <div>
+                <div class="font-bold text-lg text-orange-400 mb-1">VPN для стриминга</div>
+                <div class="text-gray-200 text-sm">Смотрите Netflix, Hulu, Disney+ и другие сервисы без ограничений.</div>
+              </div>
+              <div>
+                <div class="font-bold text-lg text-orange-400 mb-1">Страны</div>
+                <div class="text-gray-200 text-sm">США, Турция, Япония, Германия, Франция, и другие.</div>
+              </div>
+              <div>
+                <div class="font-bold text-lg text-orange-400 mb-1">Устройства</div>
+                <div class="text-gray-200 text-sm">Windows, macOS, Android, iOS, роутеры.</div>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li><a href="tariffs.html" class="text-white hover:text-orange-500 transition py-2 px-2 rounded-lg" data-i18n="header-tariffs">Тарифы</a></li>
+        <li class="relative group" id="download-menu">
+          <a href="/download" class="px-4 py-2 hover:bg-[#181818] cursor-pointer" data-i18n="header-download">Скачать</a>
+        </li>
+      </ul>
+    </div>
+    <!-- Десктоп поддержка и язык -->
+    <div class="hidden md:flex items-center gap-6 flex-shrink-0">
+      <a href="support.html" class="flex items-center gap-2 text-orange-500 font-bold py-2 px-3 rounded-lg border border-orange-500 bg-[#232323]" data-i18n="header-support">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <span class="hidden md:inline">Поддержка</span>
+      </a>
+      <div id="lang-switcher" class="relative flex items-center gap-2 select-none">
+        <button id="lang-dropdown-btn" class="flex items-center gap-2 px-3 py-2 bg-[#232323] rounded-lg border border-gray-700 text-white hover:bg-[#2c2c2c] focus:outline-none text-base">
+          <svg class="w-6 h-6 text-gray-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 0 20M12 2a15.3 15.3 0 0 0 0 20"/></svg>
+          <span id="lang-current" class="font-semibold">Русский</span>
+          <svg class="w-5 h-5 ml-1 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div id="lang-dropdown" class="hidden absolute right-0 mt-2 w-40 bg-[#232323] border border-gray-700 rounded-lg shadow-lg py-1 z-50">
+          <button type="button" class="w-full text-left px-5 py-3 text-base hover:bg-[#181818] text-white flex items-center gap-2" data-lang="ru">Русский</button>
+          <button type="button" class="w-full text-left px-5 py-3 text-base hover:bg-[#181818] text-white flex items-center gap-2" data-lang="en">English</button>
+        </div>
+      </div>
+    </div>
+    <!-- Мобильный бургер -->
+    <button id="burger-btn" class="block md:hidden text-white focus:outline-none" aria-label="Открыть меню">
+      <svg class="w-9 h-9" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </div>
+  <!-- Мобильное меню -->
+  <div id="mobile-menu" class="fixed inset-0 bg-black bg-opacity-80 z-50 flex-col items-center justify-start pt-24 px-6 hidden md:hidden">
+    <div class="flex flex-col gap-6 w-full max-w-xs mx-auto bg-[#232323] rounded-2xl p-6 shadow-2xl">
+      <a href="index.html#advantages" class="block text-lg font-bold text-white py-2 px-4 rounded-lg hover:bg-[#181818]" data-i18n="header-advantages">Преимущества</a>
+      <a href="tariffs.html" class="block text-lg font-bold text-white py-2 px-4 rounded-lg hover:bg-[#181818]" data-i18n="header-tariffs">Тарифы</a>
+      <a href="/download" class="block text-lg font-bold text-white py-2 px-4 rounded-lg hover:bg-[#181818]" data-i18n="header-download">Скачать</a>
+      <a href="support.html" class="block text-lg font-bold text-orange-400 py-2 px-4 rounded-lg border border-orange-500 bg-[#181818]" data-i18n="header-support">Поддержка</a>
+      <div class="flex flex-col gap-2 mt-2">
+        <div class="text-gray-400 text-sm font-semibold mb-1">Язык</div>
+        <button type="button" class="w-full text-left px-4 py-3 text-base rounded-lg bg-[#181818] text-white font-semibold border border-gray-700" onclick="setLang('ru')">Русский</button>
+        <button type="button" class="w-full text-left px-4 py-3 text-base rounded-lg bg-[#181818] text-white font-semibold border border-gray-700" onclick="setLang('en')">English</button>
+      </div>
+      <button id="close-mobile-menu" class="mt-4 w-full py-3 rounded-lg bg-[#181818] text-gray-400 font-bold text-lg border border-gray-700">Закрыть</button>
+    </div>
+  </div>
+</nav>
+<script>
+// Мобильное меню бургер
+const burgerBtn = document.getElementById('burger-btn');
+const mobileMenu = document.getElementById('mobile-menu');
+const closeMobileMenu = document.getElementById('close-mobile-menu');
+burgerBtn && burgerBtn.addEventListener('click', function() {
+  mobileMenu.classList.remove('hidden');
+});
+closeMobileMenu && closeMobileMenu.addEventListener('click', function() {
+  mobileMenu.classList.add('hidden');
+});
+mobileMenu && mobileMenu.addEventListener('click', function(e) {
+  if (e.target === mobileMenu) mobileMenu.classList.add('hidden');
+});
+</script>
+  <!-- HERO -->
+<style>
+.fade-up-main {
+  opacity: 0;
+  transform: translateY(32px);
+  animation: fadeUpMain 0.7s cubic-bezier(.77,0,.18,1) forwards;
+}
+@keyframes fadeUpMain {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.hero-shield-anim:hover #main-hero-shield {
+  transform: rotate(-24deg) translateY(32px) scale(0.98);
+  filter: drop-shadow(0 12px 32px #0008);
+}
+.hero-shield-anim:hover .trader-anim {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+  transition-delay: 0.25s;
+}
+.hero-shield-anim:hover .greeting-anim {
+  opacity: 1;
+  pointer-events: auto;
+  transition-delay: 0.45s;
+}
+</style>
+<section class="flex flex-col md:flex-row items-center justify-between max-w-6xl mx-auto py-24 px-4 md:pt-32 md:pb-24 gap-16 md:gap-0">
+  <div class="flex-1 flex flex-col items-start md:items-start text-left">
+    <h1 class="text-5xl md:text-6xl font-extrabold text-orange-500 mb-6 fade-up-main" style="animation-delay:0.08s"><span data-i18n="hero-title-orange">Bazara</span><span class="text-white" data-i18n="hero-title-white">VPN</span></h1>
+    <p class="text-2xl md:text-3xl text-white mb-10 max-w-xl fade-up-main" style="animation-delay:0.18s" data-i18n="hero-subtitle">Быстро. Безопасно. Анонимно. <br><span class='text-gray-300 text-lg block mt-4'>VPN, который не спрашивает лишнего и не грузит мозги. Просто включил — и ты уже в безопасности. Всё по-базарному просто!</span></p>
+    <a href="tariffs.html" class="btn-glow mb-6 text-xl md:text-2xl py-5 px-12 fade-up-main" style="animation-delay:0.32s" data-i18n="try-free">Попробовать бесплатно</a>
+    <ul class="flex flex-wrap gap-6 mt-6 fade-up-main" style="animation-delay:0.44s">
+      <li class="flex items-center gap-2 text-white text-lg" data-i18n="feature-speed"><svg class="w-6 h-6 text-orange-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>Скорость до 1 Гбит/с</li>
+      <li class="flex items-center gap-2 text-white text-lg" data-i18n="feature-nologs"><svg class="w-6 h-6 text-orange-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Без логов и слежки</li>
+      <li class="flex items-center gap-2 text-white text-lg" data-i18n="feature-devices"><svg class="w-6 h-6 text-orange-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8 12h8"/><path d="M12 8v8"/></svg>До 5 устройств</li>
+    </ul>
+  </div>
+  <div class="flex-1 flex justify-center items-center fade-up-main" style="animation-delay:0.56s">
+    <div class="relative group hero-shield-anim" style="width:340px;height:300px;">
+      <img src="/assets/trader.gif" class="absolute bottom-36 left-0 w-44 h-auto opacity-0 pointer-events-none trader-anim select-none" style="transform: scaleX(-1) translateY(0); transition: opacity 0.5s, transform 0.7s cubic-bezier(.68,-0.55,.27,1.55); z-index:1;" />
+      <svg id="main-hero-shield" width="340" height="300" viewBox="0 0 340 300" fill="none" xmlns="http://www.w3.org/2000/svg" class="drop-shadow-2xl" style="z-index:2; position:relative; transition: transform 0.7s cubic-bezier(.68,-0.55,.27,1.55), filter 0.5s;">
+        <defs>
+          <linearGradient id="shieldGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#ff8800"/>
+            <stop offset="100%" stop-color="#a259ff"/>
+          </linearGradient>
+        </defs>
+        <path d="M170 20C230 40 300 40 300 100C300 220 170 280 170 280C170 280 40 220 40 100C40 40 110 40 170 20Z" fill="url(#shieldGrad)" stroke="#fff" stroke-width="6"/>
+        <path d="M170 80v60l40 20" stroke="#fff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="170" cy="140" r="16" fill="#fff" fill-opacity="0.15"/>
+      </svg>
+      <div class="absolute left-32 bottom-72 bg-[#232323ee] text-white text-base px-4 py-1.5 rounded-lg shadow-lg opacity-0 pointer-events-none greeting-anim whitespace-nowrap" style="transition: opacity 0.5s; z-index:3;" data-i18n="greeting-bubble">Привет! Чем могу помочь?</div>
+    </div>
+  </div>
+</section>
+
+  <!-- ВСТАВЛЯЮ promo-cards-adguard-style СЮДА -->
+  <section class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 my-24 px-4" id="promo-cards-adguard-style">
+    <div class="flex flex-col items-center text-center bg-[#232323] rounded-3xl shadow-2xl p-10 md:p-12">
+      <div class="w-40 h-40 flex items-center justify-center mb-6 drop-shadow-xl bg-[#181818] rounded-full">
+        <img src="/assets/chill.png" alt="Свобода" class="w-28 h-28 object-contain select-none" draggable="false">
+      </div>
+      <div class="text-3xl md:text-4xl font-extrabold text-white mb-4" data-i18n="card-1-title">Свобода без компромиссов</div>
+      <div class="text-lg md:text-xl text-gray-300 font-medium" data-i18n="card-1-text">
+        Тысячи пользователей выбрали BazaraVPN, чтобы вернуть себе контроль и спокойствие. Рейтинг 4.9/5 — не просто так.
+    </div>
+    </div>
+    <div class="flex flex-col items-center text-center bg-[#232323] rounded-3xl shadow-2xl p-10 md:p-12">
+      <div class="w-40 h-40 flex items-center justify-center mb-6 drop-shadow-xl bg-[#181818] rounded-full">
+        <img src="/assets/stena.png" alt="Доступ без границ" class="w-28 h-28 object-contain select-none" draggable="false">
+      </div>
+      <div class="text-3xl md:text-4xl font-extrabold text-white mb-4" data-i18n="card-2-title">Доступ без границ</div>
+      <div class="text-lg md:text-xl text-gray-300 font-medium" data-i18n="card-2-text">
+        Открывай сайты, стримы и приложения из любой точки мира — быстро, стабильно и безопасно.
+    </div>
+    </div>
+    <div class="flex flex-col items-center text-center bg-[#232323] rounded-3xl shadow-2xl p-10 md:p-12">
+      <div class="w-40 h-40 flex items-center justify-center mb-6 drop-shadow-xl bg-[#181818] rounded-full">
+        <img src="/assets/planeta.png" alt="Универсальная защита" class="w-28 h-28 object-contain select-none" draggable="false">
+      </div>
+      <div class="text-3xl md:text-4xl font-extrabold text-white mb-4" data-i18n="card-3-title">Универсальная защита</div>
+      <div class="text-lg md:text-xl text-gray-300 font-medium" data-i18n="card-3-text">
+        BazaraVPN работает на всех популярных устройствах: Windows, macOS, Android, iOS и даже роутерах.
+      </div>
+    </div>
+  </section>
+
+  <!-- Tariffs Page (отдельная секция) -->
+  <!-- (старый блок тарифов скрыт или удалён) -->
+<!-- Блок отзывов (3D-слайдер, по 3 в строке, с анимацией) -->
+<section class="max-w-5xl mx-auto my-16 px-4">
+  <div class="flex items-center justify-between mb-8">
+    <h2 class="text-3xl font-bold text-orange-400">Отзывы пользователей</h2>
+    <a href="reviews.html" class="bg-gradient-to-r from-orange-500 to-purple-500 hover:from-orange-600 hover:to-purple-600 text-white font-bold py-2 px-6 rounded-xl shadow-lg text-lg transition-all">Все отзывы</a>
+  </div>
+  <div class="relative reviews-carousel-3d">
+    <button class="carousel-arrow left" id="main-reviews-prev" aria-label="Назад" style="left:-32px;">
+      <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg>
+    </button>
+    <div class="reviews-track-3d flex gap-8" id="main-reviews-track" style="transition:transform 0.7s cubic-bezier(.77,0,.18,1); will-change:transform;"></div>
+    <button class="carousel-arrow right" id="main-reviews-next" aria-label="Вперёд" style="right:-32px;">
+      <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
+    </button>
+  </div>
+</section>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const track = document.getElementById('main-reviews-track');
+    const prevBtn = document.getElementById('main-reviews-prev');
+    const nextBtn = document.getElementById('main-reviews-next');
+    const avatars = [
+      '/assets/avatar1.png',
+      '/assets/avatar2.png',
+      '/assets/avatar3.png'
+    ];
+    let reviews = [];
+    let current = 0;
+    let visible = 3;
+    function getVisible() {
+      const w = window.innerWidth;
+      if (w < 700) return 1;
+      if (w < 1000) return 2;
+      return 3;
+    }
+    function render() {
+      visible = getVisible();
+      track.innerHTML = '';
+      if (reviews.length === 0) {
+        track.innerHTML = '<div class="text-gray-400 text-center w-full py-16 text-xl">Пока нет отзывов</div>';
+        prevBtn.style.display = 'none';
+        nextBtn.style.display = 'none';
+        return;
+      }
+      if (current > reviews.length - visible) current = Math.max(0, reviews.length - visible);
+      if (reviews.length <= visible) {
+        prevBtn.style.display = 'none';
+        nextBtn.style.display = 'none';
+      } else {
+        prevBtn.style.display = '';
+        nextBtn.style.display = '';
+      }
+      for (let i = 0; i < reviews.length; i++) {
+        let cls = 'review-card-3d-anim';
+        if (i === current + Math.floor(visible/2)) cls += ' active';
+        else if (i === current + Math.floor(visible/2) - 1) cls += ' left';
+        else if (i === current + Math.floor(visible/2) + 1) cls += ' right';
+        else cls += '';
+        if (i >= current && i < current + visible) {
+          const r = reviews[i];
+          const avatar = avatars[Math.floor(Math.random() * avatars.length)];
+          track.innerHTML += `
+            <div class="${cls}" style="min-width:320px;max-width:370px;transition:box-shadow 0.3s,transform 0.7s cubic-bezier(.77,0,.18,1),filter 0.5s;filter:none;opacity:1;background:#232323;border-radius:1.5rem;box-shadow:0 8px 32px 0 rgba(0,0,0,0.18),0 1.5px 0 #ff8800;padding:2rem 1.5rem;display:flex;flex-direction:column;align-items:flex-start;">
+              <div class="flex items-center gap-3 mb-2">
+                <img src="${avatar}" class="w-12 h-12 rounded-full shadow" alt="avatar">
+                <div>
+                  <div class="font-semibold text-white text-lg">${r.name}</div>
+                  <div class="flex gap-0.5 mt-1">${Array(5).fill(0).map((_,j)=>`<svg class='w-5 h-5 ${j<r.rating?'text-orange-400':'text-orange-400 opacity-50'}' fill='currentColor' viewBox='0 0 20 20'><polygon points='10,1 12.59,7.36 19.51,7.64 14,12.14 15.82,19.02 10,15.27 4.18,19.02 6,12.14 0.49,7.64 7.41,7.36'/></svg>`).join('')}</div>
+                </div>
+              </div>
+              <p class="text-gray-300 text-base mt-2">${r.text}</p>
+              <div class="text-xs text-gray-400 mt-1">${r.createdAt ? r.createdAt.toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit' }) : ''}</div>
+            </div>
+          `;
+        }
+      }
+      setTimeout(() => {
+        const card = track.querySelector('.review-card-3d-anim');
+        if (card) {
+          const totalWidth = card.offsetWidth * Math.min(visible, reviews.length) + 32 * (Math.min(visible, reviews.length) - 1);
+          track.style.transform = `translateX(calc(50% - ${totalWidth/2}px))`;
+        }
+      }, 10);
+    }
+    function prev() {
+      if (current > 0) {
+        current--;
+        render();
+      }
+    }
+    function next() {
+      if (current < reviews.length - visible) {
+        current++;
+        render();
+      }
+    }
+    prevBtn.onclick = prev;
+    nextBtn.onclick = next;
+    let startX = null;
+    track.addEventListener('touchstart', e => { startX = e.touches[0].clientX; });
+    track.addEventListener('touchend', e => {
+      if (startX === null) return;
+      const dx = e.changedTouches[0].clientX - startX;
+      if (dx > 40) prev();
+      if (dx < -40) next();
+      startX = null;
+    });
+    function updateResponsive() {
+      visible = getVisible();
+      if (current > reviews.length - visible) current = Math.max(0, reviews.length - visible);
+      render();
+    }
+    window.addEventListener('resize', updateResponsive);
+    firebase.firestore().collection('reviews').where('status','in',['approved','published']).orderBy('createdAt','desc').limit(30).onSnapshot(snap => {
+      reviews = [];
+      snap.forEach(doc => {
+        const d = doc.data();
+        reviews.push({
+          name: d.name || 'Аноним',
+          text: d.text || '',
+          rating: d.rating || 5,
+          createdAt: d.createdAt ? d.createdAt.toDate() : null
+        });
+      });
+      current = 0;
+      render();
+    });
+    updateResponsive();
+  });
+</script>
+<style>
+.reviews-carousel-3d { position: relative; width: 100%; max-width: 1100px; margin: 0 auto; overflow: hidden; perspective: 1200px; min-height: 320px; }
+.reviews-track-3d { display: flex; transition: transform 0.7s cubic-bezier(.77,0,.18,1), filter 0.5s; will-change: transform; gap: 2rem; }
+.review-card-3d-anim { min-width: 340px; max-width: 360px; background: #232323; border-radius: 1.5rem; box-shadow: 0 8px 32px 0 rgba(0,0,0,0.18), 0 1.5px 0 #ff8800; padding: 2rem 1.5rem; display: flex; flex-direction: column; align-items: flex-start; transform-style: preserve-3d; transition: box-shadow 0.3s, transform 0.7s cubic-bezier(.77,0,.18,1), filter 0.5s; filter: none; opacity: 1; }
+.review-card-3d-anim.active { box-shadow: 0 12px 40px 0 rgba(255,136,0,0.18), 0 2px 0 #ff8800; transform: scale(1.06) translateZ(40px) rotateY(0deg); z-index: 2; filter: none; opacity: 1; }
+.review-card-3d-anim.left, .review-card-3d-anim.right { transform: scale(0.96) translateZ(-40px) rotateY(var(--angle)); filter: none; z-index: 1; opacity: 1; }
+.review-card-3d-anim.left { --angle: 18deg; }
+.review-card-3d-anim.right { --angle: -18deg; }
+.review-card-3d-anim:not(.active):not(.left):not(.right) { display: none !important; }
+.carousel-arrow { position: absolute; top: 50%; transform: translateY(-50%); width: 48px; height: 48px; background: rgba(60,60,60,0.7); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #bbb; font-size: 2rem; cursor: pointer; z-index: 10; border: 2px solid #444; transition: background 0.2s, color 0.2s, box-shadow 0.2s; box-shadow: 0 2px 8px 0 rgba(0,0,0,0.12); user-select: none; }
+.carousel-arrow:hover { background: #ff8800; color: #fff; box-shadow: 0 4px 16px 0 rgba(255,136,0,0.18); }
+.carousel-arrow.left { left: -32px; }
+.carousel-arrow.right { right: -32px; }
+@media (max-width: 900px) { .review-card-3d-anim { min-width: 90vw; max-width: 95vw; } .reviews-track-3d { gap: 1rem; } .carousel-arrow.left { left: 0; } .carousel-arrow.right { right: 0; } }
+@media (max-width: 600px) { .review-card-3d-anim { min-width: 98vw; max-width: 99vw; } .carousel-arrow { width: 40px; height: 40px; font-size: 1.5rem; } }
+</style>
+  <!-- Leave a Review Button Section -->
+  <section class="max-w-3xl mx-auto mt-0 mb-10 px-4 flex justify-center gap-4">
+    <button id="open-review-modal" class="flex items-center gap-2 bg-gradient-to-r from-orange-500 to-orange-400 hover:from-orange-600 hover:to-orange-500 text-white text-[22px] font-bold py-4 px-10 rounded-xl shadow-lg transition-all duration-200">
+      <svg class="w-6 h-6" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M12 20h9"/>
+        <path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19.5 3 21l1.5-4L16.5 3.5Z"/>
+      </svg>
+      <span data-i18n="leave-review">Оставить отзыв</span>
+    </button>
+    <a href="/" class="btn-glow text-xl md:text-2xl py-4 px-8 rounded-xl shadow-lg transition-all duration-200 bg-gradient-to-r from-orange-400 to-purple-500 hover:from-orange-500 hover:to-purple-600 font-bold">
+      Новая главная (React)
+    </a>
+  </section>
+  <!-- Блок 1 из 5: Всегда на связи -->
+  <section class="w-full bg-[#181818] py-16 px-4">
+    <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center md:items-stretch gap-10 md:gap-16">
+      <!-- Левая колонка -->
+      <div class="flex-1 flex flex-col justify-center text-center md:text-left">
+        <h1 class="text-3xl md:text-5xl font-extrabold text-white mb-6 leading-tight">
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-purple-500" data-i18n="block-1-title">Всегда на связи.</span><br>
+          <span data-i18n="block-1-title-2">Даже когда весь мир против.</span>
+        </h1>
+        <div class="text-lg md:text-2xl text-gray-200 font-medium leading-snug" data-i18n="block-1-text">
+          BazaraVPN подключает тебя к миру — без слежки, блокировок и прерываний. Работай, чиль, смотри YouTube и телегу, даже если кто-то решил "запретить".
+        </div>
+      </div>
+      <!-- Правая колонка -->
+      <div class="flex-1 flex items-center justify-center">
+        <img src="/assets/block1.png" alt="Всегда на связи" class="w-full max-w-xs md:max-w-md lg:max-w-lg object-contain drop-shadow-xl select-none" draggable="false">
+        </div>
+      </div>
+  </section>
+  <!-- Блок 2 из 5: Оставайся в тени -->
+<section class="w-full bg-[#181818] py-16 px-4">
+  <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center md:items-stretch gap-10 md:gap-16">
+    <!-- Левая колонка: картинка -->
+    <div class="flex-1 flex items-center justify-center order-1 md:order-none mb-8 md:mb-0">
+      <img src="/assets/block2.png" alt="Оставайся в тени" class="w-full max-w-xs md:max-w-md lg:max-w-lg object-contain drop-shadow-xl select-none" draggable="false">
+        </div>
+    <!-- Правая колонка: текст -->
+    <div class="flex-1 flex flex-col justify-center text-center md:text-left">
+      <h2 class="text-3xl md:text-5xl font-extrabold text-white mb-6 leading-tight">
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-orange-400" data-i18n="block-2-title">Оставайся в тени.</span><br>
+        <span data-i18n="block-2-title-2">Всегда.</span>
+      </h2>
+      <div class="text-lg md:text-2xl text-gray-200 font-medium leading-snug" data-i18n="block-2-text">
+        Никакого отслеживания, логов и рекламных трекеров. Твой трафик шифруется, а личные данные остаются твоими. BazaraVPN — как ниндзя в интернете, только круче.
+      </div>
+    </div>
+  </div>
+</section>
+<!-- Блок 3 из 5: Ничего лишнего. Только результат. -->
+<section class="w-full bg-[#181818] py-16 px-4">
+  <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center md:items-stretch gap-10 md:gap-16">
+    <!-- Левая колонка: текст -->
+    <div class="flex-1 flex flex-col justify-center text-center md:text-left">
+      <h2 class="text-3xl md:text-5xl font-extrabold text-white mb-6 leading-tight">
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-purple-500" data-i18n="block-3-title">Ничего лишнего.</span><br>
+        <span data-i18n="block-3-title-2">Только результат.</span>
+      </h2>
+      <div class="text-lg md:text-2xl text-gray-200 font-medium leading-snug" data-i18n="block-3-text">
+        BazaraVPN запускается с одного нажатия и сразу работает. Без регистрации, без настройки, без вопросов. Нажал "подключить" — и ты уже в безопасности.
+      </div>
+    </div>
+    <!-- Правая колонка: картинка -->
+    <div class="flex-1 flex items-center justify-center">
+      <img src="/assets/block3.png" alt="Ничего лишнего" class="w-full max-w-xs md:max-w-md lg:max-w-lg object-contain drop-shadow-xl select-none" draggable="false">
+    </div>
+  </div>
+</section>
+<!-- Блок 'Как это работает?' -->
+<section class="max-w-6xl mx-auto my-20 px-4">
+  <h2 class="text-3xl font-bold text-orange-400 mb-10 text-center" data-i18n="how-title">Как это работает?</h2>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+    <!-- 1 -->
+    <div class="flex flex-col items-center text-center bg-[#232323] rounded-2xl shadow-xl p-10 md:p-12 min-w-[320px] max-w-[370px] mx-auto">
+      <div class="bg-[#181818] rounded-full mb-6 shadow-lg flex items-center justify-center w-40 h-40">
+        <img src="/assets/install.png" alt="Установите" class="w-32 h-32 object-contain select-none" draggable="false">
+      </div>
+      <div class="text-2xl md:text-3xl font-extrabold text-white mb-4 leading-tight" data-i18n="how-1-title">
+        Установите BazaraVPN за пару секунд
+      </div>
+      <div class="text-lg md:text-xl text-gray-200 font-medium leading-snug" data-i18n="how-1-text">
+        Скачайте приложение на любое устройство: Windows, Mac, Android или iOS. Всё просто: открыл, поставил, зашёл. Без лишних настроек и сложных инструкций. Даже бабушка справится (если надо — справимся за неё ).
+      </div>
+    </div>
+    <!-- 2 -->
+    <div class="flex flex-col items-center text-center bg-[#232323] rounded-2xl shadow-xl p-10 md:p-12 min-w-[320px] max-w-[370px] mx-auto">
+      <div class="bg-[#181818] rounded-full mb-6 shadow-lg flex items-center justify-center w-40 h-40">
+        <img src="/assets/map.png" alt="Выберите страну" class="w-32 h-32 object-contain select-none" draggable="false">
+      </div>
+      <div class="text-2xl md:text-3xl font-extrabold text-white mb-4 leading-tight" data-i18n="how-2-title">
+        Выберите страну — и в путь
+      </div>
+      <div class="text-lg md:text-xl text-gray-200 font-medium leading-snug" data-i18n="how-2-text">
+        Откройте BazaraVPN, выберите нужную страну из списка и нажмите одну кнопку. Всё — ты в безопасности, трафик шифруется, контент разблокирован. Автоматически. Мгновенно. Всегда стабильно.
+      </div>
+    </div>
+    <!-- 3 -->
+    <div class="flex flex-col items-center text-center bg-[#232323] rounded-2xl shadow-xl p-10 md:p-12 min-w-[320px] max-w-[370px] mx-auto">
+      <div class="bg-[#181818] rounded-full mb-6 shadow-lg flex items-center justify-center w-40 h-40">
+        <img src="/assets/mikrochel.png" alt="Никаких границ" class="w-32 h-32 object-contain select-none" draggable="false">
+      </div>
+      <div class="text-2xl md:text-3xl font-extrabold text-white mb-4 leading-tight" data-i18n="how-3-title">
+        Никаких границ. Ни в интернете, ни в жизни.
+      </div>
+      <div class="text-lg md:text-xl text-gray-200 font-medium leading-snug" data-i18n="how-3-text">
+        Смотри стримы, работай, учись, скачивай и просто живи — где угодно. BazaraVPN открывает весь интернет и даёт тебе свободу без цензуры, блокировок и замедлений.
+      </div>
+      </div>
+    </div>
+  </section>
+  <!-- Review Modal -->
+  <div id="review-modal-bg" class="fixed inset-0 bg-black bg-opacity-60 z-50 hidden flex items-center justify-center">
+    <div class="review-modal animate-fade-in">
+      <button id="close-review-modal" class="close-btn">&times;</button>
+      <h2>Оставить отзыв</h2>
+      <form id="review-form" class="flex flex-col gap-6 items-center">
+        <div class="w-full flex flex-col gap-5">
+          <label for="review-name">Ваше имя</label>
+          <input id="review-name" name="name" type="text" required placeholder="Введите имя">
+        </div>
+        <div class="w-full flex flex-col gap-5">
+          <label for="review-text">Ваш отзыв</label>
+          <textarea id="review-text" name="text" required rows="3" placeholder="Напишите свой отзыв..."></textarea>
+        </div>
+        <div class="w-full flex flex-col gap-2">
+          <label>Ваша оценка</label>
+          <div id="review-stars" class="review-stars">
+            <button type="button" class="star">★</button>
+            <button type="button" class="star">★</button>
+            <button type="button" class="star">★</button>
+            <button type="button" class="star">★</button>
+            <button type="button" class="star">★</button>
+          </div>
+          <input type="hidden" name="rating" id="review-rating" value="0">
+        </div>
+        <button type="submit" class="submit-btn">Отправить отзыв</button>
+        <div id="review-success" class="review-success hidden">Спасибо за ваш отзыв!</div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Современный FAQ -->
+<section id="faq-section" class="max-w-3xl mx-auto my-20 px-4">
+  <h2 class="text-4xl font-extrabold text-orange-400 mb-10 text-center" data-i18n="faq-title">Часто задаваемые вопросы</h2>
+  <div>
+    <!-- ВОПРОС 1 -->
+    <div class="faq-item">
+      <button class="faq-question" type="button">
+        <span data-i18n="faq-q1">Как работает BazaraVPN?</span>
+        <span class="faq-arrow">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 10 12 16 18 10"/></svg>
+        </span>
+        </button>
+      <div class="faq-answer" data-i18n="faq-a1">BazaraVPN защищает вашу конфиденциальность в Интернете, скрывая ваш настоящий IP-адрес. Когда ваше виртуальное местоположение скрыто, отслеживать, ограничивать или продавать вашу онлайн-активность становится намного сложнее.</div>
+        </div>
+    <!-- ВОПРОС 2 -->
+    <div class="faq-item">
+      <button class="faq-question" type="button">
+        <span data-i18n="faq-q2">Как установить BazaraVPN?</span>
+        <span class="faq-arrow">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 10 12 16 18 10"/></svg>
+        </span>
+        </button>
+      <div class="faq-answer" data-i18n="faq-a2">Чтобы установить BazaraVPN, скачайте приложение для вашего устройства и следуйте нашему руководству по настройке. Затем просто войдите в свой аккаунт, и вы будете готовы к подключению.</div>
+        </div>
+    <!-- ВОПРОС 3 -->
+    <div class="faq-item">
+      <button class="faq-question" type="button">
+        <span data-i18n="faq-q3">Можно ли пользоваться бесплатно?</span>
+        <span class="faq-arrow">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 10 12 16 18 10"/></svg>
+        </span>
+        </button>
+      <div class="faq-answer" data-i18n="faq-a3">Да, у нас есть бесплатный пробный период и базовые функции без оплаты.</div>
+        </div>
+    <!-- ВОПРОС 4 -->
+    <div class="faq-item">
+      <button class="faq-question" type="button">
+        <span data-i18n="faq-q4">Какие устройства поддерживаются?</span>
+        <span class="faq-arrow">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 10 12 16 18 10"/></svg>
+        </span>
+        </button>
+      <div class="faq-answer" data-i18n="faq-a4">Windows, macOS, Android, iOS, роутеры и другие.</div>
+        </div>
+    <!-- ВОПРОС 5 -->
+    <div class="faq-item">
+      <button class="faq-question" type="button">
+        <span data-i18n="faq-q5">Можно ли смотреть Netflix и другие стриминги?</span>
+        <span class="faq-arrow">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 10 12 16 18 10"/></svg>
+        </span>
+        </button>
+      <div class="faq-answer" data-i18n="faq-a5">Да, BazaraVPN позволяет обходить блокировки и смотреть любые стриминговые сервисы.</div>
+        </div>
+    <!-- ВОПРОС 6 -->
+    <div class="faq-item">
+      <button class="faq-question" type="button">
+        <span data-i18n="faq-q6">Сколько устройств можно подключить?</span>
+        <span class="faq-arrow">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 10 12 16 18 10"/></svg>
+        </span>
+        </button>
+      <div class="faq-answer" data-i18n="faq-a6">До 5 устройств одновременно на одном аккаунте.</div>
+        </div>
+    <!-- ВОПРОС 7 -->
+    <div class="faq-item">
+      <button class="faq-question" type="button">
+        <span data-i18n="faq-q7">Как оплатить подписку?</span>
+        <span class="faq-arrow">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 10 12 16 18 10"/></svg>
+        </span>
+        </button>
+      <div class="faq-answer" data-i18n="faq-a7">Мы принимаем карты, криптовалюту и другие способы оплаты.</div>
+        </div>
+    <!-- ВОПРОС 8 -->
+    <div class="faq-item">
+      <button class="faq-question" type="button">
+        <span data-i18n="faq-q8">Законно ли использовать VPN?</span>
+        <span class="faq-arrow">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 10 12 16 18 10"/></svg>
+        </span>
+        </button>
+      <div class="faq-answer" data-i18n="faq-a8">В большинстве стран — да. Но проверьте законы вашей страны.</div>
+      </div>
+    </div>
+  </section>
+
+<script>
+// FAQ: раскрытие/сворачивание по клику через inline-стили (maxHeight, opacity), без hidden и классов
+Array.from(document.querySelectorAll('.faq-question')).forEach(btn => {
+  btn.addEventListener('click', function() {
+    const item = btn.closest('.faq-item');
+    const answer = item.querySelector('.faq-answer');
+    if (!answer) return;
+    if (answer.style.maxHeight && answer.style.maxHeight !== '0px') {
+      answer.style.maxHeight = '0px';
+      answer.style.opacity = '0';
+      item.classList.remove('open');
+    } else {
+      answer.style.maxHeight = answer.scrollHeight + 'px';
+      answer.style.opacity = '1';
+      item.classList.add('open');
+    }
+  });
+});
+// При загрузке: все ответы скрыты
+Array.from(document.querySelectorAll('.faq-answer')).forEach(ans => {
+  ans.style.maxHeight = '0px';
+  ans.style.opacity = '0';
+});
+</script>
+
+  <script>
+// --- ЛОГИКА ПЕРЕКЛЮЧЕНИЯ ЯЗЫКА (RU/EN) ---
+document.addEventListener('DOMContentLoaded', function() {
+    const translations = {
+      ru: {
+      'hero-title-orange': 'Bazara',
+      'hero-title-white': 'VPN',
+      'hero-subtitle': 'Быстро. Безопасно. Анонимно. <br><span class=\'text-gray-300 text-lg block mt-4\'>VPN, который не спрашивает лишнего и не грузит мозги. Просто включил — и ты уже в безопасности. Всё по-базарному просто!</span>',
+        'try-free': 'Попробовать бесплатно',
+      'card-1-title': 'Свобода без компромиссов',
+      'card-1-text': 'Тысячи пользователей выбрали BazaraVPN, чтобы вернуть себе контроль и спокойствие. Рейтинг 4.9/5 — не просто так.',
+      'card-2-title': 'Доступ без границ',
+      'card-2-text': 'Открывай сайты, стримы и приложения из любой точки мира — быстро, стабильно и безопасно.',
+      'card-3-title': 'Универсальная защита',
+      'card-3-text': 'BazaraVPN работает на всех популярных устройствах: Windows, macOS, Android, iOS и даже роутерах.',
+      'reviews-title': 'Отзывы пользователей',
+      'leave-review': 'Оставить отзыв',
+      'block-1-title': 'Всегда на связи.',
+      'block-1-title-2': 'Даже когда весь мир против.',
+      'block-1-text': 'BazaraVPN подключает тебя к миру — без слежки, блокировок и прерываний. Работай, чиль, смотри YouTube и телегу, даже если кто-то решил "запретить".',
+      'block-2-title': 'Оставайся в тени.',
+      'block-2-title-2': 'Всегда.',
+      'block-2-text': 'Никакого отслеживания, логов и рекламных трекеров. Твой трафик шифруется, а личные данные остаются твоими. BazaraVPN — как ниндзя в интернете, только круче.',
+      'block-3-title': 'Ничего лишнего.',
+      'block-3-title-2': 'Только результат.',
+      'block-3-text': 'BazaraVPN запускается с одного нажатия и сразу работает. Без регистрации, без настройки, без вопросов. Нажал "подключить" — и ты уже в безопасности.',
+      'how-title': 'Как это работает?',
+      'how-1-title': 'Установите BazaraVPN за пару секунд',
+      'how-1-text': 'Скачайте приложение на любое устройство: Windows, Mac, Android или iOS. Всё просто: открыл, поставил, зашёл. Без лишних настроек и сложных инструкций. Даже бабушка справится (если надо — справимся за неё ).',
+      'how-2-title': 'Выберите страну — и в путь',
+      'how-2-text': 'Откройте BazaraVPN, выберите нужную страну из списка и нажмите одну кнопку. Всё — ты в безопасности, трафик шифруется, контент разблокирован. Автоматически. Мгновенно. Всегда стабильно.',
+      'how-3-title': 'Никаких границ. Ни в интернете, ни в жизни.',
+      'how-3-text': 'Смотри стримы, работай, учись, скачивай и просто живи — где угодно. BazaraVPN открывает весь интернет и даёт тебе свободу без цензуры, блокировок и замедлений.',
+      'faq-title': 'Часто задаваемые вопросы',
+      'faq-q1': 'Как работает BazaraVPN?',
+      'faq-a1': 'BazaraVPN защищает вашу конфиденциальность в Интернете, скрывая ваш настоящий IP-адрес. Когда ваше виртуальное местоположение скрыто, отслеживать, ограничивать или продавать вашу онлайн-активность становится намного сложнее.',
+      'faq-q2': 'Как установить BazaraVPN?',
+      'faq-a2': 'Чтобы установить BazaraVPN, скачайте приложение для вашего устройства и следуйте нашему руководству по настройке. Затем просто войдите в свой аккаунт, и вы будете готовы к подключению.',
+      'faq-q3': 'Можно ли пользоваться бесплатно?',
+      'faq-a3': 'Да, у нас есть бесплатный пробный период и базовые функции без оплаты.',
+      'faq-q4': 'Какие устройства поддерживаются?',
+      'faq-a4': 'Windows, macOS, Android, iOS, роутеры и другие.',
+      'faq-q5': 'Можно ли смотреть Netflix и другие стриминги?',
+      'faq-a5': 'Да, BazaraVPN позволяет обходить блокировки и смотреть любые стриминговые сервисы.',
+      'faq-q6': 'Сколько устройств можно подключить?',
+      'faq-a6': 'До 5 устройств одновременно на одном аккаунте.',
+      'faq-q7': 'Как оплатить подписку?',
+      'faq-a7': 'Мы принимаем карты, криптовалюту и другие способы оплаты.',
+      'faq-q8': 'Законно ли использовать VPN?',
+      'faq-a8': 'В большинстве стран — да. Но проверьте законы вашей страны.',
+      'feature-speed': 'Скорость до 1 Гбит/с',
+      'feature-nologs': 'Без логов и слежки',
+      'feature-devices': 'До 5 устройств',
+      'greeting-bubble': 'Привет! Чем могу помочь?',
+    },
+    en: {
+      "hero-title-orange": "Bazara",
+      "hero-title-white": "VPN",
+      "hero-subtitle": "Fast. Secure. Anonymous. <br><span class='text-gray-300 text-lg block mt-4'>A VPN that doesn't ask unnecessary questions and doesn't overload your brain. Just turn it on — and you're already safe. It's as simple as it gets!</span>",
+      "try-free": "Try for free",
+      "card-1-title": "Freedom without compromise",
+      "card-1-text": "Thousands of users chose BazaraVPN to regain control and peace of mind. 4.9/5 rating — not for nothing.",
+      "card-2-title": "Access without borders",
+      "card-2-text": "Open sites, streams, and apps from anywhere in the world — fast, stable, and secure.",
+      "card-3-title": "Universal protection",
+      "card-3-text": "BazaraVPN works on all popular devices: Windows, macOS, Android, iOS, and even routers.",
+      "reviews-title": "User reviews",
+      "leave-review": "Leave a review",
+      "block-1-title": "Always connected.",
+      "block-1-title-2": "Even when the world is against you.",
+      "block-1-text": "BazaraVPN connects you to the world — no tracking, blocks, or interruptions. Work, chill, watch YouTube and Telegram, even if someone decided to 'ban' it.",
+      "block-2-title": "Stay in the shadows.",
+      "block-2-title-2": "Always.",
+      "block-2-text": "No tracking, logs, or ad trackers. Your traffic is encrypted, and your personal data stays yours. BazaraVPN is like a ninja on the internet, only cooler.",
+      "block-3-title": "Nothing extra.",
+      "block-3-title-2": "Only results.",
+      "block-3-text": "BazaraVPN starts with one click and works right away. No registration, no setup, no questions. Click 'connect' — and you're already safe.",
+      "how-title": "How does it work?",
+      "how-1-title": "Install BazaraVPN in seconds",
+      "how-1-text": "Download the app for any device: Windows, Mac, Android, or iOS. It's simple: open, install, log in. No extra settings or complicated instructions. Even grandma can handle it (and if not — we'll help her).",
+      "how-2-title": "Choose a country — and go",
+      "how-2-text": "Open BazaraVPN, select the country you need from the list, and press one button. That's it — you're safe, traffic is encrypted, content is unblocked. Automatically. Instantly. Always stable.",
+      "how-3-title": "No borders. On the internet or in life.",
+      "how-3-text": "Watch streams, work, study, download, and just live — anywhere. BazaraVPN opens up the whole internet and gives you freedom without censorship, blocks, or slowdowns.",
+      "faq-title": "Frequently Asked Questions",
+      "faq-q1": "How does BazaraVPN work?",
+      "faq-a1": "BazaraVPN protects your privacy online by hiding your real IP address. When your virtual location is hidden, it's much harder to track, restrict, or sell your online activity.",
+      "faq-q2": "How to install BazaraVPN?",
+      "faq-a2": "To install BazaraVPN, download the app for your device and follow our setup guide. Then just log in to your account and you're ready to connect.",
+      "faq-q3": "Can I use it for free?",
+      "faq-a3": "Yes, we have a free trial period and basic features without payment.",
+      "faq-q4": "Which devices are supported?",
+      "faq-a4": "Windows, macOS, Android, iOS, routers, and more.",
+      "faq-q5": "Can I watch Netflix and other streaming services?",
+      "faq-a5": "Yes, BazaraVPN allows you to bypass blocks and watch any streaming services.",
+      "faq-q6": "How many devices can I connect?",
+      "faq-a6": "Up to 5 devices simultaneously on one account.",
+      "faq-q7": "How do I pay for a subscription?",
+      "faq-a7": "We accept cards, cryptocurrency, and other payment methods.",
+      "faq-q8": "Is it legal to use a VPN?",
+      "faq-a8": "In most countries — yes. But check your local laws.",
+      "feature-speed": "Speed up to 1 Gbps",
+      "feature-nologs": "No logs or tracking",
+      "feature-devices": "Up to 5 devices",
+      "greeting-bubble": "Hi! How can I help you?",
+    }
+  };
+    const langBtn = document.getElementById('lang-dropdown-btn');
+    const langDropdown = document.getElementById('lang-dropdown');
+    const langCurrent = document.getElementById('lang-current');
+  const langSwitcher = document.getElementById('lang-switcher');
+  function setLang(lang) {
+    localStorage.setItem('lang', lang);
+    if (langCurrent) langCurrent.textContent = lang === 'ru' ? 'Русский' : 'English';
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (translations[lang][key]) {
+        if (/<[a-z][\s\S]*>/i.test(translations[lang][key])) {
+          el.innerHTML = translations[lang][key];
+        } else {
+          el.textContent = translations[lang][key];
+        }
+      }
+    });
+    if (typeof renderReviews === 'function') renderReviews();
+  }
+  let lang = localStorage.getItem('lang') || 'ru';
+  setLang(lang);
+  if (langBtn && langDropdown) {
+    langBtn.onclick = function(e) {
+      e.stopPropagation();
+      langDropdown.classList.toggle('hidden');
+    };
+    langDropdown.querySelectorAll('[data-lang]').forEach(btn => {
+      btn.onclick = function(e) {
+        e.stopPropagation();
+        setLang(this.getAttribute('data-lang'));
+        langDropdown.classList.add('hidden');
+      };
+    });
+      document.addEventListener('click', function(e) {
+      if (langDropdown && langSwitcher && !langSwitcher.contains(e.target)) {
+          langDropdown.classList.add('hidden');
+      }
+          });
+        }
+      });
+// --- КОНЕЦ ЛОГИКИ ПЕРЕКЛЮЧЕНИЯ ЯЗЫКА ---
+</script>
+<script>
+      // 2. Смена темы (тёмная/светлая/системная)
+      const body = document.getElementById('main-body');
+      function setTheme(theme) {
+        if (theme === 'light') {
+          body.classList.add('light');
+          body.style.background = '#f7f7f9';
+          body.style.color = '#232323';
+          document.documentElement.style.setProperty('--tw-bg-opacity', '1');
+        } else if (theme === 'dark') {
+          body.classList.remove('light');
+          body.style.background = '#181818';
+          body.style.color = '';
+          document.documentElement.style.setProperty('--tw-bg-opacity', '1');
+        } else { // system
+          body.classList.remove('light');
+          body.style.background = window.matchMedia('(prefers-color-scheme: dark)').matches ? '#181818' : '#f7f7f9';
+          body.style.color = '';
+        }
+        localStorage.setItem('theme', theme);
+        // Обновить надпись на кнопке
+        const themeCurrent = document.getElementById('theme-current');
+        if (theme === 'light') themeCurrent.textContent = 'Светлая';
+        else if (theme === 'dark') themeCurrent.textContent = 'Тёмная';
+        else themeCurrent.textContent = 'Системная тема';
+      }
+      // Клики по пунктам меню темы (ТОЛЬКО по data-theme)
+      document.querySelectorAll('#theme-dropdown [data-theme]').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          setTheme(this.getAttribute('data-theme'));
+          document.getElementById('theme-dropdown').classList.add('hidden');
+        });
+      });
+      // Применить тему при загрузке
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme) setTheme(savedTheme);
+      else setTheme('system');
+      // --- Theme dropdown (footer) ---
+      const themeSwitcherBtn = document.getElementById('theme-switcher-btn');
+      const themeDropdown = document.getElementById('theme-dropdown');
+      const themeSwitcherGroup = document.getElementById('theme-switcher-group');
+      if (themeSwitcherBtn && themeDropdown && themeSwitcherGroup) {
+        function toggleThemeDropdown(e) {
+          e.stopPropagation();
+          themeDropdown.classList.toggle('hidden');
+          themeDropdown.classList.toggle('dropdown-open');
+        }
+        function closeThemeDropdown() {
+          themeDropdown.classList.add('hidden');
+          themeDropdown.classList.remove('dropdown-open');
+        }
+        themeSwitcherBtn.addEventListener('click', toggleThemeDropdown);
+        document.addEventListener('click', function(e) {
+          if (!themeSwitcherGroup.contains(e.target)) closeThemeDropdown();
+        });
+        // Исправить позиционирование (всегда вверх)
+        themeDropdown.style.bottom = '100%';
+        themeDropdown.style.top = 'auto';
+        themeDropdown.style.marginBottom = '0.5rem';
+        themeDropdown.style.zIndex = '1000';
+      }
+      // --- Language dropdown (navbar) ---
+      // (оставить только один рабочий блок, остальные удалить)
+</script>
+<script>
+    // Promo banner close logic
+    document.addEventListener('DOMContentLoaded', function() {
+      const promoBanner = document.getElementById('promo-banner');
+      const mainBody = document.getElementById('main-body');
+      const navbarHeight = 56; // px
+      const bannerHeight = 64; // px
+      function setBannerPadding(showBanner) {
+        mainBody.style.paddingTop = (showBanner ? (navbarHeight + bannerHeight) : navbarHeight) + 'px';
+      }
+      if (localStorage.getItem('promoClosed')) {
+        promoBanner.style.display = 'none';
+        setBannerPadding(false);
+      } else {
+        setBannerPadding(true);
+      }
+      // Гарантированный обработчик закрытия
+      function closePromo() {
+        promoBanner.style.display = 'none';
+        setBannerPadding(false);
+        localStorage.setItem('promoClosed', '1');
+      }
+      // 1. По id
+      const promoClose = document.getElementById('promo-close');
+      if (promoClose) {
+        promoClose.onclick = closePromo;
+      }
+      // 2. Делегирование на случай динамики
+      document.body.addEventListener('click', function(e) {
+        if (e.target && (e.target.id === 'promo-close' || e.target.classList.contains('promo-close') || e.target.textContent.trim() === '×')) {
+          closePromo();
+        }
+      });
+    });
+
+    // Модалка для отзыва
+    document.addEventListener('DOMContentLoaded', function() {
+      const openBtn = document.getElementById('open-review-modal');
+      const modalBg = document.getElementById('review-modal-bg');
+      const closeBtn = document.getElementById('close-review-modal');
+      openBtn.addEventListener('click', function() {
+        modalBg.classList.remove('hidden');
+      });
+      closeBtn.addEventListener('click', function() {
+        modalBg.classList.add('hidden');
+      });
+      modalBg.addEventListener('click', function(e) {
+        if (e.target === modalBg) modalBg.classList.add('hidden');
+      });
+      // Звёзды рейтинга
+      const stars = document.querySelectorAll('#review-stars .star');
+      const ratingInput = document.getElementById('review-rating');
+      function updateStars(rating) {
+        stars.forEach((star, i) => {
+          if (i < rating) {
+            star.classList.add('selected');
+            star.style.color = '#ff8800'; // ярко-оранжевый
+            star.style.opacity = '1';
+          } else {
+            star.classList.remove('selected');
+            star.style.color = '#bbb'; // серый
+            star.style.opacity = '0.5';
+          }
+        });
+      }
+      stars.forEach((star, i) => {
+        star.addEventListener('mouseenter', function() {
+          updateStars(i + 1);
+        });
+        star.addEventListener('mouseleave', function() {
+          updateStars(Number(ratingInput.value));
+        });
+        star.addEventListener('click', function() {
+          ratingInput.value = (i + 1).toString();
+          updateStars(i + 1);
+        });
+      });
+      // Сброс выделения при открытии
+      openBtn.addEventListener('click', function() {
+        ratingInput.value = '0';
+        updateStars(0);
+      });
+      // При загрузке — сбросить звёзды
+      updateStars(Number(ratingInput.value));
+      // Форма отправки
+      const reviewFormEl = document.getElementById('review-form');
+      const submitBtn = reviewFormEl.querySelector('.submit-btn');
+      // Удаляем все старые обработчики (если вдруг были)
+      reviewFormEl.onsubmit = null;
+      let isSubmitting = false;
+      reviewFormEl.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        if (isSubmitting) return;
+        isSubmitting = true;
+        submitBtn.disabled = true;
+        submitBtn.style.opacity = '0.6';
+        const name = document.getElementById('review-name').value.trim();
+        const text = document.getElementById('review-text').value.trim();
+        const rating = parseInt(document.getElementById('review-rating').value, 10);
+        if (!name || !text || !rating || rating < 1 || rating > 5) {
+          alert('Пожалуйста, заполните все поля и выберите оценку от 1 до 5 звёзд.');
+          isSubmitting = false;
+          submitBtn.disabled = false;
+          submitBtn.style.opacity = '';
+          return;
+        }
+        try {
+          await db.collection('reviews').add({
+            name,
+            text,
+            rating,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            status: 'moderation'
+          });
+        document.getElementById('review-success').classList.remove('hidden');
+        this.reset();
+          updateStars(0);
+          document.getElementById('review-rating').value = '0';
+        setTimeout(() => {
+          document.getElementById('review-success').classList.add('hidden');
+            document.getElementById('review-modal-bg').classList.add('hidden');
+        }, 1800);
+        } catch (err) {
+          console.error('Ошибка отправки отзыва:', err);
+          // alert('Ошибка отправки отзыва. Попробуйте позже.'); // убрано по просьбе пользователя
+        } finally {
+          isSubmitting = false;
+          submitBtn.disabled = false;
+          submitBtn.style.opacity = '';
+        }
+      });
+      // Swipe для мобилок
+      let startX = null;
+      track.addEventListener('touchstart', e => { startX = e.touches[0].clientX; });
+      track.addEventListener('touchend', e => {
+        if (startX === null) return;
+        const dx = e.changedTouches[0].clientX - startX;
+        if (dx > 40) prev();
+        if (dx < -40) next();
+        startX = null;
+      });
+      function updateResponsive() {
+        visible = getVisible();
+        if (current > reviews.length - visible) current = Math.max(0, reviews.length - visible);
+        render();
+      }
+      window.addEventListener('resize', updateResponsive);
+      updateResponsive();
+    });
+
+    // --- Добавлено для анимаций появления при прокрутке ---
+    document.addEventListener('DOMContentLoaded', function() {
+      const animated = document.querySelectorAll('.animate-fade-up, .animate-fade-in-slow');
+      function reveal() {
+        animated.forEach(el => {
+          if (el.classList.contains('revealed')) return; // Уже анимирован
+          const rect = el.getBoundingClientRect();
+          if (rect.top < window.innerHeight - 40) {
+            el.style.animationPlayState = 'running';
+            el.style.opacity = 1;
+            el.classList.add('revealed'); // Помечаем как анимированный
+          }
+        });
+      }
+      reveal();
+      window.addEventListener('scroll', reveal);
+    });
+  </script>
+  <main class="flex-1 flex flex-col">
+    <!-- hero, benefits, guarantee, promo, отзывы, тарифы, FAQ, способы оплаты, contact-cta, review-modal и т.д. -->
+  </main>
+  <!-- Footer (универсальный для всех страниц) -->
+  <footer class="w-full bg-[#232323] border-t border-[#333] py-6 px-4 flex flex-col md:flex-row items-center justify-center gap-6 md:gap-10 text-gray-200 text-base mt-auto text-center">
+    <a href="contacts.html" class="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-[#181818] transition text-lg font-semibold">
+      <img src="assets/mail-3d.png" alt="Контакты" class="w-7 h-7" style="object-fit:contain;">
+      <span data-i18n="footer-contacts">Контакты</span>
+    </a>
+    <a href="privacy.html" class="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-[#181818] transition text-lg font-semibold">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8 8h8v8H8z"/></svg>
+      <span data-i18n="footer-privacy">Политика</span>
+    </a>
+    <div class="text-center text-lg font-medium" data-i18n="footer-copyright">© 2024 BazaraVPN</div>
+    <div class="flex items-center gap-5">
+      <a href="https://t.me/bazaraVPN" class="hover:text-orange-400" aria-label="Telegram" target="_blank" rel="noopener"><svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 4L12 20l-3-7-7-3z"/></svg></a>
+      <a href="https://www.instagram.com/bazaravpn/" class="hover:text-orange-400" aria-label="Instagram" target="_blank" rel="noopener"><svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="6"/><circle cx="12" cy="12" r="5"/><circle cx="17" cy="7" r="1.5"/></svg></a>
+      <a href="https://www.youtube.com/@BazaraVPN" class="hover:text-orange-400" aria-label="YouTube" target="_blank" rel="noopener"><svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="4"/><polygon points="10,9 16,12 10,15" fill="currentColor"/></svg></a>
+      <a href="https://www.tiktok.com/@bazaravpn1?lang=ru-RU" class="hover:text-orange-400" aria-label="TikTok" target="_blank" rel="noopener"><svg class="w-7 h-7" viewBox="0 0 24 24" fill="none"><path d="M16.5 3a4.5 4.5 0 0 0 4.5 4.5v2A6.5 6.5 0 0 1 14.5 3h2zm-2 0v12.5a3.5 3.5 0 1 1-3.5-3.5h1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    </div>
+  </footer>
+
+  <script>
+document.addEventListener('DOMContentLoaded', function() {
+  // ... существующий код ...
+  const reviewForm = document.getElementById('review-form');
+  if (reviewForm) {
+    // --- ФИКС: не навешивать обработчик submit дважды ---
+    if (!window.__reviewFormHandlerAdded) {
+      document.getElementById('review-form').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const name = document.getElementById('review-name').value.trim();
+        const text = document.getElementById('review-text').value.trim();
+        const rating = parseInt(document.getElementById('review-rating').value, 10);
+        if (!name || !text || !rating || rating < 1 || rating > 5) {
+          alert('Пожалуйста, заполните все поля и выберите оценку от 1 до 5 звёзд.');
+          return;
+        }
+        try {
+          await db.collection('reviews').add({
+            name,
+            text,
+            rating,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            status: 'moderation'
+          });
+          document.getElementById('review-success').classList.remove('hidden');
+          this.reset();
+          updateStars(0);
+          document.getElementById('review-rating').value = '0';
+          setTimeout(() => {
+            document.getElementById('review-success').classList.add('hidden');
+            document.getElementById('review-modal-bg').classList.add('hidden');
+          }, 1800);
+        } catch (err) {
+          alert('Ошибка отправки отзыва. Попробуйте позже.');
+        }
+      });
+      window.__reviewFormHandlerAdded = true;
+    }
+  }
+});
+</script>
+
+
+</body>
+</html>

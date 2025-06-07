@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BazaraVPN — Чат поддержки</title>
+  <link rel="icon" href="/favicon.ico">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { background: #181818; min-height: 100vh; }
+    .chat-card {
+      background: #232323;
+      border-radius: 1.2rem;
+      transition: background 0.18s, box-shadow 0.18s;
+      cursor: pointer;
+    }
+    .chat-card.selected {
+      background: #2d1e3a;
+      box-shadow: 0 0 0 2px #a259ff;
+    }
+    .chat-card:hover {
+      background: #282828;
+    }
+    .msg-bubble {
+      max-width: 70%;
+      padding: 0.8em 1.2em;
+      border-radius: 1.2em;
+      margin-bottom: 0.5em;
+      font-size: 1.08rem;
+      word-break: break-word;
+    }
+    .msg-user {
+      background: #232323;
+      color: #fff;
+      border-bottom-left-radius: 0.3em;
+      align-self: flex-start;
+    }
+    .msg-admin {
+      background: linear-gradient(90deg,#ff8800,#a259ff);
+      color: #fff;
+      border-bottom-right-radius: 0.3em;
+      align-self: flex-end;
+    }
+    .msg-time {
+      font-size: 0.85em;
+      color: #aaa;
+      margin-top: 0.1em;
+      margin-bottom: 0.5em;
+    }
+    .badge {
+      background: #ff3b3b;
+      color: #fff;
+      font-weight: bold;
+      border-radius: 9999px;
+      padding: 0.2em 0.7em;
+      font-size: 0.95rem;
+      min-width: 1.7em;
+      text-align: center;
+      margin-left: 0.5em;
+    }
+    .template-btn {
+      background: #232323;
+      color: #ff8800;
+      border: 1px solid #ff8800;
+      border-radius: 0.7em;
+      padding: 0.3em 1em;
+      margin-right: 0.5em;
+      margin-bottom: 0.5em;
+      cursor: pointer;
+      font-size: 0.98em;
+      transition: background 0.15s, color 0.15s;
+    }
+    .template-btn:hover {
+      background: #ff8800;
+      color: #fff;
+    }
+    ::-webkit-scrollbar { width: 8px; background: #232323; }
+    ::-webkit-scrollbar-thumb { background: #a259ff; border-radius: 8px; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col text-white">
+  <main class="flex flex-1 w-full h-screen max-h-screen">
+    <!-- Список чатов -->
+    <aside class="w-80 bg-[#1a1a1a] border-r border-[#232323] flex flex-col overflow-y-auto">
+      <div class="p-6 pb-2 text-2xl font-bold text-orange-400">Чаты</div>
+      <div id="chat-list" class="flex-1 flex flex-col gap-2 p-2 pr-0 overflow-y-auto">
+        <!-- Мок-чаты -->
+        <div class="chat-card selected flex items-center justify-between px-4 py-3 mb-1" onclick="selectChat(0)">
+          <div>
+            <div class="font-semibold">user123@mail.com</div>
+            <div class="text-sm text-gray-400 truncate max-w-[140px]">Здравствуйте, у меня не работает VPN...</div>
+          </div>
+          <div class="flex flex-col items-end">
+            <span class="text-xs text-gray-400">12:41</span>
+            <span class="badge">1</span>
+          </div>
+        </div>
+        <div class="chat-card flex items-center justify-between px-4 py-3 mb-1" onclick="selectChat(1)">
+          <div>
+            <div class="font-semibold">id_456789</div>
+            <div class="text-sm text-gray-400 truncate max-w-[140px]">Спасибо, всё заработало!</div>
+          </div>
+          <div class="flex flex-col items-end">
+            <span class="text-xs text-gray-400">11:22</span>
+          </div>
+        </div>
+        <div class="chat-card flex items-center justify-between px-4 py-3 mb-1" onclick="selectChat(2)">
+          <div>
+            <div class="font-semibold">user777@proton.me</div>
+            <div class="text-sm text-gray-400 truncate max-w-[140px]">А когда будет акция?</div>
+          </div>
+          <div class="flex flex-col items-end">
+            <span class="text-xs text-gray-400">10:05</span>
+            <span class="badge">2</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+    <!-- Окно чата -->
+    <section class="flex-1 flex flex-col h-full">
+      <!-- Инфо о пользователе -->
+      <div class="flex items-center gap-6 px-8 py-6 border-b border-[#232323] bg-[#232323]">
+        <div class="bg-[#181818] rounded-full p-4 flex items-center justify-center shadow-lg">
+          <svg class="w-10 h-10 text-orange-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 15c1.333-1 2.667-1 4 0"/><circle cx="9" cy="10" r="1"/><circle cx="15" cy="10" r="1"/></svg>
+        </div>
+        <div>
+          <div class="text-lg font-bold">user123@mail.com</div>
+          <div class="text-sm text-gray-400">IP: 185.23.44.11 • Россия • Windows 10 • Chrome</div>
+        </div>
+      </div>
+      <!-- Переписка -->
+      <div id="chat-messages" class="flex-1 flex flex-col gap-1 px-8 py-6 overflow-y-auto" style="background:#1a1a1a;">
+        <div class="msg-bubble msg-user">Здравствуйте, у меня не работает VPN</div>
+        <div class="msg-time">12:41</div>
+        <div class="msg-bubble msg-admin">Добрый день! Опишите, пожалуйста, подробнее проблему.</div>
+        <div class="msg-time" style="text-align:right;">12:42</div>
+        <div class="msg-bubble msg-user">Я оплатил, но не получил ссылку</div>
+        <div class="msg-time">12:43</div>
+      </div>
+      <!-- Быстрые шаблоны и поле ввода -->
+      <div class="px-8 py-5 bg-[#232323] border-t border-[#232323] flex flex-col gap-3">
+        <div class="flex flex-wrap gap-2 mb-2">
+          <button class="template-btn" onclick="insertTemplate('Проверьте, пожалуйста, почту — ссылка отправлена!')">Проверьте, пожалуйста, почту — ссылка отправлена!</button>
+          <button class="template-btn" onclick="insertTemplate('VPN уже должен работать, попробуйте ещё раз.')">VPN уже должен работать, попробуйте ещё раз.</button>
+          <button class="template-btn" onclick="insertTemplate('Если не помогло — напишите, мы решим!')">Если не помогло — напишите, мы решим!</button>
+        </div>
+        <div class="flex gap-3">
+          <input id="msg-input" type="text" class="flex-1 rounded-xl px-4 py-3 bg-[#181818] text-white border border-[#333] focus:outline-none focus:border-orange-400" placeholder="Введите сообщение..."/>
+          <button onclick="sendMessage()" class="bg-gradient-to-r from-orange-500 to-purple-500 text-white font-bold px-7 py-3 rounded-xl shadow hover:scale-105 transition-transform">Отправить</button>
+        </div>
+      </div>
+    </section>
+  </main>
+  <script>
+    // Мок-данные для чатов
+    const chats = [
+      {
+        user: 'user123@mail.com',
+        info: 'IP: 185.23.44.11 • Россия • Windows 10 • Chrome',
+        messages: [
+          { from: 'user', text: 'Здравствуйте, у меня не работает VPN', time: '12:41' },
+          { from: 'admin', text: 'Добрый день! Опишите, пожалуйста, подробнее проблему.', time: '12:42' },
+          { from: 'user', text: 'Я оплатил, но не получил ссылку', time: '12:43' },
+        ],
+        unread: 1
+      },
+      {
+        user: 'id_456789',
+        info: 'IP: 91.12.33.22 • Казахстан • Android • Firefox',
+        messages: [
+          { from: 'user', text: 'Спасибо, всё заработало!', time: '11:22' },
+        ],
+        unread: 0
+      },
+      {
+        user: 'user777@proton.me',
+        info: 'IP: 77.88.55.44 • Беларусь • iOS • Safari',
+        messages: [
+          { from: 'user', text: 'А когда будет акция?', time: '10:05' },
+        ],
+        unread: 2
+      },
+    ];
+    let selected = 0;
+    function selectChat(idx) {
+      selected = idx;
+      renderChat();
+      chats[idx].unread = 0;
+      updateSupportCount();
+      // Обновляем бейджи
+      document.querySelectorAll('.chat-card .badge').forEach((el, i) => {
+        if (chats[i] && chats[i].unread > 0) el.textContent = chats[i].unread;
+        else el.remove();
+      });
+    }
+    function renderChat() {
+      // Инфо о пользователе
+      document.querySelector('.text-lg.font-bold').textContent = chats[selected].user;
+      document.querySelector('.text-sm.text-gray-400').textContent = chats[selected].info;
+      // Сообщения
+      const msgBox = document.getElementById('chat-messages');
+      msgBox.innerHTML = '';
+      chats[selected].messages.forEach(m => {
+        const div = document.createElement('div');
+        div.className = 'msg-bubble ' + (m.from === 'admin' ? 'msg-admin' : 'msg-user');
+        div.textContent = m.text;
+        msgBox.appendChild(div);
+        const time = document.createElement('div');
+        time.className = 'msg-time';
+        time.style.textAlign = m.from === 'admin' ? 'right' : 'left';
+        time.textContent = m.time;
+        msgBox.appendChild(time);
+      });
+      msgBox.scrollTop = msgBox.scrollHeight;
+    }
+    function updateSupportCount() {
+      const count = chats.reduce((acc, c) => acc + (c.unread || 0), 0);
+      localStorage.setItem('supportCount', count);
+    }
+    window.addEventListener('storage', updateSupportCount);
+    setInterval(updateSupportCount, 5000);
+    document.addEventListener('DOMContentLoaded', updateSupportCount);
+    function sendMessage() {
+      const input = document.getElementById('msg-input');
+      const text = input.value.trim();
+      if (!text) return;
+      chats[selected].messages.push({ from: 'admin', text, time: new Date().toLocaleTimeString().slice(0,5) });
+      chats[selected].unread = 0;
+      input.value = '';
+      renderChat();
+      updateSupportCount();
+    }
+    function insertTemplate(text) {
+      document.getElementById('msg-input').value = text;
+    }
+    // Инициализация
+    renderChat();
+  </script>
+</body>
+</html> 

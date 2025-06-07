@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BazaraVPN — Контакты</title>
+  <meta name="description" content="Контакты BazaraVPN — поддержка, Telegram, почта, соцсети.">
+  <link rel="icon" href="/favicon.ico">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    html, body { background: #181818 !important; color: #fff; min-height: 100vh; }
+    .contact-card{background:#232323;border-radius:1.5rem;box-shadow:0 4px 24px #0003;padding:2.5rem 2rem;margin:2rem auto;max-width:480px;text-align:center;}
+    .contact-icon{width:3rem;height:3rem;margin-bottom:1rem;display:inline-block;}
+    .contact-link{color:#ff8800;font-weight:600;font-size:1.15rem;word-break:break-all;}
+    .contact-link:hover{color:#a259ff;text-decoration:underline;}
+    .contact-title{font-size:2.2rem;font-weight:900;margin-bottom:2rem;text-align:center;background:linear-gradient(90deg,#ff8800 0%,#a259ff 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .contact-desc{color:#ccc;margin-bottom:2.5rem;font-size:1.1rem;}
+    #lang-dropdown { top: 100% !important; bottom: auto !important; margin-top: 0.5rem !important; margin-bottom: 0 !important; z-index: 1050 !important; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col text-white">
+  <!-- HEADER -->
+  <nav class="fixed top-0 left-0 w-full z-20 bg-[#181818] shadow-sm border-b border-orange-900" id="main-navbar">
+    <div class="max-w-6xl mx-auto flex items-center justify-between py-4 px-4 md:px-8 text-lg gap-8">
+      <div class="flex items-center gap-3 logo-home cursor-pointer flex-shrink-0">
+        <a href="index.html" class="flex items-center gap-3">
+          <img src="/assets/logo-bazara.png" alt="BazaraVPN Logo" class="h-10 w-10">
+          <span class="text-3xl font-bold text-orange-500">Bazara<span class="text-white">VPN</span></span>
+        </a>
+      </div>
+      <div class="flex-1 flex justify-center">
+        <ul class="flex items-center gap-8 font-semibold">
+          <li class="relative group" id="advantages-menu">
+            <a href="index.html#advantages" class="text-white hover:text-orange-500 transition flex items-center gap-1 py-2 px-2 rounded-lg" data-i18n="header-advantages">
+              Преимущества
+              <svg class="w-5 h-5 text-orange-400 group-hover:rotate-180 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+            </a>
+            <!-- MegaMenu ... (опущено для краткости, как в support.html) -->
+          </li>
+          <li><a href="tariffs.html" class="text-white hover:text-orange-500 transition py-2 px-2 rounded-lg" data-i18n="header-tariffs">Тарифы</a></li>
+          <li><a href="/download" class="px-4 py-2 hover:bg-[#181818] cursor-pointer" data-i18n="header-download">Скачать</a></li>
+        </ul>
+      </div>
+      <div class="flex items-center gap-6 flex-shrink-0">
+        <a href="support.html" class="flex items-center gap-2 text-orange-500 font-bold py-2 px-3 rounded-lg border border-orange-500 bg-[#232323]" data-i18n="header-support">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <span class="hidden md:inline">Поддержка</span>
+        </a>
+        <div id="lang-switcher" class="relative flex items-center gap-2 select-none">
+          <button id="lang-dropdown-btn" class="flex items-center gap-2 px-3 py-2 bg-[#232323] rounded-lg border border-gray-700 text-white hover:bg-[#2c2c2c] focus:outline-none text-base">
+            <svg class="w-6 h-6 text-gray-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 0 20M12 2a15.3 15.3 0 0 0 0 20"/></svg>
+            <span id="lang-current" class="font-semibold">Русский</span>
+            <svg class="w-5 h-5 ml-1 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div id="lang-dropdown" class="hidden absolute right-0 mt-2 w-40 bg-[#232323] border border-gray-700 rounded-lg shadow-lg py-1 z-50">
+            <button type="button" class="w-full text-left px-5 py-3 text-base hover:bg-[#181818] text-white flex items-center gap-2" data-lang="ru">Русский</button>
+            <button type="button" class="w-full text-left px-5 py-3 text-base hover:bg-[#181818] text-white flex items-center gap-2" data-lang="en">English</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <main class="flex-1 flex flex-col pt-28 items-center w-full">
+    <img src="assets/telephon.png" alt="Телефон" class="w-72 h-72 mx-auto mb-8 select-none pointer-events-none" draggable="false">
+    <div class="text-lg md:text-xl text-[#A0A0A0] mb-12 text-center max-w-2xl font-medium" data-i18n="contacts-question">
+      Возникли вопросы, нужна помощь или совет?<br>Напишите нам — наш саппорт всегда готов помочь!
+    </div>
+    <div class="flex flex-col md:flex-row gap-10 w-full max-w-5xl justify-center items-stretch mb-12 px-2">
+      <div class="flex-1 bg-[#232323] rounded-2xl shadow-xl flex flex-col items-center py-12 px-6 min-w-[240px]">
+        <img src="assets/mail-3d.png" alt="Почта" class="w-32 h-32 mb-5 select-none pointer-events-none" draggable="false">
+        <div class="font-bold text-2xl mb-2 text-center" data-i18n="contacts-mail">Эл. почта</div>
+        <div class="text-base text-[#ff8800] font-semibold mb-1 text-center">support@bazara.ru</div>
+      </div>
+      <div class="flex-1 bg-[#232323] rounded-2xl shadow-xl flex flex-col items-center py-12 px-6 min-w-[240px]">
+        <img src="assets/telegram.png" alt="Telegram" class="w-32 h-32 mb-5 select-none pointer-events-none" draggable="false">
+        <div class="font-bold text-2xl mb-2 text-center" data-i18n="contacts-tg">Телеграм</div>
+        <div class="text-base text-[#ff8800] font-semibold mb-1 text-center">@bazaravpn</div>
+      </div>
+      <div class="flex-1 bg-[#232323] rounded-2xl shadow-xl flex flex-col items-center py-12 px-6 min-w-[240px]">
+        <img src="assets/ofis.png" alt="Офис" class="w-32 h-32 mb-5 select-none pointer-events-none" draggable="false">
+        <div class="font-bold text-2xl mb-2 text-center" data-i18n="contacts-office">Офис</div>
+        <div class="text-base text-[#ff8800] font-semibold mb-1 text-center" data-i18n="contacts-office-addr">Мы в облаке. Наш офис — это защищённые сервера и стабильный онлайн.</div>
+      </div>
+    </div>
+    <button class="mt-2 w-full max-w-xs py-4 rounded-2xl font-bold text-lg text-white shadow-lg transition-all duration-200 bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700 mb-10" data-i18n="contacts-btn" onclick="openSupportChatModal()">Связаться</button>
+  </main>
+  <!-- FOOTER -->
+  <footer class="w-full bg-[#232323] border-t border-[#333] py-6 px-4 flex flex-col md:flex-row items-center justify-center gap-6 md:gap-10 text-gray-200 text-base mt-auto text-center">
+    <a href="contacts.html" class="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-[#181818] transition text-lg font-semibold">
+      <img src="assets/mail-3d.png" alt="Контакты" class="w-7 h-7" style="object-fit:contain;">
+      <span data-i18n="footer-contacts">Контакты</span>
+    </a>
+    <a href="privacy.html" class="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-[#181818] transition text-lg font-semibold">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8 8h8v8H8z"/></svg>
+      <span data-i18n="footer-privacy">Политика</span>
+    </a>
+    <div class="text-center text-lg font-medium" data-i18n="footer-copyright">© 2024 BazaraVPN</div>
+    <div class="flex items-center gap-5">
+      <a href="https://t.me/bazaraVPN" class="hover:text-orange-400" aria-label="Telegram" target="_blank" rel="noopener"><svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 4L12 20l-3-7-7-3z"/></svg></a>
+      <a href="https://www.instagram.com/bazaravpn/" class="hover:text-orange-400" aria-label="Instagram" target="_blank" rel="noopener"><svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="6"/><circle cx="12" cy="12" r="5"/><circle cx="17" cy="7" r="1.5"/></svg></a>
+      <a href="https://www.youtube.com/@BazaraVPN" class="hover:text-orange-400" aria-label="YouTube" target="_blank" rel="noopener"><svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="4"/><polygon points="10,9 16,12 10,15" fill="currentColor"/></svg></a>
+      <a href="https://www.tiktok.com/@bazaravpn1?lang=ru-RU" class="hover:text-orange-400" aria-label="TikTok" target="_blank" rel="noopener"><svg class="w-7 h-7" viewBox="0 0 24 24" fill="none"><path d="M16.5 3a4.5 4.5 0 0 0 4.5 4.5v2A6.5 6.5 0 0 1 14.5 3h2zm-2 0v12.5a3.5 3.5 0 1 1-3.5-3.5h1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    </div>
+  </footer>
+  <!-- МОДАЛКА ОПЛАТЫ -->
+  <div id="payment-modal-bg" class="fixed inset-0 z-50 bg-black bg-opacity-70 flex items-center justify-center hidden transition-all duration-300">
+    <div class="bg-gradient-to-br from-[#232323] via-[#181818] to-[#2d1a00] rounded-3xl shadow-2xl p-0 max-w-md w-full relative animate-fade-in flex flex-col border-4 border-orange-500/30" id="payment-modal" style="box-shadow:0 8px 48px 0 #ff880022,0 2px 0 #a259ff;">
+      <button id="close-payment-modal" class="absolute top-3 right-3 text-gray-400 hover:text-orange-400 text-3xl font-bold transition-all">&times;</button>
+      <div class="flex flex-col items-center gap-3 px-8 pt-8 pb-2">
+        <img src="assets/pay-3d.png" alt="pay" class="w-16 h-16 mb-2 select-none pointer-events-none" draggable="false">
+        <div class="text-2xl font-bold mb-4 text-center">Оплата подписки</div>
+        <div class="w-full flex flex-col gap-4 mb-4">
+          <button id="pay-sbp" class="w-full py-4 rounded-xl font-bold text-lg text-white bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700 transition-all">СБП</button>
+          <button id="pay-card" class="w-full py-4 rounded-xl font-bold text-lg text-white bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700 transition-all">Добавить карту</button>
+          <button id="pay-crypto" class="w-full py-4 rounded-xl font-bold text-lg text-white bg-gradient-to-r from-gray-600 to-gray-800 hover:from-gray-700 hover:to-gray-900 transition-all">Крипта</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const translations = {
+        ru: {
+          'header-advantages': 'Преимущества',
+          'header-tariffs': 'Тарифы',
+          'header-download': 'Скачать',
+          'header-support': 'Поддержка',
+          'footer-contacts': 'Контакты',
+          'footer-privacy': 'Политика',
+          'footer-copyright': '© 2024 BazaraVPN',
+          'contacts-question': 'Возникли вопросы, нужна помощь или совет?<br>Напишите нам — наш саппорт всегда готов помочь!',
+          'contacts-mail': 'Эл. почта',
+          'contacts-tg': 'Телеграм',
+          'contacts-office': 'Офис',
+          'contacts-office-addr': 'Мы в облаке. Наш офис — это защищённые сервера и стабильный онлайн.',
+          'contacts-btn': 'Связаться',
+        },
+        en: {
+          'header-advantages': 'Advantages',
+          'header-tariffs': 'Tariffs',
+          'header-download': 'Download',
+          'header-support': 'Support',
+          'footer-contacts': 'Contacts',
+          'footer-privacy': 'Privacy',
+          'footer-copyright': '© 2024 BazaraVPN',
+          'contacts-question': 'Have questions, need help or advice?<br>Write to us — our support is always ready to help!',
+          'contacts-mail': 'Email',
+          'contacts-tg': 'Telegram',
+          'contacts-office': 'Office',
+          'contacts-office-addr': 'We are in the cloud. Our office is secure servers and stable online presence.',
+          'contacts-btn': 'Contact us',
+        }
+      };
+      const langBtn = document.getElementById('lang-dropdown-btn');
+      const langDropdown = document.getElementById('lang-dropdown');
+      const langCurrent = document.getElementById('lang-current');
+      const langSwitcher = document.getElementById('lang-switcher');
+      function setLang(lang) {
+        localStorage.setItem('lang', lang);
+        if (langCurrent) langCurrent.textContent = lang === 'ru' ? 'Русский' : 'English';
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+          const key = el.getAttribute('data-i18n');
+          if (translations[lang][key]) {
+            if (/<[a-z][\s\S]*>/i.test(translations[lang][key])) {
+              el.innerHTML = translations[lang][key];
+            } else {
+              el.textContent = translations[lang][key];
+            }
+          }
+        });
+      }
+      let lang = localStorage.getItem('lang') || 'ru';
+      setLang(lang);
+      if (langBtn && langDropdown) {
+        langBtn.onclick = function(e) {
+          e.stopPropagation();
+          langDropdown.classList.toggle('hidden');
+        };
+        langDropdown.querySelectorAll('[data-lang]').forEach(btn => {
+          btn.onclick = function(e) {
+            e.stopPropagation();
+            setLang(this.getAttribute('data-lang'));
+            langDropdown.classList.add('hidden');
+          };
+        });
+        document.addEventListener('click', function(e) {
+          if (langDropdown && langSwitcher && !langSwitcher.contains(e.target)) {
+            langDropdown.classList.add('hidden');
+          }
+        });
+      }
+      // Wata.pro API KEY
+      const API_KEY = "sk_test_xxx";
+      // Открытие/закрытие модалки оплаты
+      function openPaymentModal() {
+        document.getElementById('payment-modal-bg').classList.remove('hidden');
+      }
+      function closePaymentModal() {
+        document.getElementById('payment-modal-bg').classList.add('hidden');
+      }
+      // Кнопка оплаты (пример: можно повесить на любую кнопку)
+      // document.getElementById('some-pay-btn').onclick = openPaymentModal;
+      document.getElementById('close-payment-modal').onclick = closePaymentModal;
+      // Оплата через СБП
+      document.getElementById('pay-sbp').onclick = async function() {
+        await createInvoice('sbp');
+      };
+      // Оплата через карту
+      document.getElementById('pay-card').onclick = async function() {
+        await createInvoice('card');
+      };
+      // Крипта (заглушка)
+      document.getElementById('pay-crypto').onclick = function() {
+        alert('Скоро будет доступно!');
+      };
+    });
+    async function createInvoice(method) {
+      try {
+        const resp = await fetch('https://wata.pro/api/v1/invoice/create', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + API_KEY
+          },
+          body: JSON.stringify({
+            amount: 2290,
+            method: method,
+            order_id: 'bazara_001',
+            description: 'Подписка BazaraVPN'
+          })
+        });
+        const data = await resp.json();
+        if (data && data.invoice_url) {
+          window.open(data.invoice_url, '_blank');
+        } else {
+          alert('Ошибка при создании счёта!');
+        }
+      } catch (e) {
+        alert('Ошибка соединения!');
+      }
+    }
+  </script>
+</body>
+</html> 

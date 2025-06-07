@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Отзывы пользователей — BazaraVPN</title>
+  <meta name="description" content="Отзывы реальных пользователей BazaraVPN. Честные мнения, фильтры, поиск, сортировка.">
+  <link rel="icon" href="/favicon.ico">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/globals.css">
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <style>
+    body { background: #181818; min-height: 100vh; }
+    .review-card {
+      background: #232323;
+      border-radius: 1.2rem;
+      box-shadow: 0 2px 16px 0 #a259ff44;
+      padding: 1.5rem 2rem;
+      margin-bottom: 1.5rem;
+      transition: box-shadow 0.18s, transform 0.15s;
+      border: 2px solid transparent;
+    }
+    .review-card:hover {
+      box-shadow: 0 8px 32px 0 #a259ffcc, 0 2px 8px 0 #ff880088;
+      border-color: #a259ff;
+      transform: translateY(-2px) scale(1.01);
+    }
+    .badge {
+      background: #ff8800;
+      color: #fff;
+      font-weight: bold;
+      border-radius: 9999px;
+      padding: 0.2em 0.8em;
+      font-size: 1.1rem;
+      min-width: 2em;
+      text-align: center;
+      margin-left: 0.7em;
+    }
+    .stars {
+      display: inline-block;
+      font-size: 1.3em;
+      color: #ffbb00;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.2em;
+    }
+    .sort-btn {
+      background: #232323;
+      color: #a259ff;
+      border: 1.5px solid #a259ff;
+      border-radius: 0.7em;
+      padding: 0.4em 1.2em;
+      margin-right: 0.7em;
+      margin-bottom: 0.5em;
+      cursor: pointer;
+      font-size: 1em;
+      font-weight: 500;
+      transition: background 0.15s, color 0.15s;
+    }
+    .sort-btn.active, .sort-btn:hover {
+      background: #a259ff;
+      color: #fff;
+    }
+    .sort-btn:last-child { margin-right: 0; }
+    .orange-check {
+      display: inline-block;
+      width: 22px;
+      height: 22px;
+      vertical-align: middle;
+      margin-left: 6px;
+    }
+    @media (max-width: 700px) {
+      .review-card { padding: 1.1rem 0.7rem; }
+    }
+    .star-filter-btn {
+      background: none;
+      border: none;
+      padding: 0;
+      margin: 0 2px;
+      cursor: pointer;
+      transition: transform 0.12s;
+    }
+    .star-filter-btn:focus { outline: none; }
+    .star-icon { transition: fill 0.18s, color 0.18s; }
+    .star-filter-btn.selected .star-icon,
+    .star-filter-btn.active .star-icon {
+      fill: #ff8800 !important;
+      color: #ff8800 !important;
+    }
+    .star-filter-btn:hover .star-icon {
+      fill: #ff8800 !important;
+      color: #ff8800 !important;
+      transform: scale(1.12);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col bg-[#181818] text-gray-100" id="main-body">
+  <!-- HEADER (универсальный) -->
+  <nav class="fixed top-0 left-0 w-full z-20 bg-[#181818] shadow-sm border-b border-orange-900" id="main-navbar">
+    <div class="max-w-6xl mx-auto flex items-center justify-between py-4 px-4 md:px-8 text-lg gap-8">
+      <!-- Логотип -->
+      <div class="flex items-center gap-3 logo-home cursor-pointer flex-shrink-0">
+        <a href="index.html" class="flex items-center gap-3">
+          <img src="/assets/logo-bazara.png" alt="BazaraVPN Logo" class="h-10 w-10">
+          <span class="text-3xl font-bold text-orange-500">Bazara<span class="text-white">VPN</span></span>
+        </a>
+      </div>
+      <!-- Десктоп-меню -->
+      <div class="hidden md:flex flex-1 justify-center">
+        <ul class="flex items-center gap-8 font-semibold">
+          <li><a href="index.html#advantages" class="text-white hover:text-orange-500 transition flex items-center gap-1 py-2 px-2 rounded-lg" data-i18n="header-advantages">Преимущества</a></li>
+          <li><a href="tariffs.html" class="text-white hover:text-orange-500 transition py-2 px-2 rounded-lg" data-i18n="header-tariffs">Тарифы</a></li>
+          <li><a href="index.html#download" class="text-white hover:text-orange-500 transition flex items-center gap-1 py-2 px-2 rounded-lg" data-i18n="header-download">Скачать</a></li>
+        </ul>
+      </div>
+      <!-- Десктоп поддержка и язык -->
+      <div class="hidden md:flex items-center gap-6 flex-shrink-0">
+        <a href="support.html" class="flex items-center gap-2 text-orange-500 font-bold py-2 px-3 rounded-lg border border-orange-500 bg-[#232323]" data-i18n="header-support">Поддержка</a>
+      </div>
+      <!-- Мобильный бургер -->
+      <button class="block md:hidden p-2 rounded-lg hover:bg-[#232323] focus:outline-none" id="burger-btn" aria-label="Открыть меню">
+        <svg class="w-8 h-8 text-orange-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+    </div>
+    <!-- Мобильное меню -->
+    <div id="mobile-menu" class="fixed inset-0 bg-[#181818] bg-opacity-95 z-50 flex-col items-center justify-center gap-8 hidden md:hidden">
+      <button class="absolute top-6 right-6 p-2 rounded-lg hover:bg-[#232323]" id="close-mobile-menu" aria-label="Закрыть меню">
+        <svg class="w-8 h-8 text-orange-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+      <ul class="flex flex-col gap-8 text-2xl font-bold mt-24">
+        <li><a href="index.html#advantages" class="hover:text-orange-400" data-i18n="header-advantages">Преимущества</a></li>
+        <li><a href="tariffs.html" class="hover:text-orange-400" data-i18n="header-tariffs">Тарифы</a></li>
+        <li><a href="index.html#download" class="hover:text-orange-400" data-i18n="header-download">Скачать</a></li>
+        <li><a href="support.html" class="hover:text-orange-400" data-i18n="header-support">Поддержка</a></li>
+      </ul>
+    </div>
+  </nav>
+  <!-- HERO-REVIEWS TOP BLOCK -->
+  <section class="w-full bg-[#181818] pt-24 pb-10 px-4 border-b border-[#232323]">
+    <div class="max-w-6xl mx-auto flex flex-col items-center gap-6">
+      <div class="flex flex-col items-center gap-2">
+        <img src="/assets/logo-bazara.png" alt="BazaraVPN Logo" class="h-16 w-16 md:h-20 md:w-20 mx-auto">
+        <div class="flex items-center gap-2 mt-2">
+          <span class="text-3xl md:text-4xl font-extrabold text-white">BazaraVPN</span>
+        </div>
+        <div class="text-lg md:text-xl text-orange-400 font-semibold mt-1">Безопасность. Доступ. Контроль.</div>
+        <button id="open-review-modal" class="mt-4 bg-gradient-to-r from-orange-500 to-purple-500 hover:from-orange-600 hover:to-purple-600 text-white font-bold py-3 px-12 rounded-xl shadow-lg text-lg w-full max-w-xs mx-auto transition-all duration-200">Оставить отзыв</button>
+      </div>
+      <div class="flex flex-col items-center gap-2 mt-6 w-full">
+        <div class="flex items-center gap-4 justify-center">
+          <div id="star-filter" class="flex gap-1">
+            <button class="star-filter-btn" data-rating="1" aria-label="1 звезда"><svg class="w-7 h-7 star-icon" fill="#444" viewBox="0 0 20 20"><polygon points="10,1 12.59,7.36 19.51,7.64 14,12.14 15.82,19.02 10,15.27 4.18,19.02 6,12.14 0.49,7.64 7.41,7.36"/></svg></button>
+            <button class="star-filter-btn" data-rating="2" aria-label="2 звезды"><svg class="w-7 h-7 star-icon" fill="#444" viewBox="0 0 20 20"><polygon points="10,1 12.59,7.36 19.51,7.64 14,12.14 15.82,19.02 10,15.27 4.18,19.02 6,12.14 0.49,7.64 7.41,7.36"/></svg></button>
+            <button class="star-filter-btn" data-rating="3" aria-label="3 звезды"><svg class="w-7 h-7 star-icon" fill="#444" viewBox="0 0 20 20"><polygon points="10,1 12.59,7.36 19.51,7.64 14,12.14 15.82,19.02 10,15.27 4.18,19.02 6,12.14 0.49,7.64 7.41,7.36"/></svg></button>
+            <button class="star-filter-btn" data-rating="4" aria-label="4 звезды"><svg class="w-7 h-7 star-icon" fill="#444" viewBox="0 0 20 20"><polygon points="10,1 12.59,7.36 19.51,7.64 14,12.14 15.82,19.02 10,15.27 4.18,19.02 6,12.14 0.49,7.64 7.41,7.36"/></svg></button>
+            <button class="star-filter-btn" data-rating="5" aria-label="5 звёзд"><svg class="w-7 h-7 star-icon" fill="#444" viewBox="0 0 20 20"><polygon points="10,1 12.59,7.36 19.51,7.64 14,12.14 15.82,19.02 10,15.27 4.18,19.02 6,12.14 0.49,7.64 7.41,7.36"/></svg></button>
+          </div>
+          <input id="search" type="text" placeholder="Поиск по тексту..." class="ml-4 px-3 py-2 rounded bg-zinc-800 text-white border border-zinc-700 focus:outline-none focus:ring-2 focus:ring-orange-400">
+          <div class="relative ml-4">
+            <button id="sort-btn" class="sort-btn bg-[#232323] text-white font-bold px-6 py-2 rounded-xl flex items-center">Сначала новые <svg class="w-4 h-4 ml-1 inline" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>
+            <div id="sort-modal" class="hidden absolute right-0 mt-2 w-56 bg-[#232323] border border-zinc-700 rounded-xl shadow-lg z-50">
+              <div class="p-4">
+                <div class="font-bold text-lg text-white mb-3">Сортировка</div>
+                <button class="sort-modal-option w-full text-left py-2 px-3 rounded-lg text-base font-medium text-white hover:bg-[#181818] transition mb-1" data-sort="new">Сначала новые <span class="float-right">✔</span></button>
+                <button class="sort-modal-option w-full text-left py-2 px-3 rounded-lg text-base font-medium text-white hover:bg-[#181818] transition mb-1" data-sort="old">Сначала старые</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="text-gray-400 text-base mt-4 flex items-center justify-center gap-2">
+          <span id="reviews-count" class="inline-block bg-[#232323] text-orange-400 font-bold rounded-full px-4 py-1 text-lg"></span>
+        </div>
+      </div>
+    </div>
+  </section>
+  <main class="w-full max-w-5xl mx-auto flex flex-col gap-6 py-10 px-4" style="min-height:60vh;">
+    <div id="reviews-list" class="grid grid-cols-1 md:grid-cols-2 gap-8"></div>
+  </main>
+  <!-- FOOTER (универсальный) -->
+  <footer class="w-full bg-[#232323] border-t border-[#333] py-6 px-4 flex flex-col md:flex-row items-center justify-center md:justify-between gap-6 md:gap-12 text-gray-200 text-base mt-auto text-center md:text-left">
+    <div class="flex flex-col md:flex-row items-center gap-4 md:gap-12 w-full justify-center md:justify-start">
+      <a href="contacts.html" class="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-[#181818] transition text-lg font-semibold">
+        <img src="assets/mail-3d.png" alt="Контакты" class="w-7 h-7" style="object-fit:contain;">
+        <span data-i18n="footer-contacts">Контакты</span>
+      </a>
+      <a href="privacy.html" class="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-[#181818] transition text-lg font-semibold">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8 8h8v8H8z"/></svg>
+        <span data-i18n="footer-privacy">Политика</span>
+      </a>
+    </div>
+    <div class="text-center text-lg font-medium w-full md:w-auto" data-i18n="footer-copyright">© 2024 BazaraVPN</div>
+    <div class="flex items-center justify-center gap-5 w-full md:w-auto mt-4 md:mt-0">
+      <a href="https://t.me/bazaraVPN" class="hover:text-orange-400" aria-label="Telegram" target="_blank" rel="noopener"><svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 4L12 20l-3-7-7-3z"/></svg></a>
+      <a href="https://www.instagram.com/bazaravpn/" class="hover:text-orange-400" aria-label="Instagram" target="_blank" rel="noopener"><svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="6"/><circle cx="12" cy="12" r="5"/><circle cx="17" cy="7" r="1.5"/></svg></a>
+      <a href="https://www.youtube.com/@BazaraVPN" class="hover:text-orange-400" aria-label="YouTube" target="_blank" rel="noopener"><svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="4"/><polygon points="10,9 16,12 10,15" fill="currentColor"/></svg></a>
+      <a href="https://www.tiktok.com/@bazaravpn1?lang=ru-RU" class="hover:text-orange-400" aria-label="TikTok" target="_blank" rel="noopener"><svg class="w-7 h-7" viewBox="0 0 24 24" fill="none"><path d="M16.5 3a4.5 4.5 0 0 0 4.5 4.5v2A6.5 6.5 0 0 1 14.5 3h2zm-2 0v12.5a3.5 3.5 0 1 1-3.5-3.5h1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    </div>
+  </footer>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyAouTEXN2lQapElxCEtmebO21t19i2WYns",
+      authDomain: "bazara-vpn-admin.firebaseapp.com",
+      projectId: "bazara-vpn-admin",
+      storageBucket: "bazara-vpn-admin.appspot.com",
+      messagingSenderId: "856281360473",
+      appId: "1:856281360473:web:1b01584e7830672dcb2948"
+    };
+    firebase.initializeApp(firebaseConfig);
+  </script>
+  <script>
+  let allReviews = [];
+  let sort = 'new';
+  let filterRating = '';
+  function renderReviews() {
+    const list = document.getElementById('reviews-list');
+    const count = document.getElementById('reviews-count');
+    let filtered = allReviews;
+    const search = document.getElementById('search').value.trim().toLowerCase();
+    if (filterRating) filtered = filtered.filter(r => r.rating == filterRating);
+    if (search) filtered = filtered.filter(r => r.text.toLowerCase().includes(search) || r.name.toLowerCase().includes(search));
+    if (sort === 'new') filtered = filtered.slice().sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+    else filtered = filtered.slice().sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));
+    count.textContent = filtered.length;
+    const avatars = [
+      '/assets/avatar1.png',
+      '/assets/avatar2.png',
+      '/assets/avatar3.png'
+    ];
+    if (!filtered.length) {
+      list.innerHTML = '<div class="text-gray-400 text-center py-12">Нет отзывов по выбранным фильтрам</div>';
+      return;
+    }
+    list.innerHTML = filtered.map(r => {
+      const avatar = avatars[Math.floor(Math.random() * avatars.length)];
+      return `
+        <div class="review-card flex flex-col gap-3">
+          <div class="flex items-center gap-4 mb-1">
+            <img src="${avatar}" class="w-12 h-12 rounded-full shadow" alt="avatar">
+            <div class="font-bold text-lg text-orange-400 flex-1">${r.name}</div>
+            <div class="stars">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</div>
+          </div>
+          <div class="text-base mb-2 text-gray-200">${r.text}</div>
+          <div class="text-xs text-gray-400 mt-1">${r.createdAt ? new Date(r.createdAt).toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit' }) : ''}</div>
+        </div>
+      `;
+    }).join('');
+  }
+  document.getElementById('search').oninput = renderReviews;
+  // --- Фильтр по звёздам ---
+  const starBtns = document.querySelectorAll('.star-filter-btn');
+  starBtns.forEach((btn, idx) => {
+    btn.onclick = function() {
+      if (btn.classList.contains('active')) {
+        // Сброс фильтра при повторном клике
+        starBtns.forEach(b => b.classList.remove('active', 'selected'));
+        filterRating = '';
+        renderReviews();
+        return;
+      }
+      starBtns.forEach(b => b.classList.remove('active', 'selected'));
+      for (let i = 0; i <= idx; i++) starBtns[i].classList.add('selected');
+      btn.classList.add('active');
+      filterRating = btn.getAttribute('data-rating');
+      renderReviews();
+    };
+    btn.onmouseenter = function() {
+      starBtns.forEach((b, i) => {
+        if (i <= idx) b.querySelector('.star-icon').style.fill = '#ff8800';
+        else b.querySelector('.star-icon').style.fill = '#444';
+      });
+    };
+    btn.onmouseleave = function() {
+      starBtns.forEach((b, i) => {
+        if (b.classList.contains('selected') || b.classList.contains('active')) b.querySelector('.star-icon').style.fill = '#ff8800';
+        else b.querySelector('.star-icon').style.fill = '#444';
+      });
+    };
+  });
+  const sortBtn = document.getElementById('sort-btn');
+  const sortModal = document.getElementById('sort-modal');
+  sortBtn.onclick = function(e) {
+    e.stopPropagation();
+    sortModal.classList.toggle('hidden');
+  };
+  document.querySelectorAll('.sort-modal-option').forEach(btn => {
+    btn.onclick = function() {
+      document.querySelectorAll('.sort-modal-option').forEach(b => b.innerHTML = b.innerHTML.replace('✔',''));
+      this.innerHTML += ' <span class="float-right">✔</span>';
+      sort = this.getAttribute('data-sort');
+      // Меняем текст на кнопке сортировки
+      const sortBtnText = sort === 'new' ? 'Сначала новые' : 'Сначала старые';
+      document.getElementById('sort-btn').innerHTML = sortBtnText + ' <svg class="w-4 h-4 ml-1 inline" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>';
+      sortModal.classList.add('hidden');
+      renderReviews();
+    };
+  });
+  document.addEventListener('click', function(e) {
+    if (!sortModal.contains(e.target) && e.target !== sortBtn) {
+      sortModal.classList.add('hidden');
+    }
+  });
+  // --- Загрузка отзывов из Firestore ---
+  function fetchReviews() {
+    allReviews = [];
+    // Получаем approved и published
+    firebase.firestore().collection('reviews').where('status','in',['approved','published']).orderBy('createdAt','desc').onSnapshot(snap => {
+      allReviews = [];
+      snap.forEach(doc => {
+        const d = doc.data();
+        allReviews.push({
+          name: d.name || 'Аноним',
+          text: d.text || '',
+          rating: d.rating || 5,
+          createdAt: d.createdAt ? d.createdAt.toDate().getTime() : null
+        });
+      });
+      renderReviews();
+    });
+  }
+  fetchReviews();
+  // --- Модалка оставить отзыв (открытие) ---
+  document.getElementById('open-review-modal').onclick = function() {
+    if (document.getElementById('review-modal-bg')) {
+      document.getElementById('review-modal-bg').classList.remove('hidden');
+    }
+  };
+  // --- Модалка оставить отзыв (отправка) ---
+  if (document.getElementById('review-form')) {
+    document.getElementById('review-form').onsubmit = async function(e) {
+      e.preventDefault();
+      const name = document.getElementById('review-name').value.trim();
+      const text = document.getElementById('review-text').value.trim();
+      const rating = parseInt(document.getElementById('review-rating').value, 10);
+      if (!name || !text || !rating || rating < 1 || rating > 5) {
+        alert('Пожалуйста, заполните все поля и выберите оценку от 1 до 5 звёзд.');
+        return;
+      }
+      try {
+        await firebase.firestore().collection('reviews').add({
+          name,
+          text,
+          rating,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+          status: 'moderation'
+        });
+        document.getElementById('review-success').classList.remove('hidden');
+        this.reset();
+        setTimeout(() => {
+          document.getElementById('review-success').classList.add('hidden');
+          document.getElementById('review-modal-bg').classList.add('hidden');
+        }, 1800);
+      } catch (err) {
+        alert('Ошибка отправки отзыва. Попробуйте позже.');
+      }
+    };
+  }
+  // Бургер-меню для мобильного хедера
+  const burgerBtn = document.getElementById('burger-btn');
+  const mobileMenu = document.getElementById('mobile-menu');
+  const closeMobileMenu = document.getElementById('close-mobile-menu');
+  if (burgerBtn && mobileMenu && closeMobileMenu) {
+    burgerBtn.onclick = function() {
+      mobileMenu.classList.remove('hidden');
+    };
+    closeMobileMenu.onclick = function() {
+      mobileMenu.classList.add('hidden');
+    };
+    // Закрытие по клику вне меню
+    mobileMenu.onclick = function(e) {
+      if (e.target === mobileMenu) mobileMenu.classList.add('hidden');
+    };
+  }
+  </script>
+</body>
+</html> 

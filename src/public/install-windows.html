@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BazaraVPN — Установка для Windows</title>
+  <link rel="icon" href="favicon.ico">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    #lang-dropdown {
+      top: 100% !important;
+      bottom: auto !important;
+      margin-top: 0.5rem !important;
+      margin-bottom: 0 !important;
+      z-index: 1050 !important;
+    }
+  </style>
+</head>
+<body class="bg-[#181818] text-white min-h-screen flex flex-col">
+  <!-- HEADER -->
+  <!-- Header/Navbar (универсальный для всех страниц) -->
+  <nav class="fixed top-0 left-0 w-full z-20 bg-[#181818] shadow-sm border-b border-orange-900" id="main-navbar">
+    <div class="max-w-6xl mx-auto flex items-center justify-between py-4 px-4 md:px-8 text-lg gap-8">
+      <div class="flex items-center gap-3 logo-home cursor-pointer flex-shrink-0">
+        <a href="index.html" class="flex items-center gap-3">
+          <img src="/assets/logo-bazara.png" alt="BazaraVPN Logo" class="h-10 w-10">
+          <span class="text-3xl font-bold text-orange-500">Bazara<span class="text-white">VPN</span></span>
+        </a>
+      </div>
+      <div class="hidden md:flex flex-1 justify-center">
+        <ul class="flex items-center gap-8 font-semibold">
+          <li class="relative group" id="advantages-menu">
+            <a href="index.html#advantages" class="text-white hover:text-orange-500 transition flex items-center gap-1 py-2 px-2 rounded-lg" data-i18n="header-advantages">
+              Преимущества
+              <svg class="w-5 h-5 text-orange-400 group-hover:rotate-180 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+            </a>
+            <!-- MegaMenu -->
+            <div id="mega-advantages" class="hidden group-hover:flex group-focus-within:flex absolute left-0 top-full mt-3 w-[700px] bg-[#232323] rounded-2xl shadow-2xl p-6 z-50 text-white animate-fade-in flex gap-8">
+              <div class="flex-1 min-w-[220px] flex flex-col gap-4">
+                <div>
+                  <div class="font-bold text-lg text-orange-400 mb-1" data-i18n="header-what-vpn">Что такое VPN?</div>
+                  <div class="text-gray-200 text-sm" data-i18n="header-what-vpn-desc">VPN — это технология для анонимности, безопасности и обхода блокировок в интернете.</div>
+                </div>
+                <div>
+                  <div class="font-bold text-lg text-orange-400 mb-1" data-i18n="header-why-bazara">Почему BazaraVPN?</div>
+                  <div class="text-gray-200 text-sm" data-i18n="header-why-bazara-desc">Без логов, высокая скорость, поддержка стриминга и торрентов, современные протоколы.</div>
+                </div>
+                <div>
+                  <div class="font-bold text-lg text-orange-400 mb-1" data-i18n="header-all-features">Все функции</div>
+                  <div class="text-gray-200 text-sm" data-i18n="header-all-features-desc">Мультиустройство, защита Wi-Fi, смена IP, доступ к контенту по всему миру.</div>
+                </div>
+                <div>
+                  <div class="font-bold text-lg text-orange-400 mb-1" data-i18n="header-servers">VPN-серверы</div>
+                  <div class="text-gray-200 text-sm" data-i18n="header-servers-desc">Сервера в 10+ странах для стабильного и быстрого соединения.</div>
+                </div>
+              </div>
+              <div class="flex-1 min-w-[220px] flex flex-col gap-4">
+                <div>
+                  <div class="font-bold text-lg text-orange-400 mb-1" data-i18n="header-streaming">VPN для стриминга</div>
+                  <div class="text-gray-200 text-sm" data-i18n="header-streaming-desc">Смотрите Netflix, Hulu, Disney+ и другие сервисы без ограничений.</div>
+                </div>
+                <div>
+                  <div class="font-bold text-lg text-orange-400 mb-1" data-i18n="header-countries">Страны</div>
+                  <div class="text-gray-200 text-sm" data-i18n="header-countries-desc">США, Турция, Япония, Германия, Франция, и другие.</div>
+                </div>
+                <div>
+                  <div class="font-bold text-lg text-orange-400 mb-1" data-i18n="header-devices">Устройства</div>
+                  <div class="text-gray-200 text-sm" data-i18n="header-devices-desc">Windows, macOS, Android, iOS, роутеры.</div>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li><a href="tariffs.html" class="text-white hover:text-orange-500 transition py-2 px-2 rounded-lg" data-i18n="header-tariffs">Тарифы</a></li>
+          <li><a href="/download" class="px-4 py-2 hover:bg-[#181818] cursor-pointer" data-i18n="header-download">Скачать</a></li>
+        </ul>
+      </div>
+      <div class="hidden md:flex items-center gap-6 flex-shrink-0">
+        <!-- Поддержка -->
+        <a href="support.html" class="flex items-center gap-2 text-orange-500 font-bold py-2 px-3 rounded-lg border border-orange-500 bg-[#232323]" data-i18n="header-support">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <span class="hidden md:inline">Поддержка</span>
+        </a>
+        <!-- Language Switcher Dropdown (только RU/EN) -->
+        <div id="lang-switcher" class="relative flex items-center gap-2 select-none">
+          <button id="lang-dropdown-btn" class="flex items-center gap-2 px-3 py-2 bg-[#232323] rounded-lg border border-gray-700 text-white hover:bg-[#2c2c2c] focus:outline-none text-base">
+            <svg class="w-6 h-6 text-gray-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 0 20M12 2a15.3 15.3 0 0 0 0 20"/></svg>
+            <span id="lang-current" class="font-semibold">Русский</span>
+            <svg class="w-5 h-5 ml-1 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div id="lang-dropdown" class="hidden absolute right-0 mt-2 w-40 bg-[#232323] border border-gray-700 rounded-lg shadow-lg py-1 z-50">
+            <button type="button" class="w-full text-left px-5 py-3 text-base hover:bg-[#181818] text-white flex items-center gap-2" data-lang="ru">Русский</button>
+            <button type="button" class="w-full text-left px-5 py-3 text-base hover:bg-[#181818] text-white flex items-center gap-2" data-lang="en">English</button>
+          </div>
+        </div>
+      </div>
+      <button class="block md:hidden p-2 rounded-lg hover:bg-[#232323] focus:outline-none" id="burger-btn" aria-label="Открыть меню">
+        <svg class="w-8 h-8 text-orange-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+    </div>
+    <div id="mobile-menu" class="fixed inset-0 bg-[#181818] bg-opacity-95 z-50 flex-col items-center justify-center gap-8 hidden md:hidden">
+      <button class="absolute top-6 right-6 p-2 rounded-lg hover:bg-[#232323]" id="close-mobile-menu" aria-label="Закрыть меню">
+        <svg class="w-8 h-8 text-orange-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+      <ul class="flex flex-col gap-8 text-2xl font-bold mt-24">
+        <li><a href="index.html#advantages" class="hover:text-orange-400" data-i18n="header-advantages">Преимущества</a></li>
+        <li><a href="tariffs.html" class="hover:text-orange-400" data-i18n="header-tariffs">Тарифы</a></li>
+        <li><a href="index.html#download" class="hover:text-orange-400" data-i18n="header-download">Скачать</a></li>
+        <li><a href="support.html" class="hover:text-orange-400" data-i18n="header-support">Поддержка</a></li>
+        <li>
+          <div class="flex flex-col items-center gap-2">
+            <span class="text-base text-gray-400">Язык</span>
+            <button type="button" class="w-full text-left px-5 py-3 text-lg hover:bg-[#232323] text-white flex items-center gap-2" data-lang="ru">Русский</button>
+            <button type="button" class="w-full text-left px-5 py-3 text-lg hover:bg-[#232323] text-white flex items-center gap-2" data-lang="en">English</button>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const downloadMenu = document.getElementById('download-menu');
+      const megaDownload = document.getElementById('mega-download');
+      if (downloadMenu && megaDownload) {
+        let overMenu = false;
+        let overDropdown = false;
+        downloadMenu.addEventListener('mouseenter', () => {
+          overMenu = true;
+          megaDownload.classList.add('flex');
+          megaDownload.classList.remove('hidden');
+        });
+        downloadMenu.addEventListener('mouseleave', () => {
+          setTimeout(() => {
+            if (!overDropdown) {
+              megaDownload.classList.remove('flex');
+              megaDownload.classList.add('hidden');
+            }
+          }, 80);
+          overMenu = false;
+        });
+        megaDownload.addEventListener('mouseenter', () => {
+          overDropdown = true;
+          megaDownload.classList.add('flex');
+          megaDownload.classList.remove('hidden');
+        });
+        megaDownload.addEventListener('mouseleave', () => {
+          setTimeout(() => {
+            if (!overMenu) {
+              megaDownload.classList.remove('flex');
+              megaDownload.classList.add('hidden');
+            }
+          }, 80);
+          overDropdown = false;
+        });
+      }
+    });
+  </script>
+
+  <main class="flex-1 flex flex-col items-center justify-center pt-36 pb-12 px-4">
+    <div class="w-full max-w-3xl mx-auto flex flex-col items-center animate-fade-in">
+      <!-- Фирменный баннер -->
+      <div class="relative flex flex-col items-center mb-8">
+        <img src="assets/windows.png" alt="Windows logo" class="mb-4 mx-auto" style="width:180px;" />
+        <h1 class="text-4xl md:text-5xl font-extrabold text-center mb-2">
+          <span class="text-orange-400" data-i18n="install-title">Bazara</span><span class="text-white" data-i18n="install-title2">VPN для Windows</span>
+        </h1>
+        <div class="text-xl md:text-2xl text-white text-center font-semibold mb-2" data-i18n="install-subtitle">Скачай за 2 минуты — и ты уже в безопасности!</div>
+        <div class="text-base text-gray-400 text-center max-w-xl" data-i18n="install-desc">VPN, который не грузит мозги. Просто скачай, вставь подписку — и пользуйся!</div>
+      </div>
+      <!-- Инструкция -->
+      <ol class="w-full flex flex-col gap-6 mt-2 mb-8">
+        <li class="flex items-start gap-4">
+          <span class="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full bg-gradient-to-br from-orange-400 to-purple-500 text-white text-2xl font-bold shadow-lg"><svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></span>
+          <span class="text-lg" data-i18n="install-step1">Жми на кнопку ниже и скачай <b>Hiddify Next</b> для Windows (Portable или Setup — что больше по кайфу).</span>
+        </li>
+        <li class="flex items-start gap-4">
+          <span class="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full bg-gradient-to-br from-orange-400 to-purple-500 text-white text-2xl font-bold shadow-lg"><svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/></svg></span>
+          <span class="text-lg" data-i18n="install-step2">Запусти <b>Hiddify.exe</b> (лучше с правами администратора, чтобы всё работало по-базарному).</span>
+        </li>
+        <li class="flex items-start gap-4">
+          <span class="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full bg-gradient-to-br from-orange-400 to-purple-500 text-white text-2xl font-bold shadow-lg"><svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></span>
+          <span class="text-lg" data-i18n="install-step3">Скопируй свою подписку BazaraVPN и добавь её через «Новый профиль» → «Добавить профиль из буфера обмена».</span>
+        </li>
+        <li class="flex items-start gap-4">
+          <span class="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full bg-gradient-to-br from-orange-400 to-purple-500 text-white text-2xl font-bold shadow-lg"><svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg></span>
+          <span class="text-lg" data-i18n="install-step4">В настройках выбери режим <b>VPN</b> (для всего трафика) или <b>Системный прокси</b> (только для браузера).</span>
+        </li>
+        <li class="flex items-start gap-4">
+          <span class="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full bg-gradient-to-br from-orange-400 to-purple-500 text-white text-2xl font-bold shadow-lg"><svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 19l7-7-7-7"/></svg></span>
+          <span class="text-lg" data-i18n="install-step5">Выбери сервер, подключайся — и всё, ты под защитой!</span>
+        </li>
+      </ol>
+      <a href="https://github.com/hiddify/hiddify-next/releases" target="_blank" class="block w-full text-center bg-gradient-to-r from-orange-500 to-purple-500 hover:from-orange-600 hover:to-purple-600 text-white font-bold py-4 rounded-2xl text-xl shadow-xl transition mb-8" data-i18n="install-download-btn"><svg class="inline-block w-7 h-7 mr-2 align-middle" fill="#fff" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/></svg>Скачать Hiddify Next для Windows</a>
+      <div class="w-full bg-[#232323] rounded-2xl p-5 text-base text-gray-200 flex flex-col gap-2 animate-fade-in-slow">
+        <div class="font-bold text-orange-400 mb-1" data-i18n="install-help-title">Если что-то не работает:</div>
+        <ul class="list-disc list-inside space-y-1">
+          <li data-i18n="install-help1">Добавь Hiddify в исключения антивируса.</li>
+          <li data-i18n="install-help2">Для Discord выбери регион «Другой».</li>
+          <li data-i18n="install-help3">Если нет интернета — попробуй сменить режим или DNS (например, 9.9.9.9).</li>
+          <li data-i18n="install-help4">Всё равно не работает? <a href="support.html" class="text-orange-400 underline">Напиши в поддержку</a> — поможем!</li>
+        </ul>
+      </div>
+    </div>
+  </main>
+  <!-- FOOTER -->
+  <!-- Footer (универсальный для всех страниц) -->
+  <footer class="w-full bg-[#232323] border-t border-[#333] py-6 px-4 flex flex-col md:flex-row items-center justify-center md:justify-between gap-6 md:gap-12 text-gray-200 text-base mt-auto text-center md:text-left">
+    <div class="flex flex-col md:flex-row items-center gap-4 md:gap-12 w-full justify-center md:justify-start">
+      <a href="contacts.html" class="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-[#181818] transition text-lg font-semibold">
+        <img src="assets/mail-3d.png" alt="Контакты" class="w-7 h-7" style="object-fit:contain;">
+        <span data-i18n="footer-contacts">Контакты</span>
+      </a>
+      <a href="privacy.html" class="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-[#181818] transition text-lg font-semibold">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8 8h8v8H8z"/></svg>
+        <span data-i18n="footer-privacy">Политика</span>
+      </a>
+    </div>
+    <div class="text-center text-lg font-medium w-full md:w-auto" data-i18n="footer-copyright">© 2024 BazaraVPN</div>
+    <div class="flex items-center justify-center gap-5 w-full md:w-auto mt-4 md:mt-0">
+      <a href="https://t.me/bazaraVPN" class="hover:text-orange-400" aria-label="Telegram" target="_blank" rel="noopener"><svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 4L12 20l-3-7-7-3z"/></svg></a>
+      <a href="https://www.instagram.com/bazaravpn/" class="hover:text-orange-400" aria-label="Instagram" target="_blank" rel="noopener"><svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="6"/><circle cx="12" cy="12" r="5"/><circle cx="17" cy="7" r="1.5"/></svg></a>
+      <a href="https://www.youtube.com/@BazaraVPN" class="hover:text-orange-400" aria-label="YouTube" target="_blank" rel="noopener"><svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="4"/><polygon points="10,9 16,12 10,15" fill="currentColor"/></svg></a>
+      <a href="https://www.tiktok.com/@bazaravpn1?lang=ru-RU" class="hover:text-orange-400" aria-label="TikTok" target="_blank" rel="noopener"><svg class="w-7 h-7" viewBox="0 0 24 24" fill="none"><path d="M16.5 3a4.5 4.5 0 0 0 4.5 4.5v2A6.5 6.5 0 0 1 14.5 3h2zm-2 0v12.5a3.5 3.5 0 1 1-3.5-3.5h1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    </div>
+  </footer>
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.fade-up').forEach(el => {
+      const rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight - 40) {
+        el.classList.add('visible');
+      }
+    });
+  });
+  </script>
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const translations = {
+      ru: {
+        'header-advantages': 'Преимущества',
+        'header-tariffs': 'Тарифы',
+        'header-download': 'Скачать',
+        'header-support': 'Поддержка',
+        'header-what-vpn': 'Что такое VPN?',
+        'header-what-vpn-desc': 'VPN — это технология для анонимности, безопасности и обхода блокировок в интернете.',
+        'header-why-bazara': 'Почему BazaraVPN?',
+        'header-why-bazara-desc': 'Без логов, высокая скорость, поддержка стриминга и торрентов, современные протоколы.',
+        'header-all-features': 'Все функции',
+        'header-all-features-desc': 'Мультиустройство, защита Wi-Fi, смена IP, доступ к контенту по всему миру.',
+        'header-servers': 'VPN-серверы',
+        'header-servers-desc': 'Сервера в 10+ странах для стабильного и быстрого соединения.',
+        'header-streaming': 'VPN для стриминга',
+        'header-streaming-desc': 'Смотрите Netflix, Hulu, Disney+ и другие сервисы без ограничений.',
+        'header-countries': 'Страны',
+        'header-countries-desc': 'США, Турция, Япония, Германия, Франция, и другие.',
+        'header-devices': 'Устройства',
+        'header-devices-desc': 'Windows, macOS, Android, iOS, роутеры.',
+        'footer-contacts': 'Контакты',
+        'footer-privacy': 'Политика',
+        'footer-copyright': '© 2024 BazaraVPN',
+        'install-title': 'Bazara',
+        'install-title2': 'VPN для Windows',
+        'install-subtitle': 'Скачай за 2 минуты — и ты уже в безопасности!',
+        'install-desc': 'VPN, который не грузит мозги. Просто скачай, вставь подписку — и пользуйся!',
+        'install-step1': 'Жми на кнопку ниже и скачай <b>Hiddify Next</b> для Windows (Portable или Setup — что больше по кайфу).',
+        'install-step2': 'Запусти <b>Hiddify.exe</b> (лучше с правами администратора, чтобы всё работало по-базарному).',
+        'install-step3': 'Скопируй свою подписку BazaraVPN и добавь её через «Новый профиль» → «Добавить профиль из буфера обмена».',
+        'install-step4': 'В настройках выбери режим <b>VPN</b> (для всего трафика) или <b>Системный прокси</b> (только для браузера).',
+        'install-step5': 'Выбери сервер, подключайся — и всё, ты под защитой!',
+        'install-download-btn': '<svg class="inline-block w-7 h-7 mr-2 align-middle" fill="#fff" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/></svg>Скачать Hiddify Next для Windows',
+        'install-help-title': 'Если что-то не работает:',
+        'install-help1': 'Добавь Hiddify в исключения антивируса.',
+        'install-help2': 'Для Discord выбери регион «Другой».',
+        'install-help3': 'Если нет интернета — попробуй сменить режим или DNS (например, 9.9.9.9).',
+        'install-help4': 'Всё равно не работает? <a href="support.html" class="text-orange-400 underline">Напиши в поддержку</a> — поможем!',
+      },
+      en: {
+        'header-advantages': 'Advantages',
+        'header-tariffs': 'Tariffs',
+        'header-download': 'Download',
+        'header-support': 'Support',
+        'header-what-vpn': 'What is VPN?',
+        'header-what-vpn-desc': 'VPN is a technology for anonymity, security, and bypassing internet blocks.',
+        'header-why-bazara': 'Why BazaraVPN?',
+        'header-why-bazara-desc': 'No logs, high speed, streaming and torrent support, modern protocols.',
+        'header-all-features': 'All features',
+        'header-all-features-desc': 'Multi-device, Wi-Fi protection, IP change, access to content worldwide.',
+        'header-servers': 'VPN servers',
+        'header-servers-desc': 'Servers in 10+ countries for stable and fast connection.',
+        'header-streaming': 'VPN for streaming',
+        'header-streaming-desc': 'Watch Netflix, Hulu, Disney+ and other services without limits.',
+        'header-countries': 'Countries',
+        'header-countries-desc': 'USA, Turkey, Japan, Germany, France, and more.',
+        'header-devices': 'Devices',
+        'header-devices-desc': 'Windows, macOS, Android, iOS, routers.',
+        'footer-contacts': 'Contacts',
+        'footer-privacy': 'Privacy',
+        'footer-copyright': '© 2024 BazaraVPN',
+        'install-title': 'Bazara',
+        'install-title2': 'VPN for Windows',
+        'install-subtitle': 'Download in 2 minutes — and you are already protected!',
+        'install-desc': 'A VPN that doesn't overload your brain. Just download, paste your subscription — and use it!',
+        'install-step1': 'Click the button below and download <b>Hiddify Next</b> for Windows (Portable or Setup — whichever you prefer).',
+        'install-step2': 'Run <b>Hiddify.exe</b> (preferably as administrator for best results).',
+        'install-step3': 'Copy your BazaraVPN subscription and add it via "New profile" → "Add profile from clipboard".',
+        'install-step4': 'In settings, choose <b>VPN</b> mode (for all traffic) or <b>System proxy</b> (browser only).',
+        'install-step5': 'Choose a server, connect — and you're protected!',
+        'install-download-btn': '<svg class="inline-block w-7 h-7 mr-2 align-middle" fill="#fff" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/></svg>Download Hiddify Next for Windows',
+        'install-help-title': 'If something doesn't work:',
+        'install-help1': 'Add Hiddify to your antivirus exceptions.',
+        'install-help2': 'For Discord, select the "Other" region.',
+        'install-help3': 'If there's no internet — try changing the mode or DNS (e.g., 9.9.9.9).',
+        'install-help4': 'Still not working? <a href="support.html" class="text-orange-400 underline">Contact support</a> — we'll help!',
+      }
+    };
+    const langBtn = document.getElementById('lang-dropdown-btn');
+    const langDropdown = document.getElementById('lang-dropdown');
+    const langCurrent = document.getElementById('lang-current');
+    const langSwitcher = document.getElementById('lang-switcher');
+    function setLang(lang) {
+      localStorage.setItem('lang', lang);
+      if (langCurrent) langCurrent.textContent = lang === 'ru' ? 'Русский' : 'English';
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (translations[lang][key]) {
+          if (/<[a-z][\s\S]*>/i.test(translations[lang][key])) {
+            el.innerHTML = translations[lang][key];
+          } else {
+            el.textContent = translations[lang][key];
+          }
+        }
+      });
+    }
+    let lang = localStorage.getItem('lang') || 'ru';
+    setLang(lang);
+    if (langBtn && langDropdown) {
+      langBtn.onclick = function(e) {
+        e.stopPropagation();
+        langDropdown.classList.toggle('hidden');
+      };
+      langDropdown.querySelectorAll('[data-lang]').forEach(btn => {
+        btn.onclick = function(e) {
+          e.stopPropagation();
+          setLang(this.getAttribute('data-lang'));
+          langDropdown.classList.add('hidden');
+        };
+      });
+      document.addEventListener('click', function(e) {
+        if (langDropdown && langSwitcher && !langSwitcher.contains(e.target)) {
+          langDropdown.classList.add('hidden');
+        }
+      });
+    }
+  });
+  </script>
+  <script>
+  // Бургер-меню для мобильного хедера
+  const burgerBtn = document.getElementById('burger-btn');
+  const mobileMenu = document.getElementById('mobile-menu');
+  const closeMobileMenu = document.getElementById('close-mobile-menu');
+  if (burgerBtn && mobileMenu && closeMobileMenu) {
+    burgerBtn.onclick = function() {
+      mobileMenu.classList.remove('hidden');
+    };
+    closeMobileMenu.onclick = function() {
+      mobileMenu.classList.add('hidden');
+    };
+    // Закрытие по клику вне меню
+    mobileMenu.onclick = function(e) {
+      if (e.target === mobileMenu) mobileMenu.classList.add('hidden');
+    };
+  }
+  </script>
+</body>
+</html> 

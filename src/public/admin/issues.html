@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BazaraVPN — Решение проблем</title>
+  <link rel="icon" href="/favicon.ico">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { background: #181818; min-height: 100vh; }
+    .issue-card {
+      background: #232323;
+      border-radius: 1.2rem;
+      box-shadow: 0 2px 16px 0 #ff880044;
+      padding: 1.5rem 2rem;
+      margin-bottom: 1.5rem;
+      transition: box-shadow 0.18s, transform 0.15s;
+      border: 2px solid transparent;
+    }
+    .issue-card:hover {
+      box-shadow: 0 8px 32px 0 #ff8800cc, 0 2px 8px 0 #a259ff88;
+      border-color: #ff8800;
+      transform: translateY(-2px) scale(1.01);
+    }
+    .issue-btn {
+      background: #232323;
+      color: #ff8800;
+      border: 1.5px solid #ff8800;
+      border-radius: 0.7em;
+      padding: 0.4em 1.2em;
+      margin-right: 0.7em;
+      margin-bottom: 0.5em;
+      cursor: pointer;
+      font-size: 1em;
+      font-weight: 500;
+      transition: background 0.15s, color 0.15s;
+    }
+    .issue-btn:hover {
+      background: #ff8800;
+      color: #fff;
+    }
+    .issue-btn:last-child { margin-right: 0; }
+    .badge {
+      background: #ff3b3b;
+      color: #fff;
+      font-weight: bold;
+      border-radius: 9999px;
+      padding: 0.2em 0.8em;
+      font-size: 1.1rem;
+      min-width: 2em;
+      text-align: center;
+      margin-left: 0.7em;
+    }
+    .screenshot-thumb {
+      max-width: 90px;
+      max-height: 70px;
+      border-radius: 0.7em;
+      margin-right: 0.7em;
+      border: 1.5px solid #a259ff;
+      box-shadow: 0 2px 8px #a259ff33;
+      cursor: pointer;
+      transition: box-shadow 0.15s;
+    }
+    .screenshot-thumb:hover {
+      box-shadow: 0 4px 16px #ff880088;
+    }
+    .section-title {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #ff8800;
+      margin-bottom: 1.5rem;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col text-white">
+  <main class="w-full max-w-3xl mx-auto flex flex-col gap-6 py-12 px-4">
+    <div class="flex items-center gap-4 mb-2">
+      <span class="section-title">Активные проблемы</span>
+      <span id="issue-count" class="badge">3</span>
+    </div>
+    <div id="issues-list"></div>
+    <div class="flex items-center gap-4 mt-10 mb-2">
+      <span class="section-title" style="color:#a259ff;">Отложенные</span>
+    </div>
+    <div id="issues-delayed"></div>
+  </main>
+  <script>
+    // Мок-данные проблем
+    let issues = [
+      {
+        id: 1,
+        text: 'VPN не подключается, пишет ошибку 403. Уже пробовал перезапустить, не помогает.',
+        date: '2024-06-12 13:22',
+        user: 'user123@mail.com',
+        screenshots: ['https://dummyimage.com/180x120/232323/a259ff&text=Screen1'],
+        delayed: false
+      },
+      {
+        id: 2,
+        text: 'Оплатил, но не получил ссылку. Проверьте, пожалуйста!',
+        date: '2024-06-12 12:55',
+        user: 'id_456789',
+        screenshots: [],
+        delayed: false
+      },
+      {
+        id: 3,
+        text: 'Сайт не открывается с телефона, пишет "Ошибка SSL".',
+        date: '2024-06-12 11:40',
+        user: 'user777@proton.me',
+        screenshots: ['https://dummyimage.com/180x120/232323/ff8800&text=Screen2','https://dummyimage.com/180x120/232323/a259ff&text=Screen3'],
+        delayed: false
+      }
+    ];
+    let delayed = [];
+    function renderIssues() {
+      // Активные
+      const list = document.getElementById('issues-list');
+      list.innerHTML = '';
+      issues.filter(i=>!i.delayed).forEach((issue, idx) => {
+        const card = document.createElement('div');
+        card.className = 'issue-card flex flex-col gap-3';
+        card.innerHTML = `
+          <div class="flex items-center gap-4 mb-1">
+            <div class="font-bold text-lg text-orange-400 flex-1">${issue.user || 'Аноним'}</div>
+            <div class="text-sm text-gray-400">${issue.date}</div>
+          </div>
+          <div class="text-base mb-2">${issue.text}</div>
+          <div class="flex gap-2 mb-2">
+            ${issue.screenshots.map(s=>`<img src="${s}" class="screenshot-thumb" onclick="window.open('${s}','_blank')">`).join('')}
+          </div>
+          <div class="flex gap-2">
+            <button class="issue-btn" onclick="resolveIssue(${issue.id})">✅ Решено</button>
+            <button class="issue-btn" onclick="replyToChat('${issue.user}')">✉️ Ответить в чат</button>
+            <button class="issue-btn" onclick="delayIssue(${issue.id})">🕒 Отложить</button>
+          </div>
+        `;
+        list.appendChild(card);
+      });
+      // Счётчик
+      document.getElementById('issue-count').textContent = issues.filter(i=>!i.delayed).length;
+      // Отложенные
+      const dlist = document.getElementById('issues-delayed');
+      dlist.innerHTML = '';
+      issues.filter(i=>i.delayed).forEach((issue, idx) => {
+        const card = document.createElement('div');
+        card.className = 'issue-card flex flex-col gap-3';
+        card.innerHTML = `
+          <div class="flex items-center gap-4 mb-1">
+            <div class="font-bold text-lg text-purple-400 flex-1">${issue.user || 'Аноним'}</div>
+            <div class="text-sm text-gray-400">${issue.date}</div>
+          </div>
+          <div class="text-base mb-2">${issue.text}</div>
+          <div class="flex gap-2 mb-2">
+            ${issue.screenshots.map(s=>`<img src="${s}" class="screenshot-thumb" onclick="window.open('${s}','_blank')">`).join('')}
+          </div>
+          <div class="flex gap-2">
+            <button class="issue-btn" onclick="resolveIssue(${issue.id})">✅ Решено</button>
+            <button class="issue-btn" onclick="replyToChat('${issue.user}')">✉️ Ответить в чат</button>
+          </div>
+        `;
+        dlist.appendChild(card);
+      });
+    }
+    function updateIssuesCount() {
+      const count = issues.filter(i=>!i.delayed).length;
+      localStorage.setItem('issuesCount', count);
+    }
+    window.addEventListener('storage', updateIssuesCount);
+    setInterval(updateIssuesCount, 5000);
+    document.addEventListener('DOMContentLoaded', updateIssuesCount);
+    function resolveIssue(id) {
+      issues = issues.filter(i=>i.id!==id);
+      renderIssues();
+      updateIssuesCount();
+    }
+    function delayIssue(id) {
+      issues = issues.map(i=>i.id===id?{...i,delayed:true}:i);
+      renderIssues();
+      updateIssuesCount();
+    }
+    function replyToChat(user) {
+      // Переход на чат с этим пользователем (можно доработать под реальный роутинг)
+      window.location.href = '/admin/support';
+      // В реальной интеграции можно передавать user/id как query
+    }
+    renderIssues();
+  </script>
+</body>
+</html> 

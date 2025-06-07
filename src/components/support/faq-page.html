@@ -1,0 +1,60 @@
+<section id="faq-page" class="hidden flex-1 flex flex-col items-center min-h-0 bg-[#181818] pt-8 pb-16 animate-fade-in fade-up">
+  <div class="w-full max-w-5xl mx-auto flex flex-col">
+    <button id="back-to-support-faq" class="self-start mb-6 flex items-center gap-2 text-orange-400 hover:text-orange-500 text-lg font-semibold"><svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg>Назад</button>
+    <h2 class="text-4xl font-extrabold text-orange-400 mb-10 text-center">Часто задаваемые вопросы</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div class="bg-[#232323] rounded-2xl border-2 border-orange-700 shadow-lg">
+        <button class="w-full flex justify-between items-center px-8 py-6 text-xl font-bold text-left text-white focus:outline-none faq-question">Как работает BazaraVPN?<span class="faq-icon text-3xl text-orange-400">+</span></button>
+        <div class="faq-answer px-8 pb-6 text-gray-200 text-lg hidden">BazaraVPN защищает вашу конфиденциальность в Интернете, скрывая ваш настоящий IP-адрес. Когда ваше виртуальное местоположение скрыто, отслеживать, ограничивать или продавать вашу онлайн-активность становится намного сложнее.</div>
+      </div>
+      <div class="bg-[#232323] rounded-2xl border-2 border-orange-700 shadow-lg">
+        <button class="w-full flex justify-between items-center px-8 py-6 text-xl font-bold text-left text-white focus:outline-none faq-question">Как установить BazaraVPN?<span class="faq-icon text-3xl text-orange-400">+</span></button>
+        <div class="faq-answer px-8 pb-6 text-gray-200 text-lg hidden">Чтобы установить BazaraVPN, скачайте приложение для вашего устройства и следуйте нашему руководству по настройке. Затем просто войдите в свой аккаунт, и вы будете готовы к подключению.</div>
+      </div>
+      <div class="bg-[#232323] rounded-2xl border-2 border-orange-700 shadow-lg">
+        <button class="w-full flex justify-between items-center px-8 py-6 text-xl font-bold text-left text-white focus:outline-none faq-question">Можно ли пользоваться бесплатно?<span class="faq-icon text-3xl text-orange-400">+</span></button>
+        <div class="faq-answer px-8 pb-6 text-gray-200 text-lg hidden">Да, у нас есть бесплатный пробный период и базовые функции без оплаты.</div>
+      </div>
+      <div class="bg-[#232323] rounded-2xl border-2 border-orange-700 shadow-lg">
+        <button class="w-full flex justify-between items-center px-8 py-6 text-xl font-bold text-left text-white focus:outline-none faq-question">Какие устройства поддерживаются?<span class="faq-icon text-3xl text-orange-400">+</span></button>
+        <div class="faq-answer px-8 pb-6 text-gray-200 text-lg hidden">Windows, macOS, Android, iOS, роутеры и другие.</div>
+      </div>
+      <div class="bg-[#232323] rounded-2xl border-2 border-orange-700 shadow-lg">
+        <button class="w-full flex justify-between items-center px-8 py-6 text-xl font-bold text-left text-white focus:outline-none faq-question">Можно ли смотреть Netflix и другие стриминги?<span class="faq-icon text-3xl text-orange-400">+</span></button>
+        <div class="faq-answer px-8 pb-6 text-gray-200 text-lg hidden">Да, BazaraVPN позволяет обходить блокировки и смотреть любые стриминговые сервисы.</div>
+      </div>
+      <div class="bg-[#232323] rounded-2xl border-2 border-orange-700 shadow-lg">
+        <button class="w-full flex justify-between items-center px-8 py-6 text-xl font-bold text-left text-white focus:outline-none faq-question">Сколько устройств можно подключить?<span class="faq-icon text-3xl text-orange-400">+</span></button>
+        <div class="faq-answer px-8 pb-6 text-gray-200 text-lg hidden">До 5 устройств одновременно на одном аккаунте.</div>
+      </div>
+      <div class="bg-[#232323] rounded-2xl border-2 border-orange-700 shadow-lg">
+        <button class="w-full flex justify-between items-center px-8 py-6 text-xl font-bold text-left text-white focus:outline-none faq-question">Как оплатить подписку?<span class="faq-icon text-3xl text-orange-400">+</span></button>
+        <div class="faq-answer px-8 pb-6 text-gray-200 text-lg hidden">Мы принимаем карты, криптовалюту и другие способы оплаты.</div>
+      </div>
+      <div class="bg-[#232323] rounded-2xl border-2 border-orange-700 shadow-lg">
+        <button class="w-full flex justify-between items-center px-8 py-6 text-xl font-bold text-left text-white focus:outline-none faq-question">Законно ли использовать VPN?<span class="faq-icon text-3xl text-orange-400">+</span></button>
+        <div class="faq-answer px-8 pb-6 text-gray-200 text-lg hidden">В большинстве стран — да. Но проверьте законы вашей страны.</div>
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+// FAQ accordion logic (копия с главной)
+document.addEventListener('DOMContentLoaded', function() {
+  const questions = Array.from(document.querySelectorAll('.faq-question'));
+  const answers = Array.from(document.querySelectorAll('.faq-answer'));
+  questions.forEach((btn, idx) => {
+    btn.addEventListener('click', function() {
+      const answer = answers[idx];
+      const icon = this.querySelector('.faq-icon');
+      if (answer.classList.contains('hidden')) {
+        answer.classList.remove('hidden');
+        icon.textContent = '–';
+      } else {
+        answer.classList.add('hidden');
+        icon.textContent = '+';
+      }
+    });
+  });
+});
+</script> 

@@ -1,0 +1,35 @@
+<!-- Модалка Telegram авторизации -->
+<div id="tg-auth-modal-bg" class="fixed inset-0 bg-black bg-opacity-60 z-50 hidden flex items-center justify-center transition-opacity duration-300">
+  <div class="bg-[#232323] rounded-3xl shadow-2xl p-8 md:p-12 w-full max-w-md relative flex flex-col gap-8 animate-fade-in" style="min-width:320px; min-height:320px;">
+    <button id="close-tg-auth-modal" class="absolute top-5 right-5 w-10 h-10 flex items-center justify-center rounded-full bg-[#181818] hover:bg-[#2c2c2c] text-2xl text-gray-400">&times;</button>
+    <div class="flex flex-col items-center gap-4">
+      <h3 class="text-2xl font-extrabold text-white mb-2">Авторизация через Telegram</h3>
+      <p class="text-white text-center mb-4">Войдите через Telegram, чтобы получить пробную ссылку.<br>Это безопасно и быстро!</p>
+      <div id="telegram-login-btn"></div>
+      <div id="tg-auth-result" class="text-white text-center mt-4"></div>
+    </div>
+  </div>
+</div>
+<script async src="https://telegram.org/js/telegram-widget.js?7" data-telegram-login="YOUR_TELEGRAM_BOT_USERNAME" data-size="large" data-userpic="false" data-radius="12" data-request-access="write" data-userpic="false" data-onauth="onTelegramAuth(user)" id="tg-login-script"></script>
+<script>
+function onTelegramAuth(user) {
+  // user: {id, first_name, last_name, username, photo_url, auth_date, hash}
+  fetch('/api/telegram_auth', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(user)
+  })
+  .then(r => r.json())
+  .then(data => {
+    document.getElementById('tg-auth-result').textContent = data.message + (data.link ? ('\n' + data.link) : '');
+  })
+  .catch(() => {
+    document.getElementById('tg-auth-result').textContent = 'Ошибка соединения с сервером.';
+  });
+}
+// Открытие/закрытие модалки (пример, интегрировать с основной страницей)
+document.getElementById('close-tg-auth-modal')?.addEventListener('click', function() {
+  document.getElementById('tg-auth-modal-bg').classList.add('hidden');
+});
+</script>
+<!-- /Модалка Telegram авторизации --> 

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BazaraVPN — Политика конфиденциальности</title>
+  <meta name="description" content="Политика конфиденциальности BazaraVPN — как мы защищаем ваши данные.">
+  <link rel="icon" href="/favicon.ico">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    html, body { background: #181818 !important; color: #fff; min-height: 100vh; }
+    .privacy-title{font-size:2.2rem;font-weight:900;margin:2.5rem 0 2rem 0;text-align:center;background:linear-gradient(90deg,#ff8800 0%,#a259ff 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .privacy-card{background:#232323;border-radius:1.5rem;box-shadow:0 4px 24px #0003;padding:2.5rem 2rem;margin:2rem auto;max-width:700px;}
+    .privacy-section{margin-bottom:2.2rem;}
+    .privacy-section h2{font-size:1.3rem;font-weight:700;margin-bottom:0.7rem;color:#ff8800;}
+    .privacy-section p{color:#ccc;font-size:1.08rem;line-height:1.7;}
+    #lang-dropdown { top: 100% !important; bottom: auto !important; margin-top: 0.5rem !important; margin-bottom: 0 !important; z-index: 1050 !important; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col text-white">
+  <!-- HEADER -->
+  <nav class="fixed top-0 left-0 w-full z-20 bg-[#181818] shadow-sm border-b border-orange-900" id="main-navbar">
+    <div class="max-w-6xl mx-auto flex items-center justify-between py-4 px-4 md:px-8 text-lg gap-8">
+      <div class="flex items-center gap-3 logo-home cursor-pointer flex-shrink-0">
+        <a href="index.html" class="flex items-center gap-3">
+          <img src="/assets/logo-bazara.png" alt="BazaraVPN Logo" class="h-10 w-10">
+          <span class="text-3xl font-bold text-orange-500">Bazara<span class="text-white">VPN</span></span>
+        </a>
+      </div>
+      <div class="flex-1 flex justify-center">
+        <ul class="flex items-center gap-8 font-semibold">
+          <li class="relative group" id="advantages-menu">
+            <a href="index.html#advantages" class="text-white hover:text-orange-500 transition flex items-center gap-1 py-2 px-2 rounded-lg" data-i18n="header-advantages">
+              Преимущества
+              <svg class="w-5 h-5 text-orange-400 group-hover:rotate-180 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+            </a>
+            <!-- MegaMenu ... (опущено для краткости, как в support.html) -->
+          </li>
+          <li><a href="tariffs.html" class="text-white hover:text-orange-500 transition py-2 px-2 rounded-lg" data-i18n="header-tariffs">Тарифы</a></li>
+          <li><a href="/download" class="px-4 py-2 hover:bg-[#181818] cursor-pointer" data-i18n="header-download">Скачать</a></li>
+        </ul>
+      </div>
+      <div class="flex items-center gap-6 flex-shrink-0">
+        <a href="support.html" class="flex items-center gap-2 text-orange-500 font-bold py-2 px-3 rounded-lg border border-orange-500 bg-[#232323]" data-i18n="header-support">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <span class="hidden md:inline">Поддержка</span>
+        </a>
+        <div id="lang-switcher" class="relative flex items-center gap-2 select-none">
+          <button id="lang-dropdown-btn" class="flex items-center gap-2 px-3 py-2 bg-[#232323] rounded-lg border border-gray-700 text-white hover:bg-[#2c2c2c] focus:outline-none text-base">
+            <svg class="w-6 h-6 text-gray-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 0 20M12 2a15.3 15.3 0 0 0 0 20"/></svg>
+            <span id="lang-current" class="font-semibold">Русский</span>
+            <svg class="w-5 h-5 ml-1 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div id="lang-dropdown" class="hidden absolute right-0 mt-2 w-40 bg-[#232323] border border-gray-700 rounded-lg shadow-lg py-1 z-50">
+            <button type="button" class="w-full text-left px-5 py-3 text-base hover:bg-[#181818] text-white flex items-center gap-2" data-lang="ru">Русский</button>
+            <button type="button" class="w-full text-left px-5 py-3 text-base hover:bg-[#181818] text-white flex items-center gap-2" data-lang="en">English</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <main class="flex-1 flex flex-col pt-20">
+    <h1 class="privacy-title" data-i18n="privacy-title">Политика конфиденциальности BazaraVPN</h1>
+    <div class="privacy-card">
+      <div class="privacy-section">
+        <h2 data-i18n="privacy-1-title">1. Общие положения</h2>
+        <p data-i18n="privacy-1-text">BazaraVPN создан для вашей свободы, анонимности и безопасности. Мы не собираем и не храним логи вашей активности. Ваша приватность — наш главный приоритет.</p>
+      </div>
+      <div class="privacy-section">
+        <h2 data-i18n="privacy-2-title">2. Минимум данных</h2>
+        <p data-i18n="privacy-2-text">Для работы сервиса мы не требуем регистрации, не запрашиваем личные данные и не отслеживаем ваши действия. Для авторизации используется только Telegram ID, который не раскрывает вашу личность.</p>
+      </div>
+      <div class="privacy-section">
+        <h2 data-i18n="privacy-3-title">3. Отсутствие логов</h2>
+        <p data-i18n="privacy-3-text">Мы не ведём журналы подключений, не отслеживаем IP-адреса, не сохраняем историю посещённых сайтов и не анализируем ваш трафик. Всё, что вы делаете с BazaraVPN, остаётся только между вами и интернетом.</p>
+      </div>
+      <div class="privacy-section">
+        <h2 data-i18n="privacy-4-title">4. Безопасность</h2>
+        <p data-i18n="privacy-4-text">Весь трафик шифруется современными протоколами. Мы защищаем ваши данные от третьих лиц, провайдеров и злоумышленников.</p>
+      </div>
+      <div class="privacy-section">
+        <h2 data-i18n="privacy-5-title">5. Cookies и аналитика</h2>
+        <p data-i18n="privacy-5-text">Мы не используем сторонние трекеры, рекламные сети и не внедряем куки для отслеживания. Минимальные технические cookies используются только для работы сайта и не содержат персональных данных.</p>
+      </div>
+      <div class="privacy-section">
+        <h2 data-i18n="privacy-6-title">6. Обратная связь</h2>
+        <p data-i18n="privacy-6-text">Если у вас есть вопросы по приватности — напишите нам на <a href="mailto:support@bazaravpn.com" class="text-orange-400 hover:underline">support@bazaravpn.com</a> или в <a href="https://t.me/bazaravpn_support" class="text-orange-400 hover:underline">Telegram</a>.</p>
+      </div>
+      <div class="privacy-section">
+        <h2 data-i18n="privacy-7-title">7. Изменения политики</h2>
+        <p data-i18n="privacy-7-text">Мы можем обновлять эту политику для повышения вашей безопасности. Все изменения будут опубликованы на этой странице.</p>
+      </div>
+    </div>
+  </main>
+  <!-- FOOTER -->
+  <footer class="w-full bg-[#232323] border-t border-[#333] py-6 px-4 flex items-center justify-center gap-12 text-gray-200 text-base mt-auto">
+    <a href="contacts.html" class="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-[#181818] transition text-lg font-semibold">
+      <img src="assets/mail-3d.png" alt="Контакты" class="w-7 h-7" style="object-fit:contain;">
+      <span data-i18n="footer-contacts">Контакты</span>
+    </a>
+    <div class="text-center text-lg font-medium" data-i18n="footer-copyright">© 2024 BazaraVPN</div>
+    <a href="privacy.html" class="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-[#181818] transition text-lg font-semibold">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8 8h8v8H8z"/></svg>
+      <span data-i18n="footer-privacy">Политика</span>
+    </a>
+    <div class="flex items-center justify-center md:justify-end gap-5 w-full md:w-auto mt-4 md:mt-0">
+      <a href="https://t.me/bazaraVPN" class="hover:text-orange-400" aria-label="Telegram" target="_blank" rel="noopener"><svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 4L12 20l-3-7-7-3z"/></svg></a>
+      <a href="https://www.instagram.com/bazaravpn/" class="hover:text-orange-400" aria-label="Instagram" target="_blank" rel="noopener"><svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="6"/><circle cx="12" cy="12" r="5"/><circle cx="17" cy="7" r="1.5"/></svg></a>
+      <a href="https://www.youtube.com/@BazaraVPN" class="hover:text-orange-400" aria-label="YouTube" target="_blank" rel="noopener"><svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="4"/><polygon points="10,9 16,12 10,15" fill="currentColor"/></svg></a>
+      <a href="https://www.tiktok.com/@bazaravpn1?lang=ru-RU" class="hover:text-orange-400" aria-label="TikTok" target="_blank" rel="noopener"><svg class="w-7 h-7" viewBox="0 0 24 24" fill="none"><path d="M16.5 3a4.5 4.5 0 0 0 4.5 4.5v2A6.5 6.5 0 0 1 14.5 3h2zm-2 0v12.5a3.5 3.5 0 1 1-3.5-3.5h1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    </div>
+  </footer>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const translations = {
+        ru: {
+          'header-advantages': 'Преимущества',
+          'header-tariffs': 'Тарифы',
+          'header-download': 'Скачать',
+          'header-support': 'Поддержка',
+          'footer-contacts': 'Контакты',
+          'footer-privacy': 'Политика',
+          'footer-copyright': '© 2024 BazaraVPN',
+          'privacy-title': 'Политика конфиденциальности BazaraVPN',
+          'privacy-1-title': '1. Общие положения',
+          'privacy-1-text': 'BazaraVPN создан для вашей свободы, анонимности и безопасности. Мы не собираем и не храним логи вашей активности. Ваша приватность — наш главный приоритет.',
+          'privacy-2-title': '2. Минимум данных',
+          'privacy-2-text': 'Для работы сервиса мы не требуем регистрации, не запрашиваем личные данные и не отслеживаем ваши действия. Для авторизации используется только Telegram ID, который не раскрывает вашу личность.',
+          'privacy-3-title': '3. Отсутствие логов',
+          'privacy-3-text': 'Мы не ведём журналы подключений, не отслеживаем IP-адреса, не сохраняем историю посещённых сайтов и не анализируем ваш трафик. Всё, что вы делаете с BazaraVPN, остаётся только между вами и интернетом.',
+          'privacy-4-title': '4. Безопасность',
+          'privacy-4-text': 'Весь трафик шифруется современными протоколами. Мы защищаем ваши данные от третьих лиц, провайдеров и злоумышленников.',
+          'privacy-5-title': '5. Cookies и аналитика',
+          'privacy-5-text': 'Мы не используем сторонние трекеры, рекламные сети и не внедряем куки для отслеживания. Минимальные технические cookies используются только для работы сайта и не содержат персональных данных.',
+          'privacy-6-title': '6. Обратная связь',
+          'privacy-6-text': 'Если у вас есть вопросы по приватности — напишите нам на <a href="mailto:support@bazaravpn.com" class="text-orange-400 hover:underline">support@bazaravpn.com</a> или в <a href="https://t.me/bazaravpn_support" class="text-orange-400 hover:underline">Telegram</a>.',
+          'privacy-7-title': '7. Изменения политики',
+          'privacy-7-text': 'Мы можем обновлять эту политику для повышения вашей безопасности. Все изменения будут опубликованы на этой странице.',
+        },
+        en: {
+          'header-advantages': 'Advantages',
+          'header-tariffs': 'Tariffs',
+          'header-download': 'Download',
+          'header-support': 'Support',
+          'footer-contacts': 'Contacts',
+          'footer-privacy': 'Privacy',
+          'footer-copyright': '© 2024 BazaraVPN',
+          'privacy-title': 'BazaraVPN Privacy Policy',
+          'privacy-1-title': '1. General Provisions',
+          'privacy-1-text': 'BazaraVPN is created for your freedom, anonymity, and security. We do not collect or store logs of your activity. Your privacy is our top priority.',
+          'privacy-2-title': '2. Minimum Data',
+          'privacy-2-text': 'To use the service, we do not require registration, do not request personal data, and do not track your actions. Only Telegram ID is used for authorization, which does not reveal your identity.',
+          'privacy-3-title': '3. No Logs',
+          'privacy-3-text': 'We do not keep connection logs, do not track IP addresses, do not save browsing history, and do not analyze your traffic. Everything you do with BazaraVPN stays only between you and the internet.',
+          'privacy-4-title': '4. Security',
+          'privacy-4-text': 'All traffic is encrypted with modern protocols. We protect your data from third parties, providers, and attackers.',
+          'privacy-5-title': '5. Cookies and Analytics',
+          'privacy-5-text': 'We do not use third-party trackers, ad networks, or tracking cookies. Minimal technical cookies are used only for site operation and do not contain personal data.',
+          'privacy-6-title': '6. Feedback',
+          'privacy-6-text': 'If you have privacy questions — write to us at <a href="mailto:support@bazaravpn.com" class="text-orange-400 hover:underline">support@bazaravpn.com</a> or in <a href="https://t.me/bazaravpn_support" class="text-orange-400 hover:underline">Telegram</a>.',
+          'privacy-7-title': '7. Policy Changes',
+          'privacy-7-text': 'We may update this policy to improve your security. All changes will be published on this page.',
+        }
+      };
+      const langBtn = document.getElementById('lang-dropdown-btn');
+      const langDropdown = document.getElementById('lang-dropdown');
+      const langCurrent = document.getElementById('lang-current');
+      const langSwitcher = document.getElementById('lang-switcher');
+      function setLang(lang) {
+        localStorage.setItem('lang', lang);
+        if (langCurrent) langCurrent.textContent = lang === 'ru' ? 'Русский' : 'English';
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+          const key = el.getAttribute('data-i18n');
+          if (translations[lang][key]) {
+            if (/<[a-z][\s\S]*>/i.test(translations[lang][key])) {
+              el.innerHTML = translations[lang][key];
+            } else {
+              el.textContent = translations[lang][key];
+            }
+          }
+        });
+      }
+      let lang = localStorage.getItem('lang') || 'ru';
+      setLang(lang);
+      if (langBtn && langDropdown) {
+        langBtn.onclick = function(e) {
+          e.stopPropagation();
+          langDropdown.classList.toggle('hidden');
+        };
+        langDropdown.querySelectorAll('[data-lang]').forEach(btn => {
+          btn.onclick = function(e) {
+            e.stopPropagation();
+            setLang(this.getAttribute('data-lang'));
+            langDropdown.classList.add('hidden');
+          };
+        });
+        document.addEventListener('click', function(e) {
+          if (langDropdown && langSwitcher && !langSwitcher.contains(e.target)) {
+            langDropdown.classList.add('hidden');
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html> 

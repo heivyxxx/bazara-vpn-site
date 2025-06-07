@@ -1,0 +1,10 @@
+{
+  "headers": [
+    {
+      "source": "/base64_(.*)\\.txt",
+      "headers": [
+        { "key": "Content-Type", "value": "text/plain" }
+      ]
+    }
+  ]
+} 

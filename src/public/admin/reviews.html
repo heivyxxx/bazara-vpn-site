@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BazaraVPN — Модерация отзывов</title>
+  <link rel="icon" href="/favicon.ico">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { background: #181818; min-height: 100vh; }
+    .review-card {
+      background: #232323;
+      border-radius: 1.2rem;
+      box-shadow: 0 2px 16px 0 #a259ff44;
+      padding: 1.5rem 2rem;
+      margin-bottom: 1.5rem;
+      transition: box-shadow 0.18s, transform 0.15s;
+      border: 2px solid transparent;
+    }
+    .review-card:hover {
+      box-shadow: 0 8px 32px 0 #a259ffcc, 0 2px 8px 0 #ff880088;
+      border-color: #a259ff;
+      transform: translateY(-2px) scale(1.01);
+    }
+    .review-btn {
+      background: #232323;
+      color: #a259ff;
+      border: 1.5px solid #a259ff;
+      border-radius: 0.7em;
+      padding: 0.4em 1.2em;
+      margin-right: 0.7em;
+      margin-bottom: 0.5em;
+      cursor: pointer;
+      font-size: 1em;
+      font-weight: 500;
+      transition: background 0.15s, color 0.15s;
+    }
+    .review-btn:hover {
+      background: #a259ff;
+      color: #fff;
+    }
+    .review-btn:last-child { margin-right: 0; }
+    .badge {
+      background: #ff3b3b;
+      color: #fff;
+      font-weight: bold;
+      border-radius: 9999px;
+      padding: 0.2em 0.8em;
+      font-size: 1.1rem;
+      min-width: 2em;
+      text-align: center;
+      margin-left: 0.7em;
+    }
+    .section-title {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #a259ff;
+      margin-bottom: 1.5rem;
+    }
+    .stars {
+      display: inline-block;
+      font-size: 1.3em;
+      color: #ffbb00;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.2em;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col text-white">
+  <main class="w-full max-w-3xl mx-auto flex flex-col gap-6 py-12 px-4">
+    <div class="flex items-center justify-between mb-8">
+      <h1 class="text-3xl font-bold text-orange-400">Модерация отзывов</h1>
+      <a href="/reviews.html" class="bg-gradient-to-r from-orange-500 to-purple-500 hover:from-orange-600 hover:to-purple-600 text-white font-bold py-2 px-6 rounded-xl shadow-lg text-lg transition-all">Все отзывы</a>
+    </div>
+    <div id="reviews-list"></div>
+  </main>
+  <script>
+    // Мок-данные отзывов
+    let reviews = [
+      {
+        id: 1,
+        user: 'Иван',
+        text: 'VPN реально работает, скорость отличная, поддержка отвечает быстро!',
+        stars: 5
+      },
+      {
+        id: 2,
+        user: '',
+        text: 'Не смог подключиться с первого раза, но потом всё ок.',
+        stars: 4
+      },
+      {
+        id: 3,
+        user: 'Аноним',
+        text: 'Слишком дорого, хотелось бы скидку.',
+        stars: 3
+      }
+    ];
+    function renderReviews() {
+      const list = document.getElementById('reviews-list');
+      list.innerHTML = '';
+      reviews.forEach((review, idx) => {
+        const card = document.createElement('div');
+        card.className = 'review-card flex flex-col gap-3';
+        card.innerHTML = `
+          <div class="flex items-center gap-4 mb-1">
+            <div class="font-bold text-lg text-purple-400 flex-1">${review.user || 'Аноним'}</div>
+            <div class="stars">${'★'.repeat(review.stars)}${'☆'.repeat(5-review.stars)}</div>
+          </div>
+          <div class="text-base mb-2">${review.text}</div>
+          <div class="flex gap-2">
+            <button class="review-btn" onclick="approveReview(${review.id})">✅ Утвердить</button>
+            <button class="review-btn" onclick="deleteReview(${review.id})">❌ Удалить</button>
+          </div>
+        `;
+        list.appendChild(card);
+      });
+      document.getElementById('review-count').textContent = reviews.length;
+    }
+    function updateReviewsCount() {
+      const count = reviews.length;
+      localStorage.setItem('reviewsCount', count);
+    }
+    window.addEventListener('storage', updateReviewsCount);
+    setInterval(updateReviewsCount, 5000);
+    document.addEventListener('DOMContentLoaded', updateReviewsCount);
+    function approveReview(id) {
+      reviews = reviews.filter(r=>r.id!==id);
+      renderReviews();
+      updateReviewsCount();
+    }
+    function deleteReview(id) {
+      reviews = reviews.filter(r=>r.id!==id);
+      renderReviews();
+      updateReviewsCount();
+    }
+    renderReviews();
+
+    // --- Модерация отзывов из Firestore ---
+    function renderReviews(list) {
+      const el = document.getElementById('reviews-list');
+      el.innerHTML = '';
+      if (!list.length) {
+        el.innerHTML = '<div class="text-gray-400 text-center py-12">Нет отзывов на модерации</div>';
+        return;
+      }
+      list.forEach(r => {
+        el.innerHTML += `
+          <div class="bg-zinc-800 rounded-xl p-6 mb-6 flex flex-col md:flex-row md:items-center gap-4 shadow-lg">
+            <div class="flex items-center gap-3">
+              <img src="/assets/avatar-default.png" class="w-12 h-12 rounded-full shadow" alt="${r.name}">
+              <div>
+                <div class="font-semibold text-white text-lg">${r.name}</div>
+                <div class="flex gap-0.5 mt-1">${Array(5).fill(0).map((_,j)=>`<svg class='w-5 h-5 ${j<r.rating?'text-orange-400':'text-orange-400 opacity-50'}' fill='currentColor' viewBox='0 0 20 20'><polygon points='10,1 12.59,7.36 19.51,7.64 14,12.14 15.82,19.02 10,15.27 4.18,19.02 6,12.14 0.49,7.64 7.41,7.36'/></svg>`).join('')}</div>
+              </div>
+            </div>
+            <div class="flex-1 text-gray-300 text-base mt-2 md:mt-0">${r.text}</div>
+            <button class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-xl transition-all" onclick="approveReview('${r.id}')">Подтвердить</button>
+          </div>
+        `;
+      });
+    }
+    function loadReviews() {
+      firebase.firestore().collection('reviews').where('status','==','moderation').orderBy('createdAt','desc').onSnapshot(snap => {
+        const arr = [];
+        snap.forEach(doc => {
+          const d = doc.data();
+          arr.push({
+            id: doc.id,
+            name: d.name || 'Аноним',
+            text: d.text || '',
+            rating: d.rating || 5,
+            createdAt: d.createdAt ? d.createdAt.toDate() : null
+          });
+        });
+        renderReviews(arr);
+      });
+    }
+    function approveReview(id) {
+      firebase.firestore().collection('reviews').doc(id).update({status:'approved'});
+    }
+    loadReviews();
+  </script>
+</body>
+</html> 

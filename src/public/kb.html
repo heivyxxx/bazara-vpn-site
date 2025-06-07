@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>База знаний — Поддержка BazaraVPN</title>
+  <meta name="description" content="База знаний BazaraVPN: инструкции, советы, ответы на вопросы.">
+  <link rel="icon" href="/favicon.ico">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    html,body{background:#181818!important;color:#fff;min-height:100vh;}
+    .fade-up{opacity:0;transform:translateY(40px);transition:opacity 0.7s,transform 0.7s;}
+    .fade-up.visible{opacity:1;transform:none;}
+    .kb-block{background:#232323;border-radius:1.5rem;border:2px solid #ff8800;padding:2.5rem 2rem;margin-bottom:2.5rem;box-shadow:0 4px 32px 0 #ff880022;}
+    .kb-block h3{font-size:1.5rem;font-weight:800;color:#ff8800;margin-bottom:1rem;}
+    .kb-block p{font-size:1.1rem;line-height:1.7;color:#e5e5e5;}
+    .kb-block ul{margin:1rem 0 0 1.2rem;list-style:disc;color:#ff8800;}
+    .kb-block li{color:#e5e5e5;}
+    @media(max-width:700px){.kb-block{padding:1.2rem 0.7rem;}}
+    #lang-dropdown {
+      top: 100% !important;
+      bottom: auto !important;
+      margin-top: 0.5rem !important;
+      margin-bottom: 0 !important;
+      z-index: 1050 !important;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col text-white">
+  <!-- HEADER (универсальный) -->
+  <nav class="fixed top-0 left-0 w-full z-20 bg-[#181818] shadow-sm border-b border-orange-900" id="main-navbar">
+    <div class="max-w-6xl mx-auto flex items-center justify-between py-4 px-4 md:px-8 text-lg gap-8">
+      <!-- Логотип -->
+      <div class="flex items-center gap-3 logo-home cursor-pointer flex-shrink-0">
+        <a href="index.html" class="flex items-center gap-3">
+          <img src="/assets/logo-bazara.png" alt="BazaraVPN Logo" class="h-10 w-10">
+          <span class="text-3xl font-bold text-orange-500">Bazara<span class="text-white">VPN</span></span>
+        </a>
+      </div>
+      <!-- Десктоп-меню -->
+      <div class="hidden md:flex flex-1 justify-center">
+        <ul class="flex items-center gap-8 font-semibold">
+          <li class="relative group" id="advantages-menu">
+            <a href="index.html#advantages" class="text-white hover:text-orange-500 transition flex items-center gap-1 py-2 px-2 rounded-lg" data-i18n="header-advantages">
+              Преимущества
+              <svg class="w-5 h-5 text-orange-400 group-hover:rotate-180 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+            </a>
+            <!-- MegaMenu -->
+            <div id="mega-advantages" class="hidden group-hover:flex group-focus-within:flex absolute left-0 top-full mt-3 w-[700px] bg-[#232323] rounded-2xl shadow-2xl p-6 z-50 text-white animate-fade-in flex gap-8">
+              <div class="flex-1 min-w-[220px] flex flex-col gap-4">
+                <div>
+                  <div class="font-bold text-lg text-orange-400 mb-1" data-i18n="header-what-vpn">Что такое VPN?</div>
+                  <div class="text-gray-200 text-sm" data-i18n="header-what-vpn-desc">VPN — это технология для анонимности, безопасности и обхода блокировок в интернете.</div>
+                </div>
+                <div>
+                  <div class="font-bold text-lg text-orange-400 mb-1" data-i18n="header-why-bazara">Почему BazaraVPN?</div>
+                  <div class="text-gray-200 text-sm" data-i18n="header-why-bazara-desc">Без логов, высокая скорость, поддержка стриминга и торрентов, современные протоколы.</div>
+                </div>
+                <div>
+                  <div class="font-bold text-lg text-orange-400 mb-1" data-i18n="header-all-features">Все функции</div>
+                  <div class="text-gray-200 text-sm" data-i18n="header-all-features-desc">Мультиустройство, защита Wi-Fi, смена IP, доступ к контенту по всему миру.</div>
+                </div>
+                <div>
+                  <div class="font-bold text-lg text-orange-400 mb-1" data-i18n="header-servers">VPN-серверы</div>
+                  <div class="text-gray-200 text-sm" data-i18n="header-servers-desc">Сервера в 10+ странах для стабильного и быстрого соединения.</div>
+                </div>
+              </div>
+              <div class="flex-1 min-w-[220px] flex flex-col gap-4">
+                <div>
+                  <div class="font-bold text-lg text-orange-400 mb-1" data-i18n="header-streaming">VPN для стриминга</div>
+                  <div class="text-gray-200 text-sm" data-i18n="header-streaming-desc">Смотрите Netflix, Hulu, Disney+ и другие сервисы без ограничений.</div>
+                </div>
+                <div>
+                  <div class="font-bold text-lg text-orange-400 mb-1" data-i18n="header-countries">Страны</div>
+                  <div class="text-gray-200 text-sm" data-i18n="header-countries-desc">США, Турция, Япония, Германия, Франция, и другие.</div>
+                </div>
+                <div>
+                  <div class="font-bold text-lg text-orange-400 mb-1" data-i18n="header-devices">Устройства</div>
+                  <div class="text-gray-200 text-sm" data-i18n="header-devices-desc">Windows, macOS, Android, iOS, роутеры.</div>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li><a href="tariffs.html" class="text-white hover:text-orange-500 transition py-2 px-2 rounded-lg" data-i18n="header-tariffs">Тарифы</a></li>
+          <li><a href="/download" class="px-4 py-2 hover:bg-[#181818] cursor-pointer" data-i18n="header-download">Скачать</a></li>
+        </ul>
+      </div>
+      <!-- Десктоп поддержка и язык -->
+      <div class="hidden md:flex items-center gap-6 flex-shrink-0">
+        <a href="support.html" class="flex items-center gap-2 text-orange-500 font-bold py-2 px-3 rounded-lg border border-orange-500 bg-[#232323]" data-i18n="header-support">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <span class="hidden md:inline">Поддержка</span>
+        </a>
+        <div id="lang-switcher" class="relative flex items-center gap-2 select-none">
+          <button id="lang-dropdown-btn" class="flex items-center gap-2 px-3 py-2 bg-[#232323] rounded-lg border border-gray-700 text-white hover:bg-[#2c2c2c] focus:outline-none text-base">
+            <svg class="w-6 h-6 text-gray-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 0 20M12 2a15.3 15.3 0 0 0 0 20"/></svg>
+            <span id="lang-current" class="font-semibold">Русский</span>
+            <svg class="w-5 h-5 ml-1 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div id="lang-dropdown" class="hidden absolute right-0 mt-2 w-40 bg-[#232323] border border-gray-700 rounded-lg shadow-lg py-1 z-50">
+            <button type="button" class="w-full text-left px-5 py-3 text-base hover:bg-[#181818] text-white flex items-center gap-2" data-lang="ru">Русский</button>
+            <button type="button" class="w-full text-left px-5 py-3 text-base hover:bg-[#181818] text-white flex items-center gap-2" data-lang="en">English</button>
+          </div>
+        </div>
+      </div>
+      <!-- Мобильный бургер -->
+      <button class="block md:hidden p-2 rounded-lg hover:bg-[#232323] focus:outline-none" id="burger-btn" aria-label="Открыть меню">
+        <svg class="w-8 h-8 text-orange-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+    </div>
+    <!-- Мобильное меню -->
+    <div id="mobile-menu" class="fixed inset-0 bg-[#181818] bg-opacity-95 z-50 flex-col items-center justify-center gap-8 hidden md:hidden">
+      <button class="absolute top-6 right-6 p-2 rounded-lg hover:bg-[#232323]" id="close-mobile-menu" aria-label="Закрыть меню">
+        <svg class="w-8 h-8 text-orange-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+      <ul class="flex flex-col gap-8 text-2xl font-bold mt-24">
+        <li><a href="index.html#advantages" class="hover:text-orange-400" data-i18n="header-advantages">Преимущества</a></li>
+        <li><a href="tariffs.html" class="hover:text-orange-400" data-i18n="header-tariffs">Тарифы</a></li>
+        <li><a href="index.html#download" class="hover:text-orange-400" data-i18n="header-download">Скачать</a></li>
+        <li><a href="support.html" class="hover:text-orange-400" data-i18n="header-support">Поддержка</a></li>
+        <li>
+          <div class="flex flex-col items-center gap-2">
+            <span class="text-base text-gray-400">Язык</span>
+            <button type="button" class="w-full text-left px-5 py-3 text-lg hover:bg-[#232323] text-white flex items-center gap-2" data-lang="ru">Русский</button>
+            <button type="button" class="w-full text-left px-5 py-3 text-lg hover:bg-[#232323] text-white flex items-center gap-2" data-lang="en">English</button>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <main class="flex-1 flex flex-col items-center pt-24 pb-16">
+    <section class="fade-up w-full max-w-3xl mx-auto flex flex-col items-center min-h-0 bg-[#181818] pt-8 pb-16 animate-fade-in">
+      <h2 class="text-4xl font-extrabold text-orange-400 mb-10 text-center" data-i18n="kb-title">База знаний BazaraVPN</h2>
+      <div class="text-lg mb-10 text-gray-300 text-center max-w-2xl" data-i18n="kb-desc">Добро пожаловать в базу знаний BazaraVPN! Здесь вы найдёте инструкции, советы по безопасности, ответы на вопросы и полезные статьи о нашем сервисе.</div>
+      <div class="kb-block fade-up">
+        <h3 data-i18n="kb-overview-title">Обзор BazaraVPN</h3>
+        <p data-i18n="kb-overview-desc">BazaraVPN — это современный VPN-сервис для защиты ваших данных, обхода блокировок и анонимности в интернете. Мы предлагаем приложения для всех популярных платформ, высокую скорость и надёжную поддержку.</p>
+      </div>
+      <div class="kb-block fade-up">
+        <h3 data-i18n="kb-install-title">Установка и настройка</h3>
+        <p data-i18n="kb-install-desc">Скачайте приложение BazaraVPN для вашей платформы (Windows, macOS, Android, iOS, Linux) с официального сайта. Следуйте простым шагам мастера установки, войдите в аккаунт и подключитесь к серверу одним кликом.</p>
+        <ul>
+          <li data-i18n="kb-install-li1">Поддержка всех популярных устройств</li>
+          <li data-i18n="kb-install-li2">Пошаговые инструкции внутри приложения</li>
+          <li data-i18n="kb-install-li3">Автоматическое подключение при запуске</li>
+        </ul>
+      </div>
+      <div class="kb-block fade-up">
+        <h3 data-i18n="kb-security-title">Безопасность и анонимность</h3>
+        <p data-i18n="kb-security-desc">Ваши данные защищены современным шифрованием. Мы не храним логи, не отслеживаем активность и не передаём информацию третьим лицам. Используйте VPN для анонимного и безопасного доступа к интернету.</p>
+        <ul>
+          <li data-i18n="kb-security-li1">Сильное шифрование трафика</li>
+          <li data-i18n="kb-security-li2">Скрытие реального IP-адреса</li>
+          <li data-i18n="kb-security-li3">Защита в публичных Wi-Fi сетях</li>
+        </ul>
+      </div>
+      <div class="kb-block fade-up">
+        <h3 data-i18n="kb-tariffs-title">Тарифы и оплата</h3>
+        <p data-i18n="kb-tariffs-desc">Выберите подходящий тариф: бесплатный с базовыми возможностями или премиум с максимальной скоростью и расширенными функциями. Оплата возможна картой, криптовалютой и другими способами.</p>
+        <ul>
+          <li data-i18n="kb-tariffs-li1">Гибкая система тарифов</li>
+          <li data-i18n="kb-tariffs-li2">Безопасная оплата</li>
+          <li data-i18n="kb-tariffs-li3">Пробный период для новых пользователей</li>
+        </ul>
+      </div>
+      <div class="kb-block fade-up">
+        <h3 data-i18n="kb-support-title">Техническая поддержка</h3>
+        <p data-i18n="kb-support-desc">Если возникли вопросы или проблемы — наша команда поддержки всегда готова помочь. Напишите нам через чат на сайте или по email, и мы быстро решим ваш вопрос.</p>
+        <ul>
+          <li data-i18n="kb-support-li1">Круглосуточная поддержка</li>
+          <li data-i18n="kb-support-li2">Ответы на email и в чате</li>
+          <li data-i18n="kb-support-li3">Быстрая помощь по любым вопросам</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+  <footer class="w-full bg-[#232323] border-t border-[#333] py-6 px-4 flex flex-col md:flex-row items-center justify-center md:justify-between gap-6 md:gap-12 text-gray-200 text-base mt-auto text-center md:text-left">
+    <div class="flex flex-col md:flex-row items-center gap-4 md:gap-12 w-full justify-center md:justify-start">
+      <a href="contacts.html" class="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-[#181818] transition text-lg font-semibold">
+        <img src="assets/mail-3d.png" alt="Контакты" class="w-7 h-7" style="object-fit:contain;">
+        <span data-i18n="footer-contacts">Контакты</span>
+      </a>
+      <a href="privacy.html" class="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-[#181818] transition text-lg font-semibold">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8 8h8v8H8z"/></svg>
+        <span data-i18n="footer-privacy">Политика</span>
+      </a>
+    </div>
+    <div class="text-center text-lg font-medium w-full md:w-auto" data-i18n="footer-copyright">© 2024 BazaraVPN</div>
+    <div class="flex items-center justify-center gap-5 w-full md:w-auto mt-4 md:mt-0">
+      <a href="https://t.me/bazaraVPN" class="hover:text-orange-400" aria-label="Telegram" target="_blank" rel="noopener"><svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 4L12 20l-3-7-7-3z"/></svg></a>
+      <a href="https://www.instagram.com/bazaravpn/" class="hover:text-orange-400" aria-label="Instagram" target="_blank" rel="noopener"><svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="6"/><circle cx="12" cy="12" r="5"/><circle cx="17" cy="7" r="1.5"/></svg></a>
+      <a href="https://www.youtube.com/@BazaraVPN" class="hover:text-orange-400" aria-label="YouTube" target="_blank" rel="noopener"><svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="4"/><polygon points="10,9 16,12 10,15" fill="currentColor"/></svg></a>
+      <a href="https://www.tiktok.com/@bazaravpn1?lang=ru-RU" class="hover:text-orange-400" aria-label="TikTok" target="_blank" rel="noopener"><svg class="w-7 h-7" viewBox="0 0 24 24" fill="none"><path d="M16.5 3a4.5 4.5 0 0 0 4.5 4.5v2A6.5 6.5 0 0 1 14.5 3h2zm-2 0v12.5a3.5 3.5 0 1 1-3.5-3.5h1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    </div>
+  </footer>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('.fade-up').forEach(el => {
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight - 40) {
+          el.classList.add('visible');
+        }
+      });
+      // --- Переводчик (RU/EN)
+      const translations = {
+        ru: {
+          'kb-title': 'База знаний BazaraVPN',
+          'kb-desc': 'Добро пожаловать в базу знаний BazaraVPN! Здесь вы найдёте инструкции, советы по безопасности, ответы на вопросы и полезные статьи о нашем сервисе.',
+          'kb-overview-title': 'Обзор BazaraVPN',
+          'kb-overview-desc': 'BazaraVPN — это современный VPN-сервис для защиты ваших данных, обхода блокировок и анонимности в интернете. Мы предлагаем приложения для всех популярных платформ, высокую скорость и надёжную поддержку.',
+          'kb-install-title': 'Установка и настройка',
+          'kb-install-desc': 'Скачайте приложение BazaraVPN для вашей платформы (Windows, macOS, Android, iOS, Linux) с официального сайта. Следуйте простым шагам мастера установки, войдите в аккаунт и подключитесь к серверу одним кликом.',
+          'kb-install-li1': 'Поддержка всех популярных устройств',
+          'kb-install-li2': 'Пошаговые инструкции внутри приложения',
+          'kb-install-li3': 'Автоматическое подключение при запуске',
+          'kb-security-title': 'Безопасность и анонимность',
+          'kb-security-desc': 'Ваши данные защищены современным шифрованием. Мы не храним логи, не отслеживаем активность и не передаём информацию третьим лицам. Используйте VPN для анонимного и безопасного доступа к интернету.',
+          'kb-security-li1': 'Сильное шифрование трафика',
+          'kb-security-li2': 'Скрытие реального IP-адреса',
+          'kb-security-li3': 'Защита в публичных Wi-Fi сетях',
+          'kb-tariffs-title': 'Тарифы и оплата',
+          'kb-tariffs-desc': 'Выберите подходящий тариф: бесплатный с базовыми возможностями или премиум с максимальной скоростью и расширенными функциями. Оплата возможна картой, криптовалютой и другими способами.',
+          'kb-tariffs-li1': 'Гибкая система тарифов',
+          'kb-tariffs-li2': 'Безопасная оплата',
+          'kb-tariffs-li3': 'Пробный период для новых пользователей',
+          'kb-support-title': 'Техническая поддержка',
+          'kb-support-desc': 'Если возникли вопросы или проблемы — наша команда поддержки всегда готова помочь. Напишите нам через чат на сайте или по email, и мы быстро решим ваш вопрос.',
+          'kb-support-li1': 'Круглосуточная поддержка',
+          'kb-support-li2': 'Ответы на email и в чате',
+          'kb-support-li3': 'Быстрая помощь по любым вопросам',
+          // Header/Footer
+          'header-advantages': 'Преимущества',
+          'header-tariffs': 'Тарифы',
+          'header-download': 'Скачать',
+          'header-support': 'Поддержка',
+          'header-what-vpn': 'Что такое VPN?',
+          'header-what-vpn-desc': 'VPN — это технология для анонимности, безопасности и обхода блокировок в интернете.',
+          'header-why-bazara': 'Почему BazaraVPN?',
+          'header-why-bazara-desc': 'Без логов, высокая скорость, поддержка стриминга и торрентов, современные протоколы.',
+          'header-all-features': 'Все функции',
+          'header-all-features-desc': 'Мультиустройство, защита Wi-Fi, смена IP, доступ к контенту по всему миру.',
+          'header-servers': 'VPN-серверы',
+          'header-servers-desc': 'Сервера в 10+ странах для стабильного и быстрого соединения.',
+          'header-streaming': 'VPN для стриминга',
+          'header-streaming-desc': 'Смотрите Netflix, Hulu, Disney+ и другие сервисы без ограничений.',
+          'header-countries': 'Страны',
+          'header-countries-desc': 'США, Турция, Япония, Германия, Франция, и другие.',
+          'header-devices': 'Устройства',
+          'header-devices-desc': 'Windows, macOS, Android, iOS, роутеры.',
+          'footer-contacts': 'Контакты',
+          'footer-privacy': 'Политика',
+          'footer-copyright': '© 2024 BazaraVPN',
+        },
+        en: {
+          'kb-title': 'BazaraVPN Knowledge Base',
+          'kb-desc': 'Welcome to the BazaraVPN Knowledge Base! Here you will find guides, security tips, answers to questions, and useful articles about our service.',
+          'kb-overview-title': 'BazaraVPN Overview',
+          'kb-overview-desc': 'BazaraVPN is a modern VPN service for protecting your data, bypassing blocks, and staying anonymous online. We offer apps for all popular platforms, high speed, and reliable support.',
+          'kb-install-title': 'Installation and Setup',
+          'kb-install-desc': 'Download the BazaraVPN app for your platform (Windows, macOS, Android, iOS, Linux) from the official website. Follow the simple setup wizard steps, log in to your account, and connect to a server with one click.',
+          'kb-install-li1': 'Support for all popular devices',
+          'kb-install-li2': 'Step-by-step instructions inside the app',
+          'kb-install-li3': 'Automatic connection on startup',
+          'kb-security-title': 'Security and Anonymity',
+          'kb-security-desc': 'Your data is protected with modern encryption. We do not keep logs, track activity, or share information with third parties. Use VPN for anonymous and secure internet access.',
+          'kb-security-li1': 'Strong traffic encryption',
+          'kb-security-li2': 'Hiding your real IP address',
+          'kb-security-li3': 'Protection on public Wi-Fi networks',
+          'kb-tariffs-title': 'Tariffs and Payment',
+          'kb-tariffs-desc': 'Choose the right plan: free with basic features or premium with maximum speed and advanced functions. Payment is possible by card, cryptocurrency, and other methods.',
+          'kb-tariffs-li1': 'Flexible tariff system',
+          'kb-tariffs-li2': 'Secure payment',
+          'kb-tariffs-li3': 'Trial period for new users',
+          'kb-support-title': 'Technical Support',
+          'kb-support-desc': 'If you have questions or problems — our support team is always ready to help. Write to us via chat on the site or by email, and we will quickly solve your issue.',
+          'kb-support-li1': '24/7 support',
+          'kb-support-li2': 'Answers by email and chat',
+          'kb-support-li3': 'Fast help with any questions',
+          // Header/Footer
+          'header-advantages': 'Advantages',
+          'header-tariffs': 'Tariffs',
+          'header-download': 'Download',
+          'header-support': 'Support',
+          'header-what-vpn': 'What is VPN?',
+          'header-what-vpn-desc': 'VPN is a technology for anonymity, security, and bypassing internet blocks.',
+          'header-why-bazara': 'Why BazaraVPN?',
+          'header-why-bazara-desc': 'No logs, high speed, streaming and torrent support, modern protocols.',
+          'header-all-features': 'All features',
+          'header-all-features-desc': 'Multi-device, Wi-Fi protection, IP change, access to content worldwide.',
+          'header-servers': 'VPN servers',
+          'header-servers-desc': 'Servers in 10+ countries for stable and fast connection.',
+          'header-streaming': 'VPN for streaming',
+          'header-streaming-desc': 'Watch Netflix, Hulu, Disney+ and other services without limits.',
+          'header-countries': 'Countries',
+          'header-countries-desc': 'USA, Turkey, Japan, Germany, France, and more.',
+          'header-devices': 'Devices',
+          'header-devices-desc': 'Windows, macOS, Android, iOS, routers.',
+          'footer-contacts': 'Contacts',
+          'footer-privacy': 'Privacy',
+          'footer-copyright': '© 2024 BazaraVPN',
+        }
+      };
+      function setLang(lang) {
+        localStorage.setItem('lang', lang);
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+          const key = el.getAttribute('data-i18n');
+          if (translations[lang][key]) {
+            if (/<[a-z][\s\S]*>/i.test(translations[lang][key])) {
+              el.innerHTML = translations[lang][key];
+            } else {
+              el.textContent = translations[lang][key];
+            }
+          }
+        });
+        const langCurrent = document.getElementById('lang-current');
+        if (langCurrent) langCurrent.textContent = lang === 'ru' ? 'Русский' : 'English';
+      }
+      let lang = localStorage.getItem('lang') || 'ru';
+      setLang(lang);
+      // --- Переключатель языка (кнопка и дропдаун)
+      const langBtn = document.getElementById('lang-dropdown-btn');
+      const langDropdown = document.getElementById('lang-dropdown');
+      const langSwitcher = document.getElementById('lang-switcher');
+      if (langBtn && langDropdown) {
+        langBtn.onclick = function(e) {
+          e.stopPropagation();
+          langDropdown.classList.toggle('hidden');
+        };
+        langDropdown.querySelectorAll('[data-lang]').forEach(btn => {
+          btn.onclick = function(e) {
+            e.stopPropagation();
+            setLang(this.getAttribute('data-lang'));
+            langDropdown.classList.add('hidden');
+          };
+        });
+        document.addEventListener('click', function(e) {
+          if (langDropdown && langSwitcher && !langSwitcher.contains(e.target)) {
+            langDropdown.classList.add('hidden');
+          }
+        });
+      }
+      // Бургер-меню для мобильного хедера
+      const burgerBtn = document.getElementById('burger-btn');
+      const mobileMenu = document.getElementById('mobile-menu');
+      const closeMobileMenu = document.getElementById('close-mobile-menu');
+      if (burgerBtn && mobileMenu && closeMobileMenu) {
+        burgerBtn.onclick = function() {
+          mobileMenu.classList.remove('hidden');
+        };
+        closeMobileMenu.onclick = function() {
+          mobileMenu.classList.add('hidden');
+        };
+        // Закрытие по клику вне меню
+        mobileMenu.onclick = function(e) {
+          if (e.target === mobileMenu) mobileMenu.classList.add('hidden');
+        };
+      }
+    });
+  </script>
+</body>
+</html> 

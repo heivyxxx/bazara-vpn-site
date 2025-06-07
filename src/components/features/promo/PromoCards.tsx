@@ -1,6 +1,7 @@
 "use client";
 
 import Image from 'next/image';
+import { useLang } from '@/lib/LanguageContext';
 
 interface PromoCardProps {
   image: string;
@@ -29,35 +30,30 @@ const PromoCard = ({ image, title, description }: PromoCardProps) => (
   </div>
 );
 
-export const PromoCards = () => {
-  const cards = [
-    {
-      image: "/assets/chill.png",
-      title: "Свобода без компромиссов",
-      description: "Тысячи пользователей выбрали BazaraVPN, чтобы вернуть себе контроль и спокойствие. Рейтинг 4.9/5 — не просто так."
-    },
-    {
-      image: "/assets/stena.png",
-      title: "Доступ без границ",
-      description: "Открывай сайты, стримы и приложения из любой точки мира — быстро, стабильно и безопасно."
-    },
-    {
-      image: "/assets/planeta.png",
-      title: "Универсальная защита",
-      description: "BazaraVPN работает на всех популярных устройствах: Windows, macOS, Android, iOS и даже роутерах."
-    }
-  ];
+const promoTexts = {
+  ru: [
+    { title: 'Все локации', desc: 'Доступ к серверам в 10+ странах мира.' },
+    { title: 'Безлимит', desc: 'Без ограничений по трафику и скорости.' },
+    { title: 'Стриминг', desc: 'Смотрите Netflix, Hulu, Disney+ и другие.' },
+  ],
+  en: [
+    { title: 'All locations', desc: 'Access to servers in 10+ countries.' },
+    { title: 'Unlimited', desc: 'No limits on traffic or speed.' },
+    { title: 'Streaming', desc: 'Watch Netflix, Hulu, Disney+ and more.' },
+  ],
+};
 
+export const PromoCards = () => {
+  const { lang } = useLang();
+  const cards = promoTexts[lang];
   return (
-    <section className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 my-24 px-4" id="promo-cards">
-      {cards.map((card, index) => (
-        <PromoCard
-          key={index}
-          image={card.image}
-          title={card.title}
-          description={card.description}
-        />
+    <div className="w-full max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 my-12">
+      {cards.map((card, i) => (
+        <div key={i} className="bg-[#232323] rounded-2xl shadow-lg border border-orange-700 p-8 flex flex-col items-center text-center">
+          <div className="text-2xl font-bold text-orange-400 mb-2">{card.title}</div>
+          <div className="text-base text-gray-200">{card.desc}</div>
+        </div>
       ))}
-    </section>
+    </div>
   );
 }; 

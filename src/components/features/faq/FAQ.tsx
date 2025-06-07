@@ -64,40 +64,7 @@ export const FAQ = () => {
   const { lang } = useLang();
   const t = faqTexts[lang];
 
-  const faqs = [
-    {
-      question: "Как работает BazaraVPN?",
-      answer: "BazaraVPN защищает вашу конфиденциальность в Интернете, скрывая ваш настоящий IP-адрес. Когда ваше виртуальное местоположение скрыто, отслеживать, ограничивать или продавать вашу онлайн-активность становится намного сложнее."
-    },
-    {
-      question: "Как установить BazaraVPN?",
-      answer: "Чтобы установить BazaraVPN, скачайте приложение для вашего устройства и следуйте нашему руководству по настройке. Затем просто войдите в свой аккаунт, и вы будете готовы к подключению."
-    },
-    {
-      question: "Можно ли пользоваться бесплатно?",
-      answer: "Да, у нас есть бесплатный пробный период и базовые функции без оплаты."
-    },
-    {
-      question: "Какие устройства поддерживаются?",
-      answer: "Windows, macOS, Android, iOS, роутеры и другие."
-    },
-    {
-      question: "Можно ли смотреть Netflix и другие стриминги?",
-      answer: "Да, BazaraVPN позволяет обходить блокировки и смотреть любые стриминговые сервисы."
-    },
-    {
-      question: "Сколько устройств можно подключить?",
-      answer: "До 5 устройств одновременно на одном аккаунте."
-    },
-    {
-      question: "Как оплатить подписку?",
-      answer: "Мы принимаем карты, криптовалюту и другие способы оплаты."
-    },
-    {
-      question: "Законно ли использовать VPN?",
-      answer: "В большинстве стран — да. Но проверьте законы вашей страны."
-    }
-  ];
+  const faqs = t.items;
 
   return (
     <section className="max-w-4xl mx-auto my-20 px-4">
@@ -108,8 +75,8 @@ export const FAQ = () => {
         {faqs.map((faq, index) => (
           <FAQItem
             key={index}
-            question={faq.question}
-            answer={faq.answer}
+            question={faq.q}
+            answer={faq.a}
             isOpen={openIndex === index}
             onClick={() => setOpenIndex(openIndex === index ? null : index)}
           />

@@ -125,8 +125,10 @@ export const Hero = () => {
             width={176}
             height={176}
             alt="Trader animation"
-            className="absolute bottom-36 left-0 w-44 h-auto opacity-0 pointer-events-none trader-anim select-none"
+            className="absolute bottom-36 left-0 w-44 h-auto trader-anim select-none"
             style={{ 
+              opacity: 1,
+              pointerEvents: 'auto',
               transform: 'translateY(0)',
               transition: 'opacity 0.5s, transform 0.7s cubic-bezier(.68,-0.55,.27,1.55)',
               zIndex: 1

@@ -44,11 +44,12 @@ export const Header = () => {
       <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
           <Image 
-            src="/assets/logo.png" 
+            src="/assets/logo-bazara.png" 
             alt="BazaraVPN" 
             width={40} 
             height={40} 
             className="w-10 h-10"
+            priority
           />
           <span className="text-2xl font-bold text-white">
             {t.bazara}<span className="text-white">{t.vpn}</span>

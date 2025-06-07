@@ -2,7 +2,7 @@
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { LanguageProvider, useLang } from '@/lib/LanguageContext';
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import Image from 'next/image';
 import clsx from 'clsx';
 import { PaymentModal, TariffType } from './PaymentModal';
@@ -52,6 +52,9 @@ function TariffsContent() {
   const [modalOpen, setModalOpen] = React.useState(false);
   const [modalTariff, setModalTariff] = React.useState<TariffType>('year');
   const [modalPrice, setModalPrice] = React.useState('2290₽');
+  const [showOldPrice, setShowOldPrice] = React.useState(true);
+  const [priceAnim, setPriceAnim] = React.useState(false);
+  const oldPriceRef = useRef<HTMLSpanElement>(null);
 
   const handleOpenModal = (tariff: TariffType, price: string) => {
     setModalTariff(tariff);
@@ -63,6 +66,16 @@ function TariffsContent() {
     setModalOpen(false);
   };
 
+  // Анимация смены цены
+  const handlePriceClick = () => {
+    if (!showOldPrice) return;
+    setPriceAnim(true);
+    setTimeout(() => {
+      setShowOldPrice(false);
+      setPriceAnim(false);
+    }, 600);
+  };
+
   return (
     <main className="min-h-screen bg-[#181818] pt-24 pb-10 px-4 flex flex-col items-center">
       <style jsx>{`
@@ -70,13 +83,16 @@ function TariffsContent() {
         .fade-up.visible { opacity: 1; transform: none; }
         .device-anim { transition: transform 0.5s cubic-bezier(.77,0,.18,1); }
         .device-anim:hover { transform: scale(1.13) rotate(-6deg); filter: drop-shadow(0 0 16px #ff8800cc); }
-        .tariff-btn { background: linear-gradient(90deg, #ff8800 0%, #a259ff 100%); color: #fff; box-shadow: 0 0 16px 0 #ff880088, 0 2px 8px 0 #a259ff44; font-weight: 700; font-size: 1.18rem; border: none; border-radius: 1.1rem; padding: 1.1rem 2.5rem; transition: box-shadow 0.22s, transform 0.18s, background 0.18s; outline: none; position: relative; z-index: 1; }
-        .tariff-btn:hover, .tariff-btn:focus { box-shadow: 0 0 32px 0 #ff8800cc, 0 4px 16px 0 #a259ff88; background: linear-gradient(90deg, #ff8800 10%, #a259ff 90%); transform: scale(1.06); }
-        .tariff-card { transition: box-shadow 0.22s, transform 0.18s, border 0.18s; box-shadow: 0 2px 16px 0 #a259ff22; }
-        .tariff-card:hover { box-shadow: 0 8px 32px 0 #ff8800cc, 0 2px 8px 0 #a259ff88; border-color: #ff8800; transform: translateY(-6px) scale(1.04) rotate(-1deg); z-index: 2; }
+        .tariff-btn { background: linear-gradient(90deg, #ff8800 0%, #a259ff 100%); color: #fff; font-weight: 700; font-size: 1.18rem; border: none; border-radius: 1.1rem; padding: 1.1rem 2.5rem; transition: box-shadow 0.22s, transform 0.18s, background 0.18s; outline: none; position: relative; z-index: 1; }
+        .tariff-btn:hover, .tariff-btn:focus { background: linear-gradient(90deg, #ff8800 10%, #a259ff 90%); transform: scale(1.06); }
+        .tariff-card { transition: box-shadow 0.22s, transform 0.18s, border 0.18s; }
+        .tariff-card:hover { border-color: #ff8800; transform: translateY(-6px) scale(1.04) rotate(-1deg); z-index: 2; }
+        .no-glow { box-shadow: none !important; }
+        .price-old { display:inline-block; font-size:1.2em; color:#fff; background:#ff3b3b; border-radius:0.7em; padding:0.2em 0.7em; margin-right:0.7em; text-decoration:line-through; opacity:1; transition:opacity 0.6s, transform 0.6s; }
+        .price-old.hide { opacity:0; transform:translateY(-30px) scale(0.7) rotate(-12deg); }
       `}</style>
       {/* PromoBanner */}
-      <div className="fade-up w-full max-w-5xl mx-auto rounded-2xl bg-gradient-to-r from-[#7b2ff2] to-[#f357a8] flex items-center justify-between px-8 py-7 mb-10 shadow-lg">
+      <div className="fade-up w-full max-w-5xl mx-auto rounded-2xl bg-gradient-to-r from-[#7b2ff2] to-[#f357a8] flex items-center justify-between px-8 py-7 mb-10 shadow-lg cursor-pointer" onClick={handlePriceClick}>
         <div className="flex items-center gap-6">
           <Image src="/assets/tort.png" alt="Торт" width={128} height={128} className="w-32 h-32 md:w-40 md:h-40 select-none" draggable={false} />
           <div className="flex flex-col gap-1">
@@ -90,11 +106,14 @@ function TariffsContent() {
       </div>
       {/* TariffMainBlock */}
       <section className="fade-up w-full flex justify-center items-center py-16 px-4">
-        <div className="tariff-card w-full max-w-6xl bg-[#232323] rounded-3xl shadow-2xl flex flex-col md:flex-row items-center md:items-stretch gap-16 md:gap-0 p-14 md:p-20 border border-[#333]">
+        <div className="tariff-card no-glow w-full max-w-6xl bg-[#232323] rounded-3xl flex flex-col md:flex-row items-center md:items-stretch gap-16 md:gap-0 p-14 md:p-20 border border-[#333]">
           <div className="flex-1 flex flex-col justify-center items-start">
             <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-6">{t.mainTitle}</h2>
             <p className="text-xl md:text-2xl text-white mb-8 max-w-lg" dangerouslySetInnerHTML={{__html: t.mainDesc}} />
-            <div className="flex gap-4 mt-2">
+            <div className="flex gap-4 mt-2 items-center">
+              {showOldPrice && (
+                <span ref={oldPriceRef} className={`price-old${priceAnim ? ' hide' : ''}`}>2890₽</span>
+              )}
               <button className="tariff-btn" onClick={()=>handleOpenModal('year', lang==='ru'?'2290₽':'2290₽')}>{t.btnYear}</button>
               <button className="rounded-xl px-8 py-4 text-lg font-bold border-2 border-orange-400 text-orange-500 bg-[#232323] shadow hover:bg-orange-900 hover:scale-105 transition-transform" onClick={()=>handleOpenModal('month', lang==='ru'?'399₽':'399₽')}>{t.btnMonth}</button>
             </div>
@@ -106,7 +125,7 @@ function TariffsContent() {
       </section>
       {/* TryFreeBlock */}
       <section className="fade-up w-full flex justify-center items-center py-10 px-4">
-        <div className="tariff-card w-full max-w-4xl bg-[#232323] rounded-3xl shadow-xl flex flex-col md:flex-row items-center gap-8 md:gap-12 p-8 md:p-12 border border-[#232323]">
+        <div className="tariff-card no-glow w-full max-w-4xl bg-[#232323] rounded-3xl flex flex-col md:flex-row items-center gap-8 md:gap-12 p-8 md:p-12 border border-[#232323]">
           <div className="flex-shrink-0 flex items-center justify-center">
             <Image src="/assets/gift-3d.png" alt="Подарок" width={96} height={96} className="w-24 h-24 md:w-32 md:h-32 select-none" draggable={false} />
           </div>

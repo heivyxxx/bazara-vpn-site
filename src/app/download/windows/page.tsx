@@ -53,7 +53,7 @@ export default function WindowsInstallPage() {
   const [lang] = useLang();
   const t = texts[lang];
   return (
-    <LanguageProvider>
+    <>
       <Header />
       <main className="min-h-screen flex flex-col items-center justify-center pt-32 pb-16 bg-[#181818]">
         <div className="w-full max-w-3xl mx-auto flex flex-col items-center animate-fade-in">
@@ -104,6 +104,6 @@ export default function WindowsInstallPage() {
         </div>
       </main>
       <Footer />
-    </LanguageProvider>
+    </>
   );
 } 

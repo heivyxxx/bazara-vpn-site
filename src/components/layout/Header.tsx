@@ -3,6 +3,8 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useLang } from '@/lib/LanguageContext';
+import { useState } from 'react';
+import { TelegramAuthModal } from '@/components/features/TelegramAuthModal';
 
 const translations = {
   ru: {
@@ -28,6 +30,7 @@ const translations = {
 export const Header = () => {
   const { lang, setLang } = useLang();
   const t = translations[lang];
+  const [authOpen, setAuthOpen] = useState(false);
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-[#1A1A1A]/80 backdrop-blur-lg border-b border-[#333]">
@@ -68,12 +71,13 @@ export const Header = () => {
         </nav>
 
         <div className="flex items-center gap-4">
-          <Link 
-            href="/login" 
+          <button
+            onClick={() => setAuthOpen(true)}
             className="text-white hover:text-orange-400 transition hidden md:block"
+            style={{fontWeight:600}}
           >
             {t.login}
-          </Link>
+          </button>
           <Link 
             href="/download" 
             className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold py-2 px-6 rounded-xl shadow-lg transition"
@@ -90,6 +94,7 @@ export const Header = () => {
           </button>
         </div>
       </div>
+      <TelegramAuthModal isOpen={authOpen} onClose={() => setAuthOpen(false)} />
     </header>
   );
 }; 

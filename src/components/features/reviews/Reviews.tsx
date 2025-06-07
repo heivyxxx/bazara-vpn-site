@@ -4,8 +4,12 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ReviewModal } from './ReviewModal';
-import { User } from '@/lib/types';
+import { User, Review } from '@/lib/types';
 import { useLang } from '@/lib/LanguageContext';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, A11y } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
 
 interface ReviewCardProps {
   avatar: string;
@@ -16,7 +20,7 @@ interface ReviewCardProps {
 }
 
 const ReviewCard = ({ avatar, name, rating, text, date }: ReviewCardProps) => (
-  <div className="bg-[#232323] rounded-2xl shadow-xl p-8 flex flex-col items-start">
+  <div className="bg-[#232323] rounded-2xl shadow-xl p-8 flex flex-col items-start min-w-[320px] max-w-[370px] mx-auto review-card-3d-anim">
     <div className="flex items-center gap-3 mb-2">
       <Image 
         src={avatar} 
@@ -51,48 +55,42 @@ const reviewsTexts = {
     title: 'Отзывы пользователей',
     leave: 'Оставить отзыв',
     noReviews: 'Пока нет отзывов',
+    all: 'Все отзывы',
   },
   en: {
     title: 'User reviews',
     leave: 'Leave a review',
     noReviews: 'No reviews yet',
+    all: 'All reviews',
   },
 };
 
 export const Reviews = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [user, setUser] = useState<User | null>(null);
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const [loading, setLoading] = useState(true);
   const { lang } = useLang();
   const t = reviewsTexts[lang];
 
-  // Демо отзывы (в реальности будут загружаться из Firebase)
-  const reviews = [
-    {
-      avatar: "/assets/avatar1.png",
-      name: "Аноним",
-      rating: 5,
-      text: "VPN работает отлично, скорость высокая, всё просто и удобно!",
-      date: "12.06.24 14:32"
-    },
-    {
-      avatar: "/assets/avatar2.png",
-      name: "Иван",
-      rating: 5,
-      text: "Очень доволен сервисом, поддержка отвечает быстро.",
-      date: "10.06.24 09:18"
-    },
-    {
-      avatar: "/assets/avatar3.png",
-      name: "Мария",
-      rating: 5,
-      text: "Пользуюсь на всех устройствах, всё супер!",
-      date: "08.06.24 21:05"
-    }
-  ];
+  useEffect(() => {
+    const fetchReviews = async () => {
+      setLoading(true);
+      try {
+        const res = await fetch('/api/reviews');
+        const data = await res.json();
+        if (data.success) setReviews(data.reviews);
+      } catch (e) {
+        setReviews([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchReviews();
+  }, []);
 
   const handleSubmitReview = async (text: string, rating: number) => {
     if (!user) return;
-
     try {
       const response = await fetch('/api/reviews', {
         method: 'POST',
@@ -105,14 +103,15 @@ export const Reviews = () => {
           userUsername: user.username
         })
       });
-
       const data = await response.json();
       if (data.success) {
         setIsModalOpen(false);
-        // TODO: Показать сообщение об успехе и обновить список отзывов
+        // После отправки — обновить отзывы
+        const res = await fetch('/api/reviews');
+        const d = await res.json();
+        if (d.success) setReviews(d.reviews);
       }
     } catch (error) {
-      console.error('Error submitting review:', error);
       // TODO: Показать ошибку
     }
   };
@@ -128,7 +127,7 @@ export const Reviews = () => {
             href="/reviews" 
             className="bg-gradient-to-r from-orange-500 to-purple-500 hover:from-orange-600 hover:to-purple-600 text-white font-bold py-2 px-6 rounded-xl shadow-lg text-lg transition-all"
           >
-            Все отзывы
+            {t.all}
           </Link>
           <button
             onClick={() => setIsModalOpen(true)}
@@ -143,11 +142,37 @@ export const Reviews = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {reviews.map((review, index) => (
-          <ReviewCard key={index} {...review} />
-        ))}
-      </div>
+      {loading ? (
+        <div className="text-center text-gray-400 py-16 text-xl">Загрузка...</div>
+      ) : reviews.length === 0 ? (
+        <div className="text-center text-gray-400 py-16 text-xl">{t.noReviews}</div>
+      ) : (
+        <div className="relative reviews-carousel-3d">
+          <Swiper
+            modules={[Navigation, A11y]}
+            navigation
+            spaceBetween={32}
+            slidesPerView={1}
+            breakpoints={{
+              700: { slidesPerView: 2 },
+              1000: { slidesPerView: 3 },
+            }}
+            className="reviews-track-3d"
+          >
+            {reviews.map((review, index) => (
+              <SwiperSlide key={review.id}>
+                <ReviewCard
+                  avatar={`/assets/avatar${(index % 3) + 1}.png`}
+                  name={review.userName}
+                  rating={review.rating}
+                  text={review.text}
+                  date={new Date(review.createdAt).toLocaleString(lang === 'ru' ? 'ru-RU' : 'en-GB', { day: '2-digit', month: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit' })}
+                />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
+      )}
 
       <ReviewModal
         isOpen={isModalOpen}

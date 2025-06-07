@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 import { Review } from '@/lib/types';
+import { db } from '@/firebaseConfig';
+import { collection, getDocs, query, where, orderBy, addDoc, Timestamp } from 'firebase/firestore';
 
 // TODO: Добавить интеграцию с Firebase
 const reviews: Review[] = [
@@ -31,7 +33,25 @@ const reviews: Review[] = [
 
 export async function GET() {
   try {
-    // TODO: Получать отзывы из Firebase
+    const reviewsRef = collection(db, 'reviews');
+    const q = query(
+      reviewsRef,
+      where('status', 'in', ['approved', 'published']),
+      orderBy('createdAt', 'desc'),
+    );
+    const snap = await getDocs(q);
+    const reviews: Review[] = snap.docs.map(doc => {
+      const d = doc.data();
+      return {
+        id: doc.id,
+        userId: d.userId,
+        userName: d.name || 'Аноним',
+        userUsername: d.username || '',
+        text: d.text,
+        rating: d.rating,
+        createdAt: d.createdAt && d.createdAt.toDate ? d.createdAt.toDate().toISOString() : '',
+      };
+    });
     return NextResponse.json({ success: true, reviews });
   } catch (error) {
     console.error('Error fetching reviews:', error);
@@ -54,20 +74,17 @@ export async function POST(request: Request) {
       }, { status: 400 });
     }
 
-    // TODO: Сохранять отзыв в Firebase
-    const review: Review = {
-      id: Math.random().toString(36).substring(7),
+    const review = {
       userId,
-      userName,
-      userUsername,
+      name: userName,
+      username: userUsername || '',
       text,
       rating,
-      createdAt: new Date().toISOString()
+      createdAt: Timestamp.now(),
+      status: 'moderation',
     };
-
-    reviews.push(review);
-
-    return NextResponse.json({ success: true, review });
+    const docRef = await addDoc(collection(db, 'reviews'), review);
+    return NextResponse.json({ success: true, id: docRef.id });
   } catch (error) {
     console.error('Error creating review:', error);
     return NextResponse.json({ 

@@ -5,6 +5,8 @@ import { LanguageProvider, useLang } from '@/lib/LanguageContext';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
+import { SupportChatModal } from '@/components/support/SupportChatModal';
+import { SupportIssueModal } from '@/components/support/SupportIssueModal';
 
 const supportTexts = {
   ru: {
@@ -45,9 +47,13 @@ function SupportContent() {
   const { lang } = useLang();
   const t = supportTexts[lang];
   const [copied, setCopied] = React.useState(false);
+  const [chatOpen, setChatOpen] = React.useState(false);
+  const [issueOpen, setIssueOpen] = React.useState(false);
   return (
     <main className="flex-1 flex flex-col pt-24 items-center w-full min-h-screen bg-[#181818]">
-      <Image src="/assets/trader.gif" alt="BazaraVPN" width={208} height={208} className="w-52 h-52 mx-auto mb-8 select-none pointer-events-none" draggable={false} />
+      <Image src="/assets/trader.gif" alt="BazaraVPN" width={208} height={208} className="w-52 h-52 mx-auto mb-8 select-none pointer-events-none cursor-pointer" draggable={false} onClick={() => setChatOpen(true)} />
+      <SupportChatModal isOpen={chatOpen} onClose={() => setChatOpen(false)} />
+      <SupportIssueModal isOpen={issueOpen} onClose={() => setIssueOpen(false)} />
       <h1 className="text-4xl md:text-5xl font-extrabold text-center mb-4"><span className="text-orange-400">{t.title}</span></h1>
       <div className="text-xl md:text-2xl text-[#B8B8B8] mb-10 text-center max-w-xl font-medium">{t.desc}</div>
       <section className="w-full max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 mb-12 px-4">
@@ -80,6 +86,14 @@ function SupportContent() {
           <Image src="/assets/mail-3d.png" alt="Почта поддержки" width={80} height={80} className="w-20 h-20 mb-3 z-10 transition-transform duration-300 group-hover:-rotate-12 select-none pointer-events-none" draggable={false} />
           <span className="text-xl font-bold text-white z-10 select-none opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{whiteSpace:'nowrap'}}>{t.mailValue}</span>
           <span className={`absolute -top-8 left-1/2 -translate-x-1/2 bg-[#232323] text-white text-sm font-semibold px-4 py-2 rounded-xl shadow-lg ${copied ? 'opacity-100' : 'opacity-0'} pointer-events-none transition-opacity duration-300`} style={{zIndex:20}}>{t.mailCopied}</span>
+        </button>
+      </div>
+      <div className="flex justify-center mt-4 mb-8">
+        <button
+          onClick={() => setIssueOpen(true)}
+          className="bg-gradient-to-r from-orange-500 to-purple-700 hover:from-orange-600 hover:to-purple-800 text-white font-bold py-4 px-8 rounded-2xl text-lg shadow-lg transition-all"
+        >
+          {lang === 'ru' ? 'Сообщить о проблеме' : 'Report a Problem'}
         </button>
       </div>
     </main>

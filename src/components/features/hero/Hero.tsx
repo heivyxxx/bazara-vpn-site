@@ -11,6 +11,12 @@ const HeroFeature = ({ icon, text }: { icon: React.ReactNode; text: string }) =>
   </li>
 );
 
+const heroIcons = [
+  <svg className="w-6 h-6 text-orange-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>,
+  <svg className="w-6 h-6 text-orange-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>,
+  <svg className="w-6 h-6 text-orange-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8 12h8"/><path d="M12 8v8"/></svg>,
+];
+
 const heroTexts = {
   ru: {
     title: 'Bazara',
@@ -19,9 +25,9 @@ const heroTexts = {
     desc: 'VPN, который не спрашивает лишнего и не грузит мозги. Просто включил — и ты уже в безопасности. Всё по-базарному просто!',
     btn: 'Попробовать бесплатно',
     features: [
-      { icon: <svg className="w-6 h-6 text-orange-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>, text: 'Скорость до 1 Гбит/с' },
-      { icon: <svg className="w-6 h-6 text-orange-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>, text: 'Без логов и слежки' },
-      { icon: <svg className="w-6 h-6 text-orange-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8 12h8"/><path d="M12 8v8"/></svg>, text: 'До 5 устройств' },
+      'Скорость до 1 Гбит/с',
+      'Без логов и слежки',
+      'До 5 устройств',
     ],
     greeting: 'Привет! Чем могу помочь?',
   },
@@ -29,12 +35,12 @@ const heroTexts = {
     title: 'Bazara',
     subtitle: 'VPN',
     main: 'Fast. Secure. Anonymous.',
-    desc: 'A VPN that doesn't ask unnecessary questions or overload your brain. Just turn it on — and you're already safe. Simple as bazar!',
+    desc: 'A VPN that doesn\'t ask unnecessary questions or overload your brain. Just turn it on — and you\'re already safe. Simple as bazar!',
     btn: 'Try for free',
     features: [
-      { icon: <svg className="w-6 h-6 text-orange-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>, text: 'Speed up to 1 Gbps' },
-      { icon: <svg className="w-6 h-6 text-orange-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>, text: 'No logs or tracking' },
-      { icon: <svg className="w-6 h-6 text-orange-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8 12h8"/><path d="M12 8v8"/></svg>, text: 'Up to 5 devices' },
+      'Speed up to 1 Gbps',
+      'No logs or tracking',
+      'Up to 5 devices',
     ],
     greeting: 'Hi! How can I help you?',
   },
@@ -105,7 +111,7 @@ export const Hero = () => {
           className="flex flex-wrap gap-6 mt-6 fade-up-main"
           style={{ animationDelay: '0.44s' }}
         >
-          {t.features.map((f, i) => <HeroFeature key={i} icon={f.icon} text={f.text} />)}
+          {t.features.map((text, i) => <HeroFeature key={i} icon={heroIcons[i]} text={text} />)}
         </ul>
       </div>
 

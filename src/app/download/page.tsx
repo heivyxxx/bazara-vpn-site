@@ -181,31 +181,31 @@ const platforms = [
     name: "Windows",
     img: "/assets/windows.png",
     desc: "Простая установка для Windows 10/11. Поддержка Hiddify Next.",
-    link: "/install-windows.html"
+    link: "/download/windows"
   },
   {
     name: "macOS",
     img: "/assets/apple.png",
     desc: "Инструкция для MacBook и iMac. Быстрый старт через Hiddify.",
-    link: "/install-macos.html"
+    link: "/download/macos"
   },
   {
     name: "Linux",
     img: "/assets/linux.png",
     desc: "Поддержка Ubuntu, Debian и других дистрибутивов.",
-    link: "/install-linux.html"
+    link: "/download/linux"
   },
   {
     name: "Android",
     img: "/assets/android.png",
     desc: "Установка на Android-смартфоны и планшеты. Hiddify Next.",
-    link: "/install-android.html"
+    link: "/download/android"
   },
   {
     name: "iPhone / iPad",
     img: "/assets/apple.png",
     desc: "Инструкция для iOS и iPadOS. Быстрый старт через Hiddify.",
-    link: "/install-ios.html"
+    link: "/download/ios"
   },
 ];
 

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLang } from '@/lib/LanguageContext';
+import Image from 'next/image';
 
 const paymentTexts = {
   ru: {
@@ -158,59 +159,32 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, tar
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center transition-opacity duration-300">
-      <div className="bg-[#232323] rounded-3xl shadow-2xl p-8 md:p-12 w-full max-w-2xl relative flex flex-col gap-8 animate-fade-in" style={{minWidth:340, minHeight:340}}>
-        <button onClick={onClose} className="absolute top-5 right-5 w-10 h-10 flex items-center justify-center rounded-full bg-[#181818] hover:bg-[#2c2c2c] text-2xl text-gray-400">&times;</button>
+    <div className="fixed inset-0 z-50 bg-black bg-opacity-60 flex items-center justify-center transition-opacity duration-300 animate-fade-in">
+      <div className="bg-gradient-to-br from-[#232323] via-[#181818] to-[#2d1a00] rounded-3xl shadow-2xl p-0 max-w-2xl w-full relative flex flex-col border-4 border-orange-500/30" style={{boxShadow:'0 8px 48px 0 #ff880022,0 2px 0 #a259ff', minWidth: 440, maxWidth: 520, animation:'fade-in 0.25s cubic-bezier(.77,0,.18,1)'}}>
+        <button onClick={onClose} className="close-btn absolute top-4 right-6 text-3xl text-gray-400 hover:text-orange-400 font-bold transition-all z-20" style={{background:'none',border:'none',outline:'none',cursor:'pointer'}}>&times;</button>
         {!afterPay ? (
           <>
-            <div className="flex items-center gap-4 mb-2">
-              <div className="w-14 h-14 rounded-full bg-[#181818] flex items-center justify-center text-2xl font-bold text-orange-500">BV</div>
-              <div>
-                <div className="font-bold text-lg text-white">{t.account}</div>
-                <div className="text-gray-400 text-sm">user@bazaravpn.ru</div>
-              </div>
+            <div className="flex flex-col items-center justify-center pt-8 pb-2">
+              <Image src="/assets/pay-3d.png" alt="pay" width={80} height={80} className="w-20 h-20 mb-2 select-none pointer-events-none" draggable={false} />
+              <span className="text-2xl font-bold mb-4 text-center text-white">{tariff === 'year' ? t.year : t.month}</span>
             </div>
-            <div className="font-extrabold text-2xl text-white mb-2">{tariff === 'year' ? t.year : t.month}</div>
-            <div className="grid grid-cols-2 gap-4 mb-6">
-              <div className="flex items-center gap-3 bg-[#181818] rounded-xl px-5 py-4 text-lg text-white font-semibold shadow">
-                <svg className="w-7 h-7 text-orange-400" fill="none" stroke="currentColor" strokeWidth={2.2} viewBox="0 0 24 24"><path d="M12 3C17 5 21 5 21 10C21 19 12 21 12 21C12 21 3 19 3 10C3 5 7 5 12 3Z"/></svg>
-                <span>{t.feature1}</span>
-              </div>
-              <div className="flex items-center gap-3 bg-[#181818] rounded-xl px-5 py-4 text-lg text-white font-semibold shadow">
-                <svg className="w-7 h-7 text-orange-400" fill="none" stroke="currentColor" strokeWidth={2.2} viewBox="0 0 24 24"><path d="M12 6v12M6 12h12"/></svg>
-                <span>{t.feature2}</span>
-              </div>
-              <div className="flex items-center gap-3 bg-[#181818] rounded-xl px-5 py-4 text-lg text-white font-semibold shadow">
-                <svg className="w-7 h-7 text-orange-400" fill="none" stroke="currentColor" strokeWidth={2.2} viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M8 21h8"/></svg>
-                <span>{t.feature3}</span>
-              </div>
-              <div className="flex items-center gap-3 bg-[#181818] rounded-xl px-5 py-4 text-lg text-white font-semibold shadow">
-                <svg className="w-7 h-7 text-orange-400" fill="none" stroke="currentColor" strokeWidth={2.2} viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 12l2.5 2.5L16 9"/></svg>
-                <span>{t.feature4}</span>
-              </div>
+            <div className="w-full flex flex-col gap-4 mb-4 px-8">
+              <button onClick={()=>setPayMethod('sbp')} className={`w-full py-4 rounded-xl font-bold text-lg text-white bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700 transition-all flex items-center justify-center gap-3 ${payMethod==='sbp'?'ring-4 ring-orange-400':''}`}> <svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth={2.2} viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 12l2.5 2.5L16 9"/></svg> {t.sbp}</button>
+              <button onClick={()=>setPayMethod('card')} className={`w-full py-4 rounded-xl font-bold text-lg text-white bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700 transition-all flex items-center justify-center gap-3 ${payMethod==='card'?'ring-4 ring-orange-400':''}`}> <svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth={2.2} viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M8 21h8"/></svg> {t.card}</button>
+              <button onClick={()=>setPayMethod('crypto')} className={`w-full py-4 rounded-xl font-bold text-lg text-white bg-gradient-to-r from-gray-600 to-gray-800 hover:from-gray-700 hover:to-gray-900 transition-all flex items-center justify-center gap-3 ${payMethod==='crypto'?'ring-4 ring-orange-400':''}`}> <svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth={2.2} viewBox="0 0 24 24"><path d="M12 6v12M6 12h12"/></svg> {t.crypto}</button>
             </div>
-            <div className="flex gap-4 mb-4">
-              <div className={`flex-1 pay-method ${payMethod==='sbp'?'selected':''}`} onClick={()=>setPayMethod('sbp')}>{t.sbp}</div>
-              <div className={`flex-1 pay-method ${payMethod==='card'?'selected':''}`} onClick={()=>setPayMethod('card')}>{t.card}</div>
-              <div className={`flex-1 pay-method ${payMethod==='crypto'?'selected':''}`} onClick={()=>setPayMethod('crypto')}>{t.crypto}</div>
+            <div className="mb-4 w-full px-8">
+              <input value={email} onChange={e=>setEmail(e.target.value)} type="email" required placeholder={t.email} className="w-full rounded-lg px-4 py-3 text-base text-white font-semibold bg-[#181818] placeholder-gray-400 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-orange-400 mb-4" style={{marginBottom:8, display:'block'}} />
             </div>
-            <div className="mb-4 w-full">
-              <input value={email} onChange={e=>setEmail(e.target.value)} type="email" required placeholder={t.email} className="w-full max-w-xs mx-auto rounded-lg px-4 py-3 text-base text-white font-semibold bg-[#181818] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-400" style={{marginBottom:8, display:'block'}} />
-            </div>
-            {error && <div className="text-red-500 text-sm mb-2">{error}</div>}
-            <button onClick={handlePay} className="relative w-full py-4 rounded-xl font-bold text-lg text-white bg-[#444] flex justify-center items-center px-8 hover:bg-orange-500 transition-colors duration-200 cursor-pointer" disabled={loading}>
+            {error && <div className="text-red-400 text-center text-sm mb-2">{error}</div>}
+            <button onClick={handlePay} className="w-full py-4 rounded-xl font-bold text-lg text-white bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700 transition-all shadow-lg mb-2" style={{boxShadow:'0 2px 16px 0 #ff880088'}} disabled={loading}>
               {loading ? t.loading : <span className="mx-auto">{t.pay}</span>}
               <span className="absolute right-8">{price}</span>
             </button>
-            <div className="text-xs text-gray-400 mt-2">{t.agree}</div>
-            {success && (
-              <div className="flex flex-col items-center gap-4 mt-6">
-                <div className="text-lg text-white text-center">После оплаты вернитесь на сайт — ссылка на подписку появится автоматически.</div>
-              </div>
-            )}
+            <div className="text-xs text-gray-400 text-center mb-4" dangerouslySetInnerHTML={{__html: t.agree}} />
           </>
         ) : (
-          <div className="flex flex-col items-center gap-4 mt-6">
+          <div className="flex flex-col items-center gap-4 mt-6 px-8">
             {loading ? (
               <div className="text-2xl font-extrabold text-white mb-3 text-center">Генерация вашей подписки...</div>
             ) : link ? (

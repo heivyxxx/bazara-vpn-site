@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
-import { LanguageProvider, useLang } from '@/lib/LanguageContext';
+import { LanguageProvider, useLang, useUser } from '@/lib/LanguageContext';
 
 const texts = {
   ru: {
@@ -46,9 +46,10 @@ const texts = {
 export default function IOSInstallPage() {
   const { lang } = useLang();
   const t = texts[lang];
+  const [user, setUser] = useUser();
   return (
-    <>
-      <Header />
+    <LanguageProvider>
+      <Header user={user} onLogout={() => { setUser(null); if (typeof window !== 'undefined') localStorage.removeItem('bazaraUser'); }} />
       <main className="min-h-screen flex flex-col items-center justify-center pt-32 pb-16 bg-[#181818]">
         <div className="w-full max-w-3xl mx-auto flex flex-col items-center animate-fade-in">
           {/* Баннер */}
@@ -98,6 +99,6 @@ export default function IOSInstallPage() {
         </div>
       </main>
       <Footer />
-    </>
+    </LanguageProvider>
   );
 } 

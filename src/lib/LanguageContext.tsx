@@ -28,4 +28,20 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-export const useLang = () => useContext(LangContext); 
+export const useLang = () => useContext(LangContext);
+
+export function useUser() {
+  const [user, setUser] = useState<any>(null);
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('bazaraUser');
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          if (parsed && parsed.id && parsed.name) setUser(parsed);
+        } catch {}
+      }
+    }
+  }, []);
+  return [user, setUser] as const;
+} 

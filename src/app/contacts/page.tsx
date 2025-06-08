@@ -1,7 +1,7 @@
 "use client";
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
-import { LanguageProvider, useLang } from '@/lib/LanguageContext';
+import { LanguageProvider, useLang, useUser } from '@/lib/LanguageContext';
 import Image from 'next/image';
 import React from 'react';
 
@@ -33,6 +33,7 @@ const contactsTexts = {
 function ContactsContent() {
   const { lang } = useLang();
   const t = contactsTexts[lang];
+  const [user, setUser] = useUser();
   return (
     <main className="flex-1 flex flex-col pt-28 items-center w-full min-h-screen bg-[#181818]">
       <Image src="/assets/telephon.png" alt="Телефон" width={288} height={288} className="w-72 h-72 mx-auto mb-8 select-none pointer-events-none" draggable={false} />
@@ -60,9 +61,12 @@ function ContactsContent() {
 }
 
 export default function ContactsPage() {
+  const { lang } = useLang();
+  const t = contactsTexts[lang];
+  const [user, setUser] = useUser();
   return (
     <LanguageProvider>
-      <Header />
+      <Header user={user} onLogout={() => { setUser(null); if (typeof window !== 'undefined') localStorage.removeItem('bazaraUser'); }} />
       <ContactsContent />
       <Footer />
     </LanguageProvider>

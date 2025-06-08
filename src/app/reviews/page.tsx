@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { ReviewModal } from '@/components/features/reviews/ReviewModal';
 import { User, Review } from '@/lib/types';
-import { useLang } from '@/lib/LanguageContext';
+import { useLang, useUser } from '@/lib/LanguageContext';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { LanguageProvider } from '@/lib/LanguageContext';
@@ -76,8 +76,8 @@ const ReviewCard = ({ review, avatar }: { review: Review; avatar: string }) => {
 export default function ReviewsPage() {
   const { lang } = useLang();
   const t = reviewsTexts[lang];
+  const [user, setUser] = useUser();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [user, setUser] = useState<User | null>(null);
   const [showAuth, setShowAuth] = useState(false);
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
@@ -116,19 +116,6 @@ export default function ReviewsPage() {
       }
     };
     fetchReviews();
-  }, []);
-
-  // Автологин через localStorage
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('bazaraUser');
-      if (saved) {
-        try {
-          const parsed = JSON.parse(saved);
-          if (parsed && parsed.id && parsed.name) setUser(parsed);
-        } catch {}
-      }
-    }
   }, []);
 
   // Поиск по имени и тексту

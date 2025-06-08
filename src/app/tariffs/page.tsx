@@ -1,7 +1,7 @@
 "use client";
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
-import { LanguageProvider, useLang } from '@/lib/LanguageContext';
+import { LanguageProvider, useLang, useUser } from '@/lib/LanguageContext';
 import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import clsx from 'clsx';
@@ -309,9 +309,10 @@ function useFadeUp() {
 
 function TariffsPageWrapper() {
   useFadeUp();
+  const [user, setUser] = useUser();
   return (
     <LanguageProvider>
-      <Header />
+      <Header user={user} onLogout={() => { setUser(null); if (typeof window !== 'undefined') localStorage.removeItem('bazaraUser'); }} />
       <TariffsContent />
       <Footer />
     </LanguageProvider>

@@ -4,6 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
+import { useUser } from '@/lib/LanguageContext';
+import { LanguageProvider } from '@/contexts/LanguageContext';
 
 const LANGS = [
   { code: "ru", label: "Русский" },
@@ -50,6 +52,9 @@ const platforms = [
 ];
 
 export default function DownloadPage() {
+  const { lang } = useLang();
+  const t = texts[lang];
+  const [user, setUser] = useUser();
   const [megaOpen, setMegaOpen] = useState(false);
   const megaRef = useRef<HTMLDivElement>(null);
   // Определяем количество колонок: если 4 или 5 платформ — 2 колонки, иначе 3
@@ -57,8 +62,8 @@ export default function DownloadPage() {
   // Если карточек 5 — добавляем плейсхолдер
   const needPlaceholder = platforms.length % 3 !== 0;
   return (
-    <>
-      <Header />
+    <LanguageProvider>
+      <Header user={user} onLogout={() => { setUser(null); if (typeof window !== 'undefined') localStorage.removeItem('bazaraUser'); }} />
       <div className="relative min-h-screen flex flex-col items-center justify-center pt-24 pb-12 md:pb-16 bg-[#181818] overflow-hidden">
         {/* SVG фон */}
         <svg width="700" height="700" className="absolute left-[-180px] top-[-120px] opacity-10 z-0" viewBox="0 0 700 700" fill="none"><circle cx="350" cy="350" r="340" stroke="#ff8800" strokeWidth="24" /></svg>
@@ -81,6 +86,6 @@ export default function DownloadPage() {
         </div>
       </div>
       <Footer />
-    </>
+    </LanguageProvider>
   );
 } 

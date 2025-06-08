@@ -1,7 +1,7 @@
 "use client";
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
-import { LanguageProvider, useLang } from '@/lib/LanguageContext';
+import { LanguageProvider, useLang, useUser } from '@/lib/LanguageContext';
 import React from 'react';
 
 const privacyTexts = {
@@ -50,9 +50,12 @@ function PrivacyContent() {
 }
 
 export default function PrivacyPage() {
+  const { lang } = useLang();
+  const t = privacyTexts[lang];
+  const [user, setUser] = useUser();
   return (
     <LanguageProvider>
-      <Header />
+      <Header user={user} onLogout={() => { setUser(null); if (typeof window !== 'undefined') localStorage.removeItem('bazaraUser'); }} />
       <PrivacyContent />
       <Footer />
     </LanguageProvider>

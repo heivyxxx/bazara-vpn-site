@@ -8,11 +8,12 @@ import { HowItWorks } from '@/components/features/how-it-works/HowItWorks';
 import { FAQ } from '@/components/features/faq/FAQ';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
-import { LanguageProvider } from '@/lib/LanguageContext';
+import { LanguageProvider, useUser } from '@/lib/LanguageContext';
 import { useState, useEffect } from 'react';
 import { TelegramAuthModal } from '@/components/features/TelegramAuthModal';
 import { ReviewModal } from '@/components/features/reviews/ReviewModal';
 import { User } from '@/lib/types';
+import { useLang } from '@/lib/LanguageContext';
 
 // Расширяем глобальный интерфейс Window
 declare global {
@@ -22,9 +23,10 @@ declare global {
 }
 
 export default function HomePage() {
+  const { lang } = useLang();
   const [authOpen, setAuthOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useUser();
   // Автологин через localStorage
   useEffect(() => {
     if (typeof window !== 'undefined') {

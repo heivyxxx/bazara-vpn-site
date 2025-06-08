@@ -1,7 +1,7 @@
 "use client";
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
-import { LanguageProvider, useLang } from '@/lib/LanguageContext';
+import { LanguageProvider, useLang, useUser } from '@/lib/LanguageContext';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
@@ -109,9 +109,12 @@ function SupportContent() {
 }
 
 export default function SupportPage() {
+  const { lang } = useLang();
+  const t = supportTexts[lang];
+  const [user, setUser] = useUser();
   return (
     <LanguageProvider>
-      <Header />
+      <Header user={user} onLogout={() => { setUser(null); if (typeof window !== 'undefined') localStorage.removeItem('bazaraUser'); }} />
       <SupportContent />
       <Footer />
     </LanguageProvider>

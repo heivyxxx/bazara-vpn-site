@@ -2,7 +2,7 @@
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { LanguageProvider, useLang } from '@/lib/LanguageContext';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import clsx from 'clsx';
 import { PaymentModal, TariffType } from './PaymentModal';
@@ -55,6 +55,12 @@ function TariffsContent() {
   const [showOldPrice, setShowOldPrice] = React.useState(true);
   const [priceAnim, setPriceAnim] = React.useState(false);
   const oldPriceRef = useRef<HTMLSpanElement>(null);
+  const [exploding, setExploding] = useState(false);
+  const [showNewPrice, setShowNewPrice] = useState(false);
+  const [explodePieces, setExplodePieces] = useState<{x:number,y:number,key:string}[]>([]);
+  const btnYearRef = useRef<HTMLButtonElement>(null);
+  const btnMonthRef = useRef<HTMLButtonElement>(null);
+  const priceRef = useRef<HTMLSpanElement>(null);
 
   const handleOpenModal = (tariff: TariffType, price: string) => {
     setModalTariff(tariff);
@@ -66,14 +72,33 @@ function TariffsContent() {
     setModalOpen(false);
   };
 
-  // Анимация смены цены
+  // Анимация смены цены и кнопок (explode)
   const handlePriceClick = () => {
-    if (!showOldPrice) return;
-    setPriceAnim(true);
-    setTimeout(() => {
+    if (exploding || showNewPrice) return;
+    setExploding(true);
+    // Генерируем кусочки для старой цены и кнопок
+    const makePieces = (el:HTMLElement|null, count=12) => {
+      if (!el) return [];
+      const rect = el.getBoundingClientRect();
+      const parentRect = el.parentElement?.getBoundingClientRect() || rect;
+      return Array.from({length:count}).map((_,i)=>({
+        x: el.offsetLeft + el.offsetWidth/2 - 12 + Math.random()*el.offsetWidth/2*(Math.random()>0.5?1:-1),
+        y: el.offsetTop + el.offsetHeight/2 - 12 + Math.random()*el.offsetHeight/2*(Math.random()>0.5?1:-1),
+        key: `${el.id||'piece'}-${i}-${Date.now()}`
+      }));
+    };
+    const pieces = [
+      ...makePieces(priceRef.current, 10),
+      ...makePieces(btnYearRef.current, 12),
+      ...makePieces(btnMonthRef.current, 12)
+    ];
+    setExplodePieces(pieces);
+    setTimeout(()=>{
       setShowOldPrice(false);
-      setPriceAnim(false);
-    }, 600);
+      setExplodePieces([]);
+      setShowNewPrice(true);
+      setExploding(false);
+    }, 1200);
   };
 
   return (
@@ -86,15 +111,41 @@ function TariffsContent() {
         .tariff-btn { background: linear-gradient(90deg, #ff8800 0%, #a259ff 100%); color: #fff; font-weight: 700; font-size: 1.18rem; border: none; border-radius: 1.1rem; padding: 1.1rem 2.5rem; transition: box-shadow 0.22s, transform 0.18s, background 0.18s; outline: none; position: relative; z-index: 1; box-shadow: 0 2px 16px 0 #ff880088; }
         .tariff-btn:hover, .tariff-btn:focus { background: linear-gradient(90deg, #ff8800 10%, #a259ff 90%); transform: scale(1.06); box-shadow: 0 4px 24px 0 #ff8800aa; }
         .tariff-card { transition: box-shadow 0.22s, border 0.18s; box-shadow: 0 8px 32px 0 #00000044, 0 2px 8px 0 #a259ff22; }
-        .tariff-card:hover { border-color: #ff8800; z-index: 2; box-shadow: 0 8px 48px 0 #ff880022, 0 2px 0 #a259ff; }
+        .tariff-card:hover { z-index: 2; box-shadow: 0 8px 48px 0 #ff880022, 0 2px 0 #a259ff; }
         .no-glow { box-shadow: none !important; }
-        .price-old { display:inline-block; font-size:1.2em; color:#b8b8b8; background:none; border-radius:0; padding:0; margin-right:0.7em; text-decoration:line-through; opacity:1; transition:opacity 0.6s, transform 0.6s; }
+        .price-old { display:inline-block; font-size:1.2em; color:#b8b8b8; background:none !important; border-radius:0; padding:0; margin-right:0.7em; text-decoration:line-through; opacity:1; transition:opacity 0.6s, transform 0.6s; }
         .price-old.hide { opacity:0; transform:translateY(-30px) scale(0.7) rotate(-12deg); }
         .try-free-btn { background: linear-gradient(90deg, #ff8800 0%, #a259ff 100%); color: #fff; font-weight: 700; font-size: 1.18rem; border: none; border-radius: 1.1rem; min-width:260px; padding:1.1rem 2.5rem; box-shadow:0 2px 16px 0 #ff880088; transition: box-shadow 0.22s, background 0.18s, transform 0.18s; cursor:pointer; }
         .try-free-btn:hover { background: linear-gradient(90deg, #ff8800 10%, #a259ff 90%); box-shadow: 0 4px 24px 0 #ff8800aa; transform: scale(1.04); }
         .promo-banner { background: linear-gradient(90deg, #ff8800 0%, #a259ff 100%); color: #fff; border-radius: 1.1rem; box-shadow: 0 2px 16px 0 #ff880088; padding: 1.1rem 2.5rem; font-weight: 700; font-size: 1.18rem; display: flex; align-items: center; gap: 1.5rem; margin-bottom: 2rem; }
         .promo-banner .promo-btn { background: #fff; color: #ff8800; border-radius: 1.1rem; font-size: 1.2rem; font-weight: 700; padding: 0.8rem 2.2rem; box-shadow: 0 2px 16px 0 #ff880088; transition: background 0.18s, color 0.18s, box-shadow 0.18s; }
         .promo-banner .promo-btn:hover { background: #ff8800; color: #fff; box-shadow: 0 4px 24px 0 #ff8800aa; }
+        .explode-piece {
+          position: absolute;
+          width: 24px;
+          height: 24px;
+          background: linear-gradient(90deg, #ff8800 0%, #a259ff 100%);
+          border-radius: 6px;
+          opacity: 1;
+          pointer-events: none;
+          z-index: 10;
+          animation: explode-fall 1.2s forwards;
+        }
+        @keyframes explode-fall {
+          to {
+            transform: translateY(120px) scale(0.7) rotate(40deg);
+            opacity: 0;
+          }
+        }
+        .new-price-fade {
+          opacity: 0;
+          transform: translateY(40px);
+          transition: opacity 0.7s, transform 0.7s;
+        }
+        .new-price-fade.visible {
+          opacity: 1;
+          transform: none;
+        }
       `}</style>
       {/* PromoBanner */}
       <div className="fade-up w-full max-w-5xl mx-auto rounded-2xl bg-gradient-to-r from-[#7b2ff2] to-[#f357a8] flex items-center justify-between px-8 py-7 mb-10 shadow-lg cursor-pointer" onClick={handlePriceClick}>
@@ -110,17 +161,32 @@ function TariffsContent() {
         </div>
       </div>
       {/* TariffMainBlock */}
-      <section className="fade-up w-full flex justify-center items-center py-16 px-4">
-        <div className="tariff-card no-glow w-full max-w-6xl bg-[#232323] rounded-3xl flex flex-col md:flex-row items-center md:items-stretch gap-16 md:gap-0 p-14 md:p-20 border border-[#333]">
+      <section className="fade-up w-full flex justify-center items-center py-16 px-4" style={{position:'relative'}}>
+        {/* Explode pieces */}
+        {exploding && explodePieces.map(p=>(
+          <div key={p.key} className="explode-piece" style={{left:p.x,top:p.y}} />
+        ))}
+        <div className="tariff-card no-glow w-full max-w-6xl bg-[#232323] rounded-3xl flex flex-col md:flex-row items-center md:items-stretch gap-16 md:gap-0 p-14 md:p-20 border border-[#333]" style={{position:'relative'}}>
           <div className="flex-1 flex flex-col justify-center items-start">
             <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-6">{t.mainTitle}</h2>
             <p className="text-xl md:text-2xl text-white mb-8 max-w-lg" dangerouslySetInnerHTML={{__html: t.mainDesc}} />
-            <div className="flex gap-4 mt-2 items-center">
-              {showOldPrice && (
-                <span ref={oldPriceRef} className={`price-old${priceAnim ? ' hide' : ''}`}>2890₽</span>
+            <div className="flex gap-4 mt-2 items-center" style={{position:'relative'}}>
+              {showOldPrice && !showNewPrice && (
+                <span ref={priceRef} className={`price-old${exploding ? ' hide' : ''}`}>2890₽</span>
               )}
-              <button className="tariff-btn" onClick={()=>handleOpenModal('year', lang==='ru'?'2290₽':'2290₽')}>{t.btnYear}</button>
-              <button className="rounded-xl px-8 py-4 text-lg font-bold border-2 border-orange-400 text-orange-500 bg-[#232323] shadow hover:bg-orange-900 hover:scale-105 transition-transform" onClick={()=>handleOpenModal('month', lang==='ru'?'399₽':'399₽')}>{t.btnMonth}</button>
+              {!showNewPrice && (
+                <button ref={btnYearRef} className="tariff-btn" onClick={()=>handleOpenModal('year', lang==='ru'?'2290₽':'2290₽')}>{t.btnYear}</button>
+              )}
+              {!showNewPrice && (
+                <button ref={btnMonthRef} className="rounded-xl px-8 py-4 text-lg font-bold border-2 border-orange-400 text-orange-500 bg-[#232323] shadow hover:bg-orange-900 hover:scale-105 transition-transform" onClick={()=>handleOpenModal('month', lang==='ru'?'399₽':'399₽')}>{t.btnMonth}</button>
+              )}
+              {showNewPrice && (
+                <>
+                  <span className="price-old new-price-fade visible" style={{color:'#b8b8b8',textDecoration:'line-through'}}>2890₽</span>
+                  <button className="tariff-btn new-price-fade visible" onClick={()=>handleOpenModal('year', lang==='ru'?'2290₽':'2290₽')}>{t.btnYear}</button>
+                  <button className="rounded-xl px-8 py-4 text-lg font-bold border-2 border-orange-400 text-orange-500 bg-[#232323] shadow hover:bg-orange-900 hover:scale-105 transition-transform new-price-fade visible" onClick={()=>handleOpenModal('month', lang==='ru'?'399₽':'399₽')}>{t.btnMonth}</button>
+                </>
+              )}
             </div>
           </div>
           <div className="flex-1 flex justify-center items-center">
@@ -155,7 +221,7 @@ function TariffsContent() {
           </div>
         </div>
         <div className="flex-1 flex justify-center items-center">
-          <Image src="/assets/devices.png" alt="Все устройства" width={340} height={180} className="w-[340px] h-[180px] object-contain select-none" draggable={false} />
+          <Image src="/assets/devices.png" alt="Все устройства" width={680} height={360} className="w-[680px] h-[360px] object-contain select-none" draggable={false} />
         </div>
       </section>
       {/* GuaranteeBlock */}

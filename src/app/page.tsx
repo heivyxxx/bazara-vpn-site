@@ -71,7 +71,8 @@ export default function HomePage() {
       <main className="min-h-screen bg-[#1A1A1A]">
         <Hero />
         <PromoCards />
-        {/* Кнопка оставить отзыв */}
+        <Reviews />
+        {/* Кнопка оставить отзыв — только под отзывами */}
         <section className="max-w-3xl mx-auto mt-0 mb-10 px-4 flex justify-center gap-4">
           <button onClick={() => { user ? setIsModalOpen(true) : setAuthOpen(true); }} className="flex items-center gap-2 bg-gradient-to-r from-orange-500 to-orange-400 hover:from-orange-600 hover:to-orange-500 text-white text-[22px] font-bold py-4 px-10 rounded-xl shadow-lg transition-all duration-200">
             <svg className="w-6 h-6" fill="none" stroke="white" strokeWidth="2" viewBox="0 0 24 24">
@@ -81,7 +82,6 @@ export default function HomePage() {
             <span>Оставить отзыв</span>
           </button>
         </section>
-        <Reviews />
         <Features />
         <HowItWorks />
         <FAQ />

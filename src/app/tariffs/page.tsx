@@ -202,7 +202,7 @@ function TariffsContent() {
                 <>
                   {/* <span ref={priceRef} className={clsx("price-old", exploding && 'hide')}>2290₽</span> */}
                   <button ref={btnYearRef} className={clsx("tariff-btn", exploding && 'hide')} onClick={()=>handleOpenModal('year', lang==='ru'?'2290₽':'2290₽')}>2290₽/год</button>
-                  <button ref={btnMonthRef} className={clsx("rounded-xl px-8 py-4 text-lg font-bold border-2 border-orange-400 text-orange-500 bg-[#232323] shadow hover:bg-orange-900 hover:scale-105 transition-transform", exploding && 'hide')} onClick={()=>handleOpenModal('month', lang==='ru'?'399₽':'399₽')}>399₽/мес</button>
+                  <button ref={btnMonthRef} className={clsx("tariff-btn border-2 border-orange-400 text-orange-500 bg-[#232323]", exploding && 'hide')} style={{background: '#232323', color: '#ff8800', border: '2px solid #ff8800', marginLeft: '1rem'}} onClick={()=>handleOpenModal('month', lang==='ru'?'399₽':'399₽')}>399₽/мес</button>
                 </>
               )}
               {/* Анимация рассыпания */}
@@ -228,7 +228,7 @@ function TariffsContent() {
                   }}
                 >
                   <button className="tariff-btn" style={{marginRight: '1rem'}} onClick={()=>handleOpenModal('year', lang==='ru'?'1499₽':'1499₽')}>1499₽/год</button>
-                  <button className="rounded-xl px-8 py-4 text-lg font-bold border-2 border-orange-400 text-orange-500 bg-[#232323] shadow hover:bg-orange-900 hover:scale-105 transition-transform" onClick={()=>handleOpenModal('month', lang==='ru'?'199₽':'199₽')}>199₽/мес</button>
+                  <button className="tariff-btn border-2 border-orange-400 text-orange-500 bg-[#232323]" style={{background: '#232323', color: '#ff8800', border: '2px solid #ff8800'}} onClick={()=>handleOpenModal('month', lang==='ru'?'199₽':'199₽')}>199₽/мес</button>
                 </div>
               )}
             </div>

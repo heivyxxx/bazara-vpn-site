@@ -85,10 +85,10 @@ function TariffsContent() {
         .device-anim:hover { transform: scale(1.13) rotate(-6deg); filter: drop-shadow(0 0 16px #ff8800cc); }
         .tariff-btn { background: linear-gradient(90deg, #ff8800 0%, #a259ff 100%); color: #fff; font-weight: 700; font-size: 1.18rem; border: none; border-radius: 1.1rem; padding: 1.1rem 2.5rem; transition: box-shadow 0.22s, transform 0.18s, background 0.18s; outline: none; position: relative; z-index: 1; box-shadow: 0 2px 16px 0 #ff880088; }
         .tariff-btn:hover, .tariff-btn:focus { background: linear-gradient(90deg, #ff8800 10%, #a259ff 90%); transform: scale(1.06); box-shadow: 0 4px 24px 0 #ff8800aa; }
-        .tariff-card { transition: box-shadow 0.22s, transform 0.18s, border 0.18s; box-shadow: 0 8px 32px 0 #00000044, 0 2px 8px 0 #a259ff22; }
-        .tariff-card:hover { border-color: #ff8800; transform: translateY(-6px) scale(1.04) rotate(-1deg); z-index: 2; box-shadow: 0 8px 48px 0 #ff880022, 0 2px 0 #a259ff; }
+        .tariff-card { transition: box-shadow 0.22s, border 0.18s; box-shadow: 0 8px 32px 0 #00000044, 0 2px 8px 0 #a259ff22; }
+        .tariff-card:hover { border-color: #ff8800; z-index: 2; box-shadow: 0 8px 48px 0 #ff880022, 0 2px 0 #a259ff; }
         .no-glow { box-shadow: none !important; }
-        .price-old { display:inline-block; font-size:1.2em; color:#fff; background:#ff3b3b; border-radius:0.7em; padding:0.2em 0.7em; margin-right:0.7em; text-decoration:line-through; opacity:1; transition:opacity 0.6s, transform 0.6s; }
+        .price-old { display:inline-block; font-size:1.2em; color:#b8b8b8; background:none; border-radius:0; padding:0; margin-right:0.7em; text-decoration:line-through; opacity:1; transition:opacity 0.6s, transform 0.6s; }
         .price-old.hide { opacity:0; transform:translateY(-30px) scale(0.7) rotate(-12deg); }
         .try-free-btn { background: linear-gradient(90deg, #ff8800 0%, #a259ff 100%); color: #fff; font-weight: 700; font-size: 1.18rem; border: none; border-radius: 1.1rem; min-width:260px; padding:1.1rem 2.5rem; box-shadow:0 2px 16px 0 #ff880088; transition: box-shadow 0.22s, background 0.18s, transform 0.18s; cursor:pointer; }
         .try-free-btn:hover { background: linear-gradient(90deg, #ff8800 10%, #a259ff 90%); box-shadow: 0 4px 24px 0 #ff8800aa; transform: scale(1.04); }

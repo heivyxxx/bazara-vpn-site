@@ -167,10 +167,11 @@ export const Reviews = () => {
               700: { slidesPerView: 2 },
               1000: { slidesPerView: 3 },
             }}
-            className="reviews-track-3d"
+            className="reviews-track-3d flex gap-8"
+            style={{alignItems:'center', minHeight:320}}
           >
             {reviews.map((review, index) => (
-              <SwiperSlide key={review.id}>
+              <SwiperSlide key={review.id} style={{display:'flex',justifyContent:'center'}}>
                 <ReviewCard
                   avatar={`/assets/avatar${(index % 3) + 1}.png`}
                   name={review.userName}
@@ -180,11 +181,11 @@ export const Reviews = () => {
                 />
               </SwiperSlide>
             ))}
-            <button ref={prevRef} className="absolute left-[-32px] top-1/2 -translate-y-1/2 z-10 w-14 h-14 rounded-full bg-gradient-to-br from-orange-500 to-purple-600 shadow-lg flex items-center justify-center text-white text-3xl transition hover:scale-110 border-4 border-[#181818]" style={{boxShadow:'0 4px 24px #ff880055'}}>
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+            <button ref={prevRef} className="carousel-arrow left" aria-label="Назад" style={{left:'-32px'}}>
+              <svg width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg>
             </button>
-            <button ref={nextRef} className="absolute right-[-32px] top-1/2 -translate-y-1/2 z-10 w-14 h-14 rounded-full bg-gradient-to-br from-orange-500 to-purple-600 shadow-lg flex items-center justify-center text-white text-3xl transition hover:scale-110 border-4 border-[#181818]" style={{boxShadow:'0 4px 24px #ff880055'}}>
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            <button ref={nextRef} className="carousel-arrow right" aria-label="Вперёд" style={{right:'-32px'}}>
+              <svg width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
             </button>
           </Swiper>
         </div>
@@ -196,6 +197,38 @@ export const Reviews = () => {
         onSubmit={handleSubmitReview}
         user={user}
       />
+
+      <style jsx global>{`
+      .carousel-arrow {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 48px;
+        height: 48px;
+        background: rgba(60,60,60,0.7);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #bbb;
+        font-size: 2rem;
+        cursor: pointer;
+        z-index: 10;
+        border: 2px solid #444;
+        transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+        box-shadow: 0 2px 8px 0 rgba(0,0,0,0.12);
+        user-select: none;
+      }
+      .carousel-arrow:hover {
+        background: #ff8800;
+        color: #fff;
+        box-shadow: 0 4px 16px 0 rgba(255,136,0,0.18);
+      }
+      .carousel-arrow.left { left: -32px; }
+      .carousel-arrow.right { right: -32px; }
+      @media (max-width: 900px) { .carousel-arrow.left { left: 0; } .carousel-arrow.right { right: 0; } }
+      @media (max-width: 600px) { .carousel-arrow { width: 40px; height: 40px; font-size: 1.5rem; } }
+      `}</style>
     </section>
   );
 }; 

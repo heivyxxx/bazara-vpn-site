@@ -44,16 +44,16 @@ export const PromoCards = () => {
   const { lang } = useLang();
   const cards = promoCardsData[lang];
   return (
-    <div className="w-full max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 my-12">
+    <div className="w-full max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8 my-8 md:my-12 px-2 sm:px-0">
       {cards.map((card, i) => (
-        <div key={i} className="bg-[#232323] rounded-3xl shadow-2xl p-10 flex flex-col items-center text-center">
-          <div className="w-32 h-32 flex items-center justify-center mb-6 drop-shadow-xl bg-[#181818] rounded-full">
-            <Image src={card.icon} alt={card.title} width={96} height={96} className="w-24 h-24 object-contain select-none" draggable={false} />
+        <div key={i} className="bg-[#232323] rounded-3xl shadow-2xl p-6 md:p-10 flex flex-col items-center text-center w-full">
+          <div className="w-24 h-24 md:w-32 md:h-32 flex items-center justify-center mb-4 md:mb-6 drop-shadow-xl bg-[#181818] rounded-full">
+            <Image src={card.icon} alt={card.title} width={96} height={96} className="w-16 h-16 md:w-24 md:h-24 object-contain select-none" draggable={false} />
           </div>
-          <div className="text-3xl md:text-4xl font-extrabold text-white mb-4">
+          <div className="text-2xl md:text-3xl font-extrabold text-white mb-2 md:mb-4">
             {card.title}
           </div>
-          <div className="text-lg md:text-xl text-gray-300 font-medium">
+          <div className="text-base md:text-lg text-gray-300 font-medium">
             {card.desc}
           </div>
         </div>

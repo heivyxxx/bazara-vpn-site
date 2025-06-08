@@ -25,16 +25,16 @@ export const Footer = () => {
   return (
     <footer className="w-full bg-[#232323] border-t border-[#333] py-6 px-4 flex flex-col items-center justify-center gap-6 text-gray-200 text-base mt-auto text-center">
       <div className="flex flex-col md:flex-row items-center justify-center gap-8 w-full">
-        <Link href="/contacts" className="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-[#181818] transition text-lg font-semibold">
+        <Link href="/contacts" className="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-[#181818] transition text-lg font-semibold w-full md:w-auto justify-center">
           <Image src="/assets/mail-3d.png" alt={t.contacts} width={28} height={28} className="w-7 h-7 object-contain" />
           <span>{t.contacts}</span>
         </Link>
-        <Link href="/privacy" className="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-[#181818] transition text-lg font-semibold">
+        <Link href="/privacy" className="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-[#181818] transition text-lg font-semibold w-full md:w-auto justify-center">
           <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8 8h8v8H8z"/></svg>
           <span>{t.privacy}</span>
         </Link>
-        <div className="text-center text-lg font-medium">{t.copyright}</div>
-        <div className="flex items-center gap-5 mt-4 md:mt-0">
+        <div className="text-center text-lg font-medium w-full md:w-auto">{t.copyright}</div>
+        <div className="flex items-center gap-5 mt-4 md:mt-0 w-full md:w-auto justify-center">
           <a href="https://t.me/bazaraVPN" className="hover:text-orange-400" aria-label="Telegram" target="_blank" rel="noopener">
             <svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path d="M22 4L12 20l-3-7-7-3z"/></svg>
           </a>
@@ -49,6 +49,14 @@ export const Footer = () => {
           </a>
         </div>
       </div>
+      <style jsx>{`
+        @media (max-width: 700px) {
+          .flex-col.md\:flex-row { flex-direction: column !important; }
+          .w-full.md\:w-auto { width: 100% !important; }
+          .justify-center { justify-content: center !important; }
+          .gap-8 { gap: 1.2rem !important; }
+        }
+      `}</style>
     </footer>
   );
 }; 

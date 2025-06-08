@@ -51,7 +51,7 @@ export const Hero = () => {
   const { lang } = useLang();
   const t = heroTexts[lang];
   return (
-    <section className="flex flex-col md:flex-row items-center justify-between max-w-6xl mx-auto py-24 px-4 md:pt-32 md:pb-24 gap-16 md:gap-0">
+    <section className="flex flex-col md:flex-row items-center justify-between max-w-6xl mx-auto py-16 md:py-24 px-2 sm:px-4 md:pt-32 md:pb-24 gap-8 md:gap-0">
       <style jsx>{`
         .fade-up-main {
           opacity: 0;
@@ -79,9 +79,15 @@ export const Hero = () => {
           pointer-events: auto;
           transition-delay: 0.45s;
         }
+        @media (max-width: 700px) {
+          .text-5xl, .md\:text-6xl { font-size: 2rem !important; }
+          .text-2xl, .md\:text-3xl { font-size: 1.1rem !important; }
+          .mb-6 { margin-bottom: 1.1rem !important; }
+          .py-16, .py-24, .md\:py-24, .md\:pt-32, .md\:pb-24 { padding-top: 1.2rem !important; padding-bottom: 1.2rem !important; }
+        }
       `}</style>
 
-      <div className="flex-1 flex flex-col items-start md:items-start text-left">
+      <div className="flex-1 flex flex-col items-start md:items-start text-left w-full max-w-xl">
         <h1 
           className="text-5xl md:text-6xl font-extrabold text-orange-500 mb-6 fade-up-main"
           style={{ animationDelay: '0.08s' }}
@@ -101,15 +107,15 @@ export const Hero = () => {
 
         <Link href="/tariffs" passHref legacyBehavior>
           <a
-            className="mb-6 text-xl md:text-2xl py-5 px-12 fade-up-main btn-glow block text-center"
-            style={{ animationDelay: '0.32s', borderRadius: '1.1rem', minWidth: 260, boxShadow: '0 2px 16px 0 #ff880088' }}
+            className="mb-6 text-xl md:text-2xl py-4 md:py-5 px-6 md:px-12 fade-up-main btn-glow block text-center w-full max-w-xs md:max-w-none"
+            style={{ animationDelay: '0.32s', borderRadius: '1.1rem', boxShadow: '0 2px 16px 0 #ff880088' }}
           >
             {t.btn}
           </a>
         </Link>
 
         <ul 
-          className="flex flex-wrap gap-6 mt-6 fade-up-main"
+          className="flex flex-wrap gap-4 md:gap-6 mt-6 fade-up-main"
           style={{ animationDelay: '0.44s' }}
         >
           {t.features.map((text, i) => <HeroFeature key={i} icon={heroIcons[i]} text={text} />)}
@@ -117,16 +123,16 @@ export const Hero = () => {
       </div>
 
       <div 
-        className="flex-1 flex justify-center items-center fade-up-main"
+        className="flex-1 flex justify-center items-center fade-up-main w-full"
         style={{ animationDelay: '0.56s' }}
       >
-        <div className="relative group hero-shield-anim" style={{ width: 340, height: 300 }}>
+        <div className="relative group hero-shield-anim w-full max-w-xs md:max-w-[340px] h-[220px] md:h-[300px]" style={{}}>
           <Image
             src="/assets/trader.gif"
             width={176}
             height={176}
             alt="Trader animation"
-            className="absolute bottom-36 left-0 w-44 h-auto trader-anim select-none"
+            className="absolute bottom-36 left-0 w-32 md:w-44 h-auto trader-anim select-none"
             style={{ 
               opacity: 1,
               pointerEvents: 'auto',
@@ -138,8 +144,8 @@ export const Hero = () => {
           
           <svg 
             id="main-hero-shield" 
-            width="340" 
-            height="300" 
+            width="100%" 
+            height="100%" 
             viewBox="0 0 340 300" 
             fill="none" 
             xmlns="http://www.w3.org/2000/svg"
@@ -147,7 +153,10 @@ export const Hero = () => {
             style={{
               zIndex: 2,
               position: 'relative',
-              transition: 'transform 0.7s cubic-bezier(.68,-0.55,.27,1.55), filter 0.5s'
+              transition: 'transform 0.7s cubic-bezier(.68,-0.55,.27,1.55), filter 0.5s',
+              maxWidth: '340px',
+              width: '100%',
+              height: '100%'
             }}
           >
             <defs>
@@ -179,7 +188,7 @@ export const Hero = () => {
           </svg>
 
           <div 
-            className="absolute left-32 bottom-72 bg-[#232323ee] text-white text-base px-4 py-1.5 rounded-lg shadow-lg opacity-0 pointer-events-none greeting-anim whitespace-nowrap"
+            className="absolute left-24 md:left-32 bottom-60 md:bottom-72 bg-[#232323ee] text-white text-base px-4 py-1.5 rounded-lg shadow-lg opacity-0 pointer-events-none greeting-anim whitespace-nowrap"
             style={{ 
               transition: 'opacity 0.5s',
               zIndex: 3

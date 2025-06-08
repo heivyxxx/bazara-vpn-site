@@ -67,11 +67,11 @@ export const FAQ = () => {
   const faqs = t.items;
 
   return (
-    <section className="max-w-4xl mx-auto my-20 px-4">
-      <h2 className="text-3xl font-bold text-orange-400 mb-10 text-center">
+    <section className="max-w-4xl mx-auto my-10 md:my-20 px-2 sm:px-4">
+      <h2 className="text-2xl md:text-3xl font-bold text-orange-400 mb-6 md:mb-10 text-center">
         {t.title}
       </h2>
-      <div className="bg-[#232323] rounded-2xl shadow-xl p-6 md:p-8">
+      <div className="bg-[#232323] rounded-2xl shadow-xl p-4 md:p-8">
         {faqs.map((faq, index) => (
           <FAQItem
             key={index}

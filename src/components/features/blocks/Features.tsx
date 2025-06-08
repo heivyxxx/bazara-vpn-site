@@ -126,17 +126,17 @@ export const Features = () => {
   return (
     <div>
       {features.map((block, i) => (
-        <section key={i} className="w-full bg-[#181818] py-16 px-4">
-          <div className={`max-w-6xl mx-auto flex flex-col md:flex-row items-center md:items-stretch gap-10 md:gap-16 ${block.reverse ? 'md:flex-row-reverse' : ''}`}>
+        <section key={i} className="w-full bg-[#181818] py-8 md:py-16 px-2 sm:px-4">
+          <div className={`max-w-6xl mx-auto flex flex-col md:flex-row items-center md:items-stretch gap-6 md:gap-16 ${block.reverse ? 'md:flex-row-reverse' : ''}`}>
             <div className="flex-1 flex flex-col justify-center text-center md:text-left">
-              <h2 className="text-3xl md:text-5xl font-extrabold text-white mb-6 leading-tight">
+              <h2 className="text-2xl md:text-5xl font-extrabold text-white mb-4 md:mb-6 leading-tight">
                 <span className={`text-transparent bg-clip-text bg-gradient-to-r from-${block.gradientFrom} to-${block.gradientTo}`}>
                   {block.title}
                 </span>
                 <br />
                 <span>{block.subtitle}</span>
               </h2>
-              <div className="text-lg md:text-2xl text-gray-200 font-medium leading-snug">
+              <div className="text-base md:text-2xl text-gray-200 font-medium leading-snug">
                 {block.description}
               </div>
             </div>
@@ -144,9 +144,9 @@ export const Features = () => {
               <Image 
                 src={block.image} 
                 alt={block.imageAlt}
-                width={512}
-                height={512}
-                className="w-full max-w-xs md:max-w-md lg:max-w-lg object-contain drop-shadow-xl select-none"
+                width={256}
+                height={256}
+                className="w-full max-w-[180px] md:max-w-md lg:max-w-lg object-contain drop-shadow-xl select-none"
                 draggable={false}
               />
             </div>

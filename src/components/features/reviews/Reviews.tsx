@@ -120,20 +120,20 @@ export const Reviews = () => {
 
   return (
     <section className="max-w-5xl mx-auto my-16 px-4">
-      <div className="flex items-center justify-between mb-8">
-        <h2 className="text-3xl font-bold text-orange-400">
+      <div className="flex flex-col sm:flex-row items-center sm:justify-between gap-4 sm:gap-0 mb-8">
+        <h2 className="text-3xl font-bold text-orange-400 w-full sm:w-auto text-center sm:text-left mb-2 sm:mb-0">
           {t.title}
         </h2>
-        <div className="flex gap-4">
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto">
           <Link 
             href="/reviews" 
-            className="bg-gradient-to-r from-orange-500 to-purple-500 hover:from-orange-600 hover:to-purple-600 text-white font-bold py-2 px-6 rounded-xl shadow-lg text-lg transition-all"
+            className="bg-gradient-to-r from-orange-500 to-purple-500 hover:from-orange-600 hover:to-purple-600 text-white font-bold py-3 px-6 rounded-xl shadow-lg text-lg transition-all w-full sm:w-auto text-center"
           >
             {t.all}
           </Link>
           <button
             onClick={() => setIsModalOpen(true)}
-            className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-6 rounded-xl shadow-lg text-lg transition-all flex items-center gap-2"
+            className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-6 rounded-xl shadow-lg text-lg transition-all flex items-center gap-2 w-full sm:w-auto justify-center"
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
               <path d="M12 20h9"/>
@@ -161,13 +161,13 @@ export const Reviews = () => {
               swiper.navigation.init();
               swiper.navigation.update();
             }}
-            spaceBetween={32}
+            spaceBetween={16}
             slidesPerView={1}
             breakpoints={{
-              700: { slidesPerView: 2 },
-              1000: { slidesPerView: 3 },
+              700: { slidesPerView: 2, spaceBetween: 24 },
+              1000: { slidesPerView: 3, spaceBetween: 32 },
             }}
-            className="reviews-track-3d flex gap-8"
+            className="reviews-track-3d flex gap-4 sm:gap-8"
             style={{alignItems:'center', minHeight:320}}
           >
             {reviews.map((review, index) => (
@@ -181,11 +181,11 @@ export const Reviews = () => {
                 />
               </SwiperSlide>
             ))}
-            <button ref={prevRef} className="carousel-arrow left" aria-label="Назад" style={{left:'-32px'}}>
-              <svg width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg>
+            <button ref={prevRef} className="carousel-arrow left" aria-label="Назад">
+              <svg width="32" height="32" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg>
             </button>
-            <button ref={nextRef} className="carousel-arrow right" aria-label="Вперёд" style={{right:'-32px'}}>
-              <svg width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
+            <button ref={nextRef} className="carousel-arrow right" aria-label="Вперёд">
+              <svg width="32" height="32" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
             </button>
           </Swiper>
         </div>
@@ -203,8 +203,8 @@ export const Reviews = () => {
         position: absolute;
         top: 50%;
         transform: translateY(-50%);
-        width: 48px;
-        height: 48px;
+        width: 52px;
+        height: 52px;
         background: rgba(60,60,60,0.7);
         border-radius: 50%;
         display: flex;
@@ -224,10 +224,13 @@ export const Reviews = () => {
         color: #fff;
         box-shadow: 0 4px 16px 0 rgba(255,136,0,0.18);
       }
-      .carousel-arrow.left { left: -32px; }
-      .carousel-arrow.right { right: -32px; }
+      .carousel-arrow.left { left: 0; }
+      .carousel-arrow.right { right: 0; }
       @media (max-width: 900px) { .carousel-arrow.left { left: 0; } .carousel-arrow.right { right: 0; } }
-      @media (max-width: 600px) { .carousel-arrow { width: 40px; height: 40px; font-size: 1.5rem; } }
+      @media (max-width: 600px) {
+        .carousel-arrow { width: 44px; height: 44px; font-size: 1.3rem; }
+        .reviews-track-3d { gap: 0.5rem !important; }
+      }
       `}</style>
     </section>
   );

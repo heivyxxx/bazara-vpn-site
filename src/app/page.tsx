@@ -37,11 +37,37 @@ export default function HomePage() {
       }
     }
   }, []);
+
+  // Отправка отзыва
+  const handleSubmitReview = async (text: string, rating: number) => {
+    if (!user) return;
+    try {
+      const response = await fetch('/api/reviews', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: user.id,
+          text,
+          rating,
+          userName: user.name,
+          userUsername: user.username
+        })
+      });
+      const data = await response.json();
+      if (data.success) {
+        setIsModalOpen(false);
+        // Можно добавить обновление отзывов, если нужно
+      }
+    } catch (error) {
+      // TODO: Показать ошибку
+    }
+  };
+
   return (
     <LanguageProvider>
       <Header user={user} onLogin={() => setAuthOpen(true)} onLogout={() => { setUser(null); if (typeof window !== 'undefined') localStorage.removeItem('bazaraUser'); }} />
       <TelegramAuthModal isOpen={authOpen} onClose={() => setAuthOpen(false)} onAuth={u => { setUser(u); if (typeof window !== 'undefined') localStorage.setItem('bazaraUser', JSON.stringify(u)); setAuthOpen(false); setIsModalOpen(true); }} />
-      <ReviewModal isOpen={isModalOpen && !!user} onClose={() => setIsModalOpen(false)} onSubmit={() => setIsModalOpen(false)} user={user} />
+      <ReviewModal isOpen={isModalOpen && !!user} onClose={() => setIsModalOpen(false)} onSubmit={handleSubmitReview} user={user} />
       <main className="min-h-screen bg-[#1A1A1A]">
         <Hero />
         <PromoCards />

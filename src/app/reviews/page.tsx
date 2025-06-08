@@ -130,7 +130,7 @@ export default function ReviewsPage() {
   return (
     <LanguageProvider>
       <Header />
-      <div className="min-h-screen bg-[#181818] pt-24 pb-10 px-4">
+      <div className="min-h-screen bg-[#181818] pt-24 pb-8 md:pb-10 px-2 sm:px-4">
         <style jsx>{`
           .star-filter-btn:hover .star-icon {
             fill: #ff8800 !important;
@@ -149,43 +149,41 @@ export default function ReviewsPage() {
             transform: translateY(-2px) scale(1.01);
           }
         `}</style>
-        <section className="max-w-6xl mx-auto flex flex-col items-center gap-6">
+        <section className="max-w-6xl mx-auto flex flex-col items-center gap-4 md:gap-6">
           <div className="flex flex-col items-center gap-2">
-            <Image src="/assets/logo-bazara.png" alt="BazaraVPN Logo" width={80} height={80} className="h-16 w-16 md:h-20 md:w-20 mx-auto" />
+            <Image src="/assets/logo-bazara.png" alt="BazaraVPN Logo" width={64} height={64} className="h-12 w-12 md:h-20 md:w-20 mx-auto" />
             <div className="flex items-center gap-2 mt-2">
-              <span className="text-3xl md:text-4xl font-extrabold text-white">BazaraVPN</span>
+              <span className="text-2xl md:text-4xl font-extrabold text-white">BazaraVPN</span>
             </div>
-            <div className="text-lg md:text-xl text-orange-400 font-semibold mt-1">{t.subtitle}</div>
-            <button onClick={() => setIsModalOpen(true)} className="mt-4 bg-gradient-to-r from-orange-500 to-purple-500 hover:from-orange-600 hover:to-purple-600 text-white font-bold py-3 px-12 rounded-xl shadow-lg text-lg w-full max-w-xs mx-auto transition-all duration-200">{t.leave}</button>
+            <div className="text-base md:text-xl text-orange-400 font-semibold mt-1">{t.subtitle}</div>
+            <button onClick={() => setIsModalOpen(true)} className="mt-4 bg-gradient-to-r from-orange-500 to-purple-500 hover:from-orange-600 hover:to-purple-600 text-white font-bold py-3 px-8 md:px-12 rounded-xl shadow-lg text-base md:text-lg w-full max-w-xs mx-auto transition-all duration-200">{t.leave}</button>
           </div>
-          <div className="flex flex-col items-center gap-2 mt-6 w-full">
-            <div className="flex flex-wrap items-center gap-4 justify-center">
-              <div className="flex gap-1">
-                {[1,2,3,4,5].map(n => (
-                  <button key={n} className={`star-filter-btn ${starFilter === n ? 'selected' : ''}`} onClick={() => setStarFilter(starFilter === n ? null : n)} aria-label={`${n} ${getStarWord(n, lang)}`}>
-                    <svg className="w-7 h-7 star-icon" fill={starFilter === n ? '#ff8800' : '#444'} viewBox="0 0 20 20"><polygon points="10,1 12.59,7.36 19.51,7.64 14,12.14 15.82,19.02 10,15.27 4.18,19.02 6,12.14 0.49,7.64 7.41,7.36"/></svg>
-                  </button>
-                ))}
-              </div>
-              <input value={search} onChange={e => setSearch(e.target.value)} type="text" placeholder={t.search} className="ml-4 px-3 py-2 rounded bg-zinc-800 text-white border border-zinc-700 focus:outline-none focus:ring-2 focus:ring-orange-400" />
-              <div className="relative ml-4">
-                <select value={sort} onChange={e => setSort(e.target.value as 'new' | 'old')} className="sort-btn bg-[#232323] text-white font-bold px-6 py-2 rounded-xl flex items-center">
-                  <option value="new">{t.sortNew}</option>
-                  <option value="old">{t.sortOld}</option>
-                </select>
-              </div>
+          <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4 mt-4 w-full">
+            <div className="flex gap-1 mb-2 md:mb-0">
+              {[1,2,3,4,5].map(n => (
+                <button key={n} className={`star-filter-btn ${starFilter === n ? 'selected' : ''}`} onClick={() => setStarFilter(starFilter === n ? null : n)} aria-label={`${n} ${getStarWord(n, lang)}`}>
+                  <svg className="w-6 h-6 md:w-7 md:h-7 star-icon" fill={starFilter === n ? '#ff8800' : '#444'} viewBox="0 0 20 20"><polygon points="10,1 12.59,7.36 19.51,7.64 14,12.14 15.82,19.02 10,15.27 4.18,19.02 6,12.14 0.49,7.64 7.41,7.36"/></svg>
+                </button>
+              ))}
             </div>
-            <div className="text-gray-400 text-base mt-4 flex items-center justify-center gap-2">
-              <span className="inline-block bg-[#232323] text-orange-400 font-bold rounded-full px-4 py-1 text-lg">{filtered.length}</span>
+            <input value={search} onChange={e => setSearch(e.target.value)} type="text" placeholder={t.search} className="w-full md:w-auto ml-0 md:ml-4 px-3 py-2 rounded bg-zinc-800 text-white border border-zinc-700 focus:outline-none focus:ring-2 focus:ring-orange-400 text-base md:text-lg" />
+            <div className="relative w-full md:w-auto ml-0 md:ml-4">
+              <select value={sort} onChange={e => setSort(e.target.value as 'new' | 'old')} className="sort-btn bg-[#232323] text-white font-bold px-4 md:px-6 py-2 rounded-xl flex items-center w-full md:w-auto text-base md:text-lg">
+                <option value="new">{t.sortNew}</option>
+                <option value="old">{t.sortOld}</option>
+              </select>
             </div>
+          </div>
+          <div className="text-gray-400 text-base mt-2 flex items-center justify-center gap-2">
+            <span className="inline-block bg-[#232323] text-orange-400 font-bold rounded-full px-4 py-1 text-base md:text-lg">{filtered.length}</span>
           </div>
         </section>
-        <main className="w-full max-w-5xl mx-auto flex flex-col gap-6 py-10 px-4" style={{ minHeight: '60vh' }}>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <main className="w-full max-w-5xl mx-auto flex flex-col gap-4 md:gap-6 py-6 md:py-10 px-2 md:px-4" style={{ minHeight: '60vh' }}>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
             {loading ? (
-              <div className="text-center text-gray-400 py-16 text-xl w-full col-span-2">Загрузка...</div>
+              <div className="text-center text-gray-400 py-12 md:py-16 text-base md:text-xl w-full col-span-2">Загрузка...</div>
             ) : filtered.length === 0 ? (
-              <div className="text-center text-gray-400 py-16 text-xl w-full col-span-2">{t.noReviews}</div>
+              <div className="text-center text-gray-400 py-12 md:py-16 text-base md:text-xl w-full col-span-2">{t.noReviews}</div>
             ) : (
               filtered.map((review) => (
                 <ReviewCard key={review.id} review={review} avatar={avatarMap[review.id] || AVATARS[0]} />

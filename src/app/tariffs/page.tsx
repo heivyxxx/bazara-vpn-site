@@ -61,6 +61,7 @@ function TariffsContent() {
   const btnYearRef = useRef<HTMLButtonElement>(null);
   const btnMonthRef = useRef<HTMLButtonElement>(null);
   const priceRef = useRef<HTMLSpanElement>(null);
+  const btnsContainerRef = useRef<HTMLDivElement>(null);
 
   const handleOpenModal = (tariff: TariffType, price: string) => {
     setModalTariff(tariff);
@@ -76,11 +77,10 @@ function TariffsContent() {
   const handlePriceClick = () => {
     if (exploding || showNewPrice) return;
     setExploding(true);
-    // Генерируем кусочки для старой цены и кнопок
+    // Генерируем кусочки для старой цены и кнопок относительно контейнера
     const makePieces = (el:HTMLElement|null, count=12) => {
-      if (!el) return [];
-      const rect = el.getBoundingClientRect();
-      const parentRect = el.parentElement?.getBoundingClientRect() || rect;
+      if (!el || !btnsContainerRef.current) return [];
+      const parentRect = btnsContainerRef.current.getBoundingClientRect();
       return Array.from({length:count}).map((_,i)=>({
         x: el.offsetLeft + el.offsetWidth/2 - 12 + Math.random()*el.offsetWidth/2*(Math.random()>0.5?1:-1),
         y: el.offsetTop + el.offsetHeight/2 - 12 + Math.random()*el.offsetHeight/2*(Math.random()>0.5?1:-1),
@@ -170,16 +170,20 @@ function TariffsContent() {
           <div className="flex-1 flex flex-col justify-center items-start">
             <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-6">{t.mainTitle}</h2>
             <p className="text-xl md:text-2xl text-white mb-8 max-w-lg" dangerouslySetInnerHTML={{__html: t.mainDesc}} />
-            <div className="flex gap-4 mt-2 items-center" style={{position:'relative'}}>
-              {showOldPrice && !showNewPrice && (
-                <span ref={priceRef} className={`price-old${exploding ? ' hide' : ''}`}>2890₽</span>
+            <div ref={btnsContainerRef} className="flex gap-4 mt-2 items-center" style={{position:'relative', minHeight: '56px'}}>
+              {showOldPrice && !showNewPrice && !exploding && (
+                <span ref={priceRef} className="price-old">2890₽</span>
               )}
-              {!showNewPrice && (
+              {!showNewPrice && !exploding && (
                 <button ref={btnYearRef} className="tariff-btn" onClick={()=>handleOpenModal('year', lang==='ru'?'2290₽':'2290₽')}>{t.btnYear}</button>
               )}
-              {!showNewPrice && (
+              {!showNewPrice && !exploding && (
                 <button ref={btnMonthRef} className="rounded-xl px-8 py-4 text-lg font-bold border-2 border-orange-400 text-orange-500 bg-[#232323] shadow hover:bg-orange-900 hover:scale-105 transition-transform" onClick={()=>handleOpenModal('month', lang==='ru'?'399₽':'399₽')}>{t.btnMonth}</button>
               )}
+              {/* Explode pieces поверх */}
+              {exploding && explodePieces.map(p=>(
+                <div key={p.key} className="explode-piece" style={{left:p.x,top:p.y}} />
+              ))}
               {showNewPrice && (
                 <>
                   <span className="price-old new-price-fade visible" style={{color:'#b8b8b8',textDecoration:'line-through'}}>2890₽</span>

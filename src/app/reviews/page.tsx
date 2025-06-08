@@ -195,7 +195,7 @@ export default function ReviewsPage() {
           </div>
         </main>
         <ReviewModal
-          isOpen={isModalOpen}
+          isOpen={isModalOpen && !!user}
           onClose={() => setIsModalOpen(false)}
           onSubmit={async (text, rating) => {
             if (!user) return;

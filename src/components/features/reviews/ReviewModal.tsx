@@ -47,14 +47,7 @@ export const ReviewModal = ({ isOpen, onClose, onSubmit, user }: ReviewModalProp
             </button>
           </div>
 
-          {!user ? (
-            <div className="text-center py-8">
-              <div className="text-lg text-gray-300 mb-6">
-                Чтобы оставить отзыв, войдите через Telegram
-              </div>
-              {/* Авторизация теперь через TelegramAuthModal на уровне страницы */}
-            </div>
-          ) : (
+          {!user ? null : (
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-2">

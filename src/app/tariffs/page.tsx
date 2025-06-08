@@ -178,36 +178,14 @@ function TariffsContent() {
         </div>
       )}
       {/* TariffMainBlock */}
-      <section className="fade-up w-full flex justify-center items-center py-16 px-4" style={{position:'relative'}}>
-        {/* Explode pieces */}
-        {exploding && explodePieces.map(p=>(
-          <div key={p.key} className="explode-piece" style={{left:p.x,top:p.y}} />
-        ))}
-        <div className="tariff-card no-glow w-full max-w-6xl bg-[#232323] rounded-3xl flex flex-col md:flex-row items-center md:items-stretch gap-16 md:gap-0 p-14 md:p-20 border border-[#333]" style={{position:'relative'}}>
+      <section className="fade-up w-full flex justify-center items-center py-16 px-4">
+        <div className="tariff-card no-glow w-full max-w-6xl bg-[#232323] rounded-3xl flex flex-col md:flex-row items-center md:items-stretch gap-16 md:gap-0 p-14 md:p-20 border border-[#333]">
           <div className="flex-1 flex flex-col justify-center items-start">
             <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-6">{t.mainTitle}</h2>
             <p className="text-xl md:text-2xl text-white mb-8 max-w-lg" dangerouslySetInnerHTML={{__html: t.mainDesc}} />
-            <div ref={btnsContainerRef} className="flex gap-4 mt-2 items-center" style={{position:'relative', minHeight: '56px'}}>
-              {showOldPrice && !showNewPrice && !exploding && (
-                <span ref={priceRef} className="price-old">2890₽</span>
-              )}
-              {!showNewPrice && !exploding && (
-                <button ref={btnYearRef} className="tariff-btn" onClick={()=>handleOpenModal('year', lang==='ru'?'2290₽':'2290₽')}>{t.btnYear}</button>
-              )}
-              {!showNewPrice && !exploding && (
-                <button ref={btnMonthRef} className="rounded-xl px-8 py-4 text-lg font-bold border-2 border-orange-400 text-orange-500 bg-[#232323] shadow hover:bg-orange-900 hover:scale-105 transition-transform" onClick={()=>handleOpenModal('month', lang==='ru'?'399₽':'399₽')}>{t.btnMonth}</button>
-              )}
-              {/* Explode pieces поверх */}
-              {exploding && explodePieces.map(p=>(
-                <div key={p.key} className="explode-piece" style={{left:p.x,top:p.y}} />
-              ))}
-              {showNewPrice && (
-                <>
-                  <span className="price-old new-price-fade visible" style={{color:'#b8b8b8',textDecoration:'line-through'}}>2890₽</span>
-                  <button className="tariff-btn new-price-fade visible" onClick={()=>handleOpenModal('year', lang==='ru'?'1989₽':'1989₽')}>1989₽/год</button>
-                  <button className="rounded-xl px-8 py-4 text-lg font-bold border-2 border-orange-400 text-orange-500 bg-[#232323] shadow hover:bg-orange-900 hover:scale-105 transition-transform new-price-fade visible" onClick={()=>handleOpenModal('month', lang==='ru'?'50₽':'50₽')}>50₽/мес</button>
-                </>
-              )}
+            <div className="flex gap-4 mt-2 items-center">
+              <button className="tariff-btn" onClick={()=>handleOpenModal('year', lang==='ru'?'1989₽':'1989₽')}>1989₽/год</button>
+              <button className="rounded-xl px-8 py-4 text-lg font-bold border-2 border-orange-400 text-orange-500 bg-[#232323] shadow hover:bg-orange-900 hover:scale-105 transition-transform" onClick={()=>handleOpenModal('month', lang==='ru'?'50₽':'50₽')}>50₽/мес</button>
             </div>
           </div>
           <div className="flex-1 flex justify-center items-center">

@@ -86,7 +86,7 @@ export const Header = ({ onLogin, user, onLogout }: HeaderProps) => {
         <div className="flex items-center gap-2 md:gap-4">
           {user ? (
             <div className="flex items-center gap-2">
-              <Image src={user.photo_url || '/assets/avatar1.png'} alt={user.name} width={40} height={40} className="w-10 h-10 rounded-full border-2 border-orange-400 shadow" />
+              {/* <Image src={user.photo_url || '/assets/avatar1.png'} alt={user.name} width={40} height={40} className="w-10 h-10 rounded-full border-2 border-orange-400 shadow" /> */}
               <span className="text-white font-semibold text-base hidden md:inline">{user.name}</span>
               <button onClick={onLogout} className="ml-2 px-3 py-2 bg-[#232323] rounded-lg border border-gray-700 text-white hover:bg-[#2c2c2c] text-sm">Выйти</button>
             </div>

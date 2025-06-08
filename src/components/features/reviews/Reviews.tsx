@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ReviewModal } from './ReviewModal';
+// import { ReviewModal } from './ReviewModal';
 import { User, Review } from '@/lib/types';
 import { useLang } from '@/lib/LanguageContext';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -190,13 +190,6 @@ export const Reviews = () => {
           </Swiper>
         </div>
       )}
-
-      <ReviewModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onSubmit={handleSubmitReview}
-        user={user}
-      />
 
       <style jsx global>{`
       .carousel-arrow {

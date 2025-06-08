@@ -192,13 +192,30 @@ function TariffsContent() {
       )}
       {/* TariffMainBlock */}
       <section className="fade-up w-full flex justify-center items-center py-16 px-4">
-        <div className="tariff-card no-glow w-full max-w-6xl bg-[#232323] rounded-3xl flex flex-col md:flex-row items-center md:items-stretch gap-16 md:gap-0 p-14 md:p-20 border border-[#333]">
+        <div className="tariff-card no-glow w-full max-w-6xl bg-[#232323] rounded-3xl flex flex-col md:flex-row items-center md:items-stretch gap-16 md:gap-0 p-14 md:p-20 border border-[#333] relative overflow-visible">
           <div className="flex-1 flex flex-col justify-center items-start">
             <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-6">{t.mainTitle}</h2>
             <p className="text-xl md:text-2xl text-white mb-8 max-w-lg" dangerouslySetInnerHTML={{__html: t.mainDesc}} />
-            <div className="flex gap-4 mt-2 items-center">
-              <button className="tariff-btn" onClick={()=>handleOpenModal('year', lang==='ru'?'1989₽':'1989₽')}>1989₽/год</button>
-              <button className="rounded-xl px-8 py-4 text-lg font-bold border-2 border-orange-400 text-orange-500 bg-[#232323] shadow hover:bg-orange-900 hover:scale-105 transition-transform" onClick={()=>handleOpenModal('month', lang==='ru'?'50₽':'50₽')}>50₽/мес</button>
+            <div className="flex gap-4 mt-2 items-center min-h-[56px] relative" ref={btnsContainerRef}>
+              {/* Старые цены и кнопки */}
+              {showOldPrice && (
+                <>
+                  <span ref={priceRef} className={clsx("price-old", exploding && 'hide')}>2290₽</span>
+                  <button ref={btnYearRef} className={clsx("tariff-btn", exploding && 'hide')} onClick={()=>handleOpenModal('year', lang==='ru'?'1989₽':'1989₽')}>1989₽/год</button>
+                  <button ref={btnMonthRef} className={clsx("rounded-xl px-8 py-4 text-lg font-bold border-2 border-orange-400 text-orange-500 bg-[#232323] shadow hover:bg-orange-900 hover:scale-105 transition-transform", exploding && 'hide')} onClick={()=>handleOpenModal('month', lang==='ru'?'50₽':'50₽')}>50₽/мес</button>
+                </>
+              )}
+              {/* Анимация рассыпания */}
+              {explodePieces.map(piece => (
+                <span key={piece.key} className="explode-piece" style={{left:piece.x, top:piece.y}} />
+              ))}
+              {/* Новые цены и кнопки */}
+              {showNewPrice && (
+                <div className={clsx("flex gap-4 items-center new-price-fade", showNewPrice && 'visible')} style={{position:'absolute', left:0, top:0, width:'100%'}}>
+                  <button className="tariff-btn" onClick={()=>handleOpenModal('year', lang==='ru'?'1590₽':'1590₽')}>1590₽/год</button>
+                  <button className="rounded-xl px-8 py-4 text-lg font-bold border-2 border-orange-400 text-orange-500 bg-[#232323] shadow hover:bg-orange-900 hover:scale-105 transition-transform" onClick={()=>handleOpenModal('month', lang==='ru'?'39₽':'39₽')}>39₽/мес</button>
+                </div>
+              )}
             </div>
           </div>
           <div className="flex-1 flex justify-center items-center">

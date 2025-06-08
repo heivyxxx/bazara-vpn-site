@@ -3,9 +3,10 @@ import React, { useEffect, useRef } from 'react';
 interface TelegramAuthModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onAuth?: (user: any) => void;
 }
 
-export const TelegramAuthModal: React.FC<TelegramAuthModalProps> = ({ isOpen, onClose }) => {
+export const TelegramAuthModal: React.FC<TelegramAuthModalProps> = ({ isOpen, onClose, onAuth }) => {
   const widgetRef = useRef<HTMLDivElement>(null);
   const resultRef = useRef<HTMLDivElement>(null);
 
@@ -35,6 +36,12 @@ export const TelegramAuthModal: React.FC<TelegramAuthModalProps> = ({ isOpen, on
           const data = await resp.json();
           if (data.success) {
             if (resultRef.current) resultRef.current.textContent = 'Успешно!';
+            if (onAuth) onAuth({
+              id: user.id,
+              name: user.first_name,
+              username: user.username,
+              photo_url: user.photo_url
+            });
             setTimeout(onClose, 1200);
           } else {
             if (resultRef.current) resultRef.current.textContent = data.error || 'Ошибка авторизации';
@@ -48,7 +55,7 @@ export const TelegramAuthModal: React.FC<TelegramAuthModalProps> = ({ isOpen, on
       if (widgetRef.current) widgetRef.current.innerHTML = '';
       if (resultRef.current) resultRef.current.textContent = '';
     };
-  }, [isOpen, onClose]);
+  }, [isOpen, onClose, onAuth]);
 
   if (!isOpen) return null;
 

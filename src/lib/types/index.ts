@@ -3,6 +3,7 @@ export interface User {
   id: number;
   name: string;
   username?: string;
+  photo_url?: string;
 }
 
 // Типы для отзывов

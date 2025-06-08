@@ -8,6 +8,7 @@ import { useLang } from '@/lib/LanguageContext';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { LanguageProvider } from '@/lib/LanguageContext';
+import { TelegramAuthModal } from '@/components/features/TelegramAuthModal';
 
 const reviewsTexts = {
   ru: {
@@ -77,6 +78,7 @@ export default function ReviewsPage() {
   const t = reviewsTexts[lang];
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [user, setUser] = useState<User | null>(null);
+  const [showAuth, setShowAuth] = useState(false);
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
@@ -129,7 +131,8 @@ export default function ReviewsPage() {
 
   return (
     <LanguageProvider>
-      <Header />
+      <Header user={user} onLogin={() => setShowAuth(true)} onLogout={() => setUser(null)} />
+      <TelegramAuthModal isOpen={showAuth} onClose={() => setShowAuth(false)} onAuth={u => { setUser(u); setShowAuth(false); setIsModalOpen(true); }} />
       <div className="min-h-screen bg-[#181818] pt-24 pb-8 md:pb-10 px-2 sm:px-4">
         <style jsx>{`
           .star-filter-btn:hover .star-icon {
@@ -156,9 +159,9 @@ export default function ReviewsPage() {
               <span className="text-2xl md:text-4xl font-extrabold text-white">BazaraVPN</span>
             </div>
             <div className="text-base md:text-xl text-orange-400 font-semibold mt-1">{t.subtitle}</div>
-            <button onClick={() => setIsModalOpen(true)} className="mt-4 bg-gradient-to-r from-orange-500 to-purple-500 hover:from-orange-600 hover:to-purple-600 text-white font-bold py-3 px-8 md:px-12 rounded-xl shadow-lg text-base md:text-lg w-full max-w-xs mx-auto transition-all duration-200">{t.leave}</button>
+            <button onClick={() => { user ? setIsModalOpen(true) : setShowAuth(true); }} className="mt-4 bg-gradient-to-r from-orange-500 to-purple-500 hover:from-orange-600 hover:to-purple-600 text-white font-bold py-3 px-8 md:px-12 rounded-xl shadow-lg text-base md:text-lg w-full max-w-xs mx-auto transition-all duration-200">{t.leave}</button>
           </div>
-          <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4 mt-4 w-full">
+          <div className="w-full flex flex-col md:flex-row items-center justify-center gap-2 md:gap-4 mt-4">
             <div className="flex gap-1 mb-2 md:mb-0">
               {[1,2,3,4,5].map(n => (
                 <button key={n} className={`star-filter-btn ${starFilter === n ? 'selected' : ''}`} onClick={() => setStarFilter(starFilter === n ? null : n)} aria-label={`${n} ${getStarWord(n, lang)}`}>

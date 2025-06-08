@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
-import { LanguageProvider } from '@/lib/LanguageContext';
+import { LanguageProvider, useLang } from '@/lib/LanguageContext';
 
 const texts = {
   ru: {
@@ -43,14 +43,8 @@ const texts = {
   }
 };
 
-function useLang() {
-  const [lang, setLang] = React.useState(() => typeof window !== 'undefined' ? localStorage.getItem('lang') || 'ru' : 'ru');
-  React.useEffect(() => { localStorage.setItem('lang', lang); }, [lang]);
-  return [lang, setLang] as const;
-}
-
 export default function AndroidInstallPage() {
-  const [lang] = useLang();
+  const { lang } = useLang();
   const t = texts[lang];
   return (
     <>

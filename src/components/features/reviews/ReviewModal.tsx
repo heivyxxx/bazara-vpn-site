@@ -52,7 +52,7 @@ export const ReviewModal = ({ isOpen, onClose, onSubmit, user }: ReviewModalProp
               <div className="text-lg text-gray-300 mb-6">
                 Чтобы оставить отзыв, войдите через Telegram
               </div>
-              <div id="telegram-login" className="flex justify-center" />
+              {/* Авторизация теперь через TelegramAuthModal на уровне страницы */}
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-6">

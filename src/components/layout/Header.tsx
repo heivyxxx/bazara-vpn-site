@@ -29,9 +29,11 @@ const translations = {
 
 interface HeaderProps {
   onLogin?: () => void;
+  user?: import('@/lib/types').User | null;
+  onLogout?: () => void;
 }
 
-export const Header = ({ onLogin }: HeaderProps) => {
+export const Header = ({ onLogin, user, onLogout }: HeaderProps) => {
   const { lang, setLang } = useLang();
   const t = translations[lang];
   const [menuOpen, setMenuOpen] = useState(false);
@@ -82,12 +84,20 @@ export const Header = ({ onLogin }: HeaderProps) => {
 
         {/* Actions */}
         <div className="flex items-center gap-2 md:gap-4">
-          <button
-            onClick={onLogin}
-            className="text-white hover:text-orange-400 transition hidden md:block font-semibold"
-          >
-            {t.login}
-          </button>
+          {user ? (
+            <div className="flex items-center gap-2">
+              <Image src={user.photo_url || '/assets/avatar1.png'} alt={user.name} width={40} height={40} className="w-10 h-10 rounded-full border-2 border-orange-400 shadow" />
+              <span className="text-white font-semibold text-base hidden md:inline">{user.name}</span>
+              <button onClick={onLogout} className="ml-2 px-3 py-2 bg-[#232323] rounded-lg border border-gray-700 text-white hover:bg-[#2c2c2c] text-sm">Выйти</button>
+            </div>
+          ) : (
+            <button
+              onClick={onLogin}
+              className="text-white hover:text-orange-400 transition hidden md:block font-semibold"
+            >
+              {t.login}
+            </button>
+          )}
           <Link 
             href="/download" 
             className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold py-2 px-5 md:px-6 rounded-xl shadow-lg transition text-base md:text-lg"

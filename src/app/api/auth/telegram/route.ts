@@ -58,7 +58,8 @@ export async function POST(request: Request) {
       user: {
         id: data.id,
         name: data.first_name,
-        username: data.username
+        username: data.username,
+        photo_url: data.photo_url || null
       }
     });
   } catch (error) {

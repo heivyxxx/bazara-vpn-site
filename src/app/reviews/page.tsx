@@ -118,6 +118,19 @@ export default function ReviewsPage() {
     fetchReviews();
   }, []);
 
+  // Автологин через localStorage
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('bazaraUser');
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          if (parsed && parsed.id && parsed.name) setUser(parsed);
+        } catch {}
+      }
+    }
+  }, []);
+
   // Поиск по имени и тексту
   let filtered = reviews.filter(r =>
     (!starFilter || r.rating === starFilter) &&
@@ -131,8 +144,8 @@ export default function ReviewsPage() {
 
   return (
     <LanguageProvider>
-      <Header user={user} onLogin={() => setShowAuth(true)} onLogout={() => setUser(null)} />
-      <TelegramAuthModal isOpen={showAuth} onClose={() => setShowAuth(false)} onAuth={u => { setUser(u); setShowAuth(false); setIsModalOpen(true); }} />
+      <Header user={user} onLogin={() => setShowAuth(true)} onLogout={() => { setUser(null); if (typeof window !== 'undefined') localStorage.removeItem('bazaraUser'); }} />
+      <TelegramAuthModal isOpen={showAuth} onClose={() => setShowAuth(false)} onAuth={u => { setUser(u); if (typeof window !== 'undefined') localStorage.setItem('bazaraUser', JSON.stringify(u)); setShowAuth(false); setIsModalOpen(true); }} />
       <div className="min-h-screen bg-[#181818] pt-24 pb-8 md:pb-10 px-2 sm:px-4">
         <style jsx>{`
           .star-filter-btn:hover .star-icon {

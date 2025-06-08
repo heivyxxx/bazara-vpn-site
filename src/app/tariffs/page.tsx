@@ -52,16 +52,8 @@ function TariffsContent() {
   const [modalOpen, setModalOpen] = React.useState(false);
   const [modalTariff, setModalTariff] = React.useState<TariffType>('year');
   const [modalPrice, setModalPrice] = React.useState('2290₽');
-  const [showOldPrice, setShowOldPrice] = React.useState(true);
   const [priceAnim, setPriceAnim] = React.useState(false);
   const oldPriceRef = useRef<HTMLSpanElement>(null);
-  const [exploding, setExploding] = useState(false);
-  const [showNewPrice, setShowNewPrice] = useState(false);
-  const [explodePieces, setExplodePieces] = useState<{x:number,y:number,key:string}[]>([]);
-  const btnYearRef = useRef<HTMLButtonElement>(null);
-  const btnMonthRef = useRef<HTMLButtonElement>(null);
-  const priceRef = useRef<HTMLSpanElement>(null);
-  const btnsContainerRef = useRef<HTMLDivElement>(null);
   const [bannerVisible, setBannerVisible] = useState(true);
   const [bannerFading, setBannerFading] = useState(false);
 
@@ -73,39 +65,6 @@ function TariffsContent() {
 
   const handleCloseModal = () => {
     setModalOpen(false);
-  };
-
-  // Анимация смены цены и кнопок (explode) + плавное исчезновение баннера
-  const handlePriceClick = () => {
-    if (exploding || showNewPrice) return;
-    setBannerFading(true);
-    setTimeout(() => setBannerVisible(false), 500); // плавное исчезновение баннера
-    setExploding(true);
-    // Генерируем кусочки для старой цены и кнопок через getBoundingClientRect
-    const makePieces = (el:HTMLElement|null, count=12) => {
-      if (!el || !btnsContainerRef.current) return [];
-      const elRect = el.getBoundingClientRect();
-      const parentRect = btnsContainerRef.current.getBoundingClientRect();
-      const centerX = elRect.left + elRect.width/2 - parentRect.left;
-      const centerY = elRect.top + elRect.height/2 - parentRect.top;
-      return Array.from({length:count}).map((_,i)=>({
-        x: centerX - 12 + Math.random()*elRect.width/2*(Math.random()>0.5?1:-1),
-        y: centerY - 12 + Math.random()*elRect.height/2*(Math.random()>0.5?1:-1),
-        key: `${el.id||'piece'}-${i}-${Date.now()}`
-      }));
-    };
-    const pieces = [
-      ...makePieces(priceRef.current, 10),
-      ...makePieces(btnYearRef.current, 12),
-      ...makePieces(btnMonthRef.current, 12)
-    ];
-    setExplodePieces(pieces);
-    setTimeout(()=>{
-      setShowOldPrice(false);
-      setExplodePieces([]);
-      setShowNewPrice(true);
-      setExploding(false);
-    }, 1200);
   };
 
   return (
@@ -165,7 +124,7 @@ function TariffsContent() {
       {/* PromoBanner */}
       {bannerVisible && (
         <div className={clsx("fade-up w-full max-w-5xl mx-auto rounded-2xl bg-gradient-to-r from-[#7b2ff2] to-[#f357a8] flex items-center justify-between px-8 py-7 mb-10 shadow-lg cursor-pointer", bannerFading ? "promo-banner-fade" : "promo-banner-visible")}
-          onClick={handlePriceClick}>
+          onClick={()=>handleOpenModal('year', lang==='ru'?'2290₽':'2290₽')}>
           <div className="flex items-center gap-6">
             <Image src="/assets/tort.png" alt="Торт" width={128} height={128} className="w-32 h-32 md:w-40 md:h-40 select-none" draggable={false} />
             <div className="flex flex-col gap-1">
@@ -180,35 +139,13 @@ function TariffsContent() {
       )}
       {/* TariffMainBlock */}
       <section className="fade-up w-full flex justify-center items-center py-16 px-4" style={{position:'relative'}}>
-        {/* Explode pieces */}
-        {exploding && explodePieces.map(p=>(
-          <div key={p.key} className="explode-piece" style={{left:p.x,top:p.y}} />
-        ))}
         <div className="tariff-card no-glow w-full max-w-6xl bg-[#232323] rounded-3xl flex flex-col md:flex-row items-center md:items-stretch gap-16 md:gap-0 p-14 md:p-20 border border-[#333]" style={{position:'relative'}}>
           <div className="flex-1 flex flex-col justify-center items-start">
             <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-6">{t.mainTitle}</h2>
             <p className="text-xl md:text-2xl text-white mb-8 max-w-lg" dangerouslySetInnerHTML={{__html: t.mainDesc}} />
-            <div ref={btnsContainerRef} className="flex gap-4 mt-2 items-center" style={{position:'relative', minHeight: '56px'}}>
-              {showOldPrice && !showNewPrice && !exploding && (
-                <span ref={priceRef} className="price-old">2890₽</span>
-              )}
-              {!showNewPrice && !exploding && (
-                <button ref={btnYearRef} className="tariff-btn" onClick={()=>handleOpenModal('year', lang==='ru'?'2290₽':'2290₽')}>{t.btnYear}</button>
-              )}
-              {!showNewPrice && !exploding && (
-                <button ref={btnMonthRef} className="rounded-xl px-8 py-4 text-lg font-bold border-2 border-orange-400 text-orange-500 bg-[#232323] shadow hover:bg-orange-900 hover:scale-105 transition-transform" onClick={()=>handleOpenModal('month', lang==='ru'?'399₽':'399₽')}>{t.btnMonth}</button>
-              )}
-              {/* Explode pieces поверх */}
-              {exploding && explodePieces.map(p=>(
-                <div key={p.key} className="explode-piece" style={{left:p.x,top:p.y}} />
-              ))}
-              {showNewPrice && (
-                <>
-                  <span className="price-old new-price-fade visible" style={{color:'#b8b8b8',textDecoration:'line-through'}}>2890₽</span>
-                  <button className="tariff-btn new-price-fade visible" onClick={()=>handleOpenModal('year', lang==='ru'?'1989₽':'1989₽')}>1989₽/год</button>
-                  <button className="rounded-xl px-8 py-4 text-lg font-bold border-2 border-orange-400 text-orange-500 bg-[#232323] shadow hover:bg-orange-900 hover:scale-105 transition-transform new-price-fade visible" onClick={()=>handleOpenModal('month', lang==='ru'?'50₽':'50₽')}>50₽/мес</button>
-                </>
-              )}
+            <div className="flex gap-4 mt-2 items-center" style={{position:'relative', minHeight: '56px'}}>
+              <button className="tariff-btn" onClick={()=>handleOpenModal('year', lang==='ru'?'2290₽':'2290₽')}>{t.btnYear}</button>
+              <button className="rounded-xl px-8 py-4 text-lg font-bold border-2 border-orange-400 text-orange-500 bg-[#232323] shadow hover:bg-orange-900 hover:scale-105 transition-transform" onClick={()=>handleOpenModal('month', lang==='ru'?'399₽':'399₽')}>{t.btnMonth}</button>
             </div>
           </div>
           <div className="flex-1 flex justify-center items-center">

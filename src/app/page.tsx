@@ -9,6 +9,8 @@ import { FAQ } from '@/components/features/faq/FAQ';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { LanguageProvider } from '@/lib/LanguageContext';
+import { useState } from 'react';
+import { TelegramAuthModal } from '@/components/features/TelegramAuthModal';
 
 // Расширяем глобальный интерфейс Window
 declare global {
@@ -18,9 +20,11 @@ declare global {
 }
 
 export default function HomePage() {
+  const [authOpen, setAuthOpen] = useState(false);
   return (
     <LanguageProvider>
-      <Header />
+      <Header onLogin={() => setAuthOpen(true)} />
+      <TelegramAuthModal isOpen={authOpen} onClose={() => setAuthOpen(false)} />
       <main className="min-h-screen bg-[#1A1A1A]">
         <Hero />
         <PromoCards />

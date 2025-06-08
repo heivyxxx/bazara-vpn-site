@@ -27,10 +27,13 @@ const translations = {
   },
 };
 
-export const Header = () => {
+interface HeaderProps {
+  onLogin?: () => void;
+}
+
+export const Header = ({ onLogin }: HeaderProps) => {
   const { lang, setLang } = useLang();
   const t = translations[lang];
-  const [authOpen, setAuthOpen] = useState(false);
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-[#1A1A1A]/80 backdrop-blur-lg border-b border-[#333]">
@@ -72,7 +75,7 @@ export const Header = () => {
 
         <div className="flex items-center gap-4">
           <button
-            onClick={() => setAuthOpen(true)}
+            onClick={onLogin}
             className="text-white hover:text-orange-400 transition hidden md:block"
             style={{fontWeight:600}}
           >
@@ -94,7 +97,6 @@ export const Header = () => {
           </button>
         </div>
       </div>
-      <TelegramAuthModal isOpen={authOpen} onClose={() => setAuthOpen(false)} />
     </header>
   );
 }; 

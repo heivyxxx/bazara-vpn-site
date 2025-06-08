@@ -202,6 +202,29 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, tar
         </button>
         <div className="text-xs text-gray-400 mt-2">Нажимая кнопку "Оплатить", вы соглашаетесь с условиями <a href="#" className="underline">лицензионного соглашения</a>.</div>
       </div>
+      <style jsx>{`
+        .pay-method {
+          background: #181818;
+          color: #fff;
+          border-radius: 1rem;
+          padding: 1.25rem 0;
+          font-weight: 600;
+          font-size: 1.1rem;
+          text-align: center;
+          transition: background 0.18s, box-shadow 0.18s, border 0.18s;
+          border: 2.5px solid transparent;
+          cursor: pointer;
+        }
+        .pay-method:hover {
+          background: #333;
+        }
+        .pay-method.selected {
+          border: 2.5px solid;
+          border-image: linear-gradient(90deg, #ff8800 0%, #a259ff 100%) 1;
+          box-shadow: 0 0 0 2px #ff880055;
+          border-radius: 1rem !important;
+        }
+      `}</style>
     </div>
   );
 }; 

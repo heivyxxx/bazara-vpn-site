@@ -62,6 +62,8 @@ function TariffsContent() {
   const btnMonthRef = useRef<HTMLButtonElement>(null);
   const priceRef = useRef<HTMLSpanElement>(null);
   const btnsContainerRef = useRef<HTMLDivElement>(null);
+  const [bannerVisible, setBannerVisible] = useState(true);
+  const [bannerFading, setBannerFading] = useState(false);
 
   const handleOpenModal = (tariff: TariffType, price: string) => {
     setModalTariff(tariff);
@@ -73,17 +75,22 @@ function TariffsContent() {
     setModalOpen(false);
   };
 
-  // Анимация смены цены и кнопок (explode)
+  // Анимация смены цены и кнопок (explode) + плавное исчезновение баннера
   const handlePriceClick = () => {
     if (exploding || showNewPrice) return;
+    setBannerFading(true);
+    setTimeout(() => setBannerVisible(false), 500); // плавное исчезновение баннера
     setExploding(true);
-    // Генерируем кусочки для старой цены и кнопок относительно контейнера
+    // Генерируем кусочки для старой цены и кнопок через getBoundingClientRect
     const makePieces = (el:HTMLElement|null, count=12) => {
       if (!el || !btnsContainerRef.current) return [];
+      const elRect = el.getBoundingClientRect();
       const parentRect = btnsContainerRef.current.getBoundingClientRect();
+      const centerX = elRect.left + elRect.width/2 - parentRect.left;
+      const centerY = elRect.top + elRect.height/2 - parentRect.top;
       return Array.from({length:count}).map((_,i)=>({
-        x: el.offsetLeft + el.offsetWidth/2 - 12 + Math.random()*el.offsetWidth/2*(Math.random()>0.5?1:-1),
-        y: el.offsetTop + el.offsetHeight/2 - 12 + Math.random()*el.offsetHeight/2*(Math.random()>0.5?1:-1),
+        x: centerX - 12 + Math.random()*elRect.width/2*(Math.random()>0.5?1:-1),
+        y: centerY - 12 + Math.random()*elRect.height/2*(Math.random()>0.5?1:-1),
         key: `${el.id||'piece'}-${i}-${Date.now()}`
       }));
     };
@@ -146,20 +153,31 @@ function TariffsContent() {
           opacity: 1;
           transform: none;
         }
+        .promo-banner-fade {
+          opacity: 0;
+          transition: opacity 0.5s;
+        }
+        .promo-banner-visible {
+          opacity: 1;
+          transition: opacity 0.5s;
+        }
       `}</style>
       {/* PromoBanner */}
-      <div className="fade-up w-full max-w-5xl mx-auto rounded-2xl bg-gradient-to-r from-[#7b2ff2] to-[#f357a8] flex items-center justify-between px-8 py-7 mb-10 shadow-lg cursor-pointer" onClick={handlePriceClick}>
-        <div className="flex items-center gap-6">
-          <Image src="/assets/tort.png" alt="Торт" width={128} height={128} className="w-32 h-32 md:w-40 md:h-40 select-none" draggable={false} />
-          <div className="flex flex-col gap-1">
-            <span className="text-3xl md:text-4xl font-extrabold text-white">{t.bannerTitle}</span>
-            <span className="text-xl md:text-2xl font-semibold text-white" dangerouslySetInnerHTML={{__html: t.bannerDesc}} />
+      {bannerVisible && (
+        <div className={clsx("fade-up w-full max-w-5xl mx-auto rounded-2xl bg-gradient-to-r from-[#7b2ff2] to-[#f357a8] flex items-center justify-between px-8 py-7 mb-10 shadow-lg cursor-pointer", bannerFading ? "promo-banner-fade" : "promo-banner-visible")}
+          onClick={handlePriceClick}>
+          <div className="flex items-center gap-6">
+            <Image src="/assets/tort.png" alt="Торт" width={128} height={128} className="w-32 h-32 md:w-40 md:h-40 select-none" draggable={false} />
+            <div className="flex flex-col gap-1">
+              <span className="text-3xl md:text-4xl font-extrabold text-white">{t.bannerTitle}</span>
+              <span className="text-xl md:text-2xl font-semibold text-white" dangerouslySetInnerHTML={{__html: t.bannerDesc}} />
+            </div>
+          </div>
+          <div className="flex flex-col items-center">
+            <span className="bg-white text-orange-600 font-bold px-7 py-3 rounded-2xl text-2xl shadow-lg">{t.bannerBtn}</span>
           </div>
         </div>
-        <div className="flex flex-col items-center">
-          <span className="bg-white text-orange-600 font-bold px-7 py-3 rounded-2xl text-2xl shadow-lg">{t.bannerBtn}</span>
-        </div>
-      </div>
+      )}
       {/* TariffMainBlock */}
       <section className="fade-up w-full flex justify-center items-center py-16 px-4" style={{position:'relative'}}>
         {/* Explode pieces */}
@@ -187,8 +205,8 @@ function TariffsContent() {
               {showNewPrice && (
                 <>
                   <span className="price-old new-price-fade visible" style={{color:'#b8b8b8',textDecoration:'line-through'}}>2890₽</span>
-                  <button className="tariff-btn new-price-fade visible" onClick={()=>handleOpenModal('year', lang==='ru'?'2290₽':'2290₽')}>{t.btnYear}</button>
-                  <button className="rounded-xl px-8 py-4 text-lg font-bold border-2 border-orange-400 text-orange-500 bg-[#232323] shadow hover:bg-orange-900 hover:scale-105 transition-transform new-price-fade visible" onClick={()=>handleOpenModal('month', lang==='ru'?'399₽':'399₽')}>{t.btnMonth}</button>
+                  <button className="tariff-btn new-price-fade visible" onClick={()=>handleOpenModal('year', lang==='ru'?'1989₽':'1989₽')}>1989₽/год</button>
+                  <button className="rounded-xl px-8 py-4 text-lg font-bold border-2 border-orange-400 text-orange-500 bg-[#232323] shadow hover:bg-orange-900 hover:scale-105 transition-transform new-price-fade visible" onClick={()=>handleOpenModal('month', lang==='ru'?'50₽':'50₽')}>50₽/мес</button>
                 </>
               )}
             </div>

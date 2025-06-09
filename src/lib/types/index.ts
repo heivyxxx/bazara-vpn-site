@@ -1,6 +1,6 @@
 // Общие типы
 export interface User {
-  id: number;
+  id: string;
   name: string;
   username?: string;
   photo_url?: string;

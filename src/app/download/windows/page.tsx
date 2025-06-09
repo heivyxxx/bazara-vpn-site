@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { useLang, useUser } from '@/lib/LanguageContext';
-import { LanguageProvider } from '@/contexts/LanguageContext';
+import { LanguageProvider } from '@/lib/LanguageContext';
 
 const texts = {
   ru: {

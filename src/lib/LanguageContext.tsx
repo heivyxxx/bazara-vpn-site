@@ -30,8 +30,22 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
 
 export const useLang = () => useContext(LangContext);
 
-export function useUser() {
-  const [user, setUser] = useState<any>(null);
+// --- UserContext ---
+interface User {
+  id: string;
+  name: string;
+  username?: string;
+  // ... другие поля ...
+}
+interface UserContextProps {
+  user: User | null;
+  setUser: (u: User | null) => void;
+}
+const UserContext = createContext<UserContextProps>({ user: null, setUser: () => {} });
+
+export const UserProvider = ({ children }: { children: ReactNode }) => {
+  const [user, setUser] = useState<User | null>(null);
+
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem('bazaraUser');
@@ -43,5 +57,15 @@ export function useUser() {
       }
     }
   }, []);
+
+  return (
+    <UserContext.Provider value={{ user, setUser }}>
+      {children}
+    </UserContext.Provider>
+  );
+};
+
+export const useUser = () => {
+  const { user, setUser } = useContext(UserContext);
   return [user, setUser] as const;
-} 
+}; 

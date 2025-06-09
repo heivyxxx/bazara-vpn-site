@@ -211,22 +211,7 @@ function TariffsContent() {
               ))}
               {/* Новые цены и кнопки */}
               {showNewPrice && (
-                <div
-                  className={clsx("flex gap-4 items-center new-price-fade", showNewPrice && 'visible')}
-                  style={{
-                    position: 'absolute',
-                    left: 0,
-                    top: 0,
-                    width: '100%',
-                    height: '100%',
-                    justifyContent: 'flex-start',
-                    alignItems: 'center',
-                    pointerEvents: 'auto',
-                    zIndex: 2,
-                    padding: 0,
-                    margin: 0
-                  }}
-                >
+                <div className={clsx("flex gap-4 items-center new-price-fade", showNewPrice && 'visible')}>
                   <button className="tariff-btn" style={{marginRight: '1rem'}} onClick={()=>handleOpenModal('year', lang==='ru'?'1499₽':'1499₽')}>1499₽/год</button>
                   <button className="tariff-btn border-2 border-orange-400 text-orange-500 bg-[#232323]" style={{background: '#232323', color: '#ff8800', border: '2px solid #ff8800'}} onClick={()=>handleOpenModal('month', lang==='ru'?'199₽':'199₽')}>199₽/мес</button>
                 </div>

@@ -52,7 +52,7 @@ const platforms = [
 ];
 
 export default function DownloadPage() {
-  const { lang } = useLang();
+  const [lang] = useLang();
   const t = texts[lang];
   const [user, setUser] = useUser();
   const [megaOpen, setMegaOpen] = useState(false);

@@ -28,6 +28,7 @@ export default function ReferralsPage() {
       name: newName,
       url,
       count: 0,
+      users: [],
       createdAt: Date.now(),
     });
     setModalOpen(false);

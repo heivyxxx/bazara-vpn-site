@@ -12,7 +12,8 @@ export default async function handler(req, res) {
   if (!docSnap) return res.status(404).json({ error: 'Ref not found' });
 
   const data = docSnap.data();
-  if (data.users && data.users.includes(userId)) {
+  if (!data.users) data.users = [];
+  if (data.users.includes(userId)) {
     return res.status(200).json({ status: 'already counted' });
   }
 

@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from 'react';
 
 // Заглушка для списка рефералов (заменить на реальный fetch из БД)

@@ -117,7 +117,9 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, tar
       const amount = Number(String(price).replace(/[^\d]/g, ''));
       const package_days = tariff === 'year' ? 365 : 30;
       const order_id = 'bazara_' + Math.floor(Math.random()*1000000);
-      const description = tariff === 'year' ? t.year : t.month;
+      const description = (payMethod === 'crypto')
+        ? (tariff === 'year' ? t.year : t.month)
+        : 'Подписка BazaraVPN';
       const resp = await fetch('/api/pay', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

@@ -1,23 +1,41 @@
 "use client";
-import React, { useState } from 'react';
-
-// Заглушка для списка рефералов (заменить на реальный fetch из БД)
-const initialLinks = [
-  { name: 'booster', url: 'https://bazara-vpn-site.vercel.app/?ref=booster', count: 12 },
-  { name: 'test', url: 'https://bazara-vpn-site.vercel.app/?ref=test', count: 3 },
-];
+import React, { useState, useEffect } from 'react';
+import { db } from '@/firebaseConfig';
+import { collection, addDoc, getDocs, query, orderBy } from 'firebase/firestore';
 
 export default function ReferralsPage() {
-  const [links, setLinks] = useState(initialLinks);
+  const [links, setLinks] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [newName, setNewName] = useState('');
+  const [loading, setLoading] = useState(true);
 
-  const handleCreate = () => {
+  useEffect(() => {
+    // Загружаем все реферальные ссылки из Firestore
+    const fetchLinks = async () => {
+      setLoading(true);
+      const q = query(collection(db, 'referrals'), orderBy('createdAt', 'desc'));
+      const snap = await getDocs(q);
+      setLinks(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+      setLoading(false);
+    };
+    fetchLinks();
+  }, []);
+
+  const handleCreate = async () => {
     if (!newName) return;
     const url = `https://bazara-vpn-site.vercel.app/?ref=${encodeURIComponent(newName)}`;
-    setLinks([{ name: newName, url, count: 0 }, ...links]);
+    await addDoc(collection(db, 'referrals'), {
+      name: newName,
+      url,
+      count: 0,
+      createdAt: Date.now(),
+    });
     setModalOpen(false);
     setNewName('');
+    // Перезагружаем список
+    const q = query(collection(db, 'referrals'), orderBy('createdAt', 'desc'));
+    const snap = await getDocs(q);
+    setLinks(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
   };
 
   return (
@@ -39,8 +57,8 @@ export default function ReferralsPage() {
         </div>
       )}
       <div className="space-y-6 mt-8">
-        {links.map(link => (
-          <div key={link.name} className="bg-[#232323] rounded-xl p-6 flex flex-col md:flex-row md:items-center md:justify-between shadow">
+        {loading ? <div>Загрузка...</div> : links.map(link => (
+          <div key={link.id} className="bg-[#232323] rounded-xl p-6 flex flex-col md:flex-row md:items-center md:justify-between shadow">
             <div>
               <div className="text-lg font-bold">{link.name}</div>
               <div className="text-sm text-gray-400 break-all">{link.url}</div>

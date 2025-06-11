@@ -40,6 +40,27 @@ export default function HomePage() {
     }
   }, []);
 
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const params = new URLSearchParams(window.location.search);
+    const ref = params.get('ref');
+    if (!ref) return;
+    let userId = localStorage.getItem('bazara_ref_userid');
+    if (!userId) {
+      userId = crypto.randomUUID();
+      localStorage.setItem('bazara_ref_userid', userId);
+    }
+    const refKey = `bazara_ref_${ref}`;
+    if (localStorage.getItem(refKey)) return;
+    fetch('/api/referral-hit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ref, userId })
+    }).then(() => {
+      localStorage.setItem(refKey, '1');
+    });
+  }, []);
+
   // Отправка отзыва
   const handleSubmitReview = async (text: string, rating: number) => {
     if (!user) return;

@@ -87,9 +87,16 @@ export default function AdminHome() {
           </div>
         </div>
       </div>
-      <div className="admin-block" onClick={() => router.push('/admin/referrals')}>
-        <div className="admin-block-title">Рефералы</div>
-        <div className="admin-block-desc">Аналитика по реферальным ссылкам. Счётчик привлечённых пользователей.</div>
+      <div onClick={() => router.push('/admin/referrals')} className="admin-card flex items-center justify-center px-8 py-8 w-full cursor-pointer group border-2 border-transparent mt-2">
+        <div className="flex items-center gap-6">
+          <div className="bg-[#181818] rounded-full p-4 flex items-center justify-center shadow-lg">
+            <Image src="/assets/faq-3d.png" alt="Рефералы" width={48} height={48} className="w-12 h-12" />
+          </div>
+          <div>
+            <div className="text-2xl font-extrabold text-white mb-1">Рефералы</div>
+            <div className="text-lg text-gray-300">Аналитика по реферальным ссылкам. Счётчик привлечённых пользователей.</div>
+          </div>
+        </div>
       </div>
       <style jsx global>{`
         .admin-card {

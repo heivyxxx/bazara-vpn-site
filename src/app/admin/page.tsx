@@ -87,6 +87,10 @@ export default function AdminHome() {
           </div>
         </div>
       </div>
+      <div className="admin-block" onClick={() => router.push('/admin/referrals')}>
+        <div className="admin-block-title">Рефералы</div>
+        <div className="admin-block-desc">Аналитика по реферальным ссылкам. Счётчик привлечённых пользователей.</div>
+      </div>
       <style jsx global>{`
         .admin-card {
           background: #232323;

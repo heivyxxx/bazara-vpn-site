@@ -27,6 +27,8 @@ export default async function handler(req, res) {
       apiKey = API_KEY_CARD;
       terminalId = TERMINAL_ID_CARD;
     }
+    const now = new Date();
+    now.setMinutes(now.getMinutes() + 2);
     const wataBody = {
       amount: Number(amount),
       currency: "RUB",
@@ -35,7 +37,7 @@ export default async function handler(req, res) {
       terminalId: terminalId,
       successRedirectUrl: "https://bazara-vpn-site.vercel.app/tariffs.html?afterpay=1",
       failRedirectUrl: "https://bazara-vpn-site.vercel.app/fail",
-      expirationDateTime: new Date(Date.now() + 24*60*60*1000).toISOString()
+      expirationDateTime: now.toISOString()
     };
     console.log('WATA BODY:', wataBody);
 

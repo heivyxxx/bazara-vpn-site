@@ -114,7 +114,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, tar
     }
     setLoading(true);
     try {
-      const amount = tariff === 'year' ? (lang === 'ru' ? 2290 : 2290) : (lang === 'ru' ? 399 : 399);
+      const amount = Number(String(price).replace(/[^\d]/g, ''));
       const package_days = tariff === 'year' ? 365 : 30;
       const order_id = 'bazara_' + Math.floor(Math.random()*1000000);
       const description = tariff === 'year' ? t.year : t.month;

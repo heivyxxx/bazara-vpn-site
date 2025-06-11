@@ -135,6 +135,20 @@ export const Header = ({ onLogin, user, onLogout }: HeaderProps) => {
           .py-4 { padding-top: 0.7rem; padding-bottom: 0.7rem; }
         }
       `}</style>
+      <style jsx global>{`
+        #mobile-menu {
+          background: #181818 !important;
+          opacity: 0.98;
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100vw;
+          height: 100vh;
+          z-index: 1000;
+          /* Можно добавить blur, если хочется */
+          /* backdrop-filter: blur(8px); */
+        }
+      `}</style>
     </header>
   );
 }; 

@@ -511,5 +511,93 @@
     "api_key": "d5868e9d-42b6-4a04-b94d-fa0109f18d65",
     "end_date": "2025-07-07",
     "filename": "testkey53.txt"
+  },
+  {
+    "uuid": "aeaa1519-6d7f-4d70-8ae3-a766e9d022e8",
+    "domain": "germany.bazaravpn.ru",
+    "proxy_path": "JdbX7yhT37znZZ",
+    "api_key": "27bc6d11-a699-4360-811c-260c3c0b37d3",
+    "end_date": "2025-07-11",
+    "filename": "sanek.txt"
+  },
+  {
+    "uuid": "a1897479-6d39-49ec-b289-3ca050293aa8",
+    "domain": "turkey.bazaravpn.ru",
+    "proxy_path": "yYEIuX3jX61MXzSQhSsY4",
+    "api_key": "65478704-ac79-4636-a036-892e5aa65584",
+    "end_date": "2025-07-11",
+    "filename": "sanek.txt"
+  },
+  {
+    "uuid": "4ef16c7e-a5ff-45dd-8b8d-ad3c15302841",
+    "domain": "japan.bazaravpn.ru",
+    "proxy_path": "fZ7s2sPOFD8NyUrv",
+    "api_key": "fabcc56a-f2db-4d15-ac14-6d4b7d2f691f",
+    "end_date": "2025-07-11",
+    "filename": "sanek.txt"
+  },
+  {
+    "uuid": "cea23f4b-e559-492a-82ed-1fe643fef6d6",
+    "domain": "amsterdam.bazaravpn.ru",
+    "proxy_path": "NGtiWweDZOri3gilZ8C7Rdcq",
+    "api_key": "3391f3ff-6675-4076-8927-e75e1ac3b5e2",
+    "end_date": "2025-07-11",
+    "filename": "sanek.txt"
+  },
+  {
+    "uuid": "0500d053-a940-4462-88e1-84ae0fd669be",
+    "domain": "usa.bazaravpn.ru",
+    "proxy_path": "DKtwf29IZL72EISGNode",
+    "api_key": "b21ba2e8-e5e9-48b5-9d21-846feae0ac48",
+    "end_date": "2025-07-11",
+    "filename": "sanek.txt"
+  },
+  {
+    "uuid": "2ea4dd93-de3a-44f0-8249-b8e87860db1c",
+    "domain": "afrika.bazaravpn.ru",
+    "proxy_path": "roEf5khbBY2ufxS",
+    "api_key": "ebe672ba-936a-4b84-b45a-9825295e9f87",
+    "end_date": "2025-07-11",
+    "filename": "sanek.txt"
+  },
+  {
+    "uuid": "a74353a9-0535-431e-8f30-597657549aff",
+    "domain": "poland.bazaravpn.ru",
+    "proxy_path": "sFDcLaHpTJHrrXP",
+    "api_key": "c26d79e8-5a2d-456c-9d8c-df92e6a1fa1b",
+    "end_date": "2025-07-11",
+    "filename": "sanek.txt"
+  },
+  {
+    "uuid": "a88a8280-3327-4a9b-8375-b9de2840d0bb",
+    "domain": "kazah.bazaravpn.ru",
+    "proxy_path": "eS3Egs1z4Da",
+    "api_key": "291064fa-4941-4599-9bfe-36c74e10789e",
+    "end_date": "2025-07-11",
+    "filename": "sanek.txt"
+  },
+  {
+    "uuid": "966521c8-6fe1-4df7-a12f-e4d3c6ca6ab3",
+    "domain": "brazil.bazaravpn.ru",
+    "proxy_path": "KhfCAkVAdjmdoVEjla9cJ",
+    "api_key": "acd95152-5874-436f-9b52-943fdb77dff3",
+    "end_date": "2025-07-11",
+    "filename": "sanek.txt"
+  },
+  {
+    "uuid": "56bb9f7a-5a69-4368-8e43-d013747eae51",
+    "domain": "malaysia2.bazaravpn.ru",
+    "proxy_path": "nkwYBkfoWniPvOE",
+    "api_key": "1fcc5a62-6b07-4b8a-b6fe-21212a0343fb",
+    "end_date": "2025-07-11",
+    "filename": "sanek.txt"
+  },
+  {
+    "uuid": "92a4db5c-8e7e-413c-93cc-11f3ac3608ba",
+    "domain": "nigeria.bazaravpn.ru",
+    "proxy_path": "cvJwkPpvpC9sBLOp24LR9Or",
+    "api_key": "d5868e9d-42b6-4a04-b94d-fa0109f18d65",
+    "end_date": "2025-07-11",
+    "filename": "sanek.txt"
   }
 ]

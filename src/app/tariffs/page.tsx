@@ -6,6 +6,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import clsx from 'clsx';
 import { PaymentModal, TariffType } from './PaymentModal';
+import { TelegramAuthModal } from '@/components/features/TelegramAuthModal';
 
 const tariffsTexts = {
   ru: {
@@ -64,6 +65,11 @@ function TariffsContent() {
   const btnMonthRef = useRef<HTMLButtonElement>(null);
   const priceRef = useRef<HTMLSpanElement>(null);
   const btnsContainerRef = useRef<HTMLDivElement>(null);
+  const [user, setUser] = useUser();
+  const [trialModalOpen, setTrialModalOpen] = useState(false);
+  const [trialResult, setTrialResult] = useState<string|null>(null);
+  const [trialError, setTrialError] = useState<string|null>(null);
+  const [loadingTrial, setLoadingTrial] = useState(false);
 
   const handleOpenModal = (tariff: TariffType, price: string) => {
     setModalTariff(tariff);
@@ -105,6 +111,40 @@ function TariffsContent() {
       setShowNewPrice(true);
       setExploding(false);
     }, 1200);
+  };
+
+  // Обработчик trial-кнопки
+  const handleTrialClick = () => {
+    setTrialError(null);
+    setTrialResult(null);
+    if (!user) {
+      setTrialModalOpen(true);
+    } else {
+      requestTrial(user);
+    }
+  };
+
+  // Запрос trial-ссылки
+  const requestTrial = async (u: any) => {
+    setLoadingTrial(true);
+    setTrialError(null);
+    setTrialResult(null);
+    try {
+      const resp = await fetch('/api/trial', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ telegram_id: u.id, name: u.name, username: u.username })
+      });
+      const data = await resp.json();
+      if (data.success && data.link) {
+        setTrialResult(data.link);
+      } else {
+        setTrialError(data.error || 'Ошибка получения trial-ссылки');
+      }
+    } catch {
+      setTrialError('Ошибка соединения с сервером');
+    }
+    setLoadingTrial(false);
   };
 
   return (
@@ -232,9 +272,26 @@ function TariffsContent() {
           <div className="flex-1 flex flex-col items-start">
             <h3 className="text-2xl md:text-3xl font-extrabold text-white mb-2">{t.tryTitle}</h3>
             <p className="text-base md:text-lg text-white mb-5" dangerouslySetInnerHTML={{__html: t.tryDesc}} />
-            <button className="try-free-btn">{t.tryBtn}</button>
+            <button className="try-free-btn" onClick={handleTrialClick} disabled={loadingTrial}>{loadingTrial ? 'Загрузка...' : t.tryBtn}</button>
+            {trialResult && (
+              <div className="mt-4 text-green-400 break-all">
+                Ваша trial-ссылка: <a href={trialResult} className="underline break-all" target="_blank" rel="noopener noreferrer">{trialResult}</a>
+              </div>
+            )}
+            {trialError && (
+              <div className="mt-4 text-red-400">{trialError}</div>
+            )}
           </div>
         </div>
+        <TelegramAuthModal
+          isOpen={trialModalOpen}
+          onClose={() => setTrialModalOpen(false)}
+          onAuth={u => {
+            setUser(u);
+            setTrialModalOpen(false);
+            requestTrial(u);
+          }}
+        />
       </section>
       {/* DevicesBlock */}
       <section className="fade-up max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-10 mb-20 px-4">

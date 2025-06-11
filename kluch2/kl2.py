@@ -36,11 +36,11 @@ SERVERS = [
     #     "ws_path": "/kmSdgvmDQSXB"
     # },
     {
-        "country": "🇱🇹 Литва #2",
+        "country": "🇱🇹 Литва",
         "domain": "vpn.bazaravpn.ru",
-        "api_url": "https://vpn.bazaravpn.ru/x5do6FZ5R1Cz3m6vyONSpMCWKPuUD/api/v2/admin/user",
-        "api_key": "6c2400c0-918c-4a9f-8a59-9df23838e4e6",
-        "ws_path": "/gnLVPbCy2DikjbnpLXaz"
+        "api_url": "https://vpnbazara.ru/kmSdgvmDQSXB/api/v2/admin/user",
+        "api_key": "fe8140e9-02a7-4790-8c22-30aac9647fd4",
+        "ws_path": "/kmSdgvmDQSXB"
     },
     {
         "country": "🇩🇪 Германия",

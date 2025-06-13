@@ -27,8 +27,9 @@ export default async function handler(req, res) {
       apiKey = API_KEY_CARD;
       terminalId = TERMINAL_ID_CARD;
     }
-    const now = new Date();
-    now.setMinutes(now.getMinutes() + 2);
+    // Формируем expirationDateTime как в старой системе: +2 минуты, округление до секунды
+    const now = new Date(Date.now() + 2 * 60 * 1000);
+    now.setMilliseconds(0); // убираем миллисекунды
     const wataBody = {
       amount: Number(amount),
       currency: "RUB",

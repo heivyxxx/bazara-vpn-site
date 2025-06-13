@@ -15,8 +15,8 @@ const tariffsTexts = {
     bannerBtn: 'Жми!',
     mainTitle: 'VPN для важных задач',
     mainDesc: 'Быстро. Безопасно. Анонимно.<br>Доступ к любимым сайтам и сервисам по всему миру — без ограничений и слежки. Всё по-базарному просто!',
-    btnYear: '2290₽/год',
-    btnMonth: '399₽/мес',
+    btnYear: '777₽/год',
+    btnMonth: '99₽/мес',
     tryTitle: 'Попробуйте BazaraVPN бесплатно',
     tryDesc: '3 дня полной защиты — без оплаты. без карты.<br>Оцени качество — а потом решишь сам.',
     tryBtn: 'Активировать пробную версию',
@@ -33,8 +33,8 @@ const tariffsTexts = {
     bannerBtn: 'Go!',
     mainTitle: 'VPN for important tasks',
     mainDesc: 'Fast. Secure. Anonymous.<br>Access your favorite sites and services worldwide — no limits, no tracking. As simple as it gets!',
-    btnYear: '2290₽/year',
-    btnMonth: '399₽/month',
+    btnYear: '777₽/year',
+    btnMonth: '99₽/month',
     tryTitle: 'Try BazaraVPN for free',
     tryDesc: '3 days of full protection — no payment, no card.<br>Try the quality — then decide for yourself.',
     tryBtn: 'Activate trial',
@@ -241,8 +241,8 @@ function TariffsContent() {
               {showOldPrice && (
                 <>
                   {/* <span ref={priceRef} className={clsx("price-old", exploding && 'hide')}>2290₽</span> */}
-                  <button ref={btnYearRef} className={clsx("tariff-btn", exploding && 'hide')} onClick={()=>handleOpenModal('year', lang==='ru'?'2290₽':'2290₽')}>2290₽/год</button>
-                  <button ref={btnMonthRef} className={clsx("tariff-btn border-2 border-orange-400 text-orange-500 bg-[#232323]", exploding && 'hide')} style={{background: '#232323', color: '#ff8800', border: '2px solid #ff8800', marginLeft: '1rem'}} onClick={()=>handleOpenModal('month', lang==='ru'?'399₽':'399₽')}>399₽/мес</button>
+                  <button ref={btnYearRef} className={clsx("tariff-btn", exploding && 'hide')} onClick={()=>handleOpenModal('year', lang==='ru'?'777₽':'777₽')}>777₽/год</button>
+                  <button ref={btnMonthRef} className={clsx("tariff-btn border-2 border-orange-400 text-orange-500 bg-[#232323]", exploding && 'hide')} style={{background: '#232323', color: '#ff8800', border: '2px solid #ff8800', marginLeft: '1rem'}} onClick={()=>handleOpenModal('month', lang==='ru'?'99₽':'99₽')}>99₽/мес</button>
                 </>
               )}
               {/* Анимация рассыпания */}
@@ -252,8 +252,8 @@ function TariffsContent() {
               {/* Новые цены и кнопки */}
               {showNewPrice && (
                 <div className={clsx("flex gap-4 items-center new-price-fade", showNewPrice && 'visible')}>
-                  <button className="tariff-btn" style={{marginRight: '1rem'}} onClick={()=>handleOpenModal('year', lang==='ru'?'1499₽':'1499₽')}>1499₽/год</button>
-                  <button className="tariff-btn border-2 border-orange-400 text-orange-500 bg-[#232323]" style={{background: '#232323', color: '#ff8800', border: '2px solid #ff8800'}} onClick={()=>handleOpenModal('month', lang==='ru'?'199₽':'199₽')}>199₽/мес</button>
+                  <button className="tariff-btn" style={{marginRight: '1rem'}} onClick={()=>handleOpenModal('year', lang==='ru'?'777₽':'777₽')}>777₽/год</button>
+                  <button className="tariff-btn border-2 border-orange-400 text-orange-500 bg-[#232323]" style={{background: '#232323', color: '#ff8800', border: '2px solid #ff8800'}} onClick={()=>handleOpenModal('month', lang==='ru'?'99₽':'99₽')}>99₽/мес</button>
                 </div>
               )}
             </div>

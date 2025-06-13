@@ -210,6 +210,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, tar
         </div>
         <button onClick={handlePay} className="relative w-full py-4 rounded-xl font-bold text-lg text-white bg-[#444] flex justify-center items-center px-8 hover:bg-orange-500 transition-colors duration-200 cursor-pointer" disabled={loading}>
           <span className="mx-auto">{t.pay}</span>
+          <span className="absolute right-8 text-lg font-bold text-white opacity-90">{price}</span>
         </button>
         <div className="text-xs text-gray-400 mt-2">Нажимая кнопку "Оплатить", вы соглашаетесь с условиями <a href="#" className="underline">лицензионного соглашения</a>.</div>
       </div>

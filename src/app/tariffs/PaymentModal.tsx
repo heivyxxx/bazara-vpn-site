@@ -116,23 +116,33 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, tar
     try {
       const amount = Number(String(price).replace(/[^\d]/g, ''));
       const package_days = tariff === 'year' ? 365 : 30;
-      const order_id = 'bazara_' + Math.floor(Math.random()*1000000);
+      const order_id = payMethod === 'crypto' 
+        ? 'vpn_' + Date.now()
+        : 'bazara_' + Math.floor(Math.random()*1000000);
       const description = (payMethod === 'crypto')
         ? (tariff === 'year' ? t.year : t.month)
         : 'Подписка BazaraVPN';
+      
+      const requestBody = {
+        amount,
+        order_id,
+        description,
+        method: payMethod,
+        email,
+        package_days
+      };
+      
+      console.log('Отправляем запрос:', requestBody);
+      
       const resp = await fetch('/api/pay', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          amount,
-          order_id,
-          description,
-          method: payMethod,
-          email,
-          package_days
-        })
+        body: JSON.stringify(requestBody)
       });
+      
       const data = await resp.json();
+      console.log('Получен ответ:', data);
+      
       setLoading(false);
       if (data && data.url) {
         if (typeof window !== 'undefined') {

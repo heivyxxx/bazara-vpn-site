@@ -27,9 +27,9 @@ export default async function handler(req, res) {
       apiKey = API_KEY_CARD;
       terminalId = TERMINAL_ID_CARD;
     }
-    // Формируем expirationDateTime как в старой системе: +2 минуты, округление до секунды
+    // Корректно формируем expirationDateTime для Wata: +2 минуты, без миллисекунд, ISO
     const now = new Date(Date.now() + 2 * 60 * 1000);
-    now.setMilliseconds(0); // убираем миллисекунды
+    now.setMilliseconds(0);
     const wataBody = {
       amount: Number(amount),
       currency: "RUB",

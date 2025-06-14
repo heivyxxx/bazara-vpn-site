@@ -27,8 +27,9 @@ export default async function handler(req, res) {
       apiKey = API_KEY_CARD;
       terminalId = TERMINAL_ID_CARD;
     }
-    // Делаю expirationDateTime: +3 часа и +2 минуты, как на старой html-странице
-    const now = new Date(Date.now() + (3 * 60 + 2) * 60 * 1000);
+    // Делаю expirationDateTime: +2 дня от текущего времени
+    const now = new Date();
+    now.setDate(now.getDate() + 2);
     now.setMilliseconds(0);
     const wataBody = {
       amount: Number(amount),

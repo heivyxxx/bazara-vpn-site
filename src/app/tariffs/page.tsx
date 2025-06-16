@@ -12,11 +12,10 @@ const tariffsTexts = {
   ru: {
     bannerTitle: 'Открытие BazaraVPN',
     bannerDesc: '20% скидка на все тарифы!<br><span class="text-base text-white font-normal">Только до 31 мая</span>',
-    bannerBtn: 'Жми!',
     mainTitle: 'VPN для важных задач',
     mainDesc: 'Быстро. Безопасно. Анонимно.<br>Доступ к любимым сайтам и сервисам по всему миру — без ограничений и слежки. Всё по-базарному просто!',
-    btnYear: '2290₽/год',
-    btnMonth: '399₽/мес',
+    btnYear: '777₽/год',
+    btnMonth: '99₽/мес',
     tryTitle: 'Попробуйте BazaraVPN бесплатно',
     tryDesc: '3 дня полной защиты — без оплаты. без карты.<br>Оцени качество — а потом решишь сам.',
     tryBtn: 'Активировать пробную версию',
@@ -30,11 +29,10 @@ const tariffsTexts = {
   en: {
     bannerTitle: 'BazaraVPN Launch',
     bannerDesc: '20% discount on all tariffs!<br><span class="text-base text-white font-normal">Only until May 31</span>',
-    bannerBtn: 'Go!',
     mainTitle: 'VPN for important tasks',
     mainDesc: 'Fast. Secure. Anonymous.<br>Access your favorite sites and services worldwide — no limits, no tracking. As simple as it gets!',
-    btnYear: '2290₽/year',
-    btnMonth: '399₽/month',
+    btnYear: '777₽/year',
+    btnMonth: '99₽/month',
     tryTitle: 'Try BazaraVPN for free',
     tryDesc: '3 days of full protection — no payment, no card.<br>Try the quality — then decide for yourself.',
     tryBtn: 'Activate trial',
@@ -216,17 +214,14 @@ function TariffsContent() {
       `}</style>
       {/* PromoBanner */}
       {bannerVisible && (
-        <div className={clsx("fade-up w-full max-w-5xl mx-auto rounded-2xl bg-gradient-to-r from-[#7b2ff2] to-[#f357a8] flex items-center justify-between px-8 py-7 mb-10 shadow-lg cursor-pointer", bannerFading ? "promo-banner-fade" : "promo-banner-visible")}
-          onClick={handleBannerClick}>
+        <div className={clsx("fade-up w-full max-w-5xl mx-auto rounded-2xl bg-gradient-to-r from-[#7b2ff2] to-[#f357a8] flex items-center justify-between px-8 py-7 mb-10 shadow-lg", bannerFading ? "promo-banner-fade" : "promo-banner-visible")}
+        >
           <div className="flex items-center gap-6">
             <Image src="/assets/tort.png" alt="Торт" width={128} height={128} className="w-32 h-32 md:w-40 md:h-40 select-none" draggable={false} />
             <div className="flex flex-col gap-1">
               <span className="text-3xl md:text-4xl font-extrabold text-white">{t.bannerTitle}</span>
               <span className="text-xl md:text-2xl font-semibold text-white" dangerouslySetInnerHTML={{__html: t.bannerDesc}} />
             </div>
-          </div>
-          <div className="flex flex-col items-center">
-            <span className="bg-white text-orange-600 font-bold px-7 py-3 rounded-2xl text-2xl shadow-lg">{t.bannerBtn}</span>
           </div>
         </div>
       )}
@@ -237,24 +232,8 @@ function TariffsContent() {
             <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-6">{t.mainTitle}</h2>
             <p className="text-xl md:text-2xl text-white mb-8 max-w-lg" dangerouslySetInnerHTML={{__html: t.mainDesc}} />
             <div className="flex gap-4 mt-2 items-center min-h-[56px] relative" ref={btnsContainerRef}>
-              {/* Старые цены и кнопки */}
-              {showOldPrice && (
-                <>
-                  <button ref={btnYearRef} className={clsx("tariff-btn", exploding && 'hide')} onClick={()=>handleOpenModal('year', lang==='ru'?'2290₽':'2290₽')}>2290₽/год</button>
-                  <button ref={btnMonthRef} className={clsx("tariff-btn border-2 border-orange-400 text-orange-500 bg-[#232323]", exploding && 'hide')} style={{background: '#232323', color: '#ff8800', border: '2px solid #ff8800', marginLeft: '1rem'}} onClick={()=>handleOpenModal('month', lang==='ru'?'399₽':'399₽')}>399₽/мес</button>
-                </>
-              )}
-              {/* Анимация рассыпания */}
-              {explodePieces.map(piece => (
-                <span key={piece.key} className="explode-piece" style={{left:piece.x, top:piece.y}} />
-              ))}
-              {/* Новые цены и кнопки */}
-              {showNewPrice && (
-                <div className={clsx("flex gap-4 items-center new-price-fade", showNewPrice && 'visible')}>
-                  <button className="tariff-btn" style={{marginRight: '1rem'}} onClick={()=>handleOpenModal('year', lang==='ru'?'777₽':'777₽')}>777₽/год</button>
-                  <button className="tariff-btn border-2 border-orange-400 text-orange-500 bg-[#232323]" style={{background: '#232323', color: '#ff8800', border: '2px solid #ff8800'}} onClick={()=>handleOpenModal('month', lang==='ru'?'99₽':'99₽')}>99₽/мес</button>
-                </div>
-              )}
+              <button className="tariff-btn" style={{marginRight: '1rem'}} onClick={()=>handleOpenModal('year', lang==='ru'?t.btnYear:t.btnYear)}>{t.btnYear}</button>
+              <button className="tariff-btn border-2 border-orange-400 text-orange-500 bg-[#232323]" style={{background: '#232323', color: '#ff8800', border: '2px solid #ff8800'}} onClick={()=>handleOpenModal('month', lang==='ru'?t.btnMonth:t.btnMonth)}>{t.btnMonth}</button>
             </div>
           </div>
           <div className="flex-1 flex justify-center items-center">

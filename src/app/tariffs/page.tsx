@@ -45,6 +45,9 @@ const tariffsTexts = {
   }
 };
 
+// ЗАМЕНИ на реальный адрес своего backend!
+const FLASK_BACKEND_URL = 'https://bazara.app/api/trial';
+
 function TrialModal({ isOpen, onClose, link, error }: { isOpen: boolean, onClose: () => void, link?: string | null, error?: string | null }) {
   const [copied, setCopied] = useState(false);
   useEffect(() => { setCopied(false); }, [link]);
@@ -154,13 +157,13 @@ function TariffsContent() {
     }
   };
 
-  // Запрос trial-ссылки
+  // Запрос trial-ссылки на Flask backend
   const requestTrial = async (u: any) => {
     setLoadingTrial(true);
     setTrialError(null);
     setTrialResult(null);
     try {
-      const resp = await fetch('/api/trial', {
+      const resp = await fetch(FLASK_BACKEND_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ telegram_id: u.id, name: u.name, username: u.username })

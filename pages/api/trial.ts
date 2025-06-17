@@ -1,6 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { db } from '@/firebaseConfig';
-import { collection, doc, getDoc, setDoc } from 'firebase/firestore';
+import { adminDb } from '@/firebaseAdmin';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
@@ -12,9 +11,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(400).json({ success: false, error: 'No telegram_id' });
     }
     // Проверяем, был ли уже trial
-    const trialRef = doc(collection(db, 'trials'), String(telegram_id));
-    const trialSnap = await getDoc(trialRef);
-    if (trialSnap.exists()) {
+    const trialRef = adminDb.collection('trials').doc(String(telegram_id));
+    const trialSnap = await trialRef.get();
+    if (trialSnap.exists) {
       return res.status(400).json({ success: false, error: 'already_used' });
     }
     // Генерируем trial-ссылку через тот же API, что и оплата, но package_days: 3
@@ -35,7 +34,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     });
     const data = await resp.json();
     if (data && data.url) {
-      await setDoc(trialRef, { date: Date.now(), link: data.url, telegram_id, name, username });
+      await trialRef.set({ date: Date.now(), link: data.url, telegram_id, name, username });
       return res.status(200).json({ success: true, link: data.url });
     } else {
       return res.status(500).json({ success: false, error: data.error || 'Ошибка генерации trial-ссылки' });

@@ -1,19 +1,6 @@
 import { NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
-
-const TRIALS_PATH = path.resolve(process.cwd(), 'src/api/trials.json');
-
-function readTrials() {
-  try {
-    return JSON.parse(fs.readFileSync(TRIALS_PATH, 'utf-8'));
-  } catch {
-    return {};
-  }
-}
-function writeTrials(data: any) {
-  fs.writeFileSync(TRIALS_PATH, JSON.stringify(data, null, 2), 'utf-8');
-}
+import { db } from '@/firebaseConfig';
+import { collection, doc, getDoc, setDoc } from 'firebase/firestore';
 
 export async function POST(request: Request) {
   try {
@@ -21,8 +8,10 @@ export async function POST(request: Request) {
     if (!telegram_id) {
       return NextResponse.json({ success: false, error: 'No telegram_id' }, { status: 400 });
     }
-    const trials = readTrials();
-    if (trials[telegram_id]) {
+    // Проверяем, был ли уже trial
+    const trialRef = doc(collection(db, 'trials'), String(telegram_id));
+    const trialSnap = await getDoc(trialRef);
+    if (trialSnap.exists()) {
       return NextResponse.json({ success: false, error: 'already_used' }, { status: 400 });
     }
     // Генерируем trial-ссылку через тот же API, что и оплата, но package_days: 3
@@ -43,8 +32,7 @@ export async function POST(request: Request) {
     });
     const data = await resp.json();
     if (data && data.url) {
-      trials[telegram_id] = { date: Date.now(), link: data.url };
-      writeTrials(trials);
+      await setDoc(trialRef, { date: Date.now(), link: data.url, telegram_id, name, username });
       return NextResponse.json({ success: true, link: data.url });
     } else {
       return NextResponse.json({ success: false, error: data.error || 'Ошибка генерации trial-ссылки' }, { status: 500 });

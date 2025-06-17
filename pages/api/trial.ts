@@ -2,6 +2,11 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { adminDb } from '@/firebaseAdmin';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  // Логируем переменные окружения для диагностики
+  console.log('FIREBASE_PROJECT_ID:', process.env.FIREBASE_PROJECT_ID);
+  console.log('FIREBASE_CLIENT_EMAIL:', process.env.FIREBASE_CLIENT_EMAIL);
+  console.log('FIREBASE_PRIVATE_KEY:', process.env.FIREBASE_PRIVATE_KEY ? 'OK' : 'MISSING');
+
   if (req.method !== 'POST') {
     return res.status(405).json({ success: false, error: 'Method not allowed' });
   }
@@ -40,6 +45,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(500).json({ success: false, error: data.error || 'Ошибка генерации trial-ссылки' });
     }
   } catch (e: any) {
+    console.error('TRIAL ERROR:', e, e?.message);
     return res.status(500).json({ success: false, error: e.message || 'Server error' });
   }
 } 

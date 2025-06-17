@@ -11,7 +11,7 @@ import { TelegramAuthModal } from '@/components/features/TelegramAuthModal';
 const tariffsTexts = {
   ru: {
     bannerTitle: 'Открытие BazaraVPN',
-    bannerDesc: '20% скидка на все тарифы!<br><span class="text-base text-white font-normal">Только до 31 мая</span>',
+    bannerDesc: '20% скидка на все тарифы!<br><span class="text-base text-white font-normal">Только до 31 июня</span>',
     mainTitle: 'VPN для важных задач',
     mainDesc: 'Быстро. Безопасно. Анонимно.<br>Доступ к любимым сайтам и сервисам по всему миру — без ограничений и слежки. Всё по-базарному просто!',
     btnYear: '777₽/год',
@@ -28,7 +28,7 @@ const tariffsTexts = {
   },
   en: {
     bannerTitle: 'BazaraVPN Launch',
-    bannerDesc: '20% discount on all tariffs!<br><span class="text-base text-white font-normal">Only until May 31</span>',
+    bannerDesc: '20% discount on all tariffs!<br><span class="text-base text-white font-normal">Only until June 31</span>',
     mainTitle: 'VPN for important tasks',
     mainDesc: 'Fast. Secure. Anonymous.<br>Access your favorite sites and services worldwide — no limits, no tracking. As simple as it gets!',
     btnYear: '777₽/year',

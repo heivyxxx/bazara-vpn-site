@@ -183,6 +183,31 @@ function TariffsContent() {
     setLoadingTrial(false);
   };
 
+  // --- Автоматический запрос на триал при первом заходе ---
+  useEffect(() => {
+    if (user && user.id && !(window as any).__trialRequested) {
+      (window as any).__trialRequested = true;
+      fetch('/api/trial', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ tg_id: user.id })
+      })
+        .then(r => r.json())
+        .then(data => {
+          // Если status: ok — всё ок, ничего не делаем
+          // Если ошибка — можно аккуратно показать (например, alert)
+          if (data.status !== 'ok') {
+            // Можно заменить на модалку/уведомление
+            alert(data.error || 'Ошибка получения триала');
+          }
+        })
+        .catch(() => {
+          // Можно заменить на модалку/уведомление
+          alert('Ошибка соединения с сервером');
+        });
+    }
+  }, [user]);
+
   return (
     <main className="min-h-screen bg-[#181818] pt-24 pb-10 px-2 sm:px-4 flex flex-col items-center">
       <style jsx>{`

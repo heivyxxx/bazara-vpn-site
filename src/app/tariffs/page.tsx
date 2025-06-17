@@ -45,6 +45,38 @@ const tariffsTexts = {
   }
 };
 
+function TrialModal({ isOpen, onClose, link, error }: { isOpen: boolean, onClose: () => void, link?: string | null, error?: string | null }) {
+  const [copied, setCopied] = useState(false);
+  useEffect(() => { setCopied(false); }, [link]);
+  if (!isOpen) return null;
+  return (
+    <div className="fixed inset-0 z-50 bg-black bg-opacity-60 flex items-center justify-center p-2">
+      <div className="bg-[#232323] rounded-3xl shadow-2xl p-6 w-full max-w-md relative flex flex-col gap-6">
+        <button onClick={onClose} className="absolute top-3 right-3 w-10 h-10 flex items-center justify-center rounded-full bg-[#181818] hover:bg-[#2c2c2c] text-2xl text-gray-400">&times;</button>
+        {link ? (
+          <>
+            <div className="font-bold text-xl text-green-400 mb-2">Ваша trial-ссылка</div>
+            <div className="break-all text-white mb-4">{link}</div>
+            <button onClick={() => {navigator.clipboard.writeText(link);setCopied(true);setTimeout(()=>setCopied(false),1200);}} className="w-full py-3 rounded-xl font-bold text-lg text-white bg-orange-500 hover:bg-orange-600 transition-colors duration-200">{copied ? 'Скопировано!' : 'Скопировать ссылку'}</button>
+          </>
+        ) : error === 'already_used' ? (
+          <>
+            <div className="font-bold text-xl text-red-400 mb-2">Упс!</div>
+            <div className="text-white mb-4">Сервер говорит, что вы уже воспользовались пробной версией.</div>
+            <button onClick={onClose} className="w-full py-3 rounded-xl font-bold text-lg text-white bg-[#444] hover:bg-orange-500 transition-colors duration-200">Закрыть</button>
+          </>
+        ) : error ? (
+          <>
+            <div className="font-bold text-xl text-red-400 mb-2">Ошибка</div>
+            <div className="text-white mb-4">{error}</div>
+            <button onClick={onClose} className="w-full py-3 rounded-xl font-bold text-lg text-white bg-[#444] hover:bg-orange-500 transition-colors duration-200">Закрыть</button>
+          </>
+        ) : null}
+      </div>
+    </div>
+  );
+}
+
 function TariffsContent() {
   const { lang } = useLang();
   const t = tariffsTexts[lang];
@@ -136,11 +168,14 @@ function TariffsContent() {
       const data = await resp.json();
       if (data.success && data.link) {
         setTrialResult(data.link);
+        setTrialModalOpen(true);
       } else {
         setTrialError(data.error || 'Ошибка получения trial-ссылки');
+        setTrialModalOpen(true);
       }
     } catch {
       setTrialError('Ошибка соединения с сервером');
+      setTrialModalOpen(true);
     }
     setLoadingTrial(false);
   };
@@ -251,25 +286,8 @@ function TariffsContent() {
             <h3 className="text-2xl md:text-3xl font-extrabold text-white mb-2">{t.tryTitle}</h3>
             <p className="text-base md:text-lg text-white mb-5" dangerouslySetInnerHTML={{__html: t.tryDesc}} />
             <button className="try-free-btn" onClick={handleTrialClick} disabled={loadingTrial}>{loadingTrial ? 'Загрузка...' : t.tryBtn}</button>
-            {trialResult && (
-              <div className="mt-4 text-green-400 break-all">
-                Ваша trial-ссылка: <a href={trialResult} className="underline break-all" target="_blank" rel="noopener noreferrer">{trialResult}</a>
-              </div>
-            )}
-            {trialError && (
-              <div className="mt-4 text-red-400">{trialError}</div>
-            )}
           </div>
         </div>
-        <TelegramAuthModal
-          isOpen={trialModalOpen}
-          onClose={() => setTrialModalOpen(false)}
-          onAuth={u => {
-            setUser(u);
-            setTrialModalOpen(false);
-            requestTrial(u);
-          }}
-        />
       </section>
       {/* DevicesBlock */}
       <section className="fade-up max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-10 mb-20 px-4">
@@ -302,6 +320,16 @@ function TariffsContent() {
         <span style={{position:'absolute',right:'1.2rem',bottom:'0.2rem',fontSize:'2.5rem',color:'#ff8800'}}>&quot;</span>
       </div>
       <PaymentModal isOpen={modalOpen} onClose={handleCloseModal} tariff={modalTariff} price={modalPrice} />
+      <TrialModal isOpen={trialModalOpen && (!!trialResult || !!trialError)} onClose={() => { setTrialModalOpen(false); setTrialResult(null); setTrialError(null); }} link={trialResult} error={trialError} />
+      <TelegramAuthModal
+        isOpen={trialModalOpen && !user && !trialResult && !trialError}
+        onClose={() => setTrialModalOpen(false)}
+        onAuth={u => {
+          setUser(u);
+          setTrialModalOpen(false);
+          requestTrial(u);
+        }}
+      />
     </main>
   );
 }

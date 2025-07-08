@@ -30,5 +30,5 @@ function checkBase64Url(url) {
   });
 }
 
-// Пример вызова:
+// Пример вызаова:
 checkBase64Url('https://kluch2.vercel.app/base64.txt'); 

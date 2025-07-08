@@ -1,3 +1,12 @@
+declare global {
+  interface Window {
+    Telegram?: {
+      WebApp?: any;
+      [key: string]: any;
+    };
+  }
+}
+
 import { useEffect } from 'react';
 
 export function useTelegramInit(onUser?: (user: any) => void) {

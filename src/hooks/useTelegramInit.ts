@@ -15,8 +15,13 @@ export function useTelegramInit(onUser?: (user: any) => void) {
       const tg = window.Telegram.WebApp;
       tg.ready();
       tg.expand();
-      // fullscreen для мобилок
-      if (tg.platform === 'android' || tg.platform === 'ios' || /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)) {
+      // fullscreen только для мобильных устройств
+      const isMobile = (
+        tg.platform === 'android' ||
+        tg.platform === 'ios' ||
+        /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)
+      );
+      if (isMobile) {
         tg.requestFullscreen();
         window.addEventListener('click', () => tg.requestFullscreen(), { once: true });
       }

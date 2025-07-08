@@ -2,7 +2,7 @@ const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
 
-const TELEGRAM_BOT_TOKEN = '7153524021:AAFzY5nkHCOT4SPhQkChgi5QCKuzsGSarAA';
+const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 
 const TRIALS_FILE = path.resolve(__dirname, 'trials.json');
 const USERS_FILE = path.resolve(__dirname, 'users.json');

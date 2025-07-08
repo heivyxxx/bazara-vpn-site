@@ -354,6 +354,7 @@ function TariffsContent() {
         onClose={() => setTrialModalOpen(false)}
         onAuth={u => {
           setUser(u);
+          if (typeof window !== 'undefined') localStorage.setItem('bazaraUser', JSON.stringify(u));
           setTrialModalOpen(false);
           requestTrial(u);
         }}

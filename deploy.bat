@@ -22,3 +22,4 @@ curl -X POST https://api.vercel.com/v1/integrations/deploy/prj_z9oW4x5HbFu4V4BBZ
 echo =============================
 echo ✅ Всё залито и деплой вызван!
 pause
+https://api.vercel.com/v1/integrations/deploy/prj_KWkOlJnvylZiuxQAhsKktldm7RMR/XxqVlOHLoc

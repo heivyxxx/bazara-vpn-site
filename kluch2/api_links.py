@@ -6,8 +6,10 @@ import os
 from links_firebase import add_link
 from datetime import datetime
 import uuid
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app, origins=["https://bazara-vpn-site.vercel.app", "https://bazara.app"])
 KEY_PATH = os.path.join(os.path.dirname(__file__), '../src/bazara-vpn-admin-firebase-adminsdk-fbsvc-603b4dd215.json')
 if not firebase_admin._apps:
     cred = credentials.Certificate(KEY_PATH)

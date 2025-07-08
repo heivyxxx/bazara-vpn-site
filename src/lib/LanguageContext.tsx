@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { useTelegramInit } from '@/hooks/useTelegramInit';
 
 type Lang = 'ru' | 'en';
 
@@ -45,6 +46,16 @@ const UserContext = createContext<UserContextProps>({ user: null, setUser: () =>
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
+
+  // --- Telegram Mini App авторизация ---
+  useTelegramInit((tgUser) => {
+    if (tgUser && tgUser.id) {
+      setUser(tgUser);
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('bazaraUser', JSON.stringify(tgUser));
+      }
+    }
+  });
 
   useEffect(() => {
     if (typeof window !== 'undefined') {

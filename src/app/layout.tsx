@@ -4,6 +4,7 @@ import type { ReactNode } from 'react';
 import { UserProvider } from '@/lib/LanguageContext';
 import { LanguageProvider } from '@/lib/LanguageContext';
 import SafeArea from '@/components/SafeArea';
+import BottomNav from '@/components/BottomNav';
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
@@ -11,6 +12,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body>
         <SafeArea>
           {children}
+          <BottomNav />
         </SafeArea>
       </body>
     </html>

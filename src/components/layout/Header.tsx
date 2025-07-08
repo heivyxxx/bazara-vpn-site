@@ -77,12 +77,8 @@ export const Header = ({ onLogin, user, onLogout }: HeaderProps) => {
           </Link>
         </nav>
 
-        {/* Actions + Burger */}
+        {/* Actions */}
         <div className="flex items-center gap-2 md:gap-4">
-          {/* Бургер теперь тут */}
-          <button className="md:hidden flex items-center justify-center w-11 h-11 rounded-lg hover:bg-[#232323] transition" onClick={()=>setMenuOpen(v=>!v)} aria-label="Открыть меню">
-            <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
-          </button>
           {user ? (
             <div className="flex items-center gap-2">
               {/* <Image src={user.photo_url || '/assets/avatar1.png'} alt={user.name} width={40} height={40} className="w-10 h-10 rounded-full border-2 border-orange-400 shadow" /> */}
@@ -113,21 +109,7 @@ export const Header = ({ onLogin, user, onLogout }: HeaderProps) => {
           </button>
         </div>
       </div>
-      {/* Mobile menu overlay */}
-      {menuOpen && (
-        <div className="fixed inset-0 z-40 bg-[#232323] md:hidden" onClick={()=>setMenuOpen(false)} />
-      )}
-      <div className={`fixed top-0 right-0 z-50 w-full h-full bg-[#232323] shadow-2xl transition-transform duration-300 md:hidden ${menuOpen ? 'translate-x-0' : 'translate-x-full'}`} style={{willChange:'transform'}}>
-        <div className="flex flex-col gap-2 p-6 pt-8">
-          <button className="self-end mb-4 text-gray-400 hover:text-white" onClick={()=>setMenuOpen(false)} aria-label="Закрыть меню">
-            <svg className="w-8 h-8" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24"><path d="M6 6l12 12M6 18L18 6"/></svg>
-          </button>
-          <Link href="/tariffs" className="text-white text-lg font-semibold py-3 px-2 rounded-lg hover:bg-[#181818] transition" onClick={()=>setMenuOpen(false)}>{t.prices}</Link>
-          <Link href="/reviews" className="text-white text-lg font-semibold py-3 px-2 rounded-lg hover:bg-[#181818] transition" onClick={()=>setMenuOpen(false)}>{t.reviews}</Link>
-          <Link href="/support" className="text-white text-lg font-semibold py-3 px-2 rounded-lg hover:bg-[#181818] transition" onClick={()=>setMenuOpen(false)}>{t.support}</Link>
-          <button onClick={()=>{setMenuOpen(false);onLogin&&onLogin();}} className="text-white text-lg font-semibold py-3 px-2 rounded-lg hover:bg-[#181818] transition text-left">{t.login}</button>
-        </div>
-      </div>
+      {/* Удаляю бургер и мобильное меню */}
       <style jsx>{`
         @media (max-width: 600px) {
           .text-2xl { font-size: 1.2rem; }

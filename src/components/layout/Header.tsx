@@ -50,7 +50,7 @@ export const Header = ({ onLogin, user, onLogout }: HeaderProps) => {
             className="w-10 h-10 min-w-[40px] min-h-[40px]"
             priority
           />
-          <span className="text-2xl font-bold text-white truncate max-w-[120px] sm:max-w-none">
+          <span className="text-2xl font-bold text-white">
             {t.bazara}<span className="text-white">{t.vpn}</span>
           </span>
         </Link>

@@ -133,7 +133,7 @@ export default function ReviewsPage() {
     <LanguageProvider>
       <Header user={user} onLogin={() => setShowAuth(true)} onLogout={() => { setUser(null); if (typeof window !== 'undefined') localStorage.removeItem('bazaraUser'); }} />
       <TelegramAuthModal isOpen={showAuth} onClose={() => setShowAuth(false)} onAuth={u => { setUser(u); if (typeof window !== 'undefined') localStorage.setItem('bazaraUser', JSON.stringify(u)); setShowAuth(false); setIsModalOpen(true); }} />
-      <div className="min-h-screen bg-[#181818] pt-24 pb-8 md:pb-10 px-2 sm:px-4">
+      <div className="min-h-screen bg-[#181818] pt-32 pb-14 md:pb-16 px-2 sm:px-4">
         <style jsx>{`
           .star-filter-btn:hover .star-icon {
             fill: #ff8800 !important;
@@ -165,7 +165,7 @@ export default function ReviewsPage() {
             <div className="flex gap-1 mb-2 md:mb-0">
               {[1,2,3,4,5].map(n => (
                 <button key={n} className={`star-filter-btn ${starFilter === n ? 'selected' : ''}`} onClick={() => setStarFilter(starFilter === n ? null : n)} aria-label={`${n} ${getStarWord(n, lang)}`}>
-                  <svg className="w-6 h-6 md:w-7 md:h-7 star-icon" fill={starFilter === n ? '#ff8800' : '#444'} viewBox="0 0 20 20"><polygon points="10,1 12.59,7.36 19.51,7.64 14,12.14 15.82,19.02 10,15.27 4.18,19.02 6,12.14 0.49,7.64 7.41,7.36"/></svg>
+                  <svg className="w-6 h-6 md:w-7 md:h-7 star-icon" fill={starFilter && n <= starFilter ? '#ff8800' : '#444'} viewBox="0 0 20 20"><polygon points="10,1 12.59,7.36 19.51,7.64 14,12.14 15.82,19.02 10,15.27 4.18,19.02 6,12.14 0.49,7.64 7.41,7.36"/></svg>
                 </button>
               ))}
             </div>

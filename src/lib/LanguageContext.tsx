@@ -1,6 +1,8 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useTelegramInit } from '@/hooks/useTelegramInit';
 import { signInOrUpWithTelegram } from './auth';
+import { createClient } from '@supabase/supabase-js';
+import { User } from './types';
 
 type Lang = 'ru' | 'en';
 
@@ -32,4 +34,60 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
 
 export const useLang = () => useContext(LangContext);
 
-// Удаляю UserProvider и useUser, оставляю только LanguageProvider и useLang 
+// --- UserContext ---
+interface UserContextProps {
+  user: User | null;
+  setUser: (u: User | null) => void;
+}
+const UserContext = createContext<UserContextProps>({ user: null, setUser: () => {} });
+
+export const UserProvider = ({ children }: { children: ReactNode }) => {
+  const [user, setUser] = useState<User | null>(null);
+
+  // Инициализация из localStorage
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('bazaraUser');
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          if (parsed && parsed.id && parsed.name) setUser(parsed);
+        } catch {}
+      }
+    }
+  }, []);
+
+  // Синхронизация с Supabase и Telegram (как в Eclipse)
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
+    if (tgUser && tgUser.id) {
+      const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
+      supabase
+        .from('users')
+        .select('*')
+        .eq('id', tgUser.id)
+        .single()
+        .then(({ data }) => {
+          if (data) {
+            setUser(data);
+            localStorage.setItem('bazaraUser', JSON.stringify(data));
+          } else {
+            setUser(null);
+            localStorage.removeItem('bazaraUser');
+          }
+        });
+    }
+  }, []);
+
+  return (
+    <UserContext.Provider value={{ user, setUser }}>
+      {children}
+    </UserContext.Provider>
+  );
+};
+
+export const useUser = () => {
+  const { user, setUser } = useContext(UserContext);
+  return [user, setUser] as const;
+}; 

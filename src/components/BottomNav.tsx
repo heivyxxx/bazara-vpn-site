@@ -13,7 +13,7 @@ const navs = [
   { to: '/', label: 'Главная', icon: '/assets/home.png', iconActive: '/assets/homeactive.png' },
   { to: '/tariffs', label: 'Цены', icon: '/assets/market.png', iconActive: '/assets/marketactive.png' },
   { to: '/reviews', label: 'Отзывы', icon: '/assets/stars.png', iconActive: '/assets/starsactive.png' },
-  { to: '/support', label: 'Поддержка', icon: '/assets/help.png', iconActive: '/assets/helpactive.png' },
+  { to: '/profile', label: 'Профиль', icon: '/assets/avatar1.png', iconActive: '/assets/avatar2.png' },
 ];
 
 const BottomNav = () => {

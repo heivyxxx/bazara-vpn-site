@@ -6,7 +6,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import clsx from 'clsx';
 import { PaymentModal, TariffType } from './PaymentModal';
-import { TelegramAuthModal } from '@/components/features/TelegramAuthModal';
 import { Button } from '@/components/ui/Button';
 
 const tariffsTexts = {
@@ -343,16 +342,6 @@ function TariffsContent() {
 
       <PaymentModal isOpen={modalOpen} onClose={handleCloseModal} tariff={modalTariff} price={modalPrice} />
       <TrialModal isOpen={trialModalOpen && (!!trialResult || !!trialError)} onClose={() => { setTrialModalOpen(false); setTrialResult(null); setTrialError(null); }} link={trialResult} error={trialError} />
-      <TelegramAuthModal
-        isOpen={trialModalOpen && !user && !trialResult && !trialError}
-        onClose={() => setTrialModalOpen(false)}
-        onAuth={u => {
-          setUser(u);
-          if (typeof window !== 'undefined') localStorage.setItem('bazaraUser', JSON.stringify(u));
-          setTrialModalOpen(false);
-          requestTrial(u);
-        }}
-      />
     </main>
   );
 }

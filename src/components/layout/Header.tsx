@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useLang } from '@/lib/LanguageContext';
 import { useState } from 'react';
-import { TelegramAuthModal } from '@/components/features/TelegramAuthModal';
+import { getTelegramUser, signInOrUpWithTelegram, upsertUserProfile, getProfileFromUsersTable } from '@/lib/auth';
 
 const translations = {
   ru: {
@@ -37,6 +37,23 @@ export const Header = ({ onLogin, user, onLogout }: HeaderProps) => {
   const { lang, setLang } = useLang();
   const t = translations[lang];
   const [menuOpen, setMenuOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  async function handleLogin() {
+    setLoading(true);
+    try {
+      const tgUser = getTelegramUser();
+      if (!tgUser) { alert('Откройте через Telegram WebApp!'); setLoading(false); return; }
+      const supaUser = await signInOrUpWithTelegram(tgUser);
+      await upsertUserProfile(tgUser, supaUser.id);
+      // Можно получить профиль из users
+      // const profile = await getProfileFromUsersTable(supaUser.id);
+      window.location.reload();
+    } catch (e) {
+      alert('Ошибка входа: ' + (e?.message || e));
+    }
+    setLoading(false);
+  }
 
   return (
     <header>
@@ -87,10 +104,11 @@ export const Header = ({ onLogin, user, onLogout }: HeaderProps) => {
             </div>
           ) : (
             <button
-              onClick={onLogin}
+              onClick={handleLogin}
               className="text-white hover:text-[#fd6a32] transition hidden md:block font-semibold"
+              disabled={loading}
             >
-              {t.login}
+              {loading ? 'Вход...' : t.login}
             </button>
           )}
           <Link 

@@ -71,7 +71,7 @@ export const FAQ = () => {
       <h2 className="text-2xl md:text-3xl font-bold text-[#fd6a32] mb-6 md:mb-10 text-center">
         {t.title}
       </h2>
-      <div className="bg-[#232323] rounded-2xl shadow-xl p-4 md:p-8">
+      <div className="bg-[#18181b] rounded-2xl shadow-xl p-4 md:p-8">
         {faqs.map((faq, index) => (
           <FAQItem
             key={index}

@@ -126,7 +126,7 @@ export const Features = () => {
   return (
     <div>
       {features.map((block, i) => (
-        <section key={i} className="w-full bg-[#181818] py-8 md:py-16 px-2 sm:px-4">
+        <section key={i} className="w-full py-8 md:py-16 px-2 sm:px-4">
           <div className={`max-w-6xl mx-auto flex flex-col md:flex-row items-center md:items-stretch gap-6 md:gap-16 ${block.reverse ? 'md:flex-row-reverse' : ''}`}>
             <div className="flex-1 flex flex-col justify-center text-center md:text-left">
               <h2 className="text-2xl md:text-5xl font-extrabold text-white mb-4 md:mb-6 leading-tight">

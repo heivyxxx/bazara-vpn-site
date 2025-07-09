@@ -75,7 +75,7 @@ export const SupportIssueModal = ({ isOpen, onClose }: { isOpen: boolean; onClos
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[9999] bg-black/80 flex items-center justify-center transition-all duration-300">
+    <div className="fixed inset-0 z-[9999] bg-black/80 flex items-center justify-center">
       <div className="bg-gradient-to-br from-[#18181b] via-[#18181b] to-[#2d1a00] rounded-3xl shadow-2xl max-w-xl w-full p-0 relative animate-fade-in flex flex-col border-4 border-[#FE6125]/30" style={{boxShadow:'0 8px 48px 0 #FE612522,0 2px 0 #a259ff', minWidth: 340, maxWidth: 520}}>
         <button onClick={onClose} className="absolute top-4 right-6 text-3xl text-gray-400 hover:text-[#FE6125] font-bold transition-all z-20 bg-transparent border-none outline-none cursor-pointer">&times;</button>
         <div className="flex flex-col items-center justify-center pt-8 pb-2">

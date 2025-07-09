@@ -10,7 +10,6 @@ import { Header } from '@/components/layout/Header';
 // import { Footer } from '@/components/layout/Footer';
 import { LanguageProvider, useUser } from '@/lib/LanguageContext';
 import { useState, useEffect } from 'react';
-import { TelegramAuthModal } from '@/components/features/TelegramAuthModal';
 import { ReviewModal } from '@/components/features/reviews/ReviewModal';
 import { User } from '@/lib/types';
 import { useLang } from '@/lib/LanguageContext';
@@ -89,7 +88,6 @@ export default function HomePage() {
   return (
     <LanguageProvider>
       <Header user={user} onLogin={() => setAuthOpen(true)} onLogout={() => { setUser(null); if (typeof window !== 'undefined') localStorage.removeItem('bazaraUser'); }} />
-      <TelegramAuthModal isOpen={authOpen} onClose={() => setAuthOpen(false)} onAuth={u => { setUser(u); if (typeof window !== 'undefined') localStorage.setItem('bazaraUser', JSON.stringify(u)); setAuthOpen(false); setIsModalOpen(true); }} />
       <ReviewModal isOpen={isModalOpen && !!user} onClose={() => setIsModalOpen(false)} onSubmit={handleSubmitReview} user={user} />
       <main className="min-h-screen bg-black">
         <Hero />

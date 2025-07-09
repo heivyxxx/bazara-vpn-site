@@ -171,8 +171,8 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, tar
   };
 
   return (
-    <div className="fixed inset-0 z-[9999] bg-black/80 flex items-center justify-center">
-      <div className="bg-[#18181b] rounded-3xl shadow-2xl p-4 sm:p-8 md:p-12 w-full max-w-2xl relative flex flex-col gap-6 sm:gap-8" style={{minWidth:0, minHeight:320}}>
+    <div className="fixed inset-0 z-[9999] bg-black/80 flex items-end justify-center">
+      <div className="bg-[#18181b] rounded-t-3xl rounded-b-none shadow-2xl p-4 sm:p-8 md:p-12 w-full max-w-2xl relative flex flex-col gap-6 sm:gap-8 min-h-[60vh] max-h-[98vh] overflow-y-auto" style={{minWidth:0}}>
         <button onClick={onClose} className="absolute top-3 right-3 sm:top-5 sm:right-5 w-10 h-10 flex items-center justify-center rounded-full bg-[#181818] hover:bg-[#2c2c2c] text-2xl text-gray-400">&times;</button>
         <div className="flex items-center gap-3 sm:gap-4 mb-2">
           <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#181818] flex items-center justify-center text-2xl font-bold text-[#FE6125]">BV</div>

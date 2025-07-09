@@ -13,13 +13,13 @@ const navs = [
   { to: '/', label: 'Главная', icon: '/assets/home.png', iconActive: '/assets/homeactive.png' },
   { to: '/tariffs', label: 'Цены', icon: '/assets/market.png', iconActive: '/assets/marketactive.png' },
   { to: '/reviews', label: 'Отзывы', icon: '/assets/stars.png', iconActive: '/assets/starsactive.png' },
-  { to: '/profile', label: 'Профиль', icon: '/assets/avatar1.png', iconActive: '/assets/avatar2.png' },
+  { to: '/profile', label: 'Профиль', icon: '/assets/profile.png', iconActive: '/assets/profileactive.png' },
 ];
 
 const BottomNav = () => {
   const pathname = usePathname();
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-black/70 backdrop-blur-md border-t border-[#232323] flex justify-around items-center h-[76px] min-w-full md:hidden" style={{paddingBottom: '30px'}}>
+    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-black/70 backdrop-blur-md border-t border-[#232323] flex justify-around items-center h-[76px] min-w-full" style={{paddingBottom: '30px'}}>
       {navs.map((nav) => {
         const isActive = pathname === nav.to;
         return (

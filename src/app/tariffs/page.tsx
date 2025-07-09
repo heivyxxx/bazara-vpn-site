@@ -45,40 +45,8 @@ const tariffsTexts = {
   }
 };
 
-// ЗАМЕНИ на реальный адрес своего backend!
-const FLASK_BACKEND_URL = 'https://bazara.app/api/trial';
-
-function TrialModal({ isOpen, onClose, link, error }: { isOpen: boolean, onClose: () => void, link?: string | null, error?: string | null }) {
-  const [copied, setCopied] = useState(false);
-  useEffect(() => { setCopied(false); }, [link]);
-  if (!isOpen) return null;
-  return (
-    <div className="fixed inset-0 z-50 bg-black bg-opacity-60 flex items-center justify-center p-2">
-      <div className="bg-[#232323] rounded-3xl shadow-2xl p-6 w-full max-w-md relative flex flex-col gap-6">
-        <button onClick={onClose} className="absolute top-3 right-3 w-10 h-10 flex items-center justify-center rounded-full bg-[#181818] hover:bg-[#2c2c2c] text-2xl text-gray-400">&times;</button>
-        {link ? (
-          <>
-            <div className="font-bold text-xl text-green-400 mb-2">Ваша trial-ссылка</div>
-            <div className="break-all text-white mb-4">{link}</div>
-            <Button onClick={() => {navigator.clipboard.writeText(link);setCopied(true);setTimeout(()=>setCopied(false),1200);}} className="w-full py-3 rounded-xl font-bold text-lg text-white bg-orange-500 hover:bg-orange-600 transition-colors duration-200">{copied ? 'Скопировано!' : 'Скопировать ссылку'}</Button>
-          </>
-        ) : error === 'already_used' ? (
-          <>
-            <div className="font-bold text-xl text-red-400 mb-2">Упс!</div>
-            <div className="text-white mb-4">Сервер говорит, что вы уже воспользовались пробной версией.</div>
-            <Button onClick={onClose} className="w-full py-3 rounded-xl font-bold text-lg text-white bg-[#444] hover:bg-orange-500 transition-colors duration-200">Закрыть</Button>
-          </>
-        ) : error ? (
-          <>
-            <div className="font-bold text-xl text-red-400 mb-2">Ошибка</div>
-            <div className="text-white mb-4">{error}</div>
-            <Button onClick={onClose} className="w-full py-3 rounded-xl font-bold text-lg text-white bg-[#444] hover:bg-orange-500 transition-colors duration-200">Закрыть</Button>
-          </>
-        ) : null}
-      </div>
-    </div>
-  );
-}
+// 1. Удаляю все useEffect и функции, связанные с trial через Flask backend (FLASK_BACKEND_URL, requestTrial, старый handleTrialClick, старый TrialModal, автоматический trial useEffect и т.д.).
+// 2. Оставляю только переменные user, setUser, trialModalOpen, trialResult, trialError, loadingTrial для новой логики.
 
 function TariffsContent() {
   const { lang } = useLang();
@@ -146,34 +114,34 @@ function TariffsContent() {
     }, 1200);
   };
 
-  // Обработчик trial-кнопки
-  const handleTrialClick = () => {
+  // Новая логика trial
+  const handleTrialClick = async () => {
     setTrialError(null);
     setTrialResult(null);
     if (!user) {
       setTrialModalOpen(true);
-    } else {
-      requestTrial(user);
+      setTrialError('Авторизуйтесь через Telegram Mini App');
+      return;
     }
-  };
-
-  // Запрос trial-ссылки на Flask backend
-  const requestTrial = async (u: any) => {
+    if (user.trial) {
+      setTrialError('Уже активировано!');
+      setTrialModalOpen(true);
+      return;
+    }
     setLoadingTrial(true);
-    setTrialError(null);
-    setTrialResult(null);
     try {
-      const resp = await fetch(FLASK_BACKEND_URL, {
+      const resp = await fetch('/api/activate-trial', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ telegram_id: u.id, name: u.name, username: u.username })
+        body: JSON.stringify({ telegram_id: user.id })
       });
       const data = await resp.json();
       if (data.success && data.link) {
         setTrialResult(data.link);
         setTrialModalOpen(true);
+        setUser({ ...user, trial: true });
       } else {
-        setTrialError(data.error || 'Ошибка получения trial-ссылки');
+        setTrialError(data.error || 'Ошибка активации триала');
         setTrialModalOpen(true);
       }
     } catch {
@@ -184,29 +152,29 @@ function TariffsContent() {
   };
 
   // --- Автоматический запрос на триал при первом заходе ---
-  useEffect(() => {
-    if (user && user.id && !(window as any).__trialRequested) {
-      (window as any).__trialRequested = true;
-      fetch('/api/trial', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ tg_id: user.id })
-      })
-        .then(r => r.json())
-        .then(data => {
-          // Если status: ok — всё ок, ничего не делаем
-          // Если ошибка — можно аккуратно показать (например, alert)
-          if (data.status !== 'ok') {
-            // Можно заменить на модалку/уведомление
-            alert(data.error || 'Ошибка получения триала');
-          }
-        })
-        .catch(() => {
-          // Можно заменить на модалку/уведомление
-          alert('Ошибка соединения с сервером');
-        });
-    }
-  }, [user]);
+  // useEffect(() => {
+  //   if (user && user.id && !(window as any).__trialRequested) {
+  //     (window as any).__trialRequested = true;
+  //     fetch('/api/trial', {
+  //       method: 'POST',
+  //       headers: { 'Content-Type': 'application/json' },
+  //       body: JSON.stringify({ tg_id: user.id })
+  //     })
+  //       .then(r => r.json())
+  //       .then(data => {
+  //         // Если status: ok — всё ок, ничего не делаем
+  //         // Если ошибка — можно аккуратно показать (например, alert)
+  //         if (data.status !== 'ok') {
+  //           // Можно заменить на модалку/уведомление
+  //           alert(data.error || 'Ошибка получения триала');
+  //         }
+  //       })
+  //       .catch(() => {
+  //         // Можно заменить на модалку/уведомление
+  //         alert('Ошибка соединения с сервером');
+  //       });
+  //   }
+  // }, [user]);
 
   return (
     <main className="min-h-screen bg-black pt-24 pb-10 px-2 sm:px-4 flex flex-col items-center">
@@ -311,7 +279,7 @@ function TariffsContent() {
           <div className="flex-1 flex flex-col items-start">
             <h3 className="text-2xl md:text-3xl font-extrabold text-white mb-2">{t.tryTitle}</h3>
             <p className="text-base md:text-lg text-white mb-5" dangerouslySetInnerHTML={{__html: t.tryDesc}} />
-            <Button onClick={handleTrialClick} disabled={loadingTrial} className="w-full py-3 rounded-xl font-bold text-lg text-white bg-[#fd6a32] hover:bg-[#e65a1e] transition-colors duration-200">{loadingTrial ? 'Загрузка...' : t.tryBtn}</Button>
+            <Button onClick={handleTrialClick} disabled={user?.trial || loadingTrial} className={`w-full py-3 rounded-xl font-bold text-lg text-white ${user?.trial ? 'bg-gray-500' : 'bg-[#fd6a32] hover:bg-[#e65a1e]'} transition-colors duration-200`}>{user?.trial ? 'Уже активировано!' : (loadingTrial ? 'Загрузка...' : t.tryBtn)}</Button>
           </div>
         </div>
       </section>
@@ -341,7 +309,7 @@ function TariffsContent() {
       </div>
 
       <PaymentModal isOpen={modalOpen} onClose={handleCloseModal} tariff={modalTariff} price={modalPrice} />
-      <TrialModal isOpen={trialModalOpen && (!!trialResult || !!trialError)} onClose={() => { setTrialModalOpen(false); setTrialResult(null); setTrialError(null); }} link={trialResult} error={trialError} />
+      {/* TrialModal is removed as per edit hint */}
     </main>
   );
 }

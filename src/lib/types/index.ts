@@ -8,6 +8,7 @@ export interface User {
   balance?: number;
   language_code?: string;
   last_name?: string;
+  trial?: boolean;
   // можно добавить другие поля, если используются в проекте
 }
 

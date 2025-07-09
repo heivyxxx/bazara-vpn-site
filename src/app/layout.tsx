@@ -9,8 +9,21 @@ import Script from 'next/script';
 import { useState } from 'react';
 import { User } from '@/lib/types';
 import React from 'react';
+import { useEffect } from 'react';
 
 export default function RootLayout({ children }: { children: ReactNode }) {
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
+      const tg = window.Telegram.WebApp;
+      tg.ready();
+      tg.expand();
+      const isMobile = tg.platform === 'android' || tg.platform === 'ios' || /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
+      if (isMobile) {
+        tg.requestFullscreen();
+        window.addEventListener('click', () => tg.requestFullscreen(), { once: true });
+      }
+    }
+  }, []);
   return (
     <html lang="ru">
       <head>

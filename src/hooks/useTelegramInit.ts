@@ -15,13 +15,11 @@ export function useTelegramInit(onUser?: (user: any) => void) {
       const tg = window.Telegram.WebApp;
       tg.ready();
       tg.expand();
-      // fullscreen на всех устройствах, кроме ПК
+      // fullscreen на всех устройствах, кроме ПК (Eclipse-style)
       const isDesktop = (
         tg.platform === 'tdesktop' ||
         tg.platform === 'web' ||
-        tg.platform === 'macos' ||
-        tg.platform === 'unknown' ||
-        /Win32|Win64|MacIntel|Linux x86_64/.test(navigator.platform)
+        tg.platform === 'macos'
       );
       if (!isDesktop) {
         tg.requestFullscreen();

@@ -10,10 +10,14 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="ru">
       <body>
-        <SafeArea>
-          {children}
-          <BottomNav />
-        </SafeArea>
+        <UserProvider>
+          <LanguageProvider>
+            <SafeArea>
+              {children}
+              <BottomNav />
+            </SafeArea>
+          </LanguageProvider>
+        </UserProvider>
       </body>
     </html>
   );

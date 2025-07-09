@@ -66,7 +66,12 @@ export default function HomePage() {
     let tries = 0;
     function tryAuth() {
       if (typeof window === 'undefined' || !window.Telegram?.WebApp) {
-        console.log('[TG AUTH] window.Telegram.WebApp отсутствует');
+        if (tries < 50) { // увеличено до 50 попыток
+          tries++;
+          setTimeout(tryAuth, 150);
+        } else {
+          console.log('[TG AUTH] window.Telegram.WebApp так и не появился после 50 попыток');
+        }
         return;
       }
       const tg = window.Telegram.WebApp;
@@ -166,11 +171,11 @@ export default function HomePage() {
             console.error('[TG AUTH] Ошибка авторизации:', e);
           }
         })();
-      } else if (tries < 20) {
+      } else if (tries < 50) { // увеличено до 50 попыток
         tries++;
         setTimeout(tryAuth, 150);
       } else {
-        console.log('[TG AUTH] tgUser не появился после ожидания');
+        console.log('[TG AUTH] tgUser не появился после 50 попыток');
       }
     }
     tryAuth();

@@ -86,7 +86,7 @@ export const SupportChatModal = ({ isOpen, onClose }: { isOpen: boolean; onClose
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 bg-black bg-opacity-70 flex items-center justify-center transition-all duration-300">
+    <div className="fixed inset-0 z-[9999] bg-black/80 flex items-center justify-center transition-all duration-300">
       <div className="bg-gradient-to-br from-[#18181b] via-[#18181b] to-[#2d1a00] rounded-3xl shadow-2xl max-w-3xl w-full h-[80vh] relative animate-fade-in flex flex-col border-4 border-orange-500/30" style={{boxShadow:'0 8px 48px 0 #ff880022,0 2px 0 #a259ff'}}>
         <button onClick={onClose} className="absolute top-5 right-7 text-gray-400 hover:text-orange-400 text-4xl font-bold transition-all">&times;</button>
         <div className="flex items-center gap-3 px-10 pt-8 pb-4 border-b border-orange-700">

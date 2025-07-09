@@ -172,7 +172,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, tar
 
   return (
     <div className="fixed inset-0 z-50 bg-black bg-opacity-60 flex items-center justify-center transition-opacity duration-300 animate-fade-in p-2 sm:p-0">
-      <div className="bg-[#232323] rounded-3xl shadow-2xl p-4 sm:p-8 md:p-12 w-full max-w-2xl relative flex flex-col gap-6 sm:gap-8" style={{minWidth:0, minHeight:320}}>
+      <div className="bg-[#23232b] rounded-3xl shadow-2xl p-4 sm:p-8 md:p-12 w-full max-w-2xl relative flex flex-col gap-6 sm:gap-8" style={{minWidth:0, minHeight:320}}>
         <button onClick={onClose} className="absolute top-3 right-3 sm:top-5 sm:right-5 w-10 h-10 flex items-center justify-center rounded-full bg-[#181818] hover:bg-[#2c2c2c] text-2xl text-gray-400">&times;</button>
         <div className="flex items-center gap-3 sm:gap-4 mb-2">
           <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#181818] flex items-center justify-center text-2xl font-bold text-[#FE6125]">BV</div>

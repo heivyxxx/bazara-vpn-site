@@ -19,7 +19,7 @@ const navs = [
 const BottomNav = () => {
   const pathname = usePathname();
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-black/70 backdrop-blur-md border-t border-[#232323] flex justify-around items-center h-[64px] min-w-full rounded-t-2xl shadow-2xl md:hidden">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-black/70 backdrop-blur-md border-t border-[#232323] flex justify-around items-center h-[76px] min-w-full md:hidden" style={{paddingBottom: '30px'}}>
       {navs.map((nav) => {
         const isActive = pathname === nav.to;
         return (

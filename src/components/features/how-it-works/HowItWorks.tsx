@@ -56,7 +56,7 @@ export const HowItWorks = () => {
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-10">
         {t.steps.map((step, index) => (
-          <div key={index} className="bg-[#232323] rounded-2xl shadow-xl p-5 md:p-8 flex flex-col items-center text-center">
+          <div key={index} className="bg-[#23232b] rounded-2xl shadow-xl p-5 md:p-8 flex flex-col items-center text-center">
             <Image src={step.image} alt={step.title} width={80} height={80} className="mb-4 md:mb-6 w-20 h-20 md:w-28 md:h-28 object-contain select-none" draggable={false} />
             <div className="text-lg md:text-2xl font-bold text-white mb-2">{step.title}</div>
             <div className="text-base text-gray-300">{step.description}</div>

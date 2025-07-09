@@ -60,8 +60,8 @@ export const TelegramAuthModal: React.FC<TelegramAuthModalProps> = ({ isOpen, on
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 bg-black bg-opacity-60 flex items-center justify-center transition-opacity duration-300 p-2 sm:p-0">
-      <div className="bg-[#232323] rounded-3xl shadow-2xl p-4 sm:p-8 md:p-12 w-full max-w-md relative flex flex-col gap-6 animate-fade-in" style={{minWidth:0, minHeight:240}}>
+    <div className="fixed inset-0 z-[9999] bg-black/80 flex items-center justify-center transition-opacity duration-300 p-2 sm:p-0">
+      <div className="bg-[#18181b] rounded-3xl shadow-2xl p-4 sm:p-8 md:p-12 w-full max-w-md relative flex flex-col gap-6 animate-fade-in" style={{minWidth:0, minHeight:240}}>
         <button onClick={onClose} className="absolute top-3 right-3 sm:top-5 sm:right-5 w-10 h-10 flex items-center justify-center rounded-full bg-[#181818] hover:bg-[#2c2c2c] text-2xl text-gray-400">&times;</button>
         <div className="flex flex-col items-center gap-4">
           <img src="/assets/telegram.png" alt="Telegram" className="w-14 h-14 sm:w-16 sm:h-16 mb-2" />

@@ -22,7 +22,7 @@ interface ReviewCardProps {
 }
 
 const ReviewCard = ({ avatar, name, rating, text, date }: ReviewCardProps) => (
-  <div className="bg-[#232323] rounded-2xl shadow-xl p-8 flex flex-col items-start min-w-[320px] max-w-[370px] mx-auto review-card-3d-anim">
+  <div className="bg-[#23232b] rounded-2xl shadow-xl p-8 flex flex-col items-start min-w-[320px] max-w-[370px] mx-auto review-card-3d-anim">
     <div className="flex items-center gap-3 mb-2">
       <Image 
         src={avatar} 

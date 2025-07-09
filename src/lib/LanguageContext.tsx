@@ -49,32 +49,8 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [debugLog, setDebugLog] = useState<string[]>([]);
 
-  // --- Telegram Mini App авторизация ---
-  useTelegramInit(async (tgUser) => {
-    setDebugLog(log => [...log, '[useTelegramInit] вызван', JSON.stringify(tgUser)]);
-    console.log('[useTelegramInit] вызван', tgUser);
-    if (tgUser && tgUser.id) {
-      setDebugLog(log => [...log, '[signInOrUpWithTelegram] старт', JSON.stringify(tgUser)]);
-      console.log('[signInOrUpWithTelegram] старт', tgUser);
-      try {
-        const realUser = await signInOrUpWithTelegram(tgUser);
-        setDebugLog(log => [...log, '[signInOrUpWithTelegram] результат', JSON.stringify(realUser)]);
-        console.log('[signInOrUpWithTelegram] результат', realUser);
-        if (realUser) {
-          setUser(realUser);
-          setDebugLog(log => [...log, '[setUser] OK', JSON.stringify(realUser)]);
-          if (typeof window !== 'undefined') {
-            localStorage.setItem('bazaraUser', JSON.stringify(realUser));
-          }
-        }
-      } catch (e) {
-        setDebugLog(log => [...log, '[signInOrUpWithTelegram] ошибка', String(e)]);
-        console.error('[signInOrUpWithTelegram] ошибка', e);
-      }
-    } else {
-      setDebugLog(log => [...log, '[useTelegramInit] tgUser пустой или без id']);
-    }
-  });
+  // --- УБРАНО: Telegram Mini App авторизация через useTelegramInit ---
+  // Теперь авторизация только в главном компоненте (HomePage)
 
   useEffect(() => {
     if (typeof window !== 'undefined') {

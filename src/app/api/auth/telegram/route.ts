@@ -1,8 +1,16 @@
 import { NextResponse } from 'next/server';
 import { TelegramAuthResponse } from '@/lib/types';
 import crypto from 'crypto';
+import { createClient } from '@supabase/supabase-js';
 
 const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+const SUPABASE_FAKE_PASSWORD = process.env.SUPABASE_FAKE_PASSWORD || 'tg_secret_password';
+
+const supabaseAdmin = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 function checkTelegramAuthorization(data: TelegramAuthResponse) {
   const { hash, ...userData } = data;
@@ -52,9 +60,60 @@ export async function POST(request: Request) {
       }, { status: 401 });
     }
 
-    // Возвращаем данные пользователя
+    // --- Регистрация пользователя в Supabase ---
+    const email = `telegram_${data.id}@tg.local`;
+    const password = SUPABASE_FAKE_PASSWORD;
+    // 1. Пробуем создать пользователя (если уже есть — игнорируем ошибку)
+    let user = null;
+    const { data: createData, error: createError } = await supabaseAdmin.auth.admin.createUser({
+      email,
+      password,
+      email_confirm: true,
+      user_metadata: {
+        telegram_id: data.id,
+        username: data.username,
+        first_name: data.first_name,
+        last_name: '',
+        photo_url: data.photo_url,
+        language_code: ''
+      }
+    });
+    if (
+      createError &&
+      !(
+        createError.message.includes('User already registered') ||
+        createError.code === 'email_exists'
+      )
+    ) {
+      return NextResponse.json({ error: createError.message }, { status: 500 });
+    }
+    user = createData?.user || null;
+
+    // 2. Логинимся через Supabase Auth
+    const { data: session, error: signInError } = await supabase.auth.signInWithPassword({
+      email,
+      password
+    });
+    if (signInError) {
+      return NextResponse.json({ error: signInError.message }, { status: 500 });
+    }
+
+    // 3. Возвращаем токены и профиль
+    let access_token = null;
+    let refresh_token = null;
+    if (session && typeof session === 'object') {
+      if (session.session && typeof session.session === 'object') {
+        access_token = session.session.access_token;
+        refresh_token = session.session.refresh_token;
+      }
+    }
+    if (!access_token || !refresh_token) {
+      return NextResponse.json({ error: 'No access_token or refresh_token in session', session }, { status: 500 });
+    }
+
     return NextResponse.json({
-      success: true,
+      access_token,
+      refresh_token,
       user: {
         id: data.id,
         name: data.first_name,

@@ -162,24 +162,41 @@ export default function ReviewsPage() {
             <button onClick={() => { user ? setIsModalOpen(true) : setShowAuth(true); }} className="mt-4 bg-gradient-to-r from-orange-500 to-purple-500 hover:from-orange-600 hover:to-purple-600 text-white font-bold py-3 px-8 md:px-12 rounded-xl shadow-lg text-base md:text-lg w-full max-w-xs mx-auto transition-all duration-200">{t.leave}</button>
           </div>
           <div className="w-full flex flex-col md:flex-row items-center justify-center gap-2 md:gap-4 mt-4">
-            <div className="flex gap-1 mb-2 md:mb-0">
-              {[1,2,3,4,5].map(n => (
-                <button key={n} className={`star-filter-btn ${starFilter === n ? 'selected' : ''}`} onClick={() => setStarFilter(starFilter === n ? null : n)} aria-label={`${n} ${getStarWord(n, lang)}`}>
-                  <svg className="w-6 h-6 md:w-7 md:h-7 star-icon" fill={starFilter && n <= starFilter ? '#ff8800' : '#444'} viewBox="0 0 20 20"><polygon points="10,1 12.59,7.36 19.51,7.64 14,12.14 15.82,19.02 10,15.27 4.18,19.02 6,12.14 0.49,7.64 7.41,7.36"/></svg>
-                </button>
-              ))}
-            </div>
-            <input value={search} onChange={e => setSearch(e.target.value)} type="text" placeholder={t.search} className="w-full md:w-auto ml-0 md:ml-4 px-3 py-2 rounded bg-zinc-800 text-white border border-zinc-700 focus:outline-none focus:ring-2 focus:ring-orange-400 text-base md:text-lg" />
-            <div className="relative w-full md:w-auto ml-0 md:ml-4">
-              <select value={sort} onChange={e => setSort(e.target.value as 'new' | 'old')} className="sort-btn bg-[#232323] text-white font-bold px-4 md:px-6 py-2 rounded-xl flex items-center w-full md:w-auto text-base md:text-lg">
-                <option value="new">{t.sortNew}</option>
-                <option value="old">{t.sortOld}</option>
-              </select>
+            {/* Новый блок поиска и фильтров */}
+            <div className="flex flex-col md:flex-row w-full gap-2 md:gap-3 items-center">
+              {/* Поиск с иконкой */}
+              <div className="relative w-full md:w-[320px]">
+                <input
+                  value={search}
+                  onChange={e => setSearch(e.target.value)}
+                  type="text"
+                  placeholder={t.search}
+                  className="w-full pl-12 pr-4 py-3 rounded-xl bg-[#232323] text-white border-none focus:outline-none focus:ring-2 focus:ring-[#a259ff] text-base md:text-lg shadow-md placeholder-gray-400"
+                  style={{boxShadow:'0 2px 12px 0 #0004'}}
+                />
+                <Image src="/assets/filter.png" alt="filter" width={22} height={22} className="absolute left-4 top-1/2 -translate-y-1/2 opacity-70 pointer-events-none" />
+              </div>
+              {/* Кнопка сортировки */}
+              <button
+                onClick={() => setSort(sort === 'new' ? 'old' : 'new')}
+                className={`flex items-center gap-2 px-5 py-3 rounded-xl bg-[#232323] text-white font-semibold shadow-md border-none focus:outline-none transition hover:bg-[#28203a] active:scale-95`}
+                style={{minWidth: 0}}
+              >
+                <Image src="/assets/mode.png" alt="mode" width={22} height={22} className="opacity-80" />
+                <span className="ml-1 text-base md:text-lg">{sort === 'new' ? t.sortNew : t.sortOld}</span>
+              </button>
+              {/* Кнопка фильтра по звёздам (открывает/сбрасывает фильтр) */}
+              <button
+                onClick={() => setStarFilter(starFilter ? null : 5)}
+                className={`flex items-center gap-2 px-5 py-3 rounded-xl bg-[#232323] text-white font-semibold shadow-md border-none focus:outline-none transition hover:bg-[#28203a] active:scale-95 ${starFilter ? 'ring-2 ring-[#a259ff]' : ''}`}
+                style={{minWidth: 0}}
+              >
+                <Image src="/assets/filter.png" alt="filter" width={22} height={22} className="opacity-80" />
+                <span className="ml-1 text-base md:text-lg">{starFilter ? 'Только 5★' : 'Фильтр'}</span>
+              </button>
             </div>
           </div>
-          <div className="text-gray-400 text-base mt-2 flex items-center justify-center gap-2">
-            <span className="inline-block bg-[#232323] text-orange-400 font-bold rounded-full px-4 py-1 text-base md:text-lg">{filtered.length}</span>
-          </div>
+          {/* Удаляю счётчик отзывов */}
         </section>
         <main className="w-full max-w-5xl mx-auto flex flex-col gap-4 md:gap-6 py-6 md:py-10 px-2 md:px-4" style={{ minHeight: '60vh' }}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">

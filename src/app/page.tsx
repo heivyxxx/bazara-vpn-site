@@ -91,7 +91,7 @@ export default function HomePage() {
       <Header user={user} onLogin={() => setAuthOpen(true)} onLogout={() => { setUser(null); if (typeof window !== 'undefined') localStorage.removeItem('bazaraUser'); }} />
       <TelegramAuthModal isOpen={authOpen} onClose={() => setAuthOpen(false)} onAuth={u => { setUser(u); if (typeof window !== 'undefined') localStorage.setItem('bazaraUser', JSON.stringify(u)); setAuthOpen(false); setIsModalOpen(true); }} />
       <ReviewModal isOpen={isModalOpen && !!user} onClose={() => setIsModalOpen(false)} onSubmit={handleSubmitReview} user={user} />
-      <main className="min-h-screen bg-[#1A1A1A]">
+      <main className="min-h-screen bg-black">
         <Hero />
         <PromoCards />
         <Reviews />

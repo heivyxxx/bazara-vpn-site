@@ -127,8 +127,8 @@ export const Reviews = () => {
         <div className="flex w-full sm:w-auto justify-center sm:justify-start">
           <Link 
             href="/reviews" 
-            className="bg-gradient-to-r from-[#fd6a32] to-[#fd6a32] hover:from-[#fd6a32] hover:to-purple-500 text-white font-bold py-3 px-6 rounded-xl shadow-lg text-lg transition-all w-full sm:w-auto text-center btn-glow"
-            style={{minWidth:'180px', boxShadow:'0 2px 16px 0 #fd6a3255'}}
+            className="font-bold py-3 px-6 rounded-xl text-lg transition-all w-full sm:w-auto text-center bg-[#fd6a32] hover:bg-[#e65a1e] text-white"
+            style={{minWidth:'180px'}}
           >
             {t.all}
           </Link>

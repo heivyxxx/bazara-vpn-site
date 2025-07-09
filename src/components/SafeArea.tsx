@@ -26,7 +26,7 @@ export const SafeArea: React.FC<{ children: React.ReactNode }> = ({ children }) 
         paddingBottom: paddingBottom,
         minHeight: '100vh',
         boxSizing: 'border-box',
-        background: '#181818',
+        background: '#000',
         width: '100%',
       }}
     >

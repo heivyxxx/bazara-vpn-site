@@ -17,8 +17,8 @@ module.exports = {
           400: '#a259ff',
           500: '#a259ff',
         },
-        dark: '#181818',
-        card: '#232323',
+        dark: '#18181b',
+        card: '#18181b',
       },
       fontFamily: {
         sans: ['Segoe UI', 'Arial', 'sans-serif'],

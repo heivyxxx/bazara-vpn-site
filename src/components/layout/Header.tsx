@@ -95,7 +95,7 @@ export const Header = ({ onLogin, user, onLogout }: HeaderProps) => {
           )}
           <Link 
             href="/download" 
-            className="bg-gradient-to-r from-[#fd6a32] to-[#fd6a32] hover:from-[#fd6a32] hover:to-[#fd6a32] text-white font-semibold py-2 px-5 md:px-6 rounded-xl shadow-lg transition text-base md:text-lg"
+            className="bg-[#fd6a32] hover:bg-[#e65a1e] text-white font-semibold py-2 px-5 md:px-6 rounded-xl transition text-base md:text-lg"
           >
             {t.download}
           </Link>

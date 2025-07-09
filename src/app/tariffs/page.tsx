@@ -209,7 +209,7 @@ function TariffsContent() {
   }, [user]);
 
   return (
-    <main className="min-h-screen bg-[#181818] pt-24 pb-10 px-2 sm:px-4 flex flex-col items-center">
+    <main className="min-h-screen bg-black pt-24 pb-10 px-2 sm:px-4 flex flex-col items-center">
       <style jsx>{`
         .fade-up { opacity: 0; transform: translateY(40px); transition: opacity 0.7s, transform 0.7s; }
         .fade-up.visible { opacity: 1; transform: none; }
@@ -290,13 +290,13 @@ function TariffsContent() {
       )}
       {/* TariffMainBlock */}
       <section className="fade-up w-full flex justify-center items-center py-16 px-4">
-        <div className="tariff-card no-glow w-full max-w-6xl bg-[#232323] rounded-3xl flex flex-col md:flex-row items-center md:items-stretch gap-16 md:gap-0 p-14 md:p-20 border border-[#333] relative overflow-visible">
+        <div className="tariff-card no-glow w-full max-w-6xl bg-[#18181b] rounded-3xl flex flex-col md:flex-row items-center md:items-stretch gap-16 md:gap-0 p-14 md:p-20 border border-[#333] relative overflow-visible">
           <div className="flex-1 flex flex-col justify-center items-start">
             <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-6">{t.mainTitle}</h2>
             <p className="text-xl md:text-2xl text-white mb-8 max-w-lg" dangerouslySetInnerHTML={{__html: t.mainDesc}} />
             <div className="flex gap-4 mt-2 items-center min-h-[56px] relative" ref={btnsContainerRef}>
-              <button className="tariff-btn" style={{marginRight: '1rem'}} onClick={()=>handleOpenModal('year', lang==='ru'?t.btnYear:t.btnYear)}>{t.btnYear}</button>
-              <button className="tariff-btn border-2 border-[#fd6a32] text-[#fd6a32] bg-[#232323]" style={{background: '#232323', color: '#fd6a32', border: '2px solid #fd6a32'}} onClick={()=>handleOpenModal('month', lang==='ru'?t.btnMonth:t.btnMonth)}>{t.btnMonth}</button>
+              <button className="w-full py-3 rounded-xl font-bold text-lg text-white bg-[#fd6a32] hover:bg-[#e65a1e] transition-colors duration-200" onClick={()=>handleOpenModal('year', lang==='ru'?t.btnYear:t.btnYear)}>{t.btnYear}</button>
+              <button className="w-full py-3 rounded-xl font-bold text-lg text-white bg-[#fd6a32] hover:bg-[#e65a1e] transition-colors duration-200" onClick={()=>handleOpenModal('month', lang==='ru'?t.btnMonth:t.btnMonth)}>{t.btnMonth}</button>
             </div>
           </div>
           <div className="flex-1 flex justify-center items-center">
@@ -306,14 +306,14 @@ function TariffsContent() {
       </section>
       {/* TryFreeBlock */}
       <section className="fade-up w-full flex justify-center items-center py-10 px-4">
-        <div className="tariff-card no-glow w-full max-w-4xl bg-[#232323] rounded-3xl flex flex-col md:flex-row items-center gap-8 md:gap-12 p-8 md:p-12 border border-[#232323]">
+        <div className="tariff-card no-glow w-full max-w-4xl bg-[#18181b] rounded-3xl flex flex-col md:flex-row items-center gap-8 md:gap-12 p-8 md:p-12 border border-[#18181b]">
           <div className="flex-shrink-0 flex items-center justify-center">
             <Image src="/assets/gift-3d.png" alt="Подарок" width={96} height={96} className="w-24 h-24 md:w-32 md:h-32 select-none" draggable={false} />
           </div>
           <div className="flex-1 flex flex-col items-start">
             <h3 className="text-2xl md:text-3xl font-extrabold text-white mb-2">{t.tryTitle}</h3>
             <p className="text-base md:text-lg text-white mb-5" dangerouslySetInnerHTML={{__html: t.tryDesc}} />
-            <button className="try-free-btn" onClick={handleTrialClick} disabled={loadingTrial}>{loadingTrial ? 'Загрузка...' : t.tryBtn}</button>
+            <button className="w-full py-3 rounded-xl font-bold text-lg text-white bg-[#fd6a32] hover:bg-[#e65a1e] transition-colors duration-200" onClick={handleTrialClick} disabled={loadingTrial}>{loadingTrial ? 'Загрузка...' : t.tryBtn}</button>
           </div>
         </div>
       </section>

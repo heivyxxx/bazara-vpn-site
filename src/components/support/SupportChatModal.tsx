@@ -87,32 +87,32 @@ export const SupportChatModal = ({ isOpen, onClose }: { isOpen: boolean; onClose
 
   return (
     <div className="fixed inset-0 z-50 bg-black bg-opacity-70 flex items-center justify-center transition-all duration-300">
-      <div className="bg-gradient-to-br from-[#232323] via-[#181818] to-[#2d1a00] rounded-3xl shadow-2xl max-w-3xl w-full h-[80vh] relative animate-fade-in flex flex-col border-4 border-orange-500/30" style={{boxShadow:'0 8px 48px 0 #ff880022,0 2px 0 #a259ff'}}>
+      <div className="bg-gradient-to-br from-[#18181b] via-[#18181b] to-[#2d1a00] rounded-3xl shadow-2xl max-w-3xl w-full h-[80vh] relative animate-fade-in flex flex-col border-4 border-orange-500/30" style={{boxShadow:'0 8px 48px 0 #ff880022,0 2px 0 #a259ff'}}>
         <button onClick={onClose} className="absolute top-5 right-7 text-gray-400 hover:text-orange-400 text-4xl font-bold transition-all">&times;</button>
         <div className="flex items-center gap-3 px-10 pt-8 pb-4 border-b border-orange-700">
           <Image src="/assets/trader.gif" alt="Support" width={48} height={48} className="w-12 h-12 rounded-full" />
           <span className="text-3xl font-extrabold text-[#FE6125]">{t.title}</span>
           <span className="ml-auto text-base text-gray-400 font-semibold">{t.online}</span>
         </div>
-        <div className="flex-1 overflow-y-auto px-10 py-6 space-y-4 bg-[#181818] rounded-b-3xl flex flex-col" style={{minHeight:0}}>
+        <div className="flex-1 overflow-y-auto px-10 py-6 space-y-4 bg-[#18181b] rounded-b-3xl flex flex-col" style={{minHeight:0}}>
           <div className="flex items-start gap-3">
             <div className="bg-gradient-to-br from-[#FE6125] to-purple-700 rounded-full w-12 h-12 flex items-center justify-center text-white font-bold text-lg shadow-lg">S</div>
-            <div className="bg-[#232323] rounded-2xl px-5 py-3 text-white max-w-[70%] shadow border border-[#FE6125] text-base">{t.greeting}</div>
+            <div className="bg-[#18181b] rounded-2xl px-5 py-3 text-white max-w-[70%] shadow border border-[#FE6125] text-base">{t.greeting}</div>
           </div>
           {loading ? <div className="text-gray-400 text-center py-8">{t.init}</div> : null}
           {messages.map((msg, i) => (
             <div key={i} className={`flex ${msg.author === 'user' ? 'justify-end' : 'justify-start'} items-start gap-3`}>
               {msg.author === 'user' ? null : <div className="bg-gradient-to-br from-[#FE6125] to-purple-700 rounded-full w-10 h-10 flex items-center justify-center text-white font-bold text-lg shadow-lg">S</div>}
-              <div className={`rounded-2xl px-5 py-3 text-base shadow border ${msg.author === 'user' ? 'bg-[#232323] text-white border-orange-700' : 'bg-[#232323] text-white border-[#FE6125]'}`}>{msg.message}</div>
+              <div className={`rounded-2xl px-5 py-3 text-base shadow border ${msg.author === 'user' ? 'bg-[#18181b] text-white border-orange-700' : 'bg-[#18181b] text-white border-[#FE6125]'}`}>{msg.message}</div>
               {msg.author === 'user' ? <div className="bg-[#a259ff] rounded-full w-10 h-10 flex items-center justify-center text-white font-bold text-lg shadow-lg">U</div> : null}
             </div>
           ))}
           <div ref={bottomRef} />
         </div>
-        <form onSubmit={sendMessage} className="flex gap-3 p-8 border-t border-orange-700 bg-[#232323] rounded-b-3xl">
+        <form onSubmit={sendMessage} className="flex gap-3 p-8 border-t border-orange-700 bg-[#18181b] rounded-b-3xl">
           <input
             type="text"
-            className="flex-1 bg-[#181818] border border-gray-700 rounded-xl p-4 text-white text-lg"
+            className="flex-1 bg-[#18181b] border border-gray-700 rounded-xl p-4 text-white text-lg"
             placeholder={t.placeholder}
             value={input}
             onChange={e => setInput(e.target.value)}
@@ -122,7 +122,7 @@ export const SupportChatModal = ({ isOpen, onClose }: { isOpen: boolean; onClose
           />
           <button
             type="submit"
-            className="bg-gradient-to-r from-[#FE6125] to-purple-700 hover:from-[#FE6125] hover:to-purple-800 text-white font-bold py-3 px-8 rounded-xl text-lg transition-all shadow-lg"
+            className="bg-[#fd6a32] hover:bg-[#e65a1e] text-white font-bold py-3 px-8 rounded-xl text-lg transition-all"
             disabled={sending || !input.trim()}
           >
             {t.send}

@@ -1,162 +1,273 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
-// import luminaImg from '../assets/LUMINA.png';
-// import monocoreImg from '../assets/MONOCORE.png';
-// import obliviaImg from '../assets/OBLIVIA.png';
-// import banner1 from '../assets/banner1.png';
-// import banner2 from '../assets/banner2.png';
-// import modeIcon from '../assets/mode.png';
-// import { useGroupStore } from '@/lib/groupStore';
-// import PageContainer from '@/components/PageContainer';
-// import Skeleton from '../components/Skeleton.tsx';
-// import { useI18n } from '../hooks/useI18n.ts';
+// Весь предыдущий код главной страницы возвращён:
+
+import { Hero } from '@/components/features/hero/Hero';
+import { PromoCards } from '@/components/features/promo/PromoCards';
+import { Reviews } from '@/components/features/reviews/Reviews';
+import { Features } from '@/components/features/blocks/Features';
+import { HowItWorks } from '@/components/features/how-it-works/HowItWorks';
+import { FAQ } from '@/components/features/faq/FAQ';
+import { Header } from '@/components/layout/Header';
+// import { Footer } from '@/components/layout/Footer';
+import { LanguageProvider, useUser } from '@/lib/LanguageContext';
+import { useState, useEffect } from 'react';
+import { ReviewModal } from '@/components/features/reviews/ReviewModal';
+import { User } from '@/lib/types';
+import { useLang } from '@/lib/LanguageContext';
 import { supabase } from '@/lib/supabaseClient';
-// import { useNavigate } from 'react-router-dom';
-// import Toast from '../components/Toast.tsx';
 
-const HOW_IT_WORKS_TEXT = `Eclipse — это маркетплейс приватных Telegram-групп с реальными TON-кошельками. Здесь ты можешь:
-
-— Покупать доступ к уникальным приватным сообществам за TON.
-— Продавать свои группы другим пользователям.
-— Безопасно пополнять и выводить TON прямо внутри приложения.
-— Получать мгновенные приглашения в группы после покупки.
-— Следить за историей своих покупок, продаж и баланса.
-
-Как это работает?
-1. Пополни баланс TON через свой уникальный адрес (он создаётся автоматически).
-2. Выбери интересную группу на маркете и купи доступ.
-3. Получи мгновенную ссылку-приглашение в Telegram-группу.
-4. Если хочешь — выстави свою группу на продажу и зарабатывай TON.
-5. В любой момент можешь вывести TON на свой кошелёк.
-
-Всё просто, быстро и безопасно.\nЕсли остались вопросы — пиши в поддержку или смотри FAQ!`;
-
-function getTelegramInitData() {
-  if (typeof window !== 'undefined' && window.Telegram && window.Telegram.WebApp) {
-    return window.Telegram.WebApp.initData || '';
+// Расширяем глобальный интерфейс Window
+declare global {
+  interface Window {
+    onTelegramAuth: (user: any) => void;
   }
-  return '';
 }
 
-// Заглушка PageContainer
-const PageContainer = ({ children }: { children: React.ReactNode }) => <div>{children}</div>;
-// Заглушка useGroupStore
-function useGroupStore() {
-  return {
-    groups: [],
-    fetchGroups: () => {},
-    isLoading: false,
-  };
-}
+export default function HomePage() {
+  const { lang } = useLang();
+  const [authOpen, setAuthOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [user, setUser] = useUser();
 
-const Drops = () => {
-  // const { t } = useI18n();
-  const [tab, setTab] = useState<'collect' | 'free'>('collect');
-  const { groups, fetchGroups, isLoading } = useGroupStore();
-  const [modal, setModal] = useState<{ title: string; message: string; action?: () => void; actionText?: string } | null>(null);
-  const [processing, setProcessing] = useState<string | null>(null);
-  // const navigate = useNavigate();
-  const [toast, setToast] = useState<null | { content: React.ReactNode }>(null);
-  const [showHowItWorks, setShowHowItWorks] = useState(false);
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-
+  // --- DEBUG LOGS ---
   useEffect(() => {
-    setLoading(true);
-    const tgUser = window?.Telegram?.WebApp?.initDataUnsafe?.user;
-    if (!tgUser) {
-      setLoading(false);
+    if (typeof window !== 'undefined') {
+      // Проверка по документации Telegram
+      if (window.Telegram && window.Telegram.WebApp) {
+        const tg = window.Telegram.WebApp;
+        tg.ready();
+        console.log('[TG SDK] tg.ready() вызван');
+      } else {
+        console.log('[TG SDK] window.Telegram.WebApp отсутствует');
+      }
+      // Явный вывод для дебага
+      console.log('[TG SDK] window.Telegram:', window.Telegram);
+      console.log('[TG SDK] window.Telegram.WebApp:', window.Telegram?.WebApp);
+      console.log('[TG SDK] window.Telegram.WebApp.initDataUnsafe:', window.Telegram?.WebApp?.initDataUnsafe);
+      console.log('[DEBUG] localStorage:', JSON.stringify(localStorage, null, 2));
+    }
+  }, []);
+
+  // Очищаем user и localStorage, если нет Telegram WebApp (чтобы не было реальных данных в браузере)
+  useEffect(() => {
+    if (typeof window !== 'undefined' && !window.Telegram?.WebApp) {
+      console.log('[DEBUG] Нет Telegram WebApp, очищаю user и localStorage');
+      setUser(null);
+      localStorage.removeItem('bazaraUser');
       return;
     }
-    fetch('/api/get-user', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ telegram_id: String(tgUser.id) }),
-    })
-      .then(res => res.json())
-      .then(async data => {
-        if (data.user) {
-          setUser(data.user);
-        } else {
-          // Если не найден — регистрация
-          const initData = window?.Telegram?.WebApp?.initData || '';
-          const regRes = await fetch('/api/auth/telegram', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              telegram_id: String(tgUser.id),
-              username: tgUser.username,
-              first_name: tgUser.first_name,
-              last_name: tgUser.last_name,
-              photo_url: tgUser.photo_url,
-              language_code: tgUser.language_code,
-              initData
-            }),
-          });
-          const regData = await regRes.json();
-          if (regData.access_token && regData.refresh_token) {
-            await supabase.auth.setSession({
-              access_token: regData.access_token,
-              refresh_token: regData.refresh_token
-            });
-          }
-          if (regData.user) {
-            setUser(regData.user);
-            window.location.reload();
-          }
+    const saved = localStorage.getItem('bazaraUser');
+    console.log('[DEBUG] bazaraUser из localStorage:', saved);
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (parsed && parsed.id && parsed.name) {
+          setUser(parsed);
+          console.log('[DEBUG] setUser из localStorage:', parsed);
         }
-        setLoading(false);
-      })
-      .catch((e) => {
-        setLoading(false);
-        console.error('get-user error:', e);
-      });
+      } catch (e) {
+        console.log('[DEBUG] Ошибка парса bazaraUser:', e);
+      }
+    }
   }, []);
+
+  // --- Telegram Mini App авторизация с ожиданием появления tgUser ---
+  useEffect(() => {
+    let tries = 0;
+    function tryAuth() {
+      if (typeof window === 'undefined' || !window.Telegram?.WebApp) {
+        if (tries < 50) { // увеличено до 50 попыток
+          tries++;
+          setTimeout(tryAuth, 150);
+        } else {
+          console.log('[TG AUTH] window.Telegram.WebApp так и не появился после 50 попыток');
+        }
+        return;
+      }
+      const tg = window.Telegram.WebApp;
+      console.log('[TG AUTH] tg:', tg);
+      tg.ready && tg.ready();
+      tg.expand && tg.expand();
+      // fullscreen на всех устройствах, кроме ПК (Eclipse-style)
+      const isDesktop = (
+        tg.platform === 'tdesktop' ||
+        tg.platform === 'web' ||
+        tg.platform === 'macos'
+      );
+      if (!isDesktop) {
+        tg.requestFullscreen && tg.requestFullscreen();
+        window.addEventListener('click', () => tg.requestFullscreen && tg.requestFullscreen(), { once: true });
+        console.log('[TG AUTH] fullscreen вызван');
+      }
+      const tgUser = tg.initDataUnsafe?.user;
+      console.log('[TG AUTH] try', tries, tgUser);
+      if (tgUser) {
+        (async () => {
+          try {
+            console.log('[TG AUTH] tgUser найден:', tgUser);
+            const res = await fetch('/api/get-user', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ telegram_id: String(tgUser.id) }),
+            });
+            if (res.ok) {
+              const data = await res.json();
+              setUser(data.user);
+              console.log('[TG AUTH] setUser:', data.user);
+              // Проверяем сессию Supabase
+              const { data: authData } = await supabase.auth.getUser();
+              console.log('[TG AUTH] supabase.auth.getUser:', authData);
+              if (!authData?.user || authData.user.id !== data.user.auth_id) {
+                // Нет сессии — логинимся через /api/auth/telegram
+                const regRes = await fetch('/api/auth/telegram', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    telegram_id: String(tgUser.id),
+                    username: tgUser.username,
+                    first_name: tgUser.first_name,
+                    last_name: tgUser.last_name,
+                    photo_url: tgUser.photo_url,
+                    language_code: tgUser.language_code,
+                    initData: tg.initData || ''
+                  }),
+                });
+                const regData = await regRes.json();
+                console.log('[TG AUTH] /api/auth/telegram ответ:', regData);
+                if (regData.access_token && regData.refresh_token) {
+                  await supabase.auth.setSession({
+                    access_token: regData.access_token,
+                    refresh_token: regData.refresh_token
+                  });
+                  console.log('[TG AUTH] supabase setSession выполнен');
+                }
+                if (regData.user) {
+                  setUser(regData.user);
+                  console.log('[TG AUTH] setUser после регистрации:', regData.user);
+                  window.location.reload();
+                }
+              }
+            } else {
+              // Если не найден — регистрация
+              const regRes = await fetch('/api/auth/telegram', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  telegram_id: String(tgUser.id),
+                  username: tgUser.username,
+                  first_name: tgUser.first_name,
+                  last_name: tgUser.last_name,
+                  photo_url: tgUser.photo_url,
+                  language_code: tgUser.language_code,
+                  initData: tg.initData || ''
+                }),
+              });
+              const regData = await regRes.json();
+              console.log('[TG AUTH] /api/auth/telegram ответ (регистрация):', regData);
+              if (regData.access_token && regData.refresh_token) {
+                await supabase.auth.setSession({
+                  access_token: regData.access_token,
+                  refresh_token: regData.refresh_token
+                });
+                console.log('[TG AUTH] supabase setSession выполнен (регистрация)');
+              }
+              if (regData.user) {
+                setUser(regData.user);
+                console.log('[TG AUTH] setUser после регистрации:', regData.user);
+                window.location.reload();
+              }
+            }
+          } catch (e) {
+            console.error('[TG AUTH] Ошибка авторизации:', e);
+          }
+        })();
+      } else if (tries < 50) { // увеличено до 50 попыток
+        tries++;
+        setTimeout(tryAuth, 150);
+      } else {
+        console.log('[TG AUTH] tgUser не появился после 50 попыток');
+      }
+    }
+    tryAuth();
+  }, [setUser]);
 
   useEffect(() => {
-    fetchGroups();
+    if (typeof window === 'undefined') return;
+    const params = new URLSearchParams(window.location.search);
+    const ref = params.get('ref');
+    if (!ref) return;
+    let userId = localStorage.getItem('bazara_ref_userid');
+    if (!userId) {
+      userId = crypto.randomUUID();
+      localStorage.setItem('bazara_ref_userid', userId);
+    }
+    const refKey = `bazara_ref_${ref}`;
+    if (localStorage.getItem(refKey)) return;
+    fetch('/api/referral-hit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ref, userId })
+    }).then(() => {
+      localStorage.setItem(refKey, '1');
+    });
   }, []);
 
-  // Разделение на коллекционные и бесплатные (пример)
-  const collectGroups = groups.filter(g => g.price > 0);
-  const freeGroups = groups.filter(g => g.price === 0);
-  const groupsToShow = tab === 'collect' ? collectGroups : freeGroups;
+  // Отправка отзыва
+  const handleSubmitReview = async (text: string, rating: number) => {
+    if (!user) return;
+    try {
+      // const response = await fetch('/api/reviews', {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify({
+      //     userId: user.id,
+      //     text,
+      //     rating,
+      //     userName: user.name,
+      //     userUsername: user.username
+      //   })
+      // });
+      // const data = await response.json();
+      // if (data.success) {
+      //   setIsModalOpen(false);
+      //   // Можно добавить обновление отзывов, если нужно
+      // }
+    } catch (error) {
+      // TODO: Показать ошибку
+    }
+  };
 
   return (
-    <PageContainer>
-      <div style={{color:'#fff',padding:24}}>
-        <h1 style={{fontSize:28,marginBottom:16}}>Дропы (Eclipse)</h1>
-        <div style={{marginBottom:16}}>
-          <button onClick={()=>setTab('collect')} style={{marginRight:8,background:tab==='collect'?'#23232b':'#333',color:'#fff',padding:'8px 16px',borderRadius:8}}>Коллекционные</button>
-          <button onClick={()=>setTab('free')} style={{background:tab==='free'?'#23232b':'#333',color:'#fff',padding:'8px 16px',borderRadius:8}}>Бесплатные</button>
-        </div>
-        <div style={{marginBottom:16}}>
-          <button onClick={()=>setShowHowItWorks(true)} style={{background:'#00BFFF',color:'#fff',padding:'8px 16px',borderRadius:8}}>Как это работает?</button>
-        </div>
-        {showHowItWorks && (
-          <div style={{background:'#18181b',padding:16,borderRadius:16,marginBottom:16}}>
-            <div style={{marginBottom:8,fontWeight:'bold'}}>Зачем нужен Eclipse и как им пользоваться?</div>
-            <div style={{whiteSpace:'pre-line'}}>{HOW_IT_WORKS_TEXT}</div>
-            <button onClick={()=>setShowHowItWorks(false)} style={{marginTop:12,background:'#23232b',color:'#fff',padding:'8px 16px',borderRadius:8}}>Понятно</button>
-          </div>
-        )}
-        <div>
-          {loading ? (
-            <div>Загрузка...</div>
-          ) : (
-            groupsToShow.map((group:any) => (
-              <div key={group.id} style={{background:'#23232b',borderRadius:12,padding:16,marginBottom:12}}>
-                <div style={{fontWeight:'bold',fontSize:18}}>{group.name}</div>
-                <div>Мест: {group.current_slots} / {group.slots_total}</div>
-                <div>Цена: {group.price > 0 ? group.price + ' TON' : 'Бесплатно'}</div>
-              </div>
-            ))
-          )}
-        </div>
+    <>
+      <Header user={user} onLogin={() => setAuthOpen(true)} onLogout={() => { setUser(null); if (typeof window !== 'undefined') localStorage.removeItem('bazaraUser'); }} />
+      <ReviewModal isOpen={isModalOpen && !!user} onClose={() => setIsModalOpen(false)} onSubmit={handleSubmitReview} user={user} />
+      <main className="min-h-screen bg-black">
+        <Hero />
+        <PromoCards />
+        <Reviews />
+        {/* Кнопка оставить отзыв — только под отзывами */}
+        <section className="max-w-3xl mx-auto mt-0 mb-10 px-4 flex justify-center gap-4">
+          <button onClick={() => { user ? setIsModalOpen(true) : setAuthOpen(true); }} className="flex items-center gap-2 bg-gradient-to-r from-[#FE6125] to-[#FE6125] hover:from-[#FE6125] hover:to-[#FE6125] text-white text-[22px] font-bold py-4 px-10 rounded-xl shadow-lg transition-all duration-200">
+            <svg className="w-6 h-6" fill="none" stroke="white" strokeWidth="2" viewBox="0 0 24 24">
+              <path d="M12 20h9" />
+              <path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19.5 3 21l1.5-4L16.5 3.5Z" />
+            </svg>
+            <span>Оставить отзыв</span>
+          </button>
+        </section>
+        <Features />
+        <HowItWorks />
+        <FAQ />
+      </main>
+      {/* <Footer /> */}
+      <div style={{background:'#111',color:'#fff',padding:12,borderRadius:8,margin:'16px 0',fontSize:13}}>
+        <b>DEBUG:</b>
+        <div><b>window.Telegram:</b> {JSON.stringify(typeof window !== 'undefined' ? window.Telegram : null)}</div>
+        <div><b>window.Telegram.WebApp:</b> {JSON.stringify(typeof window !== 'undefined' ? window.Telegram?.WebApp : null)}</div>
+        <div><b>window.Telegram.WebApp.initDataUnsafe:</b> {JSON.stringify(typeof window !== 'undefined' ? window.Telegram?.WebApp?.initDataUnsafe : null)}</div>
+        <div><b>user:</b> {JSON.stringify(user)}</div>
       </div>
-    </PageContainer>
+    </>
   );
-};
-
-export default Drops;
+}

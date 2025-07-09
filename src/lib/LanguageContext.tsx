@@ -47,18 +47,32 @@ const UserContext = createContext<UserContextProps>({ user: null, setUser: () =>
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [debugLog, setDebugLog] = useState<string[]>([]);
 
   // --- Telegram Mini App авторизация ---
   useTelegramInit(async (tgUser) => {
+    setDebugLog(log => [...log, '[useTelegramInit] вызван', JSON.stringify(tgUser)]);
+    console.log('[useTelegramInit] вызван', tgUser);
     if (tgUser && tgUser.id) {
-      // Новый способ: авторизация через Supabase + Telegram
-      const realUser = await signInOrUpWithTelegram(tgUser);
-      if (realUser) {
-        setUser(realUser);
-        if (typeof window !== 'undefined') {
-          localStorage.setItem('bazaraUser', JSON.stringify(realUser));
+      setDebugLog(log => [...log, '[signInOrUpWithTelegram] старт', JSON.stringify(tgUser)]);
+      console.log('[signInOrUpWithTelegram] старт', tgUser);
+      try {
+        const realUser = await signInOrUpWithTelegram(tgUser);
+        setDebugLog(log => [...log, '[signInOrUpWithTelegram] результат', JSON.stringify(realUser)]);
+        console.log('[signInOrUpWithTelegram] результат', realUser);
+        if (realUser) {
+          setUser(realUser);
+          setDebugLog(log => [...log, '[setUser] OK', JSON.stringify(realUser)]);
+          if (typeof window !== 'undefined') {
+            localStorage.setItem('bazaraUser', JSON.stringify(realUser));
+          }
         }
+      } catch (e) {
+        setDebugLog(log => [...log, '[signInOrUpWithTelegram] ошибка', String(e)]);
+        console.error('[signInOrUpWithTelegram] ошибка', e);
       }
+    } else {
+      setDebugLog(log => [...log, '[useTelegramInit] tgUser пустой или без id']);
     }
   });
 
@@ -74,8 +88,16 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
+  // Выводим логи на экран для отладки
   return (
     <UserContext.Provider value={{ user, setUser }}>
+      <div style={{ position: 'fixed', top: 0, left: 0, zIndex: 99999, background: 'rgba(0,0,0,0.8)', color: '#fff', fontSize: 12, maxWidth: 400, maxHeight: 300, overflow: 'auto', padding: 8 }}>
+        <b>DEBUG LOG:</b>
+        <ul style={{ margin: 0, padding: 0, listStyle: 'none' }}>
+          {debugLog.map((l, i) => <li key={i}>{l}</li>)}
+        </ul>
+        <b>user:</b> {JSON.stringify(user)}
+      </div>
       {children}
     </UserContext.Provider>
   );

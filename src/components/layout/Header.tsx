@@ -63,9 +63,9 @@ export const Header = ({ onLogin, user, onLogout }: HeaderProps) => {
             <span className="text-xs text-gray-400 font-semibold mb-1">Общий баланс</span>
             <div className="flex items-center gap-2">
               {/* Аватар */}
-              {user?.photo_url ? (
+              {user?.avatar ? (
                 <img
-                  src={user.photo_url}
+                  src={user.avatar}
                   alt="Аватар"
                   className="w-9 h-9 rounded-full object-cover border border-gray-700 bg-gray-800"
                 />
@@ -76,10 +76,14 @@ export const Header = ({ onLogin, user, onLogout }: HeaderProps) => {
               )}
               {/* Баланс */}
               <span className="text-white font-extrabold text-[22px] leading-tight tracking-wide">
-                {typeof user?.balance === 'number' ? user.balance.toFixed(2) : '—'}
+                {typeof user?.balance === 'number' ? user.balance.toFixed(2) : user?.balance === 0 ? '0.00' : '—'}
               </span>
               {/* Иконка рубля */}
               <svg className="w-6 h-6 text-gray-300 ml-1" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24"><path d="M8 6h6a3 3 0 1 1 0 6H8V4m0 8v8m0-4h5" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            </div>
+            {/* Имя пользователя */}
+            <div className="text-white font-bold text-base mt-1 truncate max-w-[120px]">
+              {user?.name || user?.username || '—'}
             </div>
           </div>
         </div>

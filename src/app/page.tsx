@@ -11,7 +11,7 @@ import { FAQ } from '@/components/features/faq/FAQ';
 import { Header } from '@/components/layout/Header';
 // import { Footer } from '@/components/layout/Footer';
 import { LanguageProvider, useUser } from '@/lib/LanguageContext';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { ReviewModal } from '@/components/features/reviews/ReviewModal';
 import { User } from '@/lib/types';
 import { useLang } from '@/lib/LanguageContext';
@@ -60,8 +60,10 @@ export default function HomePage() {
     }
   }, []);
 
-  // --- Telegram Mini App авторизация как в Eclipse ---
+  // --- Telegram Mini App авторизация как в Eclipse, но без спама ---
+  const authDone = useRef(false);
   useEffect(() => {
+    if (authDone.current) return; // Уже авторизован — не повторять
     let isMounted = true;
     if (typeof window === 'undefined' || !window.Telegram?.WebApp) return;
     const tg = window.Telegram.WebApp;
@@ -81,7 +83,6 @@ export default function HomePage() {
           localStorage.setItem('bazaraUser', JSON.stringify(data.user));
           const { data: authData } = await supabase.auth.getUser();
           if (!authData?.user || authData.user.id !== data.user.auth_id) {
-            // Только если сессия невалидна — логинимся
             const initData = window.Telegram.WebApp.initData || '';
             const regRes = await fetch('/api/auth/telegram', {
               method: 'POST',
@@ -106,8 +107,11 @@ export default function HomePage() {
             if (regData.user) {
               setUser(regData.user);
               localStorage.setItem('bazaraUser', JSON.stringify(regData.user));
-              window.location.reload(); // reload, чтобы сбросить цикл
+              authDone.current = true; // <--- Ставим флаг, чтобы не повторять
+              window.location.reload();
             }
+          } else {
+            authDone.current = true; // <--- Ставим флаг, если всё ок
           }
         } else {
           // Если не найден — регистрация
@@ -135,7 +139,8 @@ export default function HomePage() {
           if (regData.user) {
             setUser(regData.user);
             localStorage.setItem('bazaraUser', JSON.stringify(regData.user));
-            window.location.reload(); // reload, чтобы сбросить цикл
+            authDone.current = true; // <--- Ставим флаг
+            window.location.reload();
           }
         }
       });

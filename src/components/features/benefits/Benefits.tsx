@@ -7,7 +7,7 @@ interface BenefitItemProps {
 
 const BenefitItem = ({ icon, text }: BenefitItemProps) => (
   <div className="flex flex-col items-center flex-1">
-    <div className="w-10 h-10 text-[#FE6125] mb-2">
+    <div className="w-10 h-10 text-[#FF944D] mb-2">
       {icon}
     </div>
     <span className="text-base text-white font-semibold">{text}</span>

@@ -8,6 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.50.3",
     "@telegram-apps/sdk": "^3.11.4",
     "clsx": "^2.1.1",
     "firebase": "^10.12.2",

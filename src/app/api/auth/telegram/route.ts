@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server';
-import { TelegramAuthResponse } from '@/lib/types';
 import crypto from 'crypto';
 import { createClient } from '@supabase/supabase-js';
 
@@ -12,57 +11,62 @@ const SUPABASE_FAKE_PASSWORD = process.env.SUPABASE_FAKE_PASSWORD || 'tg_secret_
 const supabaseAdmin = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-function checkTelegramAuthorization(data: TelegramAuthResponse) {
-  const { hash, ...userData } = data;
-  const dataCheckString = Object.keys(userData)
+function validateTelegramInitData(initData: string, botToken: string) {
+  const urlSearchParams = new URLSearchParams(initData);
+  const hash = urlSearchParams.get('hash');
+  urlSearchParams.delete('hash');
+  const dataCheckString = Array.from(urlSearchParams.entries())
+    .map(([key, value]) => `${key}=${value}`)
     .sort()
-    .map(key => `${key}=${userData[key as keyof typeof userData]}`)
     .join('\n');
-
-  const secretKey = crypto.createHash('sha256')
-    .update(BOT_TOKEN || '')
-    .digest();
-
-  const hmac = crypto.createHmac('sha256', secretKey)
-    .update(dataCheckString)
-    .digest('hex');
-
-  return hmac === hash;
+  const secretKey = crypto.createHmac('sha256', 'WebAppData').update(botToken).digest();
+  const computedHash = crypto.createHmac('sha256', secretKey).update(dataCheckString).digest('hex');
+  return computedHash === hash;
 }
 
 export async function POST(request: Request) {
   try {
-    const data = await request.json() as TelegramAuthResponse;
-    console.log('[TG AUTH API] входящие данные:', data);
-
+    const body = await request.json();
+    const { initData } = body;
+    if (!initData) {
+      return NextResponse.json({ success: false, error: 'No initData provided' }, { status: 400 });
+    }
     if (!BOT_TOKEN) {
-      return NextResponse.json({ 
-        success: false, 
-        error: 'Bot token not configured' 
-      }, { status: 500 });
+      return NextResponse.json({ success: false, error: 'Bot token not configured' }, { status: 500 });
     }
-
-    // Проверяем подпись
-    const isValid = checkTelegramAuthorization(data);
+    // Парсим initData
+    const params = new URLSearchParams(initData);
+    const hash = params.get('hash');
+    const auth_date = params.get('auth_date');
+    const userRaw = params.get('user');
+    if (!hash || !auth_date || !userRaw) {
+      return NextResponse.json({ success: false, error: 'Missing hash, auth_date or user in initData' }, { status: 400 });
+    }
+    // Валидируем подпись
+    const isValid = validateTelegramInitData(initData, BOT_TOKEN);
     if (!isValid) {
-      return NextResponse.json({ 
-        success: false, 
-        error: 'Invalid authorization' 
-      }, { status: 401 });
+      return NextResponse.json({ success: false, error: 'Invalid Telegram signature' }, { status: 401 });
     }
-
     // Проверяем время авторизации (не старше 24 часов)
-    const authDate = data.auth_date;
     const now = Math.floor(Date.now() / 1000);
-    if (now - authDate > 86400) {
-      return NextResponse.json({ 
-        success: false, 
-        error: 'Authorization expired' 
-      }, { status: 401 });
+    if (now - Number(auth_date) > 86400) {
+      return NextResponse.json({ success: false, error: 'Authorization expired' }, { status: 401 });
     }
-
+    // Парсим user
+    let userObj;
+    try {
+      userObj = JSON.parse(userRaw);
+    } catch (e) {
+      return NextResponse.json({ success: false, error: 'Invalid user JSON in initData' }, { status: 400 });
+    }
+    const telegram_id = userObj.id;
+    const username = userObj.username || '';
+    const first_name = userObj.first_name || '';
+    const last_name = userObj.last_name || '';
+    const photo_url = userObj.photo_url || '';
+    const language_code = userObj.language_code || 'ru';
     // --- Регистрация пользователя в Supabase ---
-    const email = `telegram_${data.id}@tg.local`;
+    const email = `telegram_${telegram_id}@tg.local`;
     const password = SUPABASE_FAKE_PASSWORD;
     // 1. Пробуем создать пользователя (если уже есть — игнорируем ошибку)
     let user = null;
@@ -71,12 +75,12 @@ export async function POST(request: Request) {
       password,
       email_confirm: true,
       user_metadata: {
-        telegram_id: data.id,
-        username: data.username,
-        first_name: data.first_name,
-        last_name: '',
-        photo_url: data.photo_url,
-        language_code: 'ru' // <-- всегда дефолт
+        telegram_id,
+        username,
+        first_name,
+        last_name,
+        photo_url,
+        language_code
       }
     });
     if (
@@ -86,39 +90,32 @@ export async function POST(request: Request) {
         createError.code === 'email_exists'
       )
     ) {
-      console.error('[TG AUTH API] Ошибка createUser:', createError);
       return NextResponse.json({ error: createError.message }, { status: 500 });
     }
     user = createData?.user || null;
-
     // 2. Логинимся через Supabase Auth
     const { data: session, error: signInError } = await supabase.auth.signInWithPassword({
       email,
       password
     });
     if (signInError) {
-      console.error('[TG AUTH API] Ошибка signInWithPassword:', signInError);
       return NextResponse.json({ error: signInError.message }, { status: 500 });
     }
-
     // 3. Upsert в таблицу users
     const auth_id = session.user.id;
     const upsertRes = await supabaseAdmin.from('users').upsert({
-      id: data.id,
-      telegram_id: data.id,
+      id: telegram_id,
+      telegram_id: telegram_id,
       auth_id: auth_id,
-      username: data.username,
-      name: data.first_name || data.username,
-      avatar: data.photo_url,
-      lang: 'ru', // <-- всегда дефолт
+      username: username,
+      name: first_name || username,
+      avatar: photo_url,
+      lang: language_code,
       updated_at: new Date().toISOString(),
     }, { onConflict: 'id' });
     if (upsertRes.error) {
-      console.error('[TG AUTH API] Ошибка upsert в users:', upsertRes.error);
       return NextResponse.json({ error: upsertRes.error.message, details: upsertRes.error }, { status: 500 });
     }
-    console.log('[TG AUTH API] Upsert result:', upsertRes);
-
     // 4. Возвращаем токены и профиль
     let access_token = null;
     let refresh_token = null;
@@ -129,26 +126,22 @@ export async function POST(request: Request) {
       }
     }
     if (!access_token || !refresh_token) {
-      console.error('[TG AUTH API] Нет access_token или refresh_token:', session);
       return NextResponse.json({ error: 'No access_token or refresh_token in session', session }, { status: 500 });
     }
-
     return NextResponse.json({
       access_token,
       refresh_token,
       user: {
-        id: data.id,
+        id: telegram_id,
         auth_id,
-        username: data.username,
-        first_name: data.first_name,
-        photo_url: data.photo_url || null
+        username,
+        first_name,
+        last_name,
+        photo_url,
+        language_code
       }
     });
   } catch (error) {
-    console.error('[TG AUTH API] Ошибка:', error);
-    return NextResponse.json({ 
-      success: false, 
-      error: 'Internal server error' 
-    }, { status: 500 });
+    return NextResponse.json({ success: false, error: 'Internal server error' }, { status: 500 });
   }
 } 

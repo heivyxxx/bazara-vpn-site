@@ -4,6 +4,7 @@ import Image from "next/image";
 import { Header } from '@/components/layout/Header';
 import { LanguageProvider, useLang } from '@/lib/LanguageContext';
 import { createClient } from '@supabase/supabase-js';
+import { useUser } from '@/lib/UserContext';
 
 const mockUser = {
   name: "heivyxxx",
@@ -11,8 +12,9 @@ const mockUser = {
   avatar: "/assets/avatar1.png",
 };
 
-export default function ProfilePage({ user, setUser }: { user: any, setUser: (u: any) => void }) {
+export default function ProfilePage() {
   const { lang } = useLang();
+  const [user, setUser] = useUser();
   const [supabaseUser, setSupabaseUser] = useState<any>(null);
   const [supabaseUserLoading, setSupabaseUserLoading] = useState(false);
   // fallback: если user нет, ищем по telegram_id

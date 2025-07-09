@@ -360,7 +360,7 @@ function TariffsContent() {
 
 // useEffect для fade-up анимации
 function useFadeUp() {
-  useEffect(() => {и
+  useEffect(() => {
     const onScroll = () => {
       document.querySelectorAll('.fade-up').forEach(el => {
         const rect = el.getBoundingClientRect();

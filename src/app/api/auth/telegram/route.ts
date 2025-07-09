@@ -33,6 +33,7 @@ function checkTelegramAuthorization(data: TelegramAuthResponse) {
 export async function POST(request: Request) {
   try {
     const data = await request.json() as TelegramAuthResponse;
+    console.log('[TG AUTH API] входящие данные:', data);
 
     if (!BOT_TOKEN) {
       return NextResponse.json({ 
@@ -85,6 +86,7 @@ export async function POST(request: Request) {
         createError.code === 'email_exists'
       )
     ) {
+      console.error('[TG AUTH API] Ошибка createUser:', createError);
       return NextResponse.json({ error: createError.message }, { status: 500 });
     }
     user = createData?.user || null;
@@ -95,10 +97,29 @@ export async function POST(request: Request) {
       password
     });
     if (signInError) {
+      console.error('[TG AUTH API] Ошибка signInWithPassword:', signInError);
       return NextResponse.json({ error: signInError.message }, { status: 500 });
     }
 
-    // 3. Возвращаем токены и профиль
+    // 3. Upsert в таблицу users
+    const auth_id = session.user.id;
+    const upsertRes = await supabaseAdmin.from('users').upsert({
+      id: data.id,
+      telegram_id: data.id,
+      auth_id: auth_id,
+      username: data.username,
+      name: data.first_name || data.username,
+      avatar: data.photo_url,
+      lang: data.language_code || 'ru',
+      updated_at: new Date().toISOString(),
+    }, { onConflict: 'id' });
+    if (upsertRes.error) {
+      console.error('[TG AUTH API] Ошибка upsert в users:', upsertRes.error);
+      return NextResponse.json({ error: upsertRes.error.message, details: upsertRes.error }, { status: 500 });
+    }
+    console.log('[TG AUTH API] Upsert result:', upsertRes);
+
+    // 4. Возвращаем токены и профиль
     let access_token = null;
     let refresh_token = null;
     if (session && typeof session === 'object') {
@@ -108,6 +129,7 @@ export async function POST(request: Request) {
       }
     }
     if (!access_token || !refresh_token) {
+      console.error('[TG AUTH API] Нет access_token или refresh_token:', session);
       return NextResponse.json({ error: 'No access_token or refresh_token in session', session }, { status: 500 });
     }
 
@@ -116,13 +138,14 @@ export async function POST(request: Request) {
       refresh_token,
       user: {
         id: data.id,
-        name: data.first_name,
+        auth_id,
         username: data.username,
+        first_name: data.first_name,
         photo_url: data.photo_url || null
       }
     });
   } catch (error) {
-    console.error('Telegram auth error:', error);
+    console.error('[TG AUTH API] Ошибка:', error);
     return NextResponse.json({ 
       success: false, 
       error: 'Internal server error' 

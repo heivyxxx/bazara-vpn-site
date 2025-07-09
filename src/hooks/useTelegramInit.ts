@@ -20,6 +20,12 @@ export function useTelegramInit(onUser?: (user: any) => void) {
       }
     }
     log('init');
+    if (typeof window !== 'undefined') {
+      log('[DEBUG] window.Telegram:', window.Telegram);
+      log('[DEBUG] window.Telegram.WebApp:', window.Telegram?.WebApp);
+      log('[DEBUG] window.Telegram.WebApp.initDataUnsafe:', window.Telegram?.WebApp?.initDataUnsafe);
+      log('[DEBUG] localStorage:', JSON.stringify(localStorage, null, 2));
+    }
     // 1. Инициализация Telegram SDK (как в Eclipse)
     (async () => {
       try {

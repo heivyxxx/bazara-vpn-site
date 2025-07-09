@@ -28,20 +28,36 @@ export default function HomePage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [user, setUser] = useUser();
 
+  // --- DEBUG LOGS ---
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      console.log('[DEBUG] window.Telegram:', window.Telegram);
+      console.log('[DEBUG] window.Telegram.WebApp:', window.Telegram?.WebApp);
+      console.log('[DEBUG] window.Telegram.WebApp.initDataUnsafe:', window.Telegram?.WebApp?.initDataUnsafe);
+      console.log('[DEBUG] localStorage:', JSON.stringify(localStorage, null, 2));
+    }
+  }, []);
+
   // Очищаем user и localStorage, если нет Telegram WebApp (чтобы не было реальных данных в браузере)
   useEffect(() => {
     if (typeof window !== 'undefined' && !window.Telegram?.WebApp) {
+      console.log('[DEBUG] Нет Telegram WebApp, очищаю user и localStorage');
       setUser(null);
       localStorage.removeItem('bazaraUser');
       return;
     }
-    // Автологин через localStorage (только если есть Telegram WebApp)
     const saved = localStorage.getItem('bazaraUser');
+    console.log('[DEBUG] bazaraUser из localStorage:', saved);
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
-        if (parsed && parsed.id && parsed.name) setUser(parsed);
-      } catch {}
+        if (parsed && parsed.id && parsed.name) {
+          setUser(parsed);
+          console.log('[DEBUG] setUser из localStorage:', parsed);
+        }
+      } catch (e) {
+        console.log('[DEBUG] Ошибка парса bazaraUser:', e);
+      }
     }
   }, []);
 
@@ -54,6 +70,7 @@ export default function HomePage() {
         return;
       }
       const tg = window.Telegram.WebApp;
+      console.log('[TG AUTH] tg:', tg);
       tg.ready && tg.ready();
       tg.expand && tg.expand();
       // fullscreen на всех устройствах, кроме ПК (Eclipse-style)
@@ -72,6 +89,7 @@ export default function HomePage() {
       if (tgUser) {
         (async () => {
           try {
+            console.log('[TG AUTH] tgUser найден:', tgUser);
             const res = await fetch('/api/get-user', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
@@ -83,6 +101,7 @@ export default function HomePage() {
               console.log('[TG AUTH] setUser:', data.user);
               // Проверяем сессию Supabase
               const { data: authData } = await supabase.auth.getUser();
+              console.log('[TG AUTH] supabase.auth.getUser:', authData);
               if (!authData?.user || authData.user.id !== data.user.auth_id) {
                 // Нет сессии — логинимся через /api/auth/telegram
                 const regRes = await fetch('/api/auth/telegram', {
@@ -99,14 +118,17 @@ export default function HomePage() {
                   }),
                 });
                 const regData = await regRes.json();
+                console.log('[TG AUTH] /api/auth/telegram ответ:', regData);
                 if (regData.access_token && regData.refresh_token) {
                   await supabase.auth.setSession({
                     access_token: regData.access_token,
                     refresh_token: regData.refresh_token
                   });
+                  console.log('[TG AUTH] supabase setSession выполнен');
                 }
                 if (regData.user) {
                   setUser(regData.user);
+                  console.log('[TG AUTH] setUser после регистрации:', regData.user);
                   window.location.reload();
                 }
               }
@@ -126,14 +148,17 @@ export default function HomePage() {
                 }),
               });
               const regData = await regRes.json();
+              console.log('[TG AUTH] /api/auth/telegram ответ (регистрация):', regData);
               if (regData.access_token && regData.refresh_token) {
                 await supabase.auth.setSession({
                   access_token: regData.access_token,
                   refresh_token: regData.refresh_token
                 });
+                console.log('[TG AUTH] supabase setSession выполнен (регистрация)');
               }
               if (regData.user) {
                 setUser(regData.user);
+                console.log('[TG AUTH] setUser после регистрации:', regData.user);
                 window.location.reload();
               }
             }

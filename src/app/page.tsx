@@ -13,6 +13,7 @@ import { useState, useEffect } from 'react';
 import { ReviewModal } from '@/components/features/reviews/ReviewModal';
 import { User } from '@/lib/types';
 import { useLang } from '@/lib/LanguageContext';
+import { supabase } from '@/lib/supabaseClient';
 
 // Расширяем глобальный интерфейс Window
 declare global {
@@ -38,6 +39,102 @@ export default function HomePage() {
       }
     }
   }, []);
+
+  // --- Telegram Mini App авторизация (как в Eclipse Drops) ---
+  useEffect(() => {
+    (async () => {
+      if (typeof window === 'undefined' || !window.Telegram?.WebApp) {
+        console.log('[TG AUTH] window.Telegram.WebApp отсутствует');
+        return;
+      }
+      const tg = window.Telegram.WebApp;
+      tg.ready();
+      tg.expand();
+      // fullscreen на всех устройствах, кроме ПК (Eclipse-style)
+      const isDesktop = (
+        tg.platform === 'tdesktop' ||
+        tg.platform === 'web' ||
+        tg.platform === 'macos'
+      );
+      if (!isDesktop) {
+        tg.requestFullscreen();
+        window.addEventListener('click', () => tg.requestFullscreen(), { once: true });
+        console.log('[TG AUTH] fullscreen вызван');
+      }
+      const tgUser = tg.initDataUnsafe?.user;
+      console.log('[TG AUTH] tgUser:', tgUser);
+      if (!tgUser) return;
+      try {
+        const res = await fetch('/api/get-user', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ telegram_id: String(tgUser.id) }),
+        });
+        if (res.ok) {
+          const data = await res.json();
+          setUser(data.user);
+          console.log('[TG AUTH] setUser:', data.user);
+          // Проверяем сессию Supabase
+          const { data: authData } = await supabase.auth.getUser();
+          if (!authData?.user || authData.user.id !== data.user.auth_id) {
+            // Нет сессии — логинимся через /api/auth/telegram
+            const regRes = await fetch('/api/auth/telegram', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                telegram_id: String(tgUser.id),
+                username: tgUser.username,
+                first_name: tgUser.first_name,
+                last_name: tgUser.last_name,
+                photo_url: tgUser.photo_url,
+                language_code: tgUser.language_code,
+                initData: tg.initData || ''
+              }),
+            });
+            const regData = await regRes.json();
+            if (regData.access_token && regData.refresh_token) {
+              await supabase.auth.setSession({
+                access_token: regData.access_token,
+                refresh_token: regData.refresh_token
+              });
+            }
+            if (regData.user) {
+              setUser(regData.user);
+              window.location.reload();
+            }
+          }
+        } else {
+          // Если не найден — регистрация
+          const regRes = await fetch('/api/auth/telegram', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              telegram_id: String(tgUser.id),
+              username: tgUser.username,
+              first_name: tgUser.first_name,
+              last_name: tgUser.last_name,
+              photo_url: tgUser.photo_url,
+              language_code: tgUser.language_code,
+              initData: tg.initData || ''
+            }),
+          });
+          const regData = await regRes.json();
+          if (regData.access_token && regData.refresh_token) {
+            await supabase.auth.setSession({
+              access_token: regData.access_token,
+              refresh_token: regData.refresh_token
+            });
+          }
+          if (regData.user) {
+            setUser(regData.user);
+            window.location.reload();
+          }
+        }
+      } catch (e) {
+        console.error('[TG AUTH] Ошибка авторизации:', e);
+      }
+    })();
+  }, [setUser]);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;

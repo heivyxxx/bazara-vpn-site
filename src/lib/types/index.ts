@@ -3,8 +3,12 @@ export interface User {
   id: string;
   name: string;
   username?: string;
-  photo_url?: string;
+  avatar?: string; // для совместимости с Supabase и фронтом
+  photo_url?: string; // для совместимости с Telegram и фронтом
   balance?: number;
+  language_code?: string;
+  last_name?: string;
+  // можно добавить другие поля, если используются в проекте
 }
 
 // Типы для отзывов

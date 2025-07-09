@@ -15,13 +15,15 @@ export function useTelegramInit(onUser?: (user: any) => void) {
       const tg = window.Telegram.WebApp;
       tg.ready();
       tg.expand();
-      // fullscreen только для мобильных устройств
-      const isMobile = (
-        tg.platform === 'android' ||
-        tg.platform === 'ios' ||
-        /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)
+      // fullscreen на всех устройствах, кроме ПК
+      const isDesktop = (
+        tg.platform === 'tdesktop' ||
+        tg.platform === 'web' ||
+        tg.platform === 'macos' ||
+        tg.platform === 'unknown' ||
+        /Win32|Win64|MacIntel|Linux x86_64/.test(navigator.platform)
       );
-      if (isMobile) {
+      if (!isDesktop) {
         tg.requestFullscreen();
         window.addEventListener('click', () => tg.requestFullscreen(), { once: true });
       }
@@ -42,10 +44,7 @@ export function useTelegramInit(onUser?: (user: any) => void) {
       try {
         const { init } = await import('@telegram-apps/sdk');
         await init();
-        // console.log('[Telegram Apps SDK] Инициализация завершена');
-      } catch (e) {
-        // console.error('[Telegram Apps SDK] Ошибка инициализации:', e);
-      }
+      } catch (e) {}
     })();
   }, [onUser]);
 } 

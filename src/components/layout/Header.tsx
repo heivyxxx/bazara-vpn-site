@@ -73,44 +73,10 @@ export const Header = ({ onLogin, user, onLogout }: HeaderProps) => {
         </Link>
 
         {/* Desktop nav */}
-        <nav className="hidden md:flex items-center gap-8">
-          <Link 
-            href="/tariffs" 
-            className="text-white hover:text-[#fd6a32] transition"
-          >
-            {t.prices}
-          </Link>
-          <Link 
-            href="/reviews" 
-            className="text-white hover:text-[#fd6a32] transition"
-          >
-            {t.reviews}
-          </Link>
-          <Link 
-            href="/support" 
-            className="text-white hover:text-[#fd6a32] transition"
-          >
-            {t.support}
-          </Link>
-        </nav>
+        {/* Удалено: навигация по тарифам, отзывам, поддержке */}
 
         {/* Actions */}
         <div className="flex items-center gap-2 md:gap-4">
-          {user ? (
-            <div className="flex items-center gap-2">
-              {/* <Image src={user.photo_url || '/assets/avatar1.png'} alt={user.name} width={40} height={40} className="w-10 h-10 rounded-full border-2 border-[#FE6125] shadow" /> */}
-              <span className="text-white font-semibold text-base hidden md:inline">{user.name}</span>
-              <button onClick={onLogout} className="ml-2 px-3 py-2 bg-[#232323] rounded-lg border border-[#fd6a32] text-white hover:bg-[#fd6a32] text-sm">Выйти</button>
-            </div>
-          ) : (
-            <button
-              onClick={handleLogin}
-              className="text-white hover:text-[#fd6a32] transition hidden md:block font-semibold"
-              disabled={loading}
-            >
-              {loading ? 'Вход...' : t.login}
-            </button>
-          )}
           <Link 
             href="/download" 
             className="bg-[#fd6a32] hover:bg-[#e65a1e] text-white font-semibold py-2 px-5 md:px-6 rounded-xl transition text-base md:text-lg"

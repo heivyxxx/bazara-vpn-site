@@ -75,20 +75,20 @@ export const SupportIssueModal = ({ isOpen, onClose }: { isOpen: boolean; onClos
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[9999] bg-black/80 flex items-center justify-center">
-      <div className="bg-gradient-to-br from-[#18181b] via-[#18181b] to-[#2d1a00] rounded-3xl shadow-2xl max-w-xl w-full p-0 relative animate-fade-in flex flex-col border-4 border-[#FE6125]/30" style={{boxShadow:'0 8px 48px 0 #FE612522,0 2px 0 #a259ff', minWidth: 340, maxWidth: 520}}>
-        <button onClick={onClose} className="absolute top-4 right-6 text-3xl text-gray-400 hover:text-[#FE6125] font-bold transition-all z-20 bg-transparent border-none outline-none cursor-pointer">&times;</button>
+    <div className="fixed inset-0 z-[9999] bg-black/80 flex items-end justify-center">
+      <div className="bg-[#18181b] rounded-t-3xl rounded-b-none shadow-2xl w-full max-w-2xl relative flex flex-col gap-0 min-h-[60vh] max-h-[98vh] overflow-y-auto" style={{minWidth:0}}>
+        <button onClick={onClose} className="absolute top-3 right-3 sm:top-5 sm:right-5 w-10 h-10 flex items-center justify-center rounded-full bg-[#181818] hover:bg-[#2c2c2c] text-2xl text-gray-400">&times;</button>
         <div className="flex flex-col items-center justify-center pt-8 pb-2">
           <Image src="/assets/bug-3d.png" alt="bug" width={80} height={80} className="w-20 h-20 mb-2" style={{objectFit:'contain'}} />
-          <span className="text-3xl font-extrabold text-[#FE6125] text-center mb-2">{t.title}</span>
+          <span className="text-2xl md:text-3xl font-extrabold text-[#FE6125] text-center mb-2">{t.title}</span>
         </div>
         {success ? (
           <div className="text-center text-lg text-green-400 py-12">{t.success}</div>
         ) : (
-        <form onSubmit={handleSubmit} className="flex flex-col gap-6 px-10 py-4">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-6 px-8 py-4">
           <div className="flex flex-col gap-2">
             <label className="font-extrabold text-white text-xl text-center mb-2">{t.name}</label>
-            <input type="text" required placeholder={t.name} className="bg-[#18181b] border border-gray-700 rounded-xl p-4 text-white text-lg w-full" value={name} onChange={e => setName(e.target.value)} />
+            <input type="text" required placeholder={t.name} className="bg-[#232323] border border-gray-700 rounded-xl p-4 text-white text-lg w-full" value={name} onChange={e => setName(e.target.value)} />
           </div>
           <div className="flex flex-col gap-2 mt-2 mb-6">
             <label className="font-extrabold text-white text-xl text-center mb-2">{t.contact}</label>
@@ -103,20 +103,20 @@ export const SupportIssueModal = ({ isOpen, onClose }: { isOpen: boolean; onClos
               </div>
             </div>
             {replyType==='email' && (
-              <input type="email" className="bg-[#18181b] border border-gray-700 rounded-xl p-4 text-white text-lg w-full mt-2" placeholder={t.email} value={email} onChange={e => setEmail(e.target.value)} autoComplete="off" />
+              <input type="email" className="bg-[#232323] border border-gray-700 rounded-xl p-4 text-white text-lg w-full mt-2" placeholder={t.email} value={email} onChange={e => setEmail(e.target.value)} autoComplete="off" />
             )}
           </div>
           <div className="flex flex-col gap-2">
             <label className="font-extrabold text-white text-xl text-center mb-2">{t.category}</label>
             <div className="relative">
-              <select className="custom-select bg-[#18181b] border border-white rounded-xl p-4 text-white text-lg cursor-pointer focus:border-white focus:ring-2 focus:ring-[#FE6125] transition-all w-full appearance-none" value={category} onChange={e => setCategory(e.target.value)}>
+              <select className="custom-select bg-[#232323] border border-white rounded-xl p-4 text-white text-lg cursor-pointer focus:border-white focus:ring-2 focus:ring-[#FE6125] transition-all w-full appearance-none" value={category} onChange={e => setCategory(e.target.value)}>
                 <option value="">—</option>
                 {t.categories.map((c, i) => <option key={i} value={c}>{c}</option>)}
               </select>
               <svg className="pointer-events-none absolute right-5 top-1/2 -translate-y-1/2 w-6 h-6 text-white opacity-70" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
             </div>
           </div>
-          <textarea className="bg-[#18181b] border border-gray-700 rounded-xl p-4 text-white text-lg resize-none min-h-[100px]" placeholder={t.placeholder} value={text} onChange={e => setText(e.target.value)} required />
+          <textarea className="bg-[#232323] border border-gray-700 rounded-xl p-4 text-white text-lg resize-none min-h-[100px]" placeholder={t.placeholder} value={text} onChange={e => setText(e.target.value)} required />
           <button type="submit" className="bg-[#fd6a32] hover:bg-[#e65a1e] text-white font-bold py-3 px-8 rounded-xl text-lg transition-all">{t.send}</button>
           {error && <div className="text-red-400 text-center text-sm">{error}</div>}
         </form>

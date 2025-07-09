@@ -86,15 +86,15 @@ export const SupportChatModal = ({ isOpen, onClose }: { isOpen: boolean; onClose
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[9999] bg-black/80 flex items-center justify-center">
-      <div className="bg-gradient-to-br from-[#18181b] via-[#18181b] to-[#2d1a00] rounded-3xl shadow-2xl max-w-3xl w-full h-[80vh] relative animate-fade-in flex flex-col border-4 border-orange-500/30" style={{boxShadow:'0 8px 48px 0 #ff880022,0 2px 0 #a259ff'}}>
-        <button onClick={onClose} className="absolute top-5 right-7 text-gray-400 hover:text-orange-400 text-4xl font-bold transition-all">&times;</button>
-        <div className="flex items-center gap-3 px-10 pt-8 pb-4 border-b border-orange-700">
+    <div className="fixed inset-0 z-[9999] bg-black/80 flex items-end justify-center">
+      <div className="bg-[#18181b] rounded-t-3xl rounded-b-none shadow-2xl w-full max-w-2xl relative flex flex-col gap-0 min-h-[60vh] max-h-[98vh] overflow-y-auto" style={{minWidth:0}}>
+        <button onClick={onClose} className="absolute top-3 right-3 sm:top-5 sm:right-5 w-10 h-10 flex items-center justify-center rounded-full bg-[#181818] hover:bg-[#2c2c2c] text-2xl text-gray-400">&times;</button>
+        <div className="flex items-center gap-3 px-6 pt-8 pb-4 border-b border-[#232323]">
           <Image src="/assets/trader.gif" alt="Support" width={48} height={48} className="w-12 h-12 rounded-full" />
-          <span className="text-3xl font-extrabold text-[#FE6125]">{t.title}</span>
+          <span className="text-2xl md:text-3xl font-extrabold text-[#FE6125]">{t.title}</span>
           <span className="ml-auto text-base text-gray-400 font-semibold">{t.online}</span>
         </div>
-        <div className="flex-1 overflow-y-auto px-10 py-6 space-y-4 bg-[#18181b] rounded-b-3xl flex flex-col" style={{minHeight:0}}>
+        <div className="flex-1 overflow-y-auto px-6 py-6 space-y-4 bg-[#18181b] flex flex-col" style={{minHeight:0}}>
           <div className="flex items-start gap-3">
             <div className="bg-gradient-to-br from-[#FE6125] to-purple-700 rounded-full w-12 h-12 flex items-center justify-center text-white font-bold text-lg shadow-lg">S</div>
             <div className="bg-[#18181b] rounded-2xl px-5 py-3 text-white max-w-[70%] shadow border border-[#FE6125] text-base">{t.greeting}</div>
@@ -109,10 +109,10 @@ export const SupportChatModal = ({ isOpen, onClose }: { isOpen: boolean; onClose
           ))}
           <div ref={bottomRef} />
         </div>
-        <form onSubmit={sendMessage} className="flex gap-3 p-8 border-t border-orange-700 bg-[#18181b] rounded-b-3xl">
+        <form onSubmit={sendMessage} className="flex gap-3 p-6 border-t border-[#232323] bg-[#18181b]">
           <input
             type="text"
-            className="flex-1 bg-[#18181b] border border-gray-700 rounded-xl p-4 text-white text-lg"
+            className="flex-1 bg-[#232323] border border-gray-700 rounded-xl p-4 text-white text-lg"
             placeholder={t.placeholder}
             value={input}
             onChange={e => setInput(e.target.value)}

@@ -7,6 +7,8 @@ import Link from 'next/link';
 import React from 'react';
 import { SupportChatModal } from '@/components/support/SupportChatModal';
 import { SupportIssueModal } from '@/components/support/SupportIssueModal';
+import { SupportKbModal } from '@/components/support/SupportKbModal';
+import { SupportDiscussModal } from '@/components/support/SupportDiscussModal';
 
 const supportTexts = {
   ru: {
@@ -49,11 +51,15 @@ function SupportContent() {
   const [copied, setCopied] = React.useState(false);
   const [chatOpen, setChatOpen] = React.useState(false);
   const [issueOpen, setIssueOpen] = React.useState(false);
+  const [kbOpen, setKbOpen] = React.useState(false);
+  const [discussOpen, setDiscussOpen] = React.useState(false);
   return (
     <main className="flex-1 flex flex-col pt-24 items-center w-full min-h-screen bg-black">
       <Image src="/assets/trader.gif" alt="BazaraVPN" width={208} height={208} className="w-52 h-52 mx-auto mb-8 select-none pointer-events-none cursor-pointer" draggable={false} onClick={() => setChatOpen(true)} />
       <SupportChatModal isOpen={chatOpen} onClose={() => setChatOpen(false)} />
       <SupportIssueModal isOpen={issueOpen} onClose={() => setIssueOpen(false)} />
+      <SupportKbModal isOpen={kbOpen} onClose={() => setKbOpen(false)} />
+      <SupportDiscussModal isOpen={discussOpen} onClose={() => setDiscussOpen(false)} />
       <h1 className="text-3xl md:text-4xl font-bold text-[#fd6a32] text-center mb-6">{t.title}</h1>
       <div className="text-base md:text-lg text-gray-300 mb-10 text-center max-w-2xl font-normal">{t.desc}</div>
       <section className="w-full max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12 mb-8 md:mb-12 px-2 sm:px-4">
@@ -72,13 +78,23 @@ function SupportContent() {
           <Image src="/assets/kb-3d.png" alt="База знаний" width={64} height={64} className="w-16 h-16 md:w-20 md:h-20 mb-4 md:mb-6 select-none pointer-events-none mx-auto" draggable={false} />
           <div className="text-lg md:text-2xl font-extrabold text-white mb-2">{t.kb}</div>
           <div className="text-sm md:text-[16px] text-[#B8B8B8] mb-4 md:mb-5">{t.kbDesc}</div>
-          <Link href="/support/kb" className="w-full max-w-xs py-3 md:py-4 rounded-2xl font-bold text-base md:text-lg text-white shadow-lg transition-all duration-200 bg-[#fd6a32] hover:bg-[#e65a1e] mt-0 text-center block">{t.kbBtn}</Link>
+          <button
+            onClick={() => setKbOpen(true)}
+            className="w-full max-w-xs py-3 md:py-4 rounded-2xl font-bold text-base md:text-lg text-white shadow-lg transition-all duration-200 bg-[#fd6a32] hover:bg-[#e65a1e] mt-0 text-center block"
+          >
+            {t.kbBtn}
+          </button>
         </div>
         <div className="bg-[#18181b] rounded-[2.2rem] shadow-xl p-6 md:p-10 flex flex-col items-center text-center">
           <Image src="/assets/chat-3d.png" alt="Обсудить" width={64} height={64} className="w-16 h-16 md:w-20 md:h-20 mb-4 md:mb-6 select-none pointer-events-none mx-auto" draggable={false} />
           <div className="text-lg md:text-2xl font-extrabold text-white mb-2">{t.discuss}</div>
           <div className="text-sm md:text-[16px] text-[#B8B8B8] mb-4 md:mb-5">{t.discussDesc}</div>
-          <Link href="/support/discuss" className="w-full max-w-xs py-3 md:py-4 rounded-2xl font-bold text-base md:text-lg text-white shadow-lg transition-all duration-200 bg-[#fd6a32] hover:bg-[#e65a1e] mt-0 text-center block">{t.discussBtn}</Link>
+          <button
+            onClick={() => setDiscussOpen(true)}
+            className="w-full max-w-xs py-3 md:py-4 rounded-2xl font-bold text-base md:text-lg text-white shadow-lg transition-all duration-200 bg-[#fd6a32] hover:bg-[#e65a1e] mt-0 text-center block"
+          >
+            {t.discussBtn}
+          </button>
         </div>
         <div className="bg-[#18181b] rounded-[2.2rem] shadow-xl p-6 md:p-10 flex flex-col items-center text-center">
           <Image src="/assets/bug-3d.png" alt="Сообщить о проблеме" width={64} height={64} className="w-16 h-16 md:w-20 md:h-20 mb-4 md:mb-6 select-none pointer-events-none mx-auto" draggable={false} />

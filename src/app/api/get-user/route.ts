@@ -9,18 +9,36 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
     const telegram_id = body.telegram_id;
-    if (!telegram_id) {
-      return NextResponse.json({ error: 'No telegram_id' }, { status: 400 });
+    // Если есть telegram_id — ищем по нему
+    if (telegram_id) {
+      const { data, error } = await supabase
+        .from('users')
+        .select('*')
+        .eq('id', telegram_id)
+        .single();
+      if (error || !data) {
+        return NextResponse.json({ error: 'User not found' }, { status: 404 });
+      }
+      return NextResponse.json({ user: { ...data, auth_id: data.auth_id } });
     }
+    // Если нет telegram_id — ищем по Supabase-токену (auth_id)
+    const authHeader = request.headers.get('authorization');
+    if (!authHeader) {
+      return NextResponse.json({ error: 'No telegram_id or authorization' }, { status: 400 });
+    }
+    const token = authHeader.replace('Bearer ', '');
+    const { data: userData, error: authError } = await supabase.auth.getUser(token);
+    const user = userData?.user;
+    if (!user) return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
     const { data, error } = await supabase
       .from('users')
       .select('*')
-      .eq('id', telegram_id)
+      .eq('auth_id', user.id)
       .single();
     if (error || !data) {
-      return NextResponse.json({ error: 'User not found' }, { status: 404 });
+      return NextResponse.json({ error: 'User not found by auth_id' }, { status: 404 });
     }
-    return NextResponse.json({ user: { ...data, auth_id: data.auth_id } });
+    return NextResponse.json({ user: { ...data, auth_id: user.id } });
   } catch (e: any) {
     return NextResponse.json({ error: e.message || 'Server error' }, { status: 500 });
   }

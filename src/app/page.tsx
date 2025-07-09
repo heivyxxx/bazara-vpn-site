@@ -15,6 +15,7 @@ import { useState, useEffect, useRef } from 'react';
 import { ReviewModal } from '@/components/features/reviews/ReviewModal';
 import { User } from '@/lib/types';
 import { supabase } from '@/lib/supabaseClient';
+import { useUser } from '@/lib/LanguageContext';
 
 // Расширяем глобальный интерфейс Window
 declare global {
@@ -23,10 +24,12 @@ declare global {
   }
 }
 
-export default function HomePage({ user, setUser }: { user: any, setUser: (u: any) => void }) {
+// Удаляю пропсы user/setUser из HomePage, возвращаю стандартный экспорт
+export default function HomePage() {
   const { lang } = useLang();
   const [authOpen, setAuthOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [user, setUser] = useUser();
 
   // --- DEBUG LOGS ---
   useEffect(() => {

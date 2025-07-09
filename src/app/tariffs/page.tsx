@@ -48,6 +48,51 @@ const tariffsTexts = {
 // 1. Удаляю все useEffect и функции, связанные с trial через Flask backend (FLASK_BACKEND_URL, requestTrial, старый handleTrialClick, старый TrialModal, автоматический trial useEffect и т.д.).
 // 2. Оставляю только переменные user, setUser, trialModalOpen, trialResult, trialError, loadingTrial для новой логики.
 
+function TrialModal({ isOpen, onClose, loading, link, error, logs }: { isOpen: boolean, onClose: () => void, loading: boolean, link?: string | null, error?: string | null, logs?: string[] }) {
+  const [copied, setCopied] = useState(false);
+  useEffect(() => { setCopied(false); }, [link]);
+  if (!isOpen) return null;
+  return (
+    <div className="fixed inset-0 z-[9999] bg-black/80 flex items-end justify-center">
+      <div className="bg-[#18181b] rounded-t-3xl rounded-b-none shadow-2xl p-4 sm:p-8 md:p-12 w-full max-w-2xl relative flex flex-col gap-6 sm:gap-8 min-h-[40vh] max-h-[98vh] overflow-y-auto" style={{minWidth:0}}>
+        <button onClick={onClose} className="absolute top-3 right-3 sm:top-5 sm:right-5 w-10 h-10 flex items-center justify-center rounded-full bg-[#181818] hover:bg-[#2c2c2c] text-2xl text-gray-400">&times;</button>
+        <div className="flex items-center gap-3 sm:gap-4 mb-2">
+          <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#181818] flex items-center justify-center text-2xl font-bold text-[#FE6125]">BV</div>
+          <div>
+            <div className="font-bold text-base sm:text-lg text-white">Генерация trial-ссылки</div>
+            <div className="text-gray-400 text-xs sm:text-sm">3 дня бесплатно</div>
+          </div>
+        </div>
+        {loading && (
+          <div className="flex flex-col items-center gap-2">
+            <div className="text-lg text-white font-bold mb-2">Генерируем ссылку...</div>
+            <div className="w-full bg-[#232323] rounded-xl p-4 text-gray-400 text-sm break-all">
+              {logs && logs.length > 0 ? logs.map((l, i) => <div key={i}>{l}</div>) : 'Ожидание ответа от сервера...'}
+            </div>
+          </div>
+        )}
+        {link && !loading && !error && (
+          <>
+            <div className="font-bold text-xl text-green-400 mb-2">Ваша trial-ссылка</div>
+            <div className="break-all text-white mb-4">{link}</div>
+            <Button onClick={() => {navigator.clipboard.writeText(link);setCopied(true);setTimeout(()=>setCopied(false),1200);}} className="w-full py-3 rounded-xl font-bold text-lg text-white bg-orange-500 hover:bg-orange-600 transition-colors duration-200">{copied ? 'Скопировано!' : 'Скопировать ссылку'}</Button>
+          </>
+        )}
+        {error && !loading && (
+          <>
+            <div className="font-bold text-xl text-red-400 mb-2">Ошибка</div>
+            <div className="text-white mb-4">{error}</div>
+            <div className="w-full bg-[#232323] rounded-xl p-4 text-gray-400 text-sm break-all">
+              {logs && logs.length > 0 ? logs.map((l, i) => <div key={i}>{l}</div>) : null}
+            </div>
+            <Button onClick={onClose} className="w-full py-3 rounded-xl font-bold text-lg text-white bg-[#444] hover:bg-orange-500 transition-colors duration-200">Закрыть</Button>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
 function TariffsContent() {
   const { lang } = useLang();
   const t = tariffsTexts[lang];
@@ -71,6 +116,7 @@ function TariffsContent() {
   const [trialResult, setTrialResult] = useState<string|null>(null);
   const [trialError, setTrialError] = useState<string|null>(null);
   const [loadingTrial, setLoadingTrial] = useState(false);
+  const [trialLogs, setTrialLogs] = useState<string[]>([]);
 
   const handleOpenModal = (tariff: TariffType, price: string) => {
     setModalTariff(tariff);
@@ -118,6 +164,7 @@ function TariffsContent() {
   const handleTrialClick = async () => {
     setTrialError(null);
     setTrialResult(null);
+    setTrialLogs([]); // Очищаем логи перед генерацией
     if (!user) {
       setTrialModalOpen(true);
       setTrialError('Авторизуйтесь через Telegram Mini App');
@@ -130,6 +177,7 @@ function TariffsContent() {
     }
     setLoadingTrial(true);
     try {
+      setTrialLogs(l => [...l, 'Попытка активировать trial...']);
       const resp = await fetch('/api/activate-trial', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -309,7 +357,7 @@ function TariffsContent() {
       </div>
 
       <PaymentModal isOpen={modalOpen} onClose={handleCloseModal} tariff={modalTariff} price={modalPrice} />
-      {/* TrialModal is removed as per edit hint */}
+      <TrialModal isOpen={trialModalOpen} onClose={() => { setTrialModalOpen(false); setTrialResult(null); setTrialError(null); setTrialLogs([]); }} loading={loadingTrial} link={trialResult} error={trialError} logs={trialLogs} />
     </main>
   );
 }

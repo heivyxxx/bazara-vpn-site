@@ -1,8 +1,9 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { Header } from '@/components/layout/Header';
 import { LanguageProvider, useLang, useUser } from '@/lib/LanguageContext';
+import { createClient } from '@supabase/supabase-js';
 
 const mockUser = {
   name: "heivyxxx",
@@ -13,19 +14,42 @@ const mockUser = {
 export default function ProfilePage() {
   const { lang } = useLang();
   const [user] = useUser();
+  const [supabaseUser, setSupabaseUser] = useState<any>(null);
+  const [supabaseUserLoading, setSupabaseUserLoading] = useState(false);
+  // fallback: если user нет, ищем по telegram_id
+  useEffect(() => {
+    if (user) return;
+    if (typeof window !== 'undefined') {
+      const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
+      if (tgUser && tgUser.id) {
+        setSupabaseUserLoading(true);
+        const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
+        supabase
+          .from('users')
+          .select('*')
+          .eq('id', tgUser.id)
+          .single()
+          .then(({ data }) => {
+            setSupabaseUser(data || null);
+            setSupabaseUserLoading(false);
+          });
+      }
+    }
+  }, [user]);
+  const effectiveUser = user || supabaseUser;
   // Моки истории и рефки
   const [historyOpen, setHistoryOpen] = useState(false);
   const [refOpen, setRefOpen] = useState(true);
   return (
     <>
-      <Header user={user} onLogout={() => {}} />
+      <Header user={effectiveUser} onLogout={() => {}} />
       <main className="min-h-screen bg-black flex flex-col items-center pt-24 pb-8">
         {/* Профиль */}
         <div className="w-full max-w-2xl mx-auto flex flex-col items-center gap-4 mb-6">
-          <Image src={user?.avatar || "/assets/avatar1.png"} alt="avatar" width={96} height={96} className="rounded-2xl w-24 h-24 object-cover border-4 border-[#232323]" />
-          <div className="text-2xl font-bold text-white">{user?.name || user?.username || '—'}</div>
+          <Image src={effectiveUser?.avatar || "/assets/avatar1.png"} alt="avatar" width={96} height={96} className="rounded-2xl w-24 h-24 object-cover border-4 border-[#232323]" />
+          <div className="text-2xl font-bold text-white">{effectiveUser?.name || effectiveUser?.username || '—'}</div>
           <div className="text-lg font-semibold text-[#fd6a32] flex items-center gap-2">
-            {typeof user?.balance === 'number' ? user.balance.toFixed(2) : '—'} <span className="text-gray-400 text-base font-normal">RUB</span>
+            {typeof effectiveUser?.balance === 'number' ? effectiveUser.balance.toFixed(2) : '—'} <span className="text-gray-400 text-base font-normal">RUB</span>
           </div>
         </div>
         {/* История */}

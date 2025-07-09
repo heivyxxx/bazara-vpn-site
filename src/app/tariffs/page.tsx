@@ -345,7 +345,7 @@ function TariffsContent() {
       <div className="fade-up testimonial w-full max-w-3xl mx-auto my-8 p-8 rounded-3xl bg-[#232323] text-white shadow-lg italic relative">
         <span>{t.testimonial}</span>
         <div className="mt-2 text-[#FE6125] font-bold">{t.testimonialUser}</div>
-        <span style={{position:'absolute',right:'1.2rem',bottom:'0.2rem',fontSize:'2.5rem',color:'#FE6125'}>&quot;</span>
+        <span style={{position:'absolute',right:'1.2rem',bottom:'0.2rem',fontSize:'2.5rem',color:'#FE6125'}}>&quot;</span>
       </div>
       <PaymentModal isOpen={modalOpen} onClose={handleCloseModal} tariff={modalTariff} price={modalPrice} />
       <TrialModal isOpen={trialModalOpen && (!!trialResult || !!trialError)} onClose={() => { setTrialModalOpen(false); setTrialResult(null); setTrialError(null); }} link={trialResult} error={trialError} />

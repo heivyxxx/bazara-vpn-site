@@ -17,7 +17,7 @@ export default function ProfilePage() {
   const [historyOpen, setHistoryOpen] = useState(false);
   const [refOpen, setRefOpen] = useState(true);
   return (
-    <LanguageProvider>
+    <>
       <Header user={user} onLogout={() => {}} />
       <main className="min-h-screen bg-black flex flex-col items-center pt-24 pb-8">
         {/* Профиль */}
@@ -25,7 +25,7 @@ export default function ProfilePage() {
           <Image src={mockUser.avatar} alt="avatar" width={96} height={96} className="rounded-2xl w-24 h-24 object-cover border-4 border-[#232323]" />
           <div className="text-2xl font-bold text-white">{mockUser.name}</div>
           <div className="text-lg font-semibold text-[#fd6a32] flex items-center gap-2">
-            {mockUser.balance} <span className="text-gray-400 text-base font-normal">TON</span>
+            {mockUser.balance} <span className="text-gray-400 text-base font-normal">RUB</span>
           </div>
         </div>
         {/* История */}
@@ -48,10 +48,10 @@ export default function ProfilePage() {
           </button>
           {refOpen && (
             <div className="bg-[#232323] rounded-2xl p-6 text-gray-200 text-base flex flex-col gap-4 border border-[#232323]">
-              <div className="text-center text-lg font-bold text-white mb-2">Приглашайте друзей — зарабатывайте TON и очки сезона</div>
+              <div className="text-center text-lg font-bold text-white mb-2">Приглашайте друзей — зарабатывайте RUB и очки сезона</div>
               <div className="flex gap-4 flex-col sm:flex-row justify-center items-center">
                 <div className="bg-[#18181b] rounded-2xl p-6 flex-1 min-w-[160px] flex flex-col items-center">
-                  <div className="text-white text-lg font-bold mb-1">TON</div>
+                  <div className="text-white text-lg font-bold mb-1">RUB</div>
                   <div className="text-gray-400 text-sm mb-1">Зарабатывай</div>
                   <div className="text-2xl font-extrabold text-[#00c3ff] mb-1">2%</div>
                   <div className="text-xs text-gray-400 text-center">от всех продаж твоих рефералов</div>
@@ -66,17 +66,17 @@ export default function ProfilePage() {
               <div className="text-center text-white mt-4 mb-2">Твой прогресс</div>
               <div className="flex justify-center gap-4 mb-2">
                 <div className="bg-[#18181b] rounded-xl px-6 py-2 text-white font-bold">LVL 1</div>
-                <div className="bg-[#18181b] rounded-xl px-6 py-2 text-white font-bold">0 / 100 TON оборота</div>
+                <div className="bg-[#18181b] rounded-xl px-6 py-2 text-white font-bold">0 / 100 RUB оборота</div>
               </div>
               <div className="flex justify-between text-sm text-gray-400">
                 <div>Рефералов: 0</div>
-                <div>Заработок: 0 TON</div>
+                <div>Заработок: 0 RUB</div>
               </div>
               <button className="mt-4 w-full bg-[#232323] hover:bg-[#18181b] text-[#00c3ff] font-bold py-3 rounded-xl transition">Пригласить друга</button>
             </div>
           )}
         </div>
       </main>
-    </LanguageProvider>
+    </>
   );
 } 

@@ -4,6 +4,7 @@ declare global {
       WebApp?: any;
       [key: string]: any;
     };
+    DEBUG_LOG?: string[];
   }
 }
 
@@ -11,38 +12,60 @@ import { useEffect } from 'react';
 
 export function useTelegramInit(onUser?: (user: any) => void) {
   useEffect(() => {
-    if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
-      const tg = window.Telegram.WebApp;
-      tg.ready();
-      tg.expand();
-      // fullscreen на всех устройствах, кроме ПК (Eclipse-style)
-      const isDesktop = (
-        tg.platform === 'tdesktop' ||
-        tg.platform === 'web' ||
-        tg.platform === 'macos'
-      );
-      if (!isDesktop) {
-        tg.requestFullscreen();
-        window.addEventListener('click', () => tg.requestFullscreen(), { once: true });
+    function log(...args: any[]) {
+      console.log('[useTelegramInit]', ...args);
+      if (typeof window !== 'undefined') {
+        window.DEBUG_LOG = window.DEBUG_LOG || [];
+        window.DEBUG_LOG.push(args.map(a => (typeof a === 'object' ? JSON.stringify(a) : String(a))).join(' '));
       }
-      // Получаем пользователя из Telegram WebApp
-      const tgUser = tg.initDataUnsafe?.user;
-      if (tgUser && onUser) {
-        onUser({
-          id: tgUser.id,
-          name: tgUser.first_name + (tgUser.last_name ? ' ' + tgUser.last_name : ''),
-          username: tgUser.username,
-          photo_url: tgUser.photo_url,
-          language_code: tgUser.language_code
-        });
+    }
+    log('init');
+    if (typeof window !== 'undefined') {
+      log('window.Telegram:', window.Telegram);
+      if (window.Telegram?.WebApp) {
+        const tg = window.Telegram.WebApp;
+        log('tg:', tg);
+        tg.ready();
+        tg.expand();
+        log('tg.platform:', tg.platform);
+        log('tg.initDataUnsafe:', tg.initDataUnsafe);
+        // fullscreen на всех устройствах, кроме ПК (Eclipse-style)
+        const isDesktop = (
+          tg.platform === 'tdesktop' ||
+          tg.platform === 'web' ||
+          tg.platform === 'macos'
+        );
+        if (!isDesktop) {
+          tg.requestFullscreen();
+          window.addEventListener('click', () => tg.requestFullscreen(), { once: true });
+        }
+        // Получаем пользователя из Telegram WebApp
+        const tgUser = tg.initDataUnsafe?.user;
+        log('tgUser:', tgUser);
+        if (tgUser && onUser) {
+          onUser({
+            id: tgUser.id,
+            name: tgUser.first_name + (tgUser.last_name ? ' ' + tgUser.last_name : ''),
+            username: tgUser.username,
+            photo_url: tgUser.photo_url,
+            language_code: tgUser.language_code
+          });
+        }
+      } else {
+        log('window.Telegram.WebApp отсутствует');
       }
+    } else {
+      log('window НЕ определён');
     }
     // Инициализация Telegram SDK (опционально)
     (async () => {
       try {
         const { init } = await import('@telegram-apps/sdk');
         await init();
-      } catch (e) {}
+        log('Telegram Apps SDK инициализирован');
+      } catch (e) {
+        log('Ошибка инициализации Telegram Apps SDK', e);
+      }
     })();
   }, [onUser]);
 } 

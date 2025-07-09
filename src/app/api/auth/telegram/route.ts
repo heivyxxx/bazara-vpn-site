@@ -76,7 +76,7 @@ export async function POST(request: Request) {
         first_name: data.first_name,
         last_name: '',
         photo_url: data.photo_url,
-        language_code: ''
+        language_code: data.language_code || 'ru'
       }
     });
     if (

@@ -4,7 +4,7 @@ import Image from "next/image";
 import { Header } from '@/components/layout/Header';
 import { LanguageProvider, useLang } from '@/lib/LanguageContext';
 import { createClient } from '@supabase/supabase-js';
-import { useUser } from '@/lib/UserContext';
+import { useUser } from '@/lib/LanguageContext';
 
 const mockUser = {
   name: "heivyxxx",

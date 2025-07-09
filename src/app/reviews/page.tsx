@@ -169,14 +169,14 @@ export default function ReviewsPage() {
                   onChange={e => setSearch(e.target.value)}
                   type="text"
                   placeholder={t.search}
-                  className="w-full pl-12 pr-4 py-3 rounded-xl bg-[#23232b] text-white border-none focus:outline-none focus:ring-2 focus:ring-[#a259ff] text-base md:text-lg shadow-md placeholder-gray-400"
+                  className="w-full pl-12 pr-4 py-3 rounded-xl bg-[#18181b] text-white border-none focus:outline-none focus:ring-2 focus:ring-[#a259ff] text-base md:text-lg shadow-md placeholder-gray-400"
                   style={{boxShadow:'0 2px 12px 0 #0004'}}
                 />
                 <Image src="/assets/filter.png" alt="filter" width={22} height={22} className="absolute left-4 top-1/2 -translate-y-1/2 opacity-70 pointer-events-none" />
               </div>
               <button
                 onClick={() => setSort(sort === 'new' ? 'old' : 'new')}
-                className={`flex items-center gap-2 px-5 py-3 rounded-xl bg-[#23232b] text-white font-semibold shadow-md border-none focus:outline-none transition hover:bg-[#28203a] active:scale-95`}
+                className={`flex items-center gap-2 px-5 py-3 rounded-xl bg-[#18181b] text-white font-semibold shadow-md border-none focus:outline-none transition hover:bg-[#28203a] active:scale-95`}
                 style={{minWidth: 0}}
               >
                 <Image src="/assets/mode.png" alt="mode" width={22} height={22} className="opacity-80" />
@@ -184,7 +184,7 @@ export default function ReviewsPage() {
               </button>
               <button
                 onClick={() => setStarFilter(starFilter ? null : 5)}
-                className={`flex items-center gap-2 px-5 py-3 rounded-xl bg-[#23232b] text-white font-semibold shadow-md border-none focus:outline-none transition hover:bg-[#28203a] active:scale-95 ${starFilter ? 'ring-2 ring-[#a259ff]' : ''}`}
+                className={`flex items-center gap-2 px-5 py-3 rounded-xl bg-[#18181b] text-white font-semibold shadow-md border-none focus:outline-none transition hover:bg-[#28203a] active:scale-95 ${starFilter ? 'ring-2 ring-[#a259ff]' : ''}`}
                 style={{minWidth: 0}}
               >
                 <Image src="/assets/filter.png" alt="filter" width={22} height={22} className="opacity-80" />

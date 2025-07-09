@@ -77,21 +77,21 @@ export default function DownloadPage() {
   return (
     <LanguageProvider>
       <Header user={user} onLogout={() => { setUser(null); if (typeof window !== 'undefined') localStorage.removeItem('bazaraUser'); }} />
-      <div className="relative min-h-screen flex flex-col items-center justify-center pt-24 pb-12 md:pb-16 bg-[#181818] overflow-hidden">
+      <div className="relative min-h-screen flex flex-col items-center justify-center pt-24 pb-12 md:pb-16 bg-black overflow-hidden">
         {/* SVG фон */}
         <svg width="700" height="700" className="absolute left-[-180px] top-[-120px] opacity-10 z-0" viewBox="0 0 700 700" fill="none"><circle cx="350" cy="350" r="340" stroke="#fd6a32" strokeWidth="24" /></svg>
         <svg width="400" height="400" className="absolute right-[-120px] bottom-[-80px] opacity-10 z-0" viewBox="0 0 400 400" fill="none"><rect x="40" y="40" width="320" height="320" rx="80" stroke="#a259ff" strokeWidth="18" /></svg>
         <h1 className="text-2xl md:text-5xl font-extrabold mb-8 md:mb-12 text-center z-10" style={{color:'#fd6a32'}}>{t.title}</h1>
         <div className={`grid grid-cols-1 md:${gridCols} gap-4 md:gap-8 w-full max-w-4xl z-10 px-2 sm:px-0`}>
           {platforms.map((p, i) => (
-            <Link key={p.name} href={p.link} className="bg-[#232323] rounded-2xl shadow-xl p-6 md:p-10 flex flex-col items-center text-center card-hover transition hover:scale-105 hover:shadow-2xl hover:border-[#fd6a32] border border-[#232323] w-full" style={{minWidth:0}}>
+            <Link key={p.name} href={p.link} className="bg-[#18181b] rounded-2xl shadow-xl p-6 md:p-10 flex flex-col items-center text-center card-hover transition hover:scale-105 hover:shadow-2xl hover:border-[#fd6a32] border border-[#18181b] w-full" style={{minWidth:0}}>
               <Image src={p.img} alt={p.name} width={48} height={48} className="mb-4 md:mb-6 w-12 h-12 md:w-16 md:h-16 select-none pointer-events-none" draggable={false} />
               <div className="text-lg md:text-2xl font-extrabold text-white mb-2 md:mb-4">{p.name}</div>
               <div className="text-sm md:text-[16px] text-[#B8B8B8] mb-2">{p.desc}</div>
             </Link>
           ))}
           {needPlaceholder && (
-            <div className="bg-gradient-to-br from-[#232323] to-[#2d1a00] rounded-2xl shadow-xl p-6 md:p-10 flex flex-col items-center text-center border-2 border-dashed border-[#fd6a32] justify-center min-h-[120px] md:min-h-[180px] w-full">
+            <div className="bg-gradient-to-br from-[#18181b] to-[#2d1a00] rounded-2xl shadow-xl p-6 md:p-10 flex flex-col items-center text-center border-2 border-dashed border-[#fd6a32] justify-center min-h-[120px] md:min-h-[180px] w-full">
               <div className="text-lg md:text-2xl font-extrabold text-[#fd6a32] mb-2">{t.soon}</div>
               <div className="text-sm md:text-base text-[#B8B8B8]">{t.follow}</div>
             </div>

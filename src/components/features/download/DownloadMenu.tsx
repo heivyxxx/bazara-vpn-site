@@ -96,7 +96,7 @@ export const DownloadMenu = () => {
   const { lang } = useLang();
   const downloadItems = downloadTexts[lang];
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-8 bg-[#232323] rounded-2xl shadow-lg border border-orange-700 max-w-3xl mx-auto">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-8 bg-[#18181b] rounded-2xl shadow-lg border border-orange-700 max-w-3xl mx-auto">
       {downloadItems.map((item, index) => (
         <DownloadItem
           key={index}

@@ -7,7 +7,7 @@ import { Features } from '@/components/features/blocks/Features';
 import { HowItWorks } from '@/components/features/how-it-works/HowItWorks';
 import { FAQ } from '@/components/features/faq/FAQ';
 import { Header } from '@/components/layout/Header';
-import { Footer } from '@/components/layout/Footer';
+// import { Footer } from '@/components/layout/Footer';
 import { LanguageProvider, useUser } from '@/lib/LanguageContext';
 import { useState, useEffect } from 'react';
 import { TelegramAuthModal } from '@/components/features/TelegramAuthModal';
@@ -109,7 +109,7 @@ export default function HomePage() {
         <HowItWorks />
         <FAQ />
       </main>
-      <Footer />
+      {/* <Footer /> */}
     </LanguageProvider>
   );
 } 

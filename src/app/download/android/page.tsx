@@ -3,7 +3,7 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Header } from '@/components/layout/Header';
-import { Footer } from '@/components/layout/Footer';
+// import { Footer } from '@/components/layout/Footer';
 import { LanguageProvider, useLang, useUser } from '@/lib/LanguageContext';
 
 const texts = {
@@ -98,7 +98,7 @@ export default function AndroidInstallPage() {
           </div>
         </div>
       </main>
-      <Footer />
+      {/* <Footer /> */}
     </LanguageProvider>
   );
 } 

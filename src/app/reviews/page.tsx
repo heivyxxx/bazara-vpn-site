@@ -6,7 +6,7 @@ import { ReviewModal } from '@/components/features/reviews/ReviewModal';
 import { User, Review } from '@/lib/types';
 import { useLang, useUser } from '@/lib/LanguageContext';
 import { Header } from '@/components/layout/Header';
-import { Footer } from '@/components/layout/Footer';
+// import { Footer } from '@/components/layout/Footer';
 import { LanguageProvider } from '@/lib/LanguageContext';
 import { TelegramAuthModal } from '@/components/features/TelegramAuthModal';
 
@@ -226,7 +226,7 @@ export default function ReviewsPage() {
           user={user}
         />
       </div>
-      <Footer />
+      {/* <Footer /> */}
     </LanguageProvider>
   );
 } 

@@ -1,6 +1,6 @@
 "use client";
 import { Header } from '@/components/layout/Header';
-import { Footer } from '@/components/layout/Footer';
+// import { Footer } from '@/components/layout/Footer';
 import { LanguageProvider, useLang, useUser } from '@/lib/LanguageContext';
 import Image from 'next/image';
 import React from 'react';
@@ -68,7 +68,7 @@ export default function ContactsPage() {
     <LanguageProvider>
       <Header user={user} onLogout={() => { setUser(null); if (typeof window !== 'undefined') localStorage.removeItem('bazaraUser'); }} />
       <ContactsContent />
-      <Footer />
+      {/* <Footer /> */}
     </LanguageProvider>
   );
 } 

@@ -3,7 +3,7 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Header } from '@/components/layout/Header';
-import { Footer } from '@/components/layout/Footer';
+// import { Footer } from '@/components/layout/Footer';
 import { useLang, useUser } from '@/lib/LanguageContext';
 import { LanguageProvider } from '@/lib/LanguageContext';
 
@@ -99,7 +99,7 @@ export default function WindowsInstallPage() {
           </div>
         </div>
       </main>
-      <Footer />
+      {/* <Footer /> */}
     </LanguageProvider>
   );
 } 

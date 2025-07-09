@@ -3,7 +3,7 @@ import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Header } from '@/components/layout/Header';
-import { Footer } from '@/components/layout/Footer';
+// import { Footer } from '@/components/layout/Footer';
 import { useUser } from '@/lib/LanguageContext';
 import { LanguageProvider } from '@/lib/LanguageContext';
 
@@ -98,7 +98,7 @@ export default function DownloadPage() {
           )}
         </div>
       </div>
-      <Footer />
+      {/* <Footer /> */}
     </LanguageProvider>
   );
 } 

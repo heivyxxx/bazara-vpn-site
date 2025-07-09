@@ -19,7 +19,7 @@ const navs = [
 const BottomNav = () => {
   const pathname = usePathname();
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-[#1A1A1A]/80 backdrop-blur-lg border-t border-[#333] flex justify-around items-center h-[62px] md:hidden">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-[#1A1A1A]/80 backdrop-blur-lg border-t border-[#333] flex justify-around items-center h-[50px] md:hidden">
       {navs.map((nav) => {
         const isActive = pathname === nav.to;
         return (
@@ -27,7 +27,7 @@ const BottomNav = () => {
             key={nav.to}
             href={nav.to}
             className={clsx(
-              'flex flex-col items-center justify-center flex-1 h-full py-1 select-none transition-colors',
+              'flex flex-col items-center justify-center flex-1 h-full py-0 select-none transition-colors',
               isActive ? 'text-white font-bold' : 'text-gray-400'
             )}
             onClick={hapticSelection}
@@ -36,13 +36,13 @@ const BottomNav = () => {
               <Image
                 src={isActive ? nav.iconActive : nav.icon}
                 alt={nav.label}
-                width={28}
-                height={28}
+                width={22}
+                height={22}
                 style={{ objectFit: 'contain' }}
                 draggable={false}
               />
             </span>
-            <span className="text-xs mt-0.5 font-medium">{nav.label}</span>
+            <span className="text-[10px] mt-0.5 font-normal tracking-wide">{nav.label}</span>
           </Link>
         );
       })}

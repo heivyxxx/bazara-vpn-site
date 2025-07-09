@@ -1,6 +1,6 @@
 "use client";
 import { Header } from '@/components/layout/Header';
-import { Footer } from '@/components/layout/Footer';
+// import { Footer } from '@/components/layout/Footer';
 import { LanguageProvider, useLang, useUser } from '@/lib/LanguageContext';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -116,7 +116,7 @@ export default function SupportPage() {
     <LanguageProvider>
       <Header user={user} onLogout={() => { setUser(null); if (typeof window !== 'undefined') localStorage.removeItem('bazaraUser'); }} />
       <SupportContent />
-      <Footer />
+      {/* <Footer /> */}
     </LanguageProvider>
   );
 } 

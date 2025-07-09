@@ -1,6 +1,6 @@
 "use client";
 import { Header } from '@/components/layout/Header';
-import { Footer } from '@/components/layout/Footer';
+// import { Footer } from '@/components/layout/Footer';
 import { LanguageProvider, useLang } from '@/lib/LanguageContext';
 import React from 'react';
 
@@ -42,7 +42,7 @@ export default function DiscussPage() {
     <LanguageProvider>
       <Header />
       <DiscussContent />
-      <Footer />
+      {/* <Footer /> */}
     </LanguageProvider>
   );
 } 

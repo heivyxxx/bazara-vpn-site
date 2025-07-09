@@ -51,7 +51,7 @@ export const Hero = () => {
   const { lang } = useLang();
   const t = heroTexts[lang];
   return (
-    <section className="flex flex-col md:flex-row items-center justify-between max-w-6xl mx-auto py-16 md:py-24 px-2 sm:px-4 md:pt-32 md:pb-24 gap-8 md:gap-0">
+    <section className="flex flex-col md:flex-row items-center justify-between max-w-6xl mx-auto pt-32 pb-16 px-2 sm:px-4 gap-8 md:gap-0">
       <style jsx>{`
         .fade-up-main {
           opacity: 0;
@@ -87,14 +87,7 @@ export const Hero = () => {
         }
       `}</style>
 
-      <div className="flex-1 flex flex-col items-start md:items-start text-left w-full max-w-xl">
-        <h1 
-          className="text-5xl md:text-6xl font-extrabold text-[#FE6125] mb-6 fade-up-main"
-          style={{ animationDelay: '0.08s' }}
-        >
-          {t.title}<span className="text-white">{t.subtitle}</span>
-        </h1>
-        
+      <div className="flex-1 flex flex-col items-center text-center w-full max-w-xl">
         <p 
           className="text-2xl md:text-3xl text-white mb-10 max-w-xl fade-up-main"
           style={{ animationDelay: '0.18s' }}
@@ -104,22 +97,14 @@ export const Hero = () => {
             {t.desc}
           </span>
         </p>
-
         <Link href="/tariffs" passHref legacyBehavior>
           <a
-            className="mb-6 text-xl md:text-2xl py-4 md:py-5 px-6 md:px-12 fade-up-main btn-glow block text-center w-full max-w-xs md:max-w-none"
-            style={{ animationDelay: '0.32s', borderRadius: '1.1rem', boxShadow: '0 2px 16px 0 #ff880088' }}
+            className="mb-10 text-xl md:text-2xl py-4 md:py-5 px-6 md:px-12 fade-up-main btn-glow block text-center w-full max-w-xs"
+            style={{ animationDelay: '0.32s', borderRadius: '1.1rem', boxShadow: '0 2px 16px 0 #ff880088', marginLeft: 'auto', marginRight: 'auto' }}
           >
             {t.btn}
           </a>
         </Link>
-
-        <ul 
-          className="flex flex-wrap gap-4 md:gap-6 mt-6 fade-up-main"
-          style={{ animationDelay: '0.44s' }}
-        >
-          {t.features.map((text, i) => <HeroFeature key={i} icon={heroIcons[i]} text={text} />)}
-        </ul>
       </div>
 
       <div 

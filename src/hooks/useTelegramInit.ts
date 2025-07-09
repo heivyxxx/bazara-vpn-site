@@ -20,11 +20,19 @@ export function useTelegramInit(onUser?: (user: any) => void) {
       }
     }
     log('init');
-    if (typeof window !== 'undefined') {
-      log('window.Telegram:', window.Telegram);
-      if (window.Telegram?.WebApp) {
+    // 1. Инициализация Telegram SDK (как в Eclipse)
+    (async () => {
+      try {
+        const { init } = await import('@telegram-apps/sdk');
+        await init();
+        log('Telegram Apps SDK инициализирован');
+      } catch (e) {
+        log('Ошибка инициализации Telegram Apps SDK', e);
+      }
+      // 2. Проверяем наличие Telegram WebApp
+      if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
+        log('window.Telegram.WebApp найден');
         const tg = window.Telegram.WebApp;
-        log('tg:', tg);
         tg.ready();
         tg.expand();
         log('tg.platform:', tg.platform);
@@ -53,18 +61,6 @@ export function useTelegramInit(onUser?: (user: any) => void) {
         }
       } else {
         log('window.Telegram.WebApp отсутствует');
-      }
-    } else {
-      log('window НЕ определён');
-    }
-    // Инициализация Telegram SDK (опционально)
-    (async () => {
-      try {
-        const { init } = await import('@telegram-apps/sdk');
-        await init();
-        log('Telegram Apps SDK инициализирован');
-      } catch (e) {
-        log('Ошибка инициализации Telegram Apps SDK', e);
       }
     })();
   }, [onUser]);

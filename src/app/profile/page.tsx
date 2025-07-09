@@ -13,29 +13,35 @@ const mockUser = {
 
 export default function ProfilePage() {
   const { lang } = useLang();
-  const [user] = useUser();
+  const [user, setUser] = useUser();
   const [supabaseUser, setSupabaseUser] = useState<any>(null);
   const [supabaseUserLoading, setSupabaseUserLoading] = useState(false);
   // fallback: если user нет, ищем по telegram_id
   useEffect(() => {
-    if (user) return;
-    if (typeof window !== 'undefined') {
-      const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
-      if (tgUser && tgUser.id) {
-        setSupabaseUserLoading(true);
-        const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
-        supabase
-          .from('users')
-          .select('*')
-          .eq('id', tgUser.id)
-          .single()
-          .then(({ data }) => {
-            setSupabaseUser(data || null);
-            setSupabaseUserLoading(false);
-          });
-      }
+    if (typeof window === 'undefined') return;
+    const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
+    if (tgUser && tgUser.id) {
+      setSupabaseUserLoading(true);
+      const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
+      supabase
+        .from('users')
+        .select('*')
+        .eq('id', tgUser.id)
+        .single()
+        .then(({ data }) => {
+          if (data) {
+            setSupabaseUser(data);
+            setUser(data);
+            localStorage.setItem('bazaraUser', JSON.stringify(data));
+          } else {
+            setSupabaseUser(null);
+            setUser(null);
+            localStorage.removeItem('bazaraUser');
+          }
+          setSupabaseUserLoading(false);
+        });
     }
-  }, [user]);
+  }, []);
   const effectiveUser = user || supabaseUser;
   // Моки истории и рефки
   const [historyOpen, setHistoryOpen] = useState(false);

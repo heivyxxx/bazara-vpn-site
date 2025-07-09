@@ -11,23 +11,20 @@ import { User } from '@/lib/types';
 import React from 'react';
 
 export default function RootLayout({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
   return (
     <html lang="ru">
       <head>
         <Script src="https://telegram.org/js/telegram-web-app.js" strategy="beforeInteractive" />
       </head>
       <body>
-        <LanguageProvider>
-          <SafeArea>
-            {React.Children.map(children, child =>
-              React.isValidElement(child)
-                ? React.cloneElement(child, { user, setUser })
-                : child
-            )}
-            <BottomNav />
-          </SafeArea>
-        </LanguageProvider>
+        <UserProvider>
+          <LanguageProvider>
+            <SafeArea>
+              {children}
+              <BottomNav />
+            </SafeArea>
+          </LanguageProvider>
+        </UserProvider>
       </body>
     </html>
   );

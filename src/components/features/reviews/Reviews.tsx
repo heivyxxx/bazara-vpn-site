@@ -10,6 +10,8 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, A11y } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
+import filterIcon from '/assets/filter.png';
+import modeIcon from '/assets/mode.png';
 
 interface ReviewCardProps {
   avatar: string;
@@ -133,6 +135,24 @@ export const Reviews = () => {
             {t.all}
           </Link>
         </div>
+      </div>
+      {/* Новый блок поиска и фильтров 1в1 как в Eclipse */}
+      <div className="flex items-center gap-2 w-full mb-8">
+        <div className="flex-1 flex items-center bg-[#18181b] rounded-2xl px-4 h-12">
+          <input
+            type="text"
+            placeholder="Поиск по тексту..."
+            className="flex-1 bg-transparent outline-none border-none text-white placeholder-gray-400 text-base"
+            style={{height:'2.5rem'}}
+            disabled
+          />
+        </div>
+        <button className="ml-2 flex items-center justify-center w-11 h-11 rounded-2xl bg-[#18181b] hover:bg-[#23232b] transition" style={{border:'none',padding:0}} disabled>
+          <img src={modeIcon.src} alt="mode" className="w-6 h-6" />
+        </button>
+        <button className="ml-2 flex items-center justify-center w-11 h-11 rounded-2xl bg-[#18181b] hover:bg-[#23232b] transition" style={{border:'none',padding:0}} disabled>
+          <img src={filterIcon.src} alt="filter" className="w-6 h-6" />
+        </button>
       </div>
 
       {loading ? (

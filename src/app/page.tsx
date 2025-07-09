@@ -31,9 +31,18 @@ export default function HomePage() {
   // --- DEBUG LOGS ---
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      console.log('[DEBUG] window.Telegram:', window.Telegram);
-      console.log('[DEBUG] window.Telegram.WebApp:', window.Telegram?.WebApp);
-      console.log('[DEBUG] window.Telegram.WebApp.initDataUnsafe:', window.Telegram?.WebApp?.initDataUnsafe);
+      // Проверка по документации Telegram
+      if (window.Telegram && window.Telegram.WebApp) {
+        const tg = window.Telegram.WebApp;
+        tg.ready();
+        console.log('[TG SDK] tg.ready() вызван');
+      } else {
+        console.log('[TG SDK] window.Telegram.WebApp отсутствует');
+      }
+      // Явный вывод для дебага
+      console.log('[TG SDK] window.Telegram:', window.Telegram);
+      console.log('[TG SDK] window.Telegram.WebApp:', window.Telegram?.WebApp);
+      console.log('[TG SDK] window.Telegram.WebApp.initDataUnsafe:', window.Telegram?.WebApp?.initDataUnsafe);
       console.log('[DEBUG] localStorage:', JSON.stringify(localStorage, null, 2));
     }
   }, []);
@@ -250,6 +259,13 @@ export default function HomePage() {
         <FAQ />
       </main>
       {/* <Footer /> */}
+      <div style={{background:'#111',color:'#fff',padding:12,borderRadius:8,margin:'16px 0',fontSize:13}}>
+        <b>DEBUG:</b>
+        <div><b>window.Telegram:</b> {JSON.stringify(typeof window !== 'undefined' ? window.Telegram : null)}</div>
+        <div><b>window.Telegram.WebApp:</b> {JSON.stringify(typeof window !== 'undefined' ? window.Telegram?.WebApp : null)}</div>
+        <div><b>window.Telegram.WebApp.initDataUnsafe:</b> {JSON.stringify(typeof window !== 'undefined' ? window.Telegram?.WebApp?.initDataUnsafe : null)}</div>
+        <div><b>user:</b> {JSON.stringify(user)}</div>
+      </div>
     </>
   );
 } 

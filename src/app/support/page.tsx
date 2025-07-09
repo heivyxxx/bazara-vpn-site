@@ -54,8 +54,8 @@ function SupportContent() {
       <Image src="/assets/trader.gif" alt="BazaraVPN" width={208} height={208} className="w-52 h-52 mx-auto mb-8 select-none pointer-events-none cursor-pointer" draggable={false} onClick={() => setChatOpen(true)} />
       <SupportChatModal isOpen={chatOpen} onClose={() => setChatOpen(false)} />
       <SupportIssueModal isOpen={issueOpen} onClose={() => setIssueOpen(false)} />
-      <h1 className="text-4xl md:text-5xl font-extrabold text-center mb-4"><span className="text-orange-400">{t.title}</span></h1>
-      <div className="text-xl md:text-2xl text-[#B8B8B8] mb-10 text-center max-w-xl font-medium">{t.desc}</div>
+      <h1 className="text-3xl md:text-4xl font-bold text-[#fd6a32] text-center mb-6">{t.title}</h1>
+      <div className="text-base md:text-lg text-gray-300 mb-10 text-center max-w-2xl font-normal">{t.desc}</div>
       <section className="w-full max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12 mb-8 md:mb-12 px-2 sm:px-4">
         <div className="bg-[#18181b] rounded-[2.2rem] shadow-xl p-6 md:p-10 flex flex-col items-center text-center">
           <Image src="/assets/faq-3d.png" alt="Чат поддержки" width={64} height={64} className="w-16 h-16 md:w-20 md:h-20 mb-4 md:mb-6 select-none pointer-events-none mx-auto" draggable={false} />

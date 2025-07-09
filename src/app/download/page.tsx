@@ -6,6 +6,7 @@ import { Header } from '@/components/layout/Header';
 // import { Footer } from '@/components/layout/Footer';
 import { useUser } from '@/lib/LanguageContext';
 import { LanguageProvider } from '@/lib/LanguageContext';
+import { DownloadModal } from '@/components/features/download/DownloadModal';
 
 const LANGS = [
   { code: "ru", label: "Русский" },
@@ -68,8 +69,7 @@ export default function DownloadPage() {
   const [lang] = useLang();
   const t = texts[lang];
   const [user, setUser] = useUser();
-  const [megaOpen, setMegaOpen] = useState(false);
-  const megaRef = useRef<HTMLDivElement>(null);
+  const [modal, setModal] = useState<null | 'windows' | 'macos' | 'linux' | 'android' | 'ios'>(null);
   // Определяем количество колонок: если 4 или 5 платформ — 2 колонки, иначе 3
   const gridCols = platforms.length <= 5 ? "md:grid-cols-2 lg:grid-cols-3" : "md:grid-cols-3";
   // Если карточек 5 — добавляем плейсхолдер
@@ -78,17 +78,20 @@ export default function DownloadPage() {
     <LanguageProvider>
       <Header user={user} onLogout={() => { setUser(null); if (typeof window !== 'undefined') localStorage.removeItem('bazaraUser'); }} />
       <div className="relative min-h-screen flex flex-col items-center justify-center pt-24 pb-12 md:pb-16 bg-black overflow-hidden">
-        {/* SVG фон */}
-        <svg width="700" height="700" className="absolute left-[-180px] top-[-120px] opacity-10 z-0" viewBox="0 0 700 700" fill="none"><circle cx="350" cy="350" r="340" stroke="#fd6a32" strokeWidth="24" /></svg>
-        <svg width="400" height="400" className="absolute right-[-120px] bottom-[-80px] opacity-10 z-0" viewBox="0 0 400 400" fill="none"><rect x="40" y="40" width="320" height="320" rx="80" stroke="#a259ff" strokeWidth="18" /></svg>
+        {/* SVG фон удалён */}
         <h1 className="text-2xl md:text-5xl font-extrabold mb-8 md:mb-12 text-center z-10" style={{color:'#fd6a32'}}>{t.title}</h1>
         <div className={`grid grid-cols-1 md:${gridCols} gap-4 md:gap-8 w-full max-w-4xl z-10 px-2 sm:px-0`}>
           {platforms.map((p, i) => (
-            <Link key={p.name} href={p.link} className="bg-[#18181b] rounded-2xl shadow-xl p-6 md:p-10 flex flex-col items-center text-center card-hover transition hover:scale-105 hover:shadow-2xl hover:border-[#fd6a32] border border-[#18181b] w-full" style={{minWidth:0}}>
+            <button
+              key={p.name}
+              className="bg-[#18181b] rounded-2xl shadow-xl p-6 md:p-10 flex flex-col items-center text-center card-hover transition hover:scale-105 hover:shadow-2xl hover:border-[#fd6a32] border border-[#18181b] w-full focus:outline-none"
+              style={{minWidth:0}}
+              onClick={() => setModal(p.name.toLowerCase().includes('windows') ? 'windows' : p.name.toLowerCase().includes('mac') ? 'macos' : p.name.toLowerCase().includes('linux') ? 'linux' : p.name.toLowerCase().includes('android') ? 'android' : p.name.toLowerCase().includes('iphone') || p.name.toLowerCase().includes('ipad') ? 'ios' : null)}
+            >
               <Image src={p.img} alt={p.name} width={48} height={48} className="mb-4 md:mb-6 w-12 h-12 md:w-16 md:h-16 select-none pointer-events-none" draggable={false} />
               <div className="text-lg md:text-2xl font-extrabold text-white mb-2 md:mb-4">{p.name}</div>
               <div className="text-sm md:text-[16px] text-[#B8B8B8] mb-2">{p.desc}</div>
-            </Link>
+            </button>
           ))}
           {needPlaceholder && (
             <div className="bg-gradient-to-br from-[#18181b] to-[#2d1a00] rounded-2xl shadow-xl p-6 md:p-10 flex flex-col items-center text-center border-2 border-dashed border-[#fd6a32] justify-center min-h-[120px] md:min-h-[180px] w-full">
@@ -97,6 +100,7 @@ export default function DownloadPage() {
             </div>
           )}
         </div>
+        <DownloadModal isOpen={!!modal} onClose={() => setModal(null)} platform={modal || 'windows'} />
       </div>
       {/* <Footer /> */}
     </LanguageProvider>

@@ -64,31 +64,31 @@ export default function IOSInstallPage() {
           {/* Инструкция */}
           <ol className="w-full flex flex-col gap-6 mt-2 mb-8">
             <li className="flex items-start gap-4">
-              <span className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full bg-gradient-to-br from-orange-400 to-purple-500 text-white text-2xl font-bold shadow-lg"><svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></span>
+              <span className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full bg-gradient-to-br from-[#fd6a32] to-purple-500 text-white text-2xl font-bold shadow-lg"><svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></span>
               <span className="text-lg" dangerouslySetInnerHTML={{__html: t.step1}} />
             </li>
             <li className="flex items-start gap-4">
-              <span className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full bg-gradient-to-br from-orange-400 to-purple-500 text-white text-2xl font-bold shadow-lg"><svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/></svg></span>
+              <span className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full bg-gradient-to-br from-[#fd6a32] to-purple-500 text-white text-2xl font-bold shadow-lg"><svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/></svg></span>
               <span className="text-lg" dangerouslySetInnerHTML={{__html: t.step2}} />
             </li>
             <li className="flex items-start gap-4">
-              <span className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full bg-gradient-to-br from-orange-400 to-purple-500 text-white text-2xl font-bold shadow-lg"><svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></span>
+              <span className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full bg-gradient-to-br from-[#fd6a32] to-purple-500 text-white text-2xl font-bold shadow-lg"><svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></span>
               <span className="text-lg" dangerouslySetInnerHTML={{__html: t.step3}} />
             </li>
             <li className="flex items-start gap-4">
-              <span className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full bg-gradient-to-br from-orange-400 to-purple-500 text-white text-2xl font-bold shadow-lg"><svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg></span>
+              <span className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full bg-gradient-to-br from-[#fd6a32] to-purple-500 text-white text-2xl font-bold shadow-lg"><svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg></span>
               <span className="text-lg" dangerouslySetInnerHTML={{__html: t.step4}} />
             </li>
             <li className="flex items-start gap-4">
-              <span className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full bg-gradient-to-br from-orange-400 to-purple-500 text-white text-2xl font-bold shadow-lg"><svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path d="M12 19l7-7-7-7"/></svg></span>
+              <span className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full bg-gradient-to-br from-[#fd6a32] to-purple-500 text-white text-2xl font-bold shadow-lg"><svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path d="M12 19l7-7-7-7"/></svg></span>
               <span className="text-lg" dangerouslySetInnerHTML={{__html: t.step5}} />
             </li>
           </ol>
-          <a href="https://apps.apple.com/app/hiddify/id1669421461" target="_blank" className="block w-full text-center bg-gradient-to-r from-orange-500 to-purple-500 hover:from-orange-600 hover:to-purple-600 text-white font-bold py-4 rounded-2xl text-xl shadow-xl transition mb-8">
+          <a href="https://apps.apple.com/app/hiddify/id1669421461" target="_blank" className="block w-full text-center bg-gradient-to-r from-[#fd6a32] to-purple-500 hover:from-[#fd6a32] hover:to-purple-600 text-white font-bold py-4 rounded-2xl text-xl shadow-xl transition mb-8">
             <svg className="inline-block w-7 h-7 mr-2 align-middle" fill="#fff" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/></svg>{t.downloadBtn}
           </a>
           <div className="w-full bg-[#232323] rounded-2xl p-5 text-base text-gray-200 flex flex-col gap-2 animate-fade-in-slow">
-            <div className="font-bold text-orange-400 mb-1">{t.helpTitle}</div>
+            <div className="font-bold text-[#fd6a32] mb-1">{t.helpTitle}</div>
             <ul className="list-disc list-inside space-y-1">
               <li>{t.help1}</li>
               <li>{t.help2}</li>

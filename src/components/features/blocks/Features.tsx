@@ -21,7 +21,7 @@ const FeatureBlock = ({
   image, 
   imageAlt,
   reverse = false,
-  gradientFrom = "orange-400",
+  gradientFrom = "[#fd6a32]",
   gradientTo = "purple-500"
 }: FeatureBlockProps) => {
   const { lang } = useLang();
@@ -32,7 +32,7 @@ const FeatureBlock = ({
       <div className={`max-w-6xl mx-auto flex flex-col md:flex-row items-center md:items-stretch gap-10 md:gap-16 ${reverse ? 'md:flex-row-reverse' : ''}`}>
         <div className="flex-1 flex flex-col justify-center text-center md:text-left">
           <h2 className="text-3xl md:text-5xl font-extrabold text-white mb-6 leading-tight">
-            <span className={`text-transparent bg-clip-text bg-gradient-to-r from-[#FF944D] to-${gradientTo}`}>
+            <span className={`text-transparent bg-clip-text bg-gradient-to-r from-[#fd6a32] to-${gradientTo}`}>
               {title}
             </span>
             <br />
@@ -65,7 +65,7 @@ const featuresTexts = {
       description: 'BazaraVPN подключает тебя к миру — без слежки, блокировок и прерываний. Работай, чиль, смотри YouTube и телегу, даже если кто-то решил "запретить".',
       image: "/assets/block1.png",
       imageAlt: "Всегда на связи",
-      gradientFrom: "orange-400",
+      gradientFrom: "[#fd6a32]",
       gradientTo: "purple-500"
     },
     {
@@ -76,7 +76,7 @@ const featuresTexts = {
       imageAlt: "Оставайся в тени",
       reverse: true,
       gradientFrom: "purple-500",
-      gradientTo: "orange-400"
+      gradientTo: "[#fd6a32]"
     },
     {
       title: "Только результат.",
@@ -84,7 +84,7 @@ const featuresTexts = {
       description: 'BazaraVPN запускается одним кликом и сразу работает без ограничений, без компромиссов, без вопросов. Наша "подключённость" — это уровень безопасности.',
       image: "/assets/block3.png",
       imageAlt: "Только результат",
-      gradientFrom: "orange-400",
+      gradientFrom: "[#fd6a32]",
       gradientTo: "purple-500"
     }
   ],
@@ -95,7 +95,7 @@ const featuresTexts = {
       description: 'BazaraVPN connects you to the world — no tracking, blocks, or interruptions. Work, chill, watch YouTube and Telegram, even if someone tries to "ban" it.',
       image: "/assets/block1.png",
       imageAlt: "Always connected",
-      gradientFrom: "orange-400",
+      gradientFrom: "[#fd6a32]",
       gradientTo: "purple-500"
     },
     {
@@ -106,7 +106,7 @@ const featuresTexts = {
       imageAlt: "Stay in the shadows",
       reverse: true,
       gradientFrom: "purple-500",
-      gradientTo: "orange-400"
+      gradientTo: "[#fd6a32]"
     },
     {
       title: "Only results.",
@@ -114,7 +114,7 @@ const featuresTexts = {
       description: 'BazaraVPN launches with one click and works instantly without restrictions, compromises, or questions. Our "connectedness" is your level of security.',
       image: "/assets/block3.png",
       imageAlt: "Only results",
-      gradientFrom: "orange-400",
+      gradientFrom: "[#fd6a32]",
       gradientTo: "purple-500"
     }
   ]
@@ -130,7 +130,7 @@ export const Features = () => {
           <div className={`max-w-6xl mx-auto flex flex-col md:flex-row items-center md:items-stretch gap-6 md:gap-16 ${block.reverse ? 'md:flex-row-reverse' : ''}`}>
             <div className="flex-1 flex flex-col justify-center text-center md:text-left">
               <h2 className="text-2xl md:text-5xl font-extrabold text-white mb-4 md:mb-6 leading-tight">
-                <span className={`text-transparent bg-clip-text bg-gradient-to-r from-[#FF944D] to-${block.gradientTo}`}>
+                <span className={`text-transparent bg-clip-text bg-gradient-to-r from-[#fd6a32] to-${block.gradientTo}`}>
                   {block.title}
                 </span>
                 <br />

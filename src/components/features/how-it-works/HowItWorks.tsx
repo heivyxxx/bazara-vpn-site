@@ -51,7 +51,7 @@ export const HowItWorks = () => {
   const t = howItWorksTexts[lang];
   return (
     <section className="max-w-6xl mx-auto my-10 md:my-20 px-2 sm:px-4">
-      <h2 className="text-2xl md:text-3xl font-bold text-[#FE6125] mb-6 md:mb-10 text-center">
+      <h2 className="text-2xl md:text-3xl font-bold text-[#fd6a32] mb-6 md:mb-10 text-center">
         {t.title}
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-10">

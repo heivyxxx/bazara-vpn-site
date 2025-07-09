@@ -39,16 +39,16 @@ function FaqContent() {
   const [open, setOpen] = React.useState<number|null>(null);
   return (
     <main className="flex-1 flex flex-col items-center pt-24 pb-16 min-h-screen bg-[#181818]">
-      <h2 className="text-4xl font-extrabold text-orange-400 mb-10 text-center">{t.title}</h2>
+      <h2 className="text-4xl font-extrabold text-[#fd6a32] mb-10 text-center">{t.title}</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-5xl">
         {t.items.map((item, i) => (
-          <div key={i} className="bg-[#232323] rounded-2xl border border-orange-700 shadow-lg">
+          <div key={i} className="bg-[#232323] rounded-2xl border border-[#fd6a32] shadow-lg">
             <button
               className="w-full flex justify-between items-center px-8 py-6 text-xl font-bold text-left text-white focus:outline-none"
               onClick={() => setOpen(open === i ? null : i)}
             >
               {item.q}
-              <span className="text-3xl text-orange-400">{open === i ? '–' : '+'}</span>
+              <span className="text-3xl text-[#fd6a32]">{open === i ? '–' : '+'}</span>
             </button>
             <div className={`px-8 pb-6 text-gray-200 text-lg transition-all duration-300 ${open === i ? '' : 'hidden'}`}>{item.a}</div>
           </div>

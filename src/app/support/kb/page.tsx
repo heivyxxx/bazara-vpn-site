@@ -34,14 +34,14 @@ function KbContent() {
   const t = kbTexts[lang];
   return (
     <main className="flex-1 flex flex-col items-center pt-24 pb-16 min-h-screen bg-[#181818]">
-      <h2 className="text-4xl font-extrabold text-orange-400 mb-10 text-center">{t.title}</h2>
+      <h2 className="text-4xl font-extrabold text-[#fd6a32] mb-10 text-center">{t.title}</h2>
       <div className="text-lg mb-10 text-gray-300 text-center max-w-2xl">{t.desc}</div>
       {t.blocks.map((block, i) => (
-        <div key={i} className="bg-[#232323] rounded-2xl border-2 border-orange-500 p-10 mb-10 shadow-lg w-full max-w-2xl">
-          <h3 className="text-2xl font-extrabold text-orange-400 mb-4">{block.title}</h3>
+        <div key={i} className="bg-[#232323] rounded-2xl border-2 border-[#fd6a32] p-10 mb-10 shadow-lg w-full max-w-2xl">
+          <h3 className="text-2xl font-extrabold text-[#fd6a32] mb-4">{block.title}</h3>
           <div className="text-base text-gray-200 mb-4">{block.desc}</div>
           {block.list && (
-            <ul className="list-disc ml-6 text-orange-400">
+            <ul className="list-disc ml-6 text-[#fd6a32]">
               {block.list.map((li, j) => <li key={j} className="text-gray-200">{li}</li>)}
             </ul>
           )}

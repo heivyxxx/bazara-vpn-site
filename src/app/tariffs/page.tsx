@@ -214,25 +214,25 @@ function TariffsContent() {
         .fade-up { opacity: 0; transform: translateY(40px); transition: opacity 0.7s, transform 0.7s; }
         .fade-up.visible { opacity: 1; transform: none; }
         .device-anim { transition: transform 0.5s cubic-bezier(.77,0,.18,1); }
-        .device-anim:hover { transform: scale(1.13) rotate(-6deg); filter: drop-shadow(0 0 16px #ff8800cc); }
-        .tariff-btn { background: linear-gradient(90deg, #ff8800 0%, #a259ff 100%); color: #fff; font-weight: 700; font-size: 1.18rem; border: none; border-radius: 1.1rem; padding: 1.1rem 2.5rem; transition: box-shadow 0.22s, transform 0.18s, background 0.18s; outline: none; position: relative; z-index: 1; box-shadow: 0 2px 16px 0 #ff880088; width:100%; max-width:320px; }
-        .tariff-btn:hover, .tariff-btn:focus { background: linear-gradient(90deg, #ff8800 10%, #a259ff 90%); transform: scale(1.06); box-shadow: 0 4px 24px 0 #ff8800aa; }
+        .device-anim:hover { transform: scale(1.13) rotate(-6deg); filter: drop-shadow(0 0 16px #fd6a32cc); }
+        .tariff-btn { background: linear-gradient(90deg, #fd6a32 0%, #a259ff 100%); color: #fff; font-weight: 700; font-size: 1.18rem; border: none; border-radius: 1.1rem; padding: 1.1rem 2.5rem; transition: box-shadow 0.22s, transform 0.18s, background 0.18s; outline: none; position: relative; z-index: 1; box-shadow: 0 2px 16px 0 #fd6a3288; width:100%; max-width:320px; }
+        .tariff-btn:hover, .tariff-btn:focus { background: linear-gradient(90deg, #fd6a32 10%, #a259ff 90%); transform: scale(1.06); box-shadow: 0 4px 24px 0 #fd6a32aa; }
         .tariff-card { transition: box-shadow 0.22s, border 0.18s; box-shadow: 0 8px 32px 0 #00000044, 0 2px 8px 0 #a259ff22; }
-        .tariff-card:hover { z-index: 2; box-shadow: 0 8px 48px 0 #ff880022, 0 2px 0 #a259ff; }
+        .tariff-card:hover { z-index: 2; box-shadow: 0 8px 48px 0 #fd6a3222, 0 2px 0 #a259ff; }
         .no-glow { box-shadow: none !important; }
         .price-old { display:inline-block; font-size:1.2em; color:#b8b8b8; background:none !important; border-radius:0; padding:0; margin-right:0.7em; text-decoration:line-through; opacity:1; transition:opacity 0.6s, transform 0.6s; }
         .price-old.hide { opacity:0; transform:translateY(-30px) scale(0.7) rotate(-12deg); }
-        .try-free-btn { background: linear-gradient(90deg, #ff8800 0%, #a259ff 100%); color: #fff; font-weight: 700; font-size: 1.18rem; border: none; border-radius: 1.1rem; min-width:180px; width:100%; max-width:320px; padding:1.1rem 2.5rem; box-shadow:0 2px 16px 0 #ff880088; transition: box-shadow 0.22s, background 0.18s, transform 0.18s; cursor:pointer; }
-        .try-free-btn:hover { background: linear-gradient(90deg, #ff8800 10%, #a259ff 90%); box-shadow: 0 4px 24px 0 #ff8800aa; transform: scale(1.04); }
-        .promo-banner { background: linear-gradient(90deg, #ff8800 0%, #a259ff 100%); color: #fff; border-radius: 1.1rem; box-shadow: 0 2px 16px 0 #ff880088; padding: 1.1rem 2.5rem; font-weight: 700; font-size: 1.18rem; display: flex; flex-direction:column; gap: 1.5rem; margin-bottom: 2rem; }
+        .try-free-btn { background: linear-gradient(90deg, #fd6a32 0%, #a259ff 100%); color: #fff; font-weight: 700; font-size: 1.18rem; border: none; border-radius: 1.1rem; min-width:180px; width:100%; max-width:320px; padding:1.1rem 2.5rem; box-shadow:0 2px 16px 0 #fd6a3288; transition: box-shadow 0.22s, background 0.18s, transform 0.18s; cursor:pointer; }
+        .try-free-btn:hover { background: linear-gradient(90deg, #fd6a32 10%, #a259ff 90%); box-shadow: 0 4px 24px 0 #fd6a32aa; transform: scale(1.04); }
+        .promo-banner { background: linear-gradient(90deg, #fd6a32 0%, #a259ff 100%); color: #fff; border-radius: 1.1rem; box-shadow: 0 2px 16px 0 #fd6a3288; padding: 1.1rem 2.5rem; font-weight: 700; font-size: 1.18rem; display: flex; flex-direction:column; gap: 1.5rem; margin-bottom: 2rem; }
         @media (min-width: 640px) { .promo-banner { flex-direction: row; } }
-        .promo-banner .promo-btn { background: #fff; color: #ff8800; border-radius: 1.1rem; font-size: 1.2rem; font-weight: 700; padding: 0.8rem 2.2rem; box-shadow: 0 2px 16px 0 #ff880088; transition: background 0.18s, color 0.18s, box-shadow 0.18s; }
-        .promo-banner .promo-btn:hover { background: #ff8800; color: #fff; box-shadow: 0 4px 24px 0 #ff8800aa; }
+        .promo-banner .promo-btn { background: #fff; color: #fd6a32; border-radius: 1.1rem; font-size: 1.2rem; font-weight: 700; padding: 0.8rem 2.2rem; box-shadow: 0 2px 16px 0 #fd6a3288; transition: background 0.18s, color 0.18s, box-shadow 0.18s; }
+        .promo-banner .promo-btn:hover { background: #fd6a32; color: #fff; box-shadow: 0 4px 24px 0 #fd6a32aa; }
         .explode-piece {
           position: absolute;
           width: 24px;
           height: 24px;
-          background: linear-gradient(90deg, #ff8800 0%, #a259ff 100%);
+          background: linear-gradient(90deg, #fd6a32 0%, #a259ff 100%);
           border-radius: 6px;
           opacity: 1;
           pointer-events: none;
@@ -296,7 +296,7 @@ function TariffsContent() {
             <p className="text-xl md:text-2xl text-white mb-8 max-w-lg" dangerouslySetInnerHTML={{__html: t.mainDesc}} />
             <div className="flex gap-4 mt-2 items-center min-h-[56px] relative" ref={btnsContainerRef}>
               <button className="tariff-btn" style={{marginRight: '1rem'}} onClick={()=>handleOpenModal('year', lang==='ru'?t.btnYear:t.btnYear)}>{t.btnYear}</button>
-              <button className="tariff-btn border-2 border-[#FE6125] text-[#FE6125] bg-[#232323]" style={{background: '#232323', color: '#FE6125', border: '2px solid #FE6125'}} onClick={()=>handleOpenModal('month', lang==='ru'?t.btnMonth:t.btnMonth)}>{t.btnMonth}</button>
+              <button className="tariff-btn border-2 border-[#fd6a32] text-[#fd6a32] bg-[#232323]" style={{background: '#232323', color: '#fd6a32', border: '2px solid #fd6a32'}} onClick={()=>handleOpenModal('month', lang==='ru'?t.btnMonth:t.btnMonth)}>{t.btnMonth}</button>
             </div>
           </div>
           <div className="flex-1 flex justify-center items-center">
@@ -320,14 +320,14 @@ function TariffsContent() {
       {/* DevicesBlock */}
       <section className="fade-up max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-10 mb-20 px-4">
         <div className="flex-1 flex flex-col items-start md:items-start text-left mb-8 md:mb-0">
-          <h2 className="text-3xl font-bold text-[#FE6125] mb-4">{t.appsTitle}</h2>
+          <h2 className="text-3xl font-bold text-[#fd6a32] mb-4">{t.appsTitle}</h2>
           <p className="text-lg text-white mb-6 max-w-lg">{t.appsDesc}</p>
           <div className="flex flex-wrap gap-4">
-            <span className="device-anim bg-[#FE6125] text-white font-semibold px-4 py-2 rounded-lg flex items-center gap-2 shadow-lg"><Image src="/assets/windows.png" alt="Windows" width={28} height={28} className="w-7 h-7" />Windows</span>
-            <span className="device-anim bg-[#FE6125] text-white font-semibold px-4 py-2 rounded-lg flex items-center gap-2 shadow-lg"><Image src="/assets/apple.png" alt="macOS" width={28} height={28} className="w-7 h-7" />macOS</span>
-            <span className="device-anim bg-[#FE6125] text-white font-semibold px-4 py-2 rounded-lg flex items-center gap-2 shadow-lg"><Image src="/assets/android.png" alt="Android" width={28} height={28} className="w-7 h-7" />Android</span>
-            <span className="device-anim bg-[#FE6125] text-white font-semibold px-4 py-2 rounded-lg flex items-center gap-2 shadow-lg"><Image src="/assets/apple.png" alt="iOS" width={28} height={28} className="w-7 h-7" />iOS</span>
-            <span className="device-anim bg-[#FE6125] text-white font-semibold px-4 py-2 rounded-lg flex items-center gap-2 shadow-lg"><Image src="/assets/linux.png" alt="Linux" width={28} height={28} className="w-7 h-7" style={{filter:'invert(1)'}} />Linux</span>
+            <span className="device-anim bg-[#fd6a32] text-white font-semibold px-4 py-2 rounded-lg flex items-center gap-2 shadow-lg"><Image src="/assets/windows.png" alt="Windows" width={28} height={28} className="w-7 h-7" />Windows</span>
+            <span className="device-anim bg-[#fd6a32] text-white font-semibold px-4 py-2 rounded-lg flex items-center gap-2 shadow-lg"><Image src="/assets/apple.png" alt="macOS" width={28} height={28} className="w-7 h-7" />macOS</span>
+            <span className="device-anim bg-[#fd6a32] text-white font-semibold px-4 py-2 rounded-lg flex items-center gap-2 shadow-lg"><Image src="/assets/android.png" alt="Android" width={28} height={28} className="w-7 h-7" />Android</span>
+            <span className="device-anim bg-[#fd6a32] text-white font-semibold px-4 py-2 rounded-lg flex items-center gap-2 shadow-lg"><Image src="/assets/apple.png" alt="iOS" width={28} height={28} className="w-7 h-7" />iOS</span>
+            <span className="device-anim bg-[#fd6a32] text-white font-semibold px-4 py-2 rounded-lg flex items-center gap-2 shadow-lg"><Image src="/assets/linux.png" alt="Linux" width={28} height={28} className="w-7 h-7" style={{filter:'invert(1)'}} />Linux</span>
           </div>
         </div>
         <div className="flex-1 flex justify-center items-center">
@@ -335,7 +335,7 @@ function TariffsContent() {
         </div>
       </section>
       {/* GuaranteeBlock */}
-      <div className="fade-up guarantee-block flex items-center gap-4 w-full max-w-4xl mx-auto my-8 p-8 rounded-3xl bg-gradient-to-r from-[#FE6125] to-purple-500 text-white shadow-lg">
+      <div className="fade-up guarantee-block flex items-center gap-4 w-full max-w-4xl mx-auto my-8 p-8 rounded-3xl bg-gradient-to-r from-[#fd6a32] to-purple-500 text-white shadow-lg">
         <div>
           <div className="text-2xl font-bold mb-1">{t.guaranteeTitle}</div>
           <div className="text-lg">{t.guaranteeDesc}</div>

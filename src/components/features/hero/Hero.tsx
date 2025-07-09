@@ -13,9 +13,9 @@ const HeroFeature = ({ icon, text }: { icon: React.ReactNode; text: string }) =>
 );
 
 const heroIcons = [
-  <svg className="w-6 h-6 text-[#FF944D]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>,
-  <svg className="w-6 h-6 text-[#FF944D]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>,
-  <svg className="w-6 h-6 text-[#FF944D]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8 12h8"/><path d="M12 8v8"/></svg>,
+  <svg className="w-6 h-6 text-[#fd6a32]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>,
+  <svg className="w-6 h-6 text-[#fd6a32]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>,
+  <svg className="w-6 h-6 text-[#fd6a32]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8 12h8"/><path d="M12 8v8"/></svg>,
 ];
 
 const heroTexts = {
@@ -100,7 +100,7 @@ export const Hero = () => {
         <Link href="/tariffs" passHref legacyBehavior>
           <a
             className="mb-10 text-xl md:text-2xl py-4 md:py-5 px-6 md:px-12 fade-up-main btn-glow block text-center w-full max-w-xs"
-            style={{ animationDelay: '0.32s', borderRadius: '1.1rem', boxShadow: '0 2px 16px 0 #ff880088', marginLeft: 'auto', marginRight: 'auto' }}
+            style={{ animationDelay: '0.32s', borderRadius: '1.1rem', boxShadow: '0 2px 16px 0 #fd6a3288', marginLeft: 'auto', marginRight: 'auto' }}
           >
             {t.btn}
           </a>
@@ -146,7 +146,7 @@ export const Hero = () => {
           >
             <defs>
               <linearGradient id="shieldGrad" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stopColor="#FF944D"/>
+                <stop offset="0%" stopColor="#fd6a32"/>
                 <stop offset="100%" stopColor="#a259ff"/>
               </linearGradient>
             </defs>

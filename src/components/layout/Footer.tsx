@@ -35,16 +35,16 @@ export const Footer = () => {
         </Link>
         <div className="text-center text-lg font-medium w-full md:w-auto">{t.copyright}</div>
         <div className="flex items-center gap-5 mt-4 md:mt-0 w-full md:w-auto justify-center">
-          <a href="https://t.me/bazaraVPN" className="hover:text-orange-400" aria-label="Telegram" target="_blank" rel="noopener">
+          <a href="https://t.me/bazaraVPN" className="hover:text-[#FE6125]" aria-label="Telegram" target="_blank" rel="noopener">
             <svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path d="M22 4L12 20l-3-7-7-3z"/></svg>
           </a>
-          <a href="https://www.instagram.com/bazaravpn/" className="hover:text-orange-400" aria-label="Instagram" target="_blank" rel="noopener">
+          <a href="https://www.instagram.com/bazaravpn/" className="hover:text-[#FE6125]" aria-label="Instagram" target="_blank" rel="noopener">
             <svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="6"/><circle cx="12" cy="12" r="5"/><circle cx="17" cy="7" r="1.5"/></svg>
           </a>
-          <a href="https://www.youtube.com/@BazaraVPN" className="hover:text-orange-400" aria-label="YouTube" target="_blank" rel="noopener">
+          <a href="https://www.youtube.com/@BazaraVPN" className="hover:text-[#FE6125]" aria-label="YouTube" target="_blank" rel="noopener">
             <svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="4"/><polygon points="10,9 16,12 10,15" fill="currentColor"/></svg>
           </a>
-          <a href="https://www.tiktok.com/@bazaravpn1?lang=ru-RU" className="hover:text-orange-400" aria-label="TikTok" target="_blank" rel="noopener">
+          <a href="https://www.tiktok.com/@bazaravpn1?lang=ru-RU" className="hover:text-[#FE6125]" aria-label="TikTok" target="_blank" rel="noopener">
             <svg className="w-7 h-7" viewBox="0 0 24 24" fill="none"><path d="M16.5 3a4.5 4.5 0 0 0 4.5 4.5v2A6.5 6.5 0 0 1 14.5 3h2zm-2 0v12.5a3.5 3.5 0 1 1-3.5-3.5h1.5" stroke="white" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"/></svg>
           </a>
         </div>

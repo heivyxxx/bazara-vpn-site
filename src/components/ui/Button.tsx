@@ -22,9 +22,9 @@ export const Button = ({
   const baseStyles = 'font-bold rounded-xl transition-all duration-200 flex items-center justify-center gap-2';
   
   const variants = {
-    primary: 'bg-gradient-to-r from-orange-500 to-purple-500 text-white hover:from-orange-600 hover:to-purple-600 shadow-lg',
-    secondary: 'bg-orange-500 hover:bg-orange-600 text-white',
-    outline: 'border-2 border-orange-400 text-orange-500 bg-[#232323] hover:bg-orange-900'
+    primary: 'bg-gradient-to-r from-[#FE6125] to-purple-500 text-white hover:from-[#FE6125] hover:to-purple-600 shadow-lg',
+    secondary: 'bg-[#FE6125] hover:bg-[#FE6125] text-white',
+    outline: 'border-2 border-[#FE6125] text-[#FE6125] bg-[#232323] hover:bg-orange-900'
   };
 
   const sizes = {

@@ -35,7 +35,7 @@ const ReviewCard = ({ avatar, name, rating, text, date }: ReviewCardProps) => (
           {Array(5).fill(0).map((_, i) => (
             <svg 
               key={i} 
-              className={`w-5 h-5 ${i < rating ? 'text-orange-400' : 'text-gray-400'}`} 
+              className={`w-5 h-5 ${i < rating ? 'text-[#FE6125]' : 'text-gray-400'}`} 
               fill="currentColor" 
               viewBox="0 0 20 20"
             >
@@ -121,13 +121,13 @@ export const Reviews = () => {
   return (
     <section className="max-w-5xl mx-auto my-16 px-4">
       <div className="flex flex-col sm:flex-row items-center sm:justify-between gap-4 sm:gap-0 mb-8">
-        <h2 className="text-3xl font-bold text-orange-400 w-full sm:w-auto text-center sm:text-left mb-2 sm:mb-0">
+        <h2 className="text-3xl font-bold text-[#FE6125] w-full sm:w-auto text-center sm:text-left mb-2 sm:mb-0">
           {t.title}
         </h2>
         <div className="flex w-full sm:w-auto justify-center sm:justify-start">
           <Link 
             href="/reviews" 
-            className="bg-gradient-to-r from-orange-500 to-purple-500 hover:from-orange-600 hover:to-purple-600 text-white font-bold py-3 px-6 rounded-xl shadow-lg text-lg transition-all w-full sm:w-auto text-center"
+            className="bg-[#FE6125] hover:from-[#FE6125] hover:to-purple-500 text-white font-bold py-3 px-6 rounded-xl shadow-lg text-lg transition-all w-full sm:w-auto text-center"
             style={{minWidth:'180px'}}
           >
             {t.all}
@@ -204,7 +204,7 @@ export const Reviews = () => {
         user-select: none;
       }
       .carousel-arrow:hover {
-        background: #ff8800;
+        background: #FE6125;
         color: #fff;
         box-shadow: 0 4px 16px 0 rgba(255,136,0,0.18);
       }

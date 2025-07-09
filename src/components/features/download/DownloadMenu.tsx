@@ -12,7 +12,7 @@ interface DownloadItemProps {
 const DownloadItem = ({ href, icon, text }: DownloadItemProps) => (
   <Link 
     href={href}
-    className="flex items-center gap-3 text-white text-xl font-semibold hover:text-orange-400 transition"
+    className="flex items-center gap-3 text-white text-xl font-semibold hover:text-[#FE6125] transition"
   >
     <span className="inline-block w-7 h-7">
       {icon}

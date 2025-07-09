@@ -59,19 +59,19 @@ export const Header = ({ onLogin, user, onLogout }: HeaderProps) => {
         <nav className="hidden md:flex items-center gap-8">
           <Link 
             href="/tariffs" 
-            className="text-white hover:text-orange-400 transition"
+            className="text-white hover:text-[#FE6125] transition"
           >
             {t.prices}
           </Link>
           <Link 
             href="/reviews" 
-            className="text-white hover:text-orange-400 transition"
+            className="text-white hover:text-[#FE6125] transition"
           >
             {t.reviews}
           </Link>
           <Link 
             href="/support" 
-            className="text-white hover:text-orange-400 transition"
+            className="text-white hover:text-[#FE6125] transition"
           >
             {t.support}
           </Link>
@@ -81,26 +81,26 @@ export const Header = ({ onLogin, user, onLogout }: HeaderProps) => {
         <div className="flex items-center gap-2 md:gap-4">
           {user ? (
             <div className="flex items-center gap-2">
-              {/* <Image src={user.photo_url || '/assets/avatar1.png'} alt={user.name} width={40} height={40} className="w-10 h-10 rounded-full border-2 border-orange-400 shadow" /> */}
+              {/* <Image src={user.photo_url || '/assets/avatar1.png'} alt={user.name} width={40} height={40} className="w-10 h-10 rounded-full border-2 border-[#FE6125] shadow" /> */}
               <span className="text-white font-semibold text-base hidden md:inline">{user.name}</span>
-              <button onClick={onLogout} className="ml-2 px-3 py-2 bg-[#232323] rounded-lg border border-gray-700 text-white hover:bg-[#2c2c2c] text-sm">Выйти</button>
+              <button onClick={onLogout} className="ml-2 px-3 py-2 bg-[#232323] rounded-lg border border-[#FE6125] text-white hover:bg-[#FE6125] text-sm">Выйти</button>
             </div>
           ) : (
             <button
               onClick={onLogin}
-              className="text-white hover:text-orange-400 transition hidden md:block font-semibold"
+              className="text-white hover:text-[#FE6125] transition hidden md:block font-semibold"
             >
               {t.login}
             </button>
           )}
           <Link 
             href="/download" 
-            className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold py-2 px-5 md:px-6 rounded-xl shadow-lg transition text-base md:text-lg"
+            className="bg-gradient-to-r from-[#FE6125] to-[#FE6125] hover:from-[#FE6125] hover:to-[#FE6125] text-white font-semibold py-2 px-5 md:px-6 rounded-xl shadow-lg transition text-base md:text-lg"
           >
             {t.download}
           </Link>
           <button
-            className="flex items-center gap-2 px-3 py-2 bg-[#232323] rounded-lg border border-gray-700 text-white hover:bg-[#2c2c2c] focus:outline-none text-base ml-1 md:ml-2"
+            className="flex items-center gap-2 px-3 py-2 bg-[#232323] rounded-lg border border-[#FE6125] text-white hover:bg-[#FE6125] focus:outline-none text-base ml-1 md:ml-2"
             onClick={() => setLang(lang === 'ru' ? 'en' : 'ru')}
             aria-label="Сменить язык"
           >

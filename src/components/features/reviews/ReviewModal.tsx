@@ -62,7 +62,7 @@ export const ReviewModal = ({ isOpen, onClose, onSubmit, user }: ReviewModalProp
                       className="text-2xl focus:outline-none"
                     >
                       <svg 
-                        className={`w-8 h-8 ${i < rating ? 'text-orange-400' : 'text-gray-400'}`} 
+                        className={`w-8 h-8 ${i < rating ? 'text-[#FE6125]' : 'text-gray-400'}`} 
                         fill="currentColor" 
                         viewBox="0 0 20 20"
                       >
@@ -81,7 +81,7 @@ export const ReviewModal = ({ isOpen, onClose, onSubmit, user }: ReviewModalProp
                   value={text}
                   onChange={(e) => setText(e.target.value)}
                   rows={4}
-                  className="w-full px-4 py-3 bg-[#181818] border border-[#333] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent resize-none text-base"
+                  className="w-full px-4 py-3 bg-[#181818] border border-[#333] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#FE6125] focus:border-transparent resize-none text-base"
                   placeholder="Расскажите о вашем опыте использования BazaraVPN..."
                 />
               </div>
@@ -97,7 +97,7 @@ export const ReviewModal = ({ isOpen, onClose, onSubmit, user }: ReviewModalProp
                 <button
                   type="submit"
                   disabled={!text.trim()}
-                  className="px-6 py-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-xl shadow transition disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto"
+                  className="px-6 py-2 bg-[#FE6125] hover:bg-[#FE6125] text-white font-semibold rounded-xl shadow transition disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto"
                 >
                   Отправить
                 </button>

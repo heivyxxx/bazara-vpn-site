@@ -296,7 +296,7 @@ function TariffsContent() {
             <p className="text-xl md:text-2xl text-white mb-8 max-w-lg" dangerouslySetInnerHTML={{__html: t.mainDesc}} />
             <div className="flex gap-4 mt-2 items-center min-h-[56px] relative" ref={btnsContainerRef}>
               <button className="tariff-btn" style={{marginRight: '1rem'}} onClick={()=>handleOpenModal('year', lang==='ru'?t.btnYear:t.btnYear)}>{t.btnYear}</button>
-              <button className="tariff-btn border-2 border-orange-400 text-orange-500 bg-[#232323]" style={{background: '#232323', color: '#ff8800', border: '2px solid #ff8800'}} onClick={()=>handleOpenModal('month', lang==='ru'?t.btnMonth:t.btnMonth)}>{t.btnMonth}</button>
+              <button className="tariff-btn border-2 border-[#FE6125] text-[#FE6125] bg-[#232323]" style={{background: '#232323', color: '#FE6125', border: '2px solid #FE6125'}} onClick={()=>handleOpenModal('month', lang==='ru'?t.btnMonth:t.btnMonth)}>{t.btnMonth}</button>
             </div>
           </div>
           <div className="flex-1 flex justify-center items-center">
@@ -320,14 +320,14 @@ function TariffsContent() {
       {/* DevicesBlock */}
       <section className="fade-up max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-10 mb-20 px-4">
         <div className="flex-1 flex flex-col items-start md:items-start text-left mb-8 md:mb-0">
-          <h2 className="text-3xl font-bold text-orange-400 mb-4">{t.appsTitle}</h2>
+          <h2 className="text-3xl font-bold text-[#FE6125] mb-4">{t.appsTitle}</h2>
           <p className="text-lg text-white mb-6 max-w-lg">{t.appsDesc}</p>
           <div className="flex flex-wrap gap-4">
-            <span className="device-anim bg-orange-500 text-white font-semibold px-4 py-2 rounded-lg flex items-center gap-2 shadow-lg"><Image src="/assets/windows.png" alt="Windows" width={28} height={28} className="w-7 h-7" />Windows</span>
-            <span className="device-anim bg-orange-500 text-white font-semibold px-4 py-2 rounded-lg flex items-center gap-2 shadow-lg"><Image src="/assets/apple.png" alt="macOS" width={28} height={28} className="w-7 h-7" />macOS</span>
-            <span className="device-anim bg-orange-500 text-white font-semibold px-4 py-2 rounded-lg flex items-center gap-2 shadow-lg"><Image src="/assets/android.png" alt="Android" width={28} height={28} className="w-7 h-7" />Android</span>
-            <span className="device-anim bg-orange-500 text-white font-semibold px-4 py-2 rounded-lg flex items-center gap-2 shadow-lg"><Image src="/assets/apple.png" alt="iOS" width={28} height={28} className="w-7 h-7" />iOS</span>
-            <span className="device-anim bg-orange-500 text-white font-semibold px-4 py-2 rounded-lg flex items-center gap-2 shadow-lg"><Image src="/assets/linux.png" alt="Linux" width={28} height={28} className="w-7 h-7" style={{filter:'invert(1)'}} />Linux</span>
+            <span className="device-anim bg-[#FE6125] text-white font-semibold px-4 py-2 rounded-lg flex items-center gap-2 shadow-lg"><Image src="/assets/windows.png" alt="Windows" width={28} height={28} className="w-7 h-7" />Windows</span>
+            <span className="device-anim bg-[#FE6125] text-white font-semibold px-4 py-2 rounded-lg flex items-center gap-2 shadow-lg"><Image src="/assets/apple.png" alt="macOS" width={28} height={28} className="w-7 h-7" />macOS</span>
+            <span className="device-anim bg-[#FE6125] text-white font-semibold px-4 py-2 rounded-lg flex items-center gap-2 shadow-lg"><Image src="/assets/android.png" alt="Android" width={28} height={28} className="w-7 h-7" />Android</span>
+            <span className="device-anim bg-[#FE6125] text-white font-semibold px-4 py-2 rounded-lg flex items-center gap-2 shadow-lg"><Image src="/assets/apple.png" alt="iOS" width={28} height={28} className="w-7 h-7" />iOS</span>
+            <span className="device-anim bg-[#FE6125] text-white font-semibold px-4 py-2 rounded-lg flex items-center gap-2 shadow-lg"><Image src="/assets/linux.png" alt="Linux" width={28} height={28} className="w-7 h-7" style={{filter:'invert(1)'}} />Linux</span>
           </div>
         </div>
         <div className="flex-1 flex justify-center items-center">
@@ -335,7 +335,7 @@ function TariffsContent() {
         </div>
       </section>
       {/* GuaranteeBlock */}
-      <div className="fade-up guarantee-block flex items-center gap-4 w-full max-w-4xl mx-auto my-8 p-8 rounded-3xl bg-gradient-to-r from-orange-500 to-purple-500 text-white shadow-lg">
+      <div className="fade-up guarantee-block flex items-center gap-4 w-full max-w-4xl mx-auto my-8 p-8 rounded-3xl bg-gradient-to-r from-[#FE6125] to-purple-500 text-white shadow-lg">
         <div>
           <div className="text-2xl font-bold mb-1">{t.guaranteeTitle}</div>
           <div className="text-lg">{t.guaranteeDesc}</div>
@@ -344,8 +344,8 @@ function TariffsContent() {
       {/* TestimonialBlock */}
       <div className="fade-up testimonial w-full max-w-3xl mx-auto my-8 p-8 rounded-3xl bg-[#232323] text-white shadow-lg italic relative">
         <span>{t.testimonial}</span>
-        <div className="mt-2 text-orange-400 font-bold">{t.testimonialUser}</div>
-        <span style={{position:'absolute',right:'1.2rem',bottom:'0.2rem',fontSize:'2.5rem',color:'#ff8800'}}>&quot;</span>
+        <div className="mt-2 text-[#FE6125] font-bold">{t.testimonialUser}</div>
+        <span style={{position:'absolute',right:'1.2rem',bottom:'0.2rem',fontSize:'2.5rem',color:'#FE6125'}>&quot;</span>
       </div>
       <PaymentModal isOpen={modalOpen} onClose={handleCloseModal} tariff={modalTariff} price={modalPrice} />
       <TrialModal isOpen={trialModalOpen && (!!trialResult || !!trialError)} onClose={() => { setTrialModalOpen(false); setTrialResult(null); setTrialError(null); }} link={trialResult} error={trialError} />

@@ -13,9 +13,9 @@ const HeroFeature = ({ icon, text }: { icon: React.ReactNode; text: string }) =>
 );
 
 const heroIcons = [
-  <svg className="w-6 h-6 text-orange-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>,
-  <svg className="w-6 h-6 text-orange-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>,
-  <svg className="w-6 h-6 text-orange-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8 12h8"/><path d="M12 8v8"/></svg>,
+  <svg className="w-6 h-6 text-[#FE6125]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>,
+  <svg className="w-6 h-6 text-[#FE6125]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>,
+  <svg className="w-6 h-6 text-[#FE6125]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8 12h8"/><path d="M12 8v8"/></svg>,
 ];
 
 const heroTexts = {
@@ -89,7 +89,7 @@ export const Hero = () => {
 
       <div className="flex-1 flex flex-col items-start md:items-start text-left w-full max-w-xl">
         <h1 
-          className="text-5xl md:text-6xl font-extrabold text-orange-500 mb-6 fade-up-main"
+          className="text-5xl md:text-6xl font-extrabold text-[#FE6125] mb-6 fade-up-main"
           style={{ animationDelay: '0.08s' }}
         >
           {t.title}<span className="text-white">{t.subtitle}</span>
@@ -161,7 +161,7 @@ export const Hero = () => {
           >
             <defs>
               <linearGradient id="shieldGrad" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stopColor="#ff8800"/>
+                <stop offset="0%" stopColor="#FE6125"/>
                 <stop offset="100%" stopColor="#a259ff"/>
               </linearGradient>
             </defs>

@@ -175,7 +175,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, tar
       <div className="bg-[#232323] rounded-3xl shadow-2xl p-4 sm:p-8 md:p-12 w-full max-w-2xl relative flex flex-col gap-6 sm:gap-8" style={{minWidth:0, minHeight:320}}>
         <button onClick={onClose} className="absolute top-3 right-3 sm:top-5 sm:right-5 w-10 h-10 flex items-center justify-center rounded-full bg-[#181818] hover:bg-[#2c2c2c] text-2xl text-gray-400">&times;</button>
         <div className="flex items-center gap-3 sm:gap-4 mb-2">
-          <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#181818] flex items-center justify-center text-2xl font-bold text-orange-500">BV</div>
+          <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#181818] flex items-center justify-center text-2xl font-bold text-[#FE6125]">BV</div>
           <div>
             <div className="font-bold text-base sm:text-lg text-white">{t.account}</div>
             <div className="text-gray-400 text-xs sm:text-sm">user@bazaravpn.ru</div>
@@ -184,19 +184,19 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, tar
         <div className="font-extrabold text-xl sm:text-2xl text-white mb-2">{tariff === 'year' ? t.year : t.month}</div>
         <div className="grid grid-cols-2 gap-2 sm:gap-4 mb-4 sm:mb-6">
           <div className="flex items-center gap-2 sm:gap-3 bg-[#181818] rounded-xl px-3 sm:px-5 py-3 sm:py-4 text-base sm:text-lg text-white font-semibold shadow">
-            <svg className="w-6 h-6 sm:w-7 sm:h-7 text-orange-400" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24"><path d="M12 3C17 5 21 5 21 10C21 19 12 21 12 21C12 21 3 19 3 10C3 5 7 5 12 3Z"/></svg>
+            <svg className="w-6 h-6 sm:w-7 sm:h-7 text-[#FE6125]" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24"><path d="M12 3C17 5 21 5 21 10C21 19 12 21 12 21C12 21 3 19 3 10C3 5 7 5 12 3Z"/></svg>
             <span>{t.feature1}</span>
           </div>
           <div className="flex items-center gap-2 sm:gap-3 bg-[#181818] rounded-xl px-3 sm:px-5 py-3 sm:py-4 text-base sm:text-lg text-white font-semibold shadow">
-            <svg className="w-6 h-6 sm:w-7 sm:h-7 text-orange-400" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24"><path d="M12 6v12M6 12h12"/></svg>
+            <svg className="w-6 h-6 sm:w-7 sm:h-7 text-[#FE6125]" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24"><path d="M12 6v12M6 12h12"/></svg>
             <span>{t.feature2}</span>
           </div>
           <div className="flex items-center gap-2 sm:gap-3 bg-[#181818] rounded-xl px-3 sm:px-5 py-3 sm:py-4 text-base sm:text-lg text-white font-semibold shadow">
-            <svg className="w-6 h-6 sm:w-7 sm:h-7 text-orange-400" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M8 21h8"/></svg>
+            <svg className="w-6 h-6 sm:w-7 sm:h-7 text-[#FE6125]" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M8 21h8"/></svg>
             <span>{t.feature3}</span>
           </div>
           <div className="flex items-center gap-2 sm:gap-3 bg-[#181818] rounded-xl px-3 sm:px-5 py-3 sm:py-4 text-base sm:text-lg text-white font-semibold shadow">
-            <svg className="w-6 h-6 sm:w-7 sm:h-7 text-orange-400" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 12l2.5 2.5L16 9"/></svg>
+            <svg className="w-6 h-6 sm:w-7 sm:h-7 text-[#FE6125]" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 12l2.5 2.5L16 9"/></svg>
             <span>{t.feature4}</span>
           </div>
         </div>
@@ -206,9 +206,9 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, tar
           <button onClick={()=>setPayMethod('crypto')} className={`flex-1 pay-method${payMethod==='crypto'?' selected':''} min-w-0`}>{t.crypto}</button>
         </div>
         <div className="mb-2 sm:mb-4 w-full">
-          <input value={email} onChange={e=>setEmail(e.target.value)} type="email" required placeholder={t.email} className="w-full rounded-lg px-4 py-3 text-base text-white font-semibold bg-[#181818] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-400" style={{marginBottom:8, display:'block'}} />
+          <input value={email} onChange={e=>setEmail(e.target.value)} type="email" required placeholder={t.email} className="w-full rounded-lg px-4 py-3 text-base text-white font-semibold bg-[#181818] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#FE6125] focus:border-[#FE6125]" style={{marginBottom:8, display:'block'}} />
         </div>
-        <button onClick={handlePay} className="relative w-full py-4 rounded-xl font-bold text-lg text-white bg-[#444] flex justify-center items-center px-8 hover:bg-orange-500 transition-colors duration-200 cursor-pointer" disabled={loading}>
+        <button onClick={handlePay} className="relative w-full py-4 rounded-xl font-bold text-lg text-white bg-[#444] flex justify-center items-center px-8 hover:bg-[#FE6125] transition-colors duration-200 cursor-pointer" disabled={loading}>
           <span className="mx-auto">{t.pay}</span>
           <span className="absolute right-8 text-lg font-bold text-white opacity-90">{price}</span>
         </button>
@@ -232,8 +232,8 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, tar
         }
         .pay-method.selected {
           border: 2.5px solid;
-          border-image: linear-gradient(90deg, #ff8800 0%, #a259ff 100%) 1;
-          box-shadow: 0 0 0 2px #ff880055;
+          border-image: linear-gradient(90deg, #FE6125 0%, #a259ff 100%) 1;
+          box-shadow: 0 0 0 2px #FE612555;
           border-radius: 1rem !important;
         }
       `}</style>

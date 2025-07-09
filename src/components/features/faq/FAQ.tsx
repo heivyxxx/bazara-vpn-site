@@ -18,7 +18,7 @@ const FAQItem = ({ question, answer, isOpen, onClick }: FAQItemProps) => (
     >
       <span className="text-xl font-semibold text-white pr-8">{question}</span>
       <svg
-        className={`w-6 h-6 text-orange-400 transform transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+        className={`w-6 h-6 text-[#FE6125] transform transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
         fill="none"
         stroke="currentColor"
         viewBox="0 0 24 24"
@@ -68,7 +68,7 @@ export const FAQ = () => {
 
   return (
     <section className="max-w-4xl mx-auto my-10 md:my-20 px-2 sm:px-4">
-      <h2 className="text-2xl md:text-3xl font-bold text-orange-400 mb-6 md:mb-10 text-center">
+      <h2 className="text-2xl md:text-3xl font-bold text-[#FE6125] mb-6 md:mb-10 text-center">
         {t.title}
       </h2>
       <div className="bg-[#232323] rounded-2xl shadow-xl p-4 md:p-8">

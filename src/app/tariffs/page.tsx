@@ -7,6 +7,7 @@ import Image from 'next/image';
 import clsx from 'clsx';
 import { PaymentModal, TariffType } from './PaymentModal';
 import { TelegramAuthModal } from '@/components/features/TelegramAuthModal';
+import { Button } from '@/components/ui/Button';
 
 const tariffsTexts = {
   ru: {
@@ -60,19 +61,19 @@ function TrialModal({ isOpen, onClose, link, error }: { isOpen: boolean, onClose
           <>
             <div className="font-bold text-xl text-green-400 mb-2">Ваша trial-ссылка</div>
             <div className="break-all text-white mb-4">{link}</div>
-            <button onClick={() => {navigator.clipboard.writeText(link);setCopied(true);setTimeout(()=>setCopied(false),1200);}} className="w-full py-3 rounded-xl font-bold text-lg text-white bg-orange-500 hover:bg-orange-600 transition-colors duration-200">{copied ? 'Скопировано!' : 'Скопировать ссылку'}</button>
+            <Button onClick={() => {navigator.clipboard.writeText(link);setCopied(true);setTimeout(()=>setCopied(false),1200);}} className="w-full py-3 rounded-xl font-bold text-lg text-white bg-orange-500 hover:bg-orange-600 transition-colors duration-200">{copied ? 'Скопировано!' : 'Скопировать ссылку'}</Button>
           </>
         ) : error === 'already_used' ? (
           <>
             <div className="font-bold text-xl text-red-400 mb-2">Упс!</div>
             <div className="text-white mb-4">Сервер говорит, что вы уже воспользовались пробной версией.</div>
-            <button onClick={onClose} className="w-full py-3 rounded-xl font-bold text-lg text-white bg-[#444] hover:bg-orange-500 transition-colors duration-200">Закрыть</button>
+            <Button onClick={onClose} className="w-full py-3 rounded-xl font-bold text-lg text-white bg-[#444] hover:bg-orange-500 transition-colors duration-200">Закрыть</Button>
           </>
         ) : error ? (
           <>
             <div className="font-bold text-xl text-red-400 mb-2">Ошибка</div>
             <div className="text-white mb-4">{error}</div>
-            <button onClick={onClose} className="w-full py-3 rounded-xl font-bold text-lg text-white bg-[#444] hover:bg-orange-500 transition-colors duration-200">Закрыть</button>
+            <Button onClick={onClose} className="w-full py-3 rounded-xl font-bold text-lg text-white bg-[#444] hover:bg-orange-500 transition-colors duration-200">Закрыть</Button>
           </>
         ) : null}
       </div>
@@ -215,8 +216,6 @@ function TariffsContent() {
         .fade-up.visible { opacity: 1; transform: none; }
         .device-anim { transition: transform 0.5s cubic-bezier(.77,0,.18,1); }
         .device-anim:hover { transform: scale(1.13) rotate(-6deg); filter: drop-shadow(0 0 16px #fd6a32cc); }
-        .tariff-btn { background: linear-gradient(90deg, #fd6a32 0%, #a259ff 100%); color: #fff; font-weight: 700; font-size: 1.18rem; border: none; border-radius: 1.1rem; padding: 1.1rem 2.5rem; transition: box-shadow 0.22s, transform 0.18s, background 0.18s; outline: none; position: relative; z-index: 1; box-shadow: 0 2px 16px 0 #fd6a3288; width:100%; max-width:320px; }
-        .tariff-btn:hover, .tariff-btn:focus { background: linear-gradient(90deg, #fd6a32 10%, #a259ff 90%); transform: scale(1.06); box-shadow: 0 4px 24px 0 #fd6a32aa; }
         .tariff-card { transition: box-shadow 0.22s, border 0.18s; box-shadow: 0 8px 32px 0 #00000044, 0 2px 8px 0 #a259ff22; }
         .tariff-card:hover { z-index: 2; box-shadow: 0 8px 48px 0 #fd6a3222, 0 2px 0 #a259ff; }
         .no-glow { box-shadow: none !important; }
@@ -295,8 +294,8 @@ function TariffsContent() {
             <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-6">{t.mainTitle}</h2>
             <p className="text-xl md:text-2xl text-white mb-8 max-w-lg" dangerouslySetInnerHTML={{__html: t.mainDesc}} />
             <div className="flex gap-4 mt-2 items-center min-h-[56px] relative" ref={btnsContainerRef}>
-              <button className="w-full py-3 rounded-xl font-bold text-lg text-white bg-[#fd6a32] hover:bg-[#e65a1e] transition-colors duration-200" onClick={()=>handleOpenModal('year', lang==='ru'?t.btnYear:t.btnYear)}>{t.btnYear}</button>
-              <button className="w-full py-3 rounded-xl font-bold text-lg text-white bg-[#fd6a32] hover:bg-[#e65a1e] transition-colors duration-200" onClick={()=>handleOpenModal('month', lang==='ru'?t.btnMonth:t.btnMonth)}>{t.btnMonth}</button>
+              <Button onClick={()=>handleOpenModal('year', lang==='ru'?t.btnYear:t.btnYear)} className="w-full py-3 rounded-xl font-bold text-lg text-white bg-[#fd6a32] hover:bg-[#e65a1e] transition-colors duration-200">{t.btnYear}</Button>
+              <Button onClick={()=>handleOpenModal('month', lang==='ru'?t.btnMonth:t.btnMonth)} className="w-full py-3 rounded-xl font-bold text-lg text-white bg-[#fd6a32] hover:bg-[#e65a1e] transition-colors duration-200">{t.btnMonth}</Button>
             </div>
           </div>
           <div className="flex-1 flex justify-center items-center">
@@ -313,7 +312,7 @@ function TariffsContent() {
           <div className="flex-1 flex flex-col items-start">
             <h3 className="text-2xl md:text-3xl font-extrabold text-white mb-2">{t.tryTitle}</h3>
             <p className="text-base md:text-lg text-white mb-5" dangerouslySetInnerHTML={{__html: t.tryDesc}} />
-            <button className="w-full py-3 rounded-xl font-bold text-lg text-white bg-[#fd6a32] hover:bg-[#e65a1e] transition-colors duration-200" onClick={handleTrialClick} disabled={loadingTrial}>{loadingTrial ? 'Загрузка...' : t.tryBtn}</button>
+            <Button onClick={handleTrialClick} disabled={loadingTrial} className="w-full py-3 rounded-xl font-bold text-lg text-white bg-[#fd6a32] hover:bg-[#e65a1e] transition-colors duration-200">{loadingTrial ? 'Загрузка...' : t.tryBtn}</Button>
           </div>
         </div>
       </section>

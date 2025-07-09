@@ -10,11 +10,10 @@ import { HowItWorks } from '@/components/features/how-it-works/HowItWorks';
 import { FAQ } from '@/components/features/faq/FAQ';
 import { Header } from '@/components/layout/Header';
 // import { Footer } from '@/components/layout/Footer';
-import { LanguageProvider, useUser } from '@/lib/LanguageContext';
+import { LanguageProvider, useLang } from '@/lib/LanguageContext';
 import { useState, useEffect, useRef } from 'react';
 import { ReviewModal } from '@/components/features/reviews/ReviewModal';
 import { User } from '@/lib/types';
-import { useLang } from '@/lib/LanguageContext';
 import { supabase } from '@/lib/supabaseClient';
 
 // Расширяем глобальный интерфейс Window
@@ -24,11 +23,10 @@ declare global {
   }
 }
 
-export default function HomePage() {
+export default function HomePage({ user, setUser }: { user: any, setUser: (u: any) => void }) {
   const { lang } = useLang();
   const [authOpen, setAuthOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [user, setUser] = useUser();
 
   // --- DEBUG LOGS ---
   useEffect(() => {

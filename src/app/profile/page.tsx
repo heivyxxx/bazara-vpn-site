@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { Header } from '@/components/layout/Header';
-import { LanguageProvider, useLang, useUser } from '@/lib/LanguageContext';
+import { LanguageProvider, useLang } from '@/lib/LanguageContext';
 import { createClient } from '@supabase/supabase-js';
 
 const mockUser = {
@@ -11,9 +11,8 @@ const mockUser = {
   avatar: "/assets/avatar1.png",
 };
 
-export default function ProfilePage() {
+export default function ProfilePage({ user, setUser }: { user: any, setUser: (u: any) => void }) {
   const { lang } = useLang();
-  const [user, setUser] = useUser();
   const [supabaseUser, setSupabaseUser] = useState<any>(null);
   const [supabaseUserLoading, setSupabaseUserLoading] = useState(false);
   // fallback: если user нет, ищем по telegram_id
@@ -48,7 +47,7 @@ export default function ProfilePage() {
   const [refOpen, setRefOpen] = useState(true);
   return (
     <>
-      <Header user={effectiveUser} onLogout={() => {}} />
+      <Header user={effectiveUser} onLogout={() => setUser(null)} />
       <main className="min-h-screen bg-black flex flex-col items-center pt-24 pb-8">
         {/* Профиль */}
         <div className="w-full max-w-2xl mx-auto flex flex-col items-center gap-4 mb-6">

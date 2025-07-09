@@ -87,6 +87,14 @@ export default function HomePage() {
       if (tgUser) {
         (async () => {
           try {
+            // Получаем hash из initData
+            let hash = '';
+            let auth_date = tgUser.auth_date;
+            if (typeof window !== 'undefined' && window.Telegram?.WebApp?.initData) {
+              const params = new URLSearchParams(window.Telegram.WebApp.initData);
+              hash = params.get('hash') || '';
+              if (!auth_date) auth_date = params.get('auth_date') || '';
+            }
             const res = await fetch('/api/get-user', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
@@ -101,13 +109,14 @@ export default function HomePage() {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
                   body: JSON.stringify({
-                    telegram_id: String(tgUser.id),
+                    id: tgUser.id,
                     username: tgUser.username,
                     first_name: tgUser.first_name,
                     last_name: tgUser.last_name,
                     photo_url: tgUser.photo_url,
                     language_code: tgUser.language_code,
-                    initData: tg.initData || ''
+                    auth_date: auth_date,
+                    hash: hash
                   }),
                 });
                 const regData = await regRes.json();
@@ -123,17 +132,26 @@ export default function HomePage() {
                 }
               }
             } else {
+              // Если не найден — регистрация
+              let hash = '';
+              let auth_date = tgUser.auth_date;
+              if (typeof window !== 'undefined' && window.Telegram?.WebApp?.initData) {
+                const params = new URLSearchParams(window.Telegram.WebApp.initData);
+                hash = params.get('hash') || '';
+                if (!auth_date) auth_date = params.get('auth_date') || '';
+              }
               const regRes = await fetch('/api/auth/telegram', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                  telegram_id: String(tgUser.id),
+                  id: tgUser.id,
                   username: tgUser.username,
                   first_name: tgUser.first_name,
                   last_name: tgUser.last_name,
                   photo_url: tgUser.photo_url,
                   language_code: tgUser.language_code,
-                  initData: tg.initData || ''
+                  auth_date: auth_date,
+                  hash: hash
                 }),
               });
               const regData = await regRes.json();

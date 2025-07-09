@@ -6,19 +6,54 @@ export function getTelegramUser() {
   return window.Telegram.WebApp.initDataUnsafe?.user || null;
 }
 
-// Зарегистрировать или залогинить пользователя через Supabase Auth (по Telegram ID)
+// Авторизация/регистрация пользователя через Telegram + Supabase (копипаста с Eclipse)
 export async function signInOrUpWithTelegram(telegramUser: any) {
   if (!telegramUser) return null;
-  // Используем Telegram ID как email (например, 123456@telegram.bazara)
-  const email = telegramUser.id + '@telegram.bazara';
-  const password = telegramUser.id + '_tg_secret';
-  // Пробуем войти
-  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-  if (data?.user) return data.user;
-  // Если не получилось — регистрируем
-  const { data: signUpData, error: signUpError } = await supabase.auth.signUp({ email, password });
-  if (signUpError) throw signUpError;
-  return signUpData.user;
+  // 1. Пробуем найти пользователя по telegram_id
+  const res = await fetch('/api/get-user', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ telegram_id: String(telegramUser.id) }),
+  });
+  let user = null;
+  if (res.ok) {
+    const data = await res.json();
+    user = data.user;
+    // Проверяем сессию
+    const { data: authData } = await supabase.auth.getUser();
+    if (!authData?.user || authData.user.id !== user.auth_id) {
+      // Получаем токены через /api/auth/telegram
+      user = await loginViaTelegram(telegramUser);
+    }
+  } else {
+    // Нет пользователя — регистрируем
+    user = await loginViaTelegram(telegramUser);
+  }
+  return user;
+}
+
+// Вызов /api/auth/telegram, установка сессии Supabase
+export async function loginViaTelegram(telegramUser: any) {
+  const res = await fetch('/api/auth/telegram', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      id: telegramUser.id,
+      first_name: telegramUser.first_name,
+      username: telegramUser.username,
+      photo_url: telegramUser.photo_url,
+      auth_date: Math.floor(Date.now() / 1000),
+      hash: telegramUser.hash || '', // если есть
+    }),
+  });
+  const data = await res.json();
+  if (data.access_token && data.refresh_token) {
+    await supabase.auth.setSession({
+      access_token: data.access_token,
+      refresh_token: data.refresh_token,
+    });
+  }
+  return data.user || null;
 }
 
 // Сохранить/обновить профиль в таблице users

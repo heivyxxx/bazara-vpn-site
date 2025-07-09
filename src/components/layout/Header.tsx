@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useLang } from '@/lib/LanguageContext';
 import { useState } from 'react';
 import { getTelegramUser, signInOrUpWithTelegram, upsertUserProfile, getProfileFromUsersTable } from '@/lib/auth';
+import { User } from '@/lib/types';
 
 const translations = {
   ru: {
@@ -29,7 +30,7 @@ const translations = {
 
 interface HeaderProps {
   onLogin?: () => void;
-  user?: import('@/lib/types').User | null;
+  user?: User | null;
   onLogout?: () => void;
 }
 
@@ -46,8 +47,6 @@ export const Header = ({ onLogin, user, onLogout }: HeaderProps) => {
       if (!tgUser) { alert('Откройте через Telegram WebApp!'); setLoading(false); return; }
       const supaUser = await signInOrUpWithTelegram(tgUser);
       await upsertUserProfile(tgUser, supaUser.id);
-      // Можно получить профиль из users
-      // const profile = await getProfileFromUsersTable(supaUser.id);
       window.location.reload();
     } catch (e) {
       alert('Ошибка входа: ' + (e?.message || e));
@@ -58,24 +57,33 @@ export const Header = ({ onLogin, user, onLogout }: HeaderProps) => {
   return (
     <header>
       <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2 min-w-0">
-          <Image 
-            src="/assets/logo-bazara.png" 
-            alt="BazaraVPN" 
-            width={40} 
-            height={40} 
-            className="w-10 h-10 min-w-[40px] min-h-[40px]"
-            priority
-          />
-          <span className="text-2xl font-bold text-white">
-            {t.bazara}<span className="text-white">{t.vpn}</span>
-          </span>
-        </Link>
-
-        {/* Desktop nav */}
-        {/* Удалено: навигация по тарифам, отзывам, поддержке */}
-
-        {/* Actions */}
+        {/* Левая часть: Общий баланс + ава + баланс + ₽ */}
+        <div className="flex items-center gap-4 min-w-0">
+          <div className="flex flex-col items-start justify-center min-w-0">
+            <span className="text-xs text-gray-400 font-semibold mb-1">Общий баланс</span>
+            <div className="flex items-center gap-2">
+              {/* Аватар */}
+              {user?.photo_url ? (
+                <img
+                  src={user.photo_url}
+                  alt="Аватар"
+                  className="w-9 h-9 rounded-full object-cover border border-gray-700 bg-gray-800"
+                />
+              ) : (
+                <div className="w-9 h-9 rounded-full bg-gray-700 flex items-center justify-center text-gray-400 text-lg font-bold">
+                  <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-2.5 3.5-4 8-4s8 1.5 8 4"/></svg>
+                </div>
+              )}
+              {/* Баланс */}
+              <span className="text-white font-extrabold text-[22px] leading-tight tracking-wide">
+                {typeof user?.balance === 'number' ? user.balance.toFixed(2) : '—'}
+              </span>
+              {/* Иконка рубля */}
+              <svg className="w-6 h-6 text-gray-300 ml-1" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24"><path d="M8 6h6a3 3 0 1 1 0 6H8V4m0 8v8m0-4h5" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            </div>
+          </div>
+        </div>
+        {/* Actions (язык, скачать) */}
         <div className="flex items-center gap-2 md:gap-4">
           <Link 
             href="/download" 
@@ -93,7 +101,6 @@ export const Header = ({ onLogin, user, onLogout }: HeaderProps) => {
           </button>
         </div>
       </div>
-      {/* Удаляю бургер и мобильное меню */}
       <style jsx>{`
         @media (max-width: 600px) {
           .text-2xl { font-size: 1.2rem; }
@@ -110,8 +117,6 @@ export const Header = ({ onLogin, user, onLogout }: HeaderProps) => {
           width: 100vw;
           height: 100vh;
           z-index: 1000;
-          /* Можно добавить blur, если хочется */
-          /* backdrop-filter: blur(8px); */
         }
       `}</style>
     </header>

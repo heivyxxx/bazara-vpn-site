@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useTelegramInit } from '@/hooks/useTelegramInit';
+import { signInOrUpWithTelegram } from './auth';
 
 type Lang = 'ru' | 'en';
 
@@ -48,11 +49,15 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
 
   // --- Telegram Mini App авторизация ---
-  useTelegramInit((tgUser) => {
+  useTelegramInit(async (tgUser) => {
     if (tgUser && tgUser.id) {
-      setUser(tgUser);
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('bazaraUser', JSON.stringify(tgUser));
+      // Новый способ: авторизация через Supabase + Telegram
+      const realUser = await signInOrUpWithTelegram(tgUser);
+      if (realUser) {
+        setUser(realUser);
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('bazaraUser', JSON.stringify(realUser));
+        }
       }
     }
   });

@@ -37,7 +37,11 @@ interface User {
   id: string;
   name: string;
   username?: string;
-  // ... другие поля ...
+  avatar?: string;
+  photo_url?: string;
+  balance?: number;
+  language_code?: string;
+  last_name?: string;
 }
 interface UserContextProps {
   user: User | null;

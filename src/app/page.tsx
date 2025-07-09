@@ -60,112 +60,87 @@ export default function HomePage() {
     }
   }, []);
 
-  // --- Telegram Mini App авторизация с ожиданием появления tgUser ---
+  // --- Telegram Mini App авторизация как в Eclipse ---
   useEffect(() => {
-    if (user) return; // Если уже залогинен — не авторизуем повторно
-    let tries = 0;
-    function tryAuth() {
-      if (typeof window === 'undefined' || !window.Telegram?.WebApp) {
-        if (tries < 50) { // увеличено до 50 попыток
-          tries++;
-          setTimeout(tryAuth, 150);
-        }
-        return;
-      }
-      const tg = window.Telegram.WebApp;
-      tg.ready && tg.ready();
-      tg.expand && tg.expand();
-      // fullscreen на всех устройствах, кроме ПК (Eclipse-style)
-      const isDesktop = (
-        tg.platform === 'tdesktop' ||
-        tg.platform === 'web' ||
-        tg.platform === 'macos'
-      );
-      if (!isDesktop) {
-        tg.requestFullscreen && tg.requestFullscreen();
-        window.addEventListener('click', () => tg.requestFullscreen && tg.requestFullscreen(), { once: true });
-      }
-      const tgUser = tg.initDataUnsafe?.user;
-      if (tgUser) {
-        (async () => {
-          try {
-            // Новый способ: просто передаём initData строкой
+    let isMounted = true;
+    if (typeof window === 'undefined' || !window.Telegram?.WebApp) return;
+    const tg = window.Telegram.WebApp;
+    const tgUser = tg.initDataUnsafe?.user;
+    if (!tgUser) return;
+
+    fetch('/api/get-user', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ telegram_id: String(tgUser.id) }),
+    })
+      .then(res => res.json())
+      .then(async data => {
+        if (!isMounted) return;
+        if (data.user) {
+          setUser(data.user);
+          localStorage.setItem('bazaraUser', JSON.stringify(data.user));
+          const { data: authData } = await supabase.auth.getUser();
+          if (!authData?.user || authData.user.id !== data.user.auth_id) {
+            // Только если сессия невалидна — логинимся
             const initData = window.Telegram.WebApp.initData || '';
-            const res = await fetch('/api/get-user', {
+            const regRes = await fetch('/api/auth/telegram', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ telegram_id: String(tgUser.id) }),
+              body: JSON.stringify({
+                id: tgUser.id,
+                username: tgUser.username,
+                first_name: tgUser.first_name,
+                last_name: tgUser.last_name,
+                photo_url: tgUser.photo_url,
+                language_code: tgUser.language_code,
+                initData
+              }),
             });
-            if (res.ok) {
-              const data = await res.json();
-              setUser(data.user);
-              localStorage.setItem('bazaraUser', JSON.stringify(data.user));
-              const { data: authData } = await supabase.auth.getUser();
-              if (!authData?.user || authData.user.id !== data.user.auth_id) {
-                const regRes = await fetch('/api/auth/telegram', {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({
-                    id: tgUser.id,
-                    username: tgUser.username,
-                    first_name: tgUser.first_name,
-                    last_name: tgUser.last_name,
-                    photo_url: tgUser.photo_url,
-                    language_code: tgUser.language_code,
-                    initData
-                  }),
-                });
-                const regData = await regRes.json();
-                if (regData.access_token && regData.refresh_token) {
-                  await supabase.auth.setSession({
-                    access_token: regData.access_token,
-                    refresh_token: regData.refresh_token
-                  });
-                }
-                if (regData.user) {
-                  setUser(regData.user);
-                  localStorage.setItem('bazaraUser', JSON.stringify(regData.user));
-                  // window.location.reload(); // reload больше не нужен
-                }
-              }
-            } else {
-              // Если не найден — регистрация
-              const initData = window.Telegram.WebApp.initData || '';
-              const regRes = await fetch('/api/auth/telegram', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  id: tgUser.id,
-                  username: tgUser.username,
-                  first_name: tgUser.first_name,
-                  last_name: tgUser.last_name,
-                  photo_url: tgUser.photo_url,
-                  language_code: tgUser.language_code,
-                  initData
-                }),
+            const regData = await regRes.json();
+            if (regData.access_token && regData.refresh_token) {
+              await supabase.auth.setSession({
+                access_token: regData.access_token,
+                refresh_token: regData.refresh_token
               });
-              const regData = await regRes.json();
-              if (regData.access_token && regData.refresh_token) {
-                await supabase.auth.setSession({
-                  access_token: regData.access_token,
-                  refresh_token: regData.refresh_token
-                });
-              }
-              if (regData.user) {
-                setUser(regData.user);
-                localStorage.setItem('bazaraUser', JSON.stringify(regData.user));
-                // window.location.reload(); // reload больше не нужен
-              }
             }
-          } catch (e) {}
-        })();
-      } else if (tries < 50) { // увеличено до 50 попыток
-        tries++;
-        setTimeout(tryAuth, 150);
-      }
-    }
-    tryAuth();
-  }, [setUser, user]);
+            if (regData.user) {
+              setUser(regData.user);
+              localStorage.setItem('bazaraUser', JSON.stringify(regData.user));
+              window.location.reload(); // reload, чтобы сбросить цикл
+            }
+          }
+        } else {
+          // Если не найден — регистрация
+          const initData = window.Telegram.WebApp.initData || '';
+          const regRes = await fetch('/api/auth/telegram', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              id: tgUser.id,
+              username: tgUser.username,
+              first_name: tgUser.first_name,
+              last_name: tgUser.last_name,
+              photo_url: tgUser.photo_url,
+              language_code: tgUser.language_code,
+              initData
+            }),
+          });
+          const regData = await regRes.json();
+          if (regData.access_token && regData.refresh_token) {
+            await supabase.auth.setSession({
+              access_token: regData.access_token,
+              refresh_token: regData.refresh_token
+            });
+          }
+          if (regData.user) {
+            setUser(regData.user);
+            localStorage.setItem('bazaraUser', JSON.stringify(regData.user));
+            window.location.reload(); // reload, чтобы сбросить цикл
+          }
+        }
+      });
+    return () => { isMounted = false; };
+  }, []);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;

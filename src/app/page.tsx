@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useEffect, useState } from 'react';
 // import luminaImg from '../assets/LUMINA.png';
 // import monocoreImg from '../assets/MONOCORE.png';

@@ -33,10 +33,11 @@ export default function HomePage() {
   // --- DEBUG LOGS ---
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      // Проверка по документации Telegram
       if (window.Telegram && window.Telegram.WebApp) {
         const tg = window.Telegram.WebApp;
         tg.ready();
+        // DEBUG: выводим initData
+        console.log('initData:', tg.initData);
       }
     }
   }, []);

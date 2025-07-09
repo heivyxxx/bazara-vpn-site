@@ -67,13 +67,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   // Выводим логи на экран для отладки
   return (
     <UserContext.Provider value={{ user, setUser }}>
-      <div style={{ position: 'fixed', top: 0, left: 0, zIndex: 99999, background: 'rgba(0,0,0,0.8)', color: '#fff', fontSize: 12, maxWidth: 400, maxHeight: 300, overflow: 'auto', padding: 8 }}>
-        <b>DEBUG LOG:</b>
-        <ul style={{ margin: 0, padding: 0, listStyle: 'none' }}>
-          {debugLog.map((l, i) => <li key={i}>{l}</li>)}
-        </ul>
-        <b>user:</b> {JSON.stringify(user)}
-      </div>
+      {/* DEBUG LOG удалён */}
       {children}
     </UserContext.Provider>
   );

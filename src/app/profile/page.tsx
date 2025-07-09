@@ -22,10 +22,10 @@ export default function ProfilePage() {
       <main className="min-h-screen bg-black flex flex-col items-center pt-24 pb-8">
         {/* Профиль */}
         <div className="w-full max-w-2xl mx-auto flex flex-col items-center gap-4 mb-6">
-          <Image src={mockUser.avatar} alt="avatar" width={96} height={96} className="rounded-2xl w-24 h-24 object-cover border-4 border-[#232323]" />
-          <div className="text-2xl font-bold text-white">{mockUser.name}</div>
+          <Image src={user?.photo_url || user?.avatar || "/assets/avatar1.png"} alt="avatar" width={96} height={96} className="rounded-2xl w-24 h-24 object-cover border-4 border-[#232323]" />
+          <div className="text-2xl font-bold text-white">{user?.name || user?.username || '—'}</div>
           <div className="text-lg font-semibold text-[#fd6a32] flex items-center gap-2">
-            {mockUser.balance} <span className="text-gray-400 text-base font-normal">RUB</span>
+            {typeof user?.balance === 'number' ? user.balance.toFixed(2) : '—'} <span className="text-gray-400 text-base font-normal">RUB</span>
           </div>
         </div>
         {/* История */}

@@ -62,6 +62,7 @@ export default function HomePage() {
 
   // --- Telegram Mini App авторизация с ожиданием появления tgUser ---
   useEffect(() => {
+    if (user) return; // Если уже залогинен — не авторизуем повторно
     let tries = 0;
     function tryAuth() {
       if (typeof window === 'undefined' || !window.Telegram?.WebApp) {
@@ -98,6 +99,7 @@ export default function HomePage() {
             if (res.ok) {
               const data = await res.json();
               setUser(data.user);
+              localStorage.setItem('bazaraUser', JSON.stringify(data.user));
               const { data: authData } = await supabase.auth.getUser();
               if (!authData?.user || authData.user.id !== data.user.auth_id) {
                 const regRes = await fetch('/api/auth/telegram', {
@@ -122,7 +124,8 @@ export default function HomePage() {
                 }
                 if (regData.user) {
                   setUser(regData.user);
-                  window.location.reload();
+                  localStorage.setItem('bazaraUser', JSON.stringify(regData.user));
+                  // window.location.reload(); // reload больше не нужен
                 }
               }
             } else {
@@ -150,7 +153,8 @@ export default function HomePage() {
               }
               if (regData.user) {
                 setUser(regData.user);
-                window.location.reload();
+                localStorage.setItem('bazaraUser', JSON.stringify(regData.user));
+                // window.location.reload(); // reload больше не нужен
               }
             }
           } catch (e) {}
@@ -161,7 +165,7 @@ export default function HomePage() {
       }
     }
     tryAuth();
-  }, [setUser]);
+  }, [setUser, user]);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;

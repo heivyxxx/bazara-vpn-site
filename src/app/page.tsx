@@ -215,22 +215,22 @@ export default function HomePage() {
   const handleSubmitReview = async (text: string, rating: number) => {
     if (!user) return;
     try {
-      const response = await fetch('/api/reviews', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          userId: user.id,
-          text,
-          rating,
-          userName: user.name,
-          userUsername: user.username
-        })
-      });
-      const data = await response.json();
-      if (data.success) {
-        setIsModalOpen(false);
-        // Можно добавить обновление отзывов, если нужно
-      }
+      // const response = await fetch('/api/reviews', {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify({
+      //     userId: user.id,
+      //     text,
+      //     rating,
+      //     userName: user.name,
+      //     userUsername: user.username
+      //   })
+      // });
+      // const data = await response.json();
+      // if (data.success) {
+      //   setIsModalOpen(false);
+      //   // Можно добавить обновление отзывов, если нужно
+      // }
     } catch (error) {
       // TODO: Показать ошибку
     }

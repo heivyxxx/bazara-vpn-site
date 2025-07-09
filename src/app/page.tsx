@@ -60,10 +60,14 @@ export default function HomePage() {
     }
   }, []);
 
-  // --- Telegram Mini App авторизация как в Eclipse, но без спама ---
+  // --- Telegram Mini App авторизация с двойной защитой от спама ---
   const authDone = useRef(false);
   useEffect(() => {
-    if (authDone.current) return; // Уже авторизован — не повторять
+    if (authDone.current) return;
+    if (typeof window !== 'undefined' && localStorage.getItem('bazaraAuthDone') === '1') {
+      authDone.current = true;
+      return;
+    }
     let isMounted = true;
     if (typeof window === 'undefined' || !window.Telegram?.WebApp) return;
     const tg = window.Telegram.WebApp;
@@ -107,11 +111,13 @@ export default function HomePage() {
             if (regData.user) {
               setUser(regData.user);
               localStorage.setItem('bazaraUser', JSON.stringify(regData.user));
-              authDone.current = true; // <--- Ставим флаг, чтобы не повторять
+              localStorage.setItem('bazaraAuthDone', '1');
+              authDone.current = true;
               window.location.reload();
             }
           } else {
-            authDone.current = true; // <--- Ставим флаг, если всё ок
+            localStorage.setItem('bazaraAuthDone', '1');
+            authDone.current = true;
           }
         } else {
           // Если не найден — регистрация
@@ -139,7 +145,8 @@ export default function HomePage() {
           if (regData.user) {
             setUser(regData.user);
             localStorage.setItem('bazaraUser', JSON.stringify(regData.user));
-            authDone.current = true; // <--- Ставим флаг
+            localStorage.setItem('bazaraAuthDone', '1');
+            authDone.current = true;
             window.location.reload();
           }
         }

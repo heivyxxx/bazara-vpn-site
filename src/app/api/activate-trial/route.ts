@@ -29,7 +29,7 @@ export async function POST(request: Request) {
     py.stdin.end();
     let output = '';
     let errorOutput = '';
-    const result = await new Promise((resolve, reject) => {
+    const result: any = await new Promise((resolve, reject) => {
       py.stdout.on('data', (data) => { output += data.toString(); });
       py.stderr.on('data', (data) => { errorOutput += data.toString(); });
       py.on('close', (code) => {

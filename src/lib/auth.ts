@@ -13,12 +13,12 @@ export async function signInOrUpWithTelegram(telegramUser: any) {
   const email = telegramUser.id + '@telegram.bazara';
   const password = telegramUser.id + '_tg_secret';
   // Пробуем войти
-  let { user, error } = await supabase.auth.signInWithPassword({ email, password });
-  if (user) return user;
+  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+  if (data?.user) return data.user;
   // Если не получилось — регистрируем
-  const { data, error: signUpError } = await supabase.auth.signUp({ email, password });
+  const { data: signUpData, error: signUpError } = await supabase.auth.signUp({ email, password });
   if (signUpError) throw signUpError;
-  return data.user;
+  return signUpData.user;
 }
 
 // Сохранить/обновить профиль в таблице users

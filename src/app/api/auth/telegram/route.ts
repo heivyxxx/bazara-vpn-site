@@ -76,7 +76,7 @@ export async function POST(request: Request) {
         first_name: data.first_name,
         last_name: '',
         photo_url: data.photo_url,
-        language_code: data.language_code || 'ru'
+        language_code: 'ru' // <-- всегда дефолт
       }
     });
     if (
@@ -110,7 +110,7 @@ export async function POST(request: Request) {
       username: data.username,
       name: data.first_name || data.username,
       avatar: data.photo_url,
-      lang: data.language_code || 'ru',
+      lang: 'ru', // <-- всегда дефолт
       updated_at: new Date().toISOString(),
     }, { onConflict: 'id' });
     if (upsertRes.error) {

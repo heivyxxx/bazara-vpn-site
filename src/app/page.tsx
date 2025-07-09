@@ -62,7 +62,6 @@ export default function HomePage() {
 
   // --- Telegram Mini App авторизация с двойной защитой от спама ---
   const authDone = useRef(false);
-  /*
   useEffect(() => {
     if (authDone.current) return;
     if (typeof window !== 'undefined' && localStorage.getItem('bazaraAuthDone') === '1') {
@@ -154,7 +153,6 @@ export default function HomePage() {
       });
     return () => { isMounted = false; };
   }, []);
-  */
 
   useEffect(() => {
     if (typeof window === 'undefined') return;

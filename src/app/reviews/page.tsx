@@ -133,11 +133,11 @@ export default function ReviewsPage() {
     <LanguageProvider>
       <Header user={user} onLogin={() => setShowAuth(true)} onLogout={() => { setUser(null); if (typeof window !== 'undefined') localStorage.removeItem('bazaraUser'); }} />
       <TelegramAuthModal isOpen={showAuth} onClose={() => setShowAuth(false)} onAuth={u => { setUser(u); if (typeof window !== 'undefined') localStorage.setItem('bazaraUser', JSON.stringify(u)); setShowAuth(false); setIsModalOpen(true); }} />
-      <div className="min-h-screen bg-[#181818] pt-32 pb-14 md:pb-16 px-2 sm:px-4">
+      <div className="min-h-screen bg-black pt-32 pb-14 md:pb-16 px-2 sm:px-4">
         <style jsx>{`
           .star-filter-btn:hover .star-icon {
-            fill: #ff8800 !important;
-            color: #ff8800 !important;
+            fill: #fd6a32 !important;
+            color: #fd6a32 !important;
             transform: scale(1.12);
           }
           .review-card {
@@ -147,7 +147,7 @@ export default function ReviewsPage() {
             border: 2px solid transparent;
           }
           .review-card:hover {
-            box-shadow: 0 0 0 5px #a259ff88, 0 8px 32px 0 #a259ffcc, 0 2px 8px 0 #ff880088;
+            box-shadow: 0 0 0 5px #a259ff88, 0 8px 32px 0 #a259ffcc, 0 2px 8px 0 #fd6a3255;
             border-color: #a259ff;
             transform: translateY(-2px) scale(1.01);
           }
@@ -158,37 +158,33 @@ export default function ReviewsPage() {
             <div className="flex items-center gap-2 mt-2">
               <span className="text-2xl md:text-4xl font-extrabold text-white">BazaraVPN</span>
             </div>
-            <div className="text-base md:text-xl text-orange-400 font-semibold mt-1">{t.subtitle}</div>
-            <button onClick={() => { user ? setIsModalOpen(true) : setShowAuth(true); }} className="mt-4 bg-gradient-to-r from-orange-500 to-purple-500 hover:from-orange-600 hover:to-purple-600 text-white font-bold py-3 px-8 md:px-12 rounded-xl shadow-lg text-base md:text-lg w-full max-w-xs mx-auto transition-all duration-200">{t.leave}</button>
+            <div className="text-base md:text-xl text-[#fd6a32] font-semibold mt-1">{t.subtitle}</div>
+            <button onClick={() => { user ? setIsModalOpen(true) : setShowAuth(true); }} className="mt-4 bg-[#fd6a32] hover:bg-[#e65a1e] text-white font-bold py-3 px-8 md:px-12 rounded-xl shadow text-base md:text-lg w-full max-w-xs mx-auto transition-all duration-200">{t.leave}</button>
           </div>
           <div className="w-full flex flex-col md:flex-row items-center justify-center gap-2 md:gap-4 mt-4">
-            {/* Новый блок поиска и фильтров */}
             <div className="flex flex-col md:flex-row w-full gap-2 md:gap-3 items-center">
-              {/* Поиск с иконкой */}
               <div className="relative w-full md:w-[320px]">
                 <input
                   value={search}
                   onChange={e => setSearch(e.target.value)}
                   type="text"
                   placeholder={t.search}
-                  className="w-full pl-12 pr-4 py-3 rounded-xl bg-[#232323] text-white border-none focus:outline-none focus:ring-2 focus:ring-[#a259ff] text-base md:text-lg shadow-md placeholder-gray-400"
+                  className="w-full pl-12 pr-4 py-3 rounded-xl bg-[#23232b] text-white border-none focus:outline-none focus:ring-2 focus:ring-[#a259ff] text-base md:text-lg shadow-md placeholder-gray-400"
                   style={{boxShadow:'0 2px 12px 0 #0004'}}
                 />
                 <Image src="/assets/filter.png" alt="filter" width={22} height={22} className="absolute left-4 top-1/2 -translate-y-1/2 opacity-70 pointer-events-none" />
               </div>
-              {/* Кнопка сортировки */}
               <button
                 onClick={() => setSort(sort === 'new' ? 'old' : 'new')}
-                className={`flex items-center gap-2 px-5 py-3 rounded-xl bg-[#232323] text-white font-semibold shadow-md border-none focus:outline-none transition hover:bg-[#28203a] active:scale-95`}
+                className={`flex items-center gap-2 px-5 py-3 rounded-xl bg-[#23232b] text-white font-semibold shadow-md border-none focus:outline-none transition hover:bg-[#28203a] active:scale-95`}
                 style={{minWidth: 0}}
               >
                 <Image src="/assets/mode.png" alt="mode" width={22} height={22} className="opacity-80" />
                 <span className="ml-1 text-base md:text-lg">{sort === 'new' ? t.sortNew : t.sortOld}</span>
               </button>
-              {/* Кнопка фильтра по звёздам (открывает/сбрасывает фильтр) */}
               <button
                 onClick={() => setStarFilter(starFilter ? null : 5)}
-                className={`flex items-center gap-2 px-5 py-3 rounded-xl bg-[#232323] text-white font-semibold shadow-md border-none focus:outline-none transition hover:bg-[#28203a] active:scale-95 ${starFilter ? 'ring-2 ring-[#a259ff]' : ''}`}
+                className={`flex items-center gap-2 px-5 py-3 rounded-xl bg-[#23232b] text-white font-semibold shadow-md border-none focus:outline-none transition hover:bg-[#28203a] active:scale-95 ${starFilter ? 'ring-2 ring-[#a259ff]' : ''}`}
                 style={{minWidth: 0}}
               >
                 <Image src="/assets/filter.png" alt="filter" width={22} height={22} className="opacity-80" />
@@ -196,7 +192,6 @@ export default function ReviewsPage() {
               </button>
             </div>
           </div>
-          {/* Удаляю счётчик отзывов */}
         </section>
         <main className="w-full max-w-5xl mx-auto flex flex-col gap-4 md:gap-6 py-6 md:py-10 px-2 md:px-4" style={{ minHeight: '60vh' }}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">

@@ -10,8 +10,6 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, A11y } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
-import filterIcon from '/assets/filter.png';
-import modeIcon from '/assets/mode.png';
 
 interface ReviewCardProps {
   avatar: string;
@@ -148,10 +146,10 @@ export const Reviews = () => {
           />
         </div>
         <button className="ml-2 flex items-center justify-center w-11 h-11 rounded-2xl bg-[#18181b] hover:bg-[#23232b] transition" style={{border:'none',padding:0}} disabled>
-          <img src={modeIcon.src} alt="mode" className="w-6 h-6" />
+          <img src="/assets/mode.png" alt="mode" className="w-6 h-6" />
         </button>
         <button className="ml-2 flex items-center justify-center w-11 h-11 rounded-2xl bg-[#18181b] hover:bg-[#23232b] transition" style={{border:'none',padding:0}} disabled>
-          <img src={filterIcon.src} alt="filter" className="w-6 h-6" />
+          <img src="/assets/filter.png" alt="filter" className="w-6 h-6" />
         </button>
       </div>
 

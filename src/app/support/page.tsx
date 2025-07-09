@@ -50,43 +50,43 @@ function SupportContent() {
   const [chatOpen, setChatOpen] = React.useState(false);
   const [issueOpen, setIssueOpen] = React.useState(false);
   return (
-    <main className="flex-1 flex flex-col pt-24 items-center w-full min-h-screen bg-[#181818]">
+    <main className="flex-1 flex flex-col pt-24 items-center w-full min-h-screen bg-black">
       <Image src="/assets/trader.gif" alt="BazaraVPN" width={208} height={208} className="w-52 h-52 mx-auto mb-8 select-none pointer-events-none cursor-pointer" draggable={false} onClick={() => setChatOpen(true)} />
       <SupportChatModal isOpen={chatOpen} onClose={() => setChatOpen(false)} />
       <SupportIssueModal isOpen={issueOpen} onClose={() => setIssueOpen(false)} />
       <h1 className="text-4xl md:text-5xl font-extrabold text-center mb-4"><span className="text-orange-400">{t.title}</span></h1>
       <div className="text-xl md:text-2xl text-[#B8B8B8] mb-10 text-center max-w-xl font-medium">{t.desc}</div>
       <section className="w-full max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12 mb-8 md:mb-12 px-2 sm:px-4">
-        <div className="bg-[#232323] rounded-[2.2rem] shadow-xl p-6 md:p-10 flex flex-col items-center text-center">
+        <div className="bg-[#23232b] rounded-[2.2rem] shadow-xl p-6 md:p-10 flex flex-col items-center text-center">
           <Image src="/assets/faq-3d.png" alt="Чат поддержки" width={64} height={64} className="w-16 h-16 md:w-20 md:h-20 mb-4 md:mb-6 select-none pointer-events-none mx-auto" draggable={false} />
           <div className="text-lg md:text-2xl font-extrabold text-white mb-2">{lang === 'ru' ? 'Чат поддержки' : 'Support Chat'}</div>
           <div className="text-sm md:text-[16px] text-[#B8B8B8] mb-4 md:mb-5">{lang === 'ru' ? 'Быстрые ответы на ваши вопросы в чате с поддержкой.' : 'Quick answers to your questions in support chat.'}</div>
           <button
             onClick={() => setChatOpen(true)}
-            className="w-full max-w-xs py-3 md:py-4 rounded-2xl font-bold text-base md:text-lg text-white shadow-lg transition-all duration-200 bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700 mt-0"
+            className="w-full max-w-xs py-3 md:py-4 rounded-2xl font-bold text-base md:text-lg text-white shadow-lg transition-all duration-200 bg-[#fd6a32] hover:bg-[#e65a1e] mt-0"
           >
             {lang === 'ru' ? 'Открыть чат поддержки' : 'Open Support Chat'}
           </button>
         </div>
-        <div className="bg-[#232323] rounded-[2.2rem] shadow-xl p-6 md:p-10 flex flex-col items-center text-center">
+        <div className="bg-[#23232b] rounded-[2.2rem] shadow-xl p-6 md:p-10 flex flex-col items-center text-center">
           <Image src="/assets/kb-3d.png" alt="База знаний" width={64} height={64} className="w-16 h-16 md:w-20 md:h-20 mb-4 md:mb-6 select-none pointer-events-none mx-auto" draggable={false} />
           <div className="text-lg md:text-2xl font-extrabold text-white mb-2">{t.kb}</div>
           <div className="text-sm md:text-[16px] text-[#B8B8B8] mb-4 md:mb-5">{t.kbDesc}</div>
-          <Link href="/support/kb" className="w-full max-w-xs py-3 md:py-4 rounded-2xl font-bold text-base md:text-lg text-white shadow-lg transition-all duration-200 bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700 mt-0 text-center block">{t.kbBtn}</Link>
+          <Link href="/support/kb" className="w-full max-w-xs py-3 md:py-4 rounded-2xl font-bold text-base md:text-lg text-white shadow-lg transition-all duration-200 bg-[#fd6a32] hover:bg-[#e65a1e] mt-0 text-center block">{t.kbBtn}</Link>
         </div>
-        <div className="bg-[#232323] rounded-[2.2rem] shadow-xl p-6 md:p-10 flex flex-col items-center text-center">
+        <div className="bg-[#23232b] rounded-[2.2rem] shadow-xl p-6 md:p-10 flex flex-col items-center text-center">
           <Image src="/assets/chat-3d.png" alt="Обсудить" width={64} height={64} className="w-16 h-16 md:w-20 md:h-20 mb-4 md:mb-6 select-none pointer-events-none mx-auto" draggable={false} />
           <div className="text-lg md:text-2xl font-extrabold text-white mb-2">{t.discuss}</div>
           <div className="text-sm md:text-[16px] text-[#B8B8B8] mb-4 md:mb-5">{t.discussDesc}</div>
-          <Link href="/support/discuss" className="w-full max-w-xs py-3 md:py-4 rounded-2xl font-bold text-base md:text-lg text-white shadow-lg transition-all duration-200 bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700 mt-0 text-center block">{t.discussBtn}</Link>
+          <Link href="/support/discuss" className="w-full max-w-xs py-3 md:py-4 rounded-2xl font-bold text-base md:text-lg text-white shadow-lg transition-all duration-200 bg-[#fd6a32] hover:bg-[#e65a1e] mt-0 text-center block">{t.discussBtn}</Link>
         </div>
-        <div className="bg-[#232323] rounded-[2.2rem] shadow-xl p-6 md:p-10 flex flex-col items-center text-center">
+        <div className="bg-[#23232b] rounded-[2.2rem] shadow-xl p-6 md:p-10 flex flex-col items-center text-center">
           <Image src="/assets/bug-3d.png" alt="Сообщить о проблеме" width={64} height={64} className="w-16 h-16 md:w-20 md:h-20 mb-4 md:mb-6 select-none pointer-events-none mx-auto" draggable={false} />
           <div className="text-lg md:text-2xl font-extrabold text-white mb-2">{lang === 'ru' ? 'Сообщить о проблеме' : 'Report a Problem'}</div>
           <div className="text-sm md:text-[16px] text-[#B8B8B8] mb-4 md:mb-5">{lang === 'ru' ? 'Оставьте отзыв или сообщите о проблеме — мы всегда на связи!' : 'Leave feedback or report a problem — we are always in touch!'}</div>
           <button
             onClick={() => setIssueOpen(true)}
-            className="w-full max-w-xs py-3 md:py-4 rounded-2xl font-bold text-base md:text-lg text-white shadow-lg transition-all duration-200 bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700 mt-0"
+            className="w-full max-w-xs py-3 md:py-4 rounded-2xl font-bold text-base md:text-lg text-white shadow-lg transition-all duration-200 bg-[#fd6a32] hover:bg-[#e65a1e] mt-0"
           >
             {lang === 'ru' ? 'Сообщить о проблеме' : 'Report a Problem'}
           </button>
@@ -95,7 +95,7 @@ function SupportContent() {
       <div className="flex justify-center mt-8 mb-4">
         <button
           onClick={() => {navigator.clipboard.writeText(t.mailValue); setCopied(true); setTimeout(()=>setCopied(false), 1500);}}
-          className="group flex flex-col items-center bg-[#232323] rounded-2xl shadow-xl px-8 py-6 transition hover:shadow-2xl relative"
+          className="group flex flex-col items-center bg-[#23232b] rounded-2xl shadow-xl px-8 py-6 transition hover:shadow-2xl relative"
           style={{boxShadow:'0 8px 32px 0 #00000044, 0 2px 8px 0 #a259ff22'}}
         >
           <span className="absolute inset-0 rounded-2xl pointer-events-none opacity-0 group-hover:opacity-100 transition duration-300" style={{boxShadow:'0 0 16px 2px #a259ff55'}}></span>

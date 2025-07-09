@@ -4,6 +4,7 @@ export interface User {
   name: string;
   username?: string;
   photo_url?: string;
+  balance?: number;
 }
 
 // Типы для отзывов

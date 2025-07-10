@@ -176,7 +176,7 @@ export default function ReviewsPage() {
   const [usersMap, setUsersMap] = useState<Record<string, User>>({});
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
-  const [sort, setSort] = useState<'new' | 'old'>('new');
+  const [sort, setSort] = useState<string>('new');
   const [starFilter, setStarFilter] = useState<number | null>(null);
   const [viewMode, setViewMode] = useState<'cards' | 'rows'>('cards');
   const [filterOpen, setFilterOpen] = useState(false);

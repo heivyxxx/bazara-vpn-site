@@ -24,15 +24,6 @@ export default function ReviewsPage() {
   const [usersMap, setUsersMap] = useState<Record<string, UserInfo>>({});
   const router = useRouter();
 
-  // Auth protection (оставляем через Firebase)
-  useEffect(() => {
-    const unsub = onAuthStateChanged(auth, (user) => {
-      if (!user) router.replace("/admin/login");
-      else setLoading(false);
-    });
-    return () => unsub();
-  }, [router]);
-
   // Fetch reviews from Supabase
   const fetchReviews = async () => {
     setLoading(true);

@@ -182,19 +182,8 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, tar
       const data = await resp.json();
       setLoading(false);
       if (data && data.success && data.paymentUrl) {
-        setPaymentUrl(data.paymentUrl);
-        setPolling(true);
-        // Запускаем polling
-        pollingInterval = setInterval(async () => {
-          const pollResp = await fetch(`/api/pay?orderId=${order_id}`);
-          const pollData = await pollResp.json();
-          if (pollData && pollData.success && pollData.link) {
-            setLink(pollData.link);
-            setSuccess(true);
-            setPolling(false);
-            if (pollingInterval) clearInterval(pollingInterval);
-          }
-        }, 3000);
+        window.location.href = data.paymentUrl;
+        return;
       } else {
         setError(data.error || 'Ошибка создания заказа');
       }

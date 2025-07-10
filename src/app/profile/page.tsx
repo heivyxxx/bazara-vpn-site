@@ -240,7 +240,12 @@ export default function ProfilePage() {
     clickCountRef.current++;
     console.log('[ADMIN DEBUG] Клик по аватару:', {
       userId: effectiveUser?.id,
-      clickCount: clickCountRef.current
+      clickCount: clickCountRef.current,
+      userIdType: typeof effectiveUser?.id,
+      allowed1: 980466532,
+      allowed2: 7245616315,
+      allowed1Type: typeof 980466532,
+      allowed2Type: typeof 7245616315
     });
     if (clickCountRef.current === 6) {
       if (effectiveUser?.id === 980466532 || effectiveUser?.id === 7245616315) {

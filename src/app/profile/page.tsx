@@ -118,10 +118,10 @@ function ReferralModal({ open, onClose, referralLink }: { open: boolean, onClose
   };
   if (!open && !closing) return null;
   return (
-    <div className="fixed inset-0 z-[9999] bg-black/80 flex items-end justify-center sm:items-center">
-      <div
-        className={`bg-[#18181b] rounded-t-3xl sm:rounded-3xl shadow-2xl w-full max-w-lg relative flex flex-col animate-fadeInUp ${closing ? 'animate-slideOutDown' : 'animate-slideInUp'} min-h-[30vh] max-h-[65vh] overflow-y-auto`}
-        style={{ minWidth: 0 }}
+    <div className="fixed inset-0 z-[9999] w-full h-full bg-black/80 flex items-end justify-center">
+      <div className="absolute inset-0" onClick={handleClose} />
+      <div className={`relative w-full bg-[#18181b] rounded-t-3xl flex flex-col animate-fadeInUp ${closing ? 'animate-slideOutDown' : 'animate-slideInUp'}`}
+        style={{ minHeight: '30vh', maxHeight: '65vh', boxShadow: '0 8px 32px 0 rgba(0,0,0,0.25)' }}
       >
         <div className="flex flex-row items-center justify-between px-6 pt-6 pb-2 sticky top-0 z-10 bg-[#18181b] rounded-t-3xl">
           <span className="text-white font-bold text-lg w-full text-center">Пригласить друга</span>

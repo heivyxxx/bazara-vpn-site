@@ -4,7 +4,7 @@ import { Header } from '@/components/layout/Header';
 import { LanguageProvider, useLang, useUser } from '@/lib/LanguageContext';
 import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { SupportChatModal } from '@/components/support/SupportChatModal';
 import { SupportIssueModal } from '@/components/support/SupportIssueModal';
 import { SupportKbModal } from '@/components/support/SupportKbModal';
@@ -128,9 +128,29 @@ export default function SupportPage() {
   const { lang } = useLang();
   const t = supportTexts[lang];
   const [user, setUser] = useUser();
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.Telegram?.WebApp?.BackButton) {
+      window.Telegram.WebApp.BackButton.show();
+      window.Telegram.WebApp.BackButton.onClick(() => {
+        window.history.back();
+      });
+    }
+    // Скрыть Header
+    const style = document.createElement('style');
+    style.innerHTML = `header, .Header, .header { display: none !important; }`;
+    style.setAttribute('data-hide-header', '1');
+    document.head.appendChild(style);
+    return () => {
+      if (window.Telegram?.WebApp?.BackButton) {
+        window.Telegram.WebApp.BackButton.hide();
+      }
+      const s = document.querySelector('style[data-hide-header="1"]');
+      if (s) s.remove();
+    };
+  }, []);
   return (
     <LanguageProvider>
-      <Header user={user} onLogout={() => { setUser(null); if (typeof window !== 'undefined') localStorage.removeItem('bazaraUser'); }} />
+      {/* Header убран */}
       <SupportContent />
       {/* <Footer /> */}
     </LanguageProvider>

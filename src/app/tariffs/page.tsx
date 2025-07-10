@@ -172,10 +172,10 @@ function TariffsContent() {
     setLoadingTrial(true);
     try {
       setTrialLogs(l => [...l, 'Попытка активировать trial...']);
-      const resp = await fetch('/api/activate-trial', {
+      const resp = await fetch('/api/pay', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ telegram_id: user.id })
+        body: JSON.stringify({ user_id: user.id, method: 'trial', is_trial: true })
       });
       const data = await resp.json();
       if (data.success && data.link) {

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLang } from '@/lib/LanguageContext';
 import Image from 'next/image';
+import { useUser } from '@/lib/LanguageContext';
 
 const paymentTexts = {
   ru: {
@@ -59,7 +60,8 @@ interface PaymentModalProps {
 export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, tariff, price }) => {
   const { lang } = useLang();
   const t = paymentTexts[lang];
-  const [payMethod, setPayMethod] = useState<'sbp' | 'card' | 'crypto' | null>(null);
+  const [user, setUser] = useUser();
+  const [payMethod, setPayMethod] = useState<'sbp' | 'card' | 'crypto' | 'balance' | null>(null);
   // Удаляю email
   // const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
@@ -118,44 +120,36 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, tar
 
   const handlePay = async () => {
     setError('');
-    // убираю валидацию email
     if (!payMethod) {
       setError(t.error);
       return;
     }
+    if (!user || typeof user.id !== 'string') {
+      setError('Пользователь не найден');
+      return;
+    }
+    const amount = Number(String(price).replace(/[^\d]/g, ''));
+    const package_days = tariff === 'year' ? 365 : 30;
+    const order_id = `${payMethod}_${user.id}_${Date.now()}`;
     setLoading(true);
     try {
-      const amount = Number(String(price).replace(/[^\d]/g, ''));
-      const package_days = tariff === 'year' ? 365 : 30;
-      const order_id = payMethod === 'crypto' 
-        ? 'vpn_' + Date.now()
-        : 'bazara_' + Math.floor(Math.random()*1000000);
-      const description = (payMethod === 'crypto')
-        ? (tariff === 'year' ? t.year : t.month)
-        : 'Подписка BazaraVPN';
-      const requestBody = {
-        amount,
-        order_id,
-        description,
-        method: payMethod,
-        package_days
-      };
       const resp = await fetch('/api/pay', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(requestBody)
+        body: JSON.stringify({
+          user_id: user.id,
+          package_days,
+          order_id,
+          method: payMethod,
+          amount
+        })
       });
       const data = await resp.json();
       setLoading(false);
-      if (data && data.url) {
-        if (typeof window !== 'undefined') {
-          // localStorage.setItem('pay_email', email); // убрано
-          localStorage.setItem('pay_package_days', String(package_days));
-          localStorage.setItem('pay_task_id', order_id);
-        }
-        window.open(data.url, '_blank');
+      if (data && data.success && data.link) {
+        setLink(data.link);
         setSuccess(true);
-        setLink('');
+        if (payMethod === 'balance') setUser({ ...user, balance: user.balance - amount });
       } else {
         setError(data.error || 'Ошибка оплаты');
       }
@@ -213,13 +207,14 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, tar
             <button type="button" onClick={()=>setPayMethod('sbp')} className={`flex-1 pay-method${payMethod==='sbp'?' selected':''} min-w-0`}>{t.sbp}</button>
             <button type="button" onClick={()=>setPayMethod('card')} className={`flex-1 pay-method${payMethod==='card'?' selected':''} min-w-0`}>{t.card}</button>
             <button type="button" onClick={()=>setPayMethod('crypto')} className={`flex-1 pay-method${payMethod==='crypto'?' selected':''} min-w-0`}>{t.crypto}</button>
+            <button type="button" onClick={()=>setPayMethod('balance')} className={`flex-1 pay-method${payMethod==='balance'?' selected':''} min-w-0`}>Баланс {user && typeof user.balance === 'number' ? `(${user.balance.toFixed(2)}₽)` : ''}</button>
           </div>
           {error && <div className="text-red-500 text-sm text-center">{error}</div>}
           <div className="sticky bottom-0 left-0 w-full flex justify-center gap-4 px-0 pt-2 bg-[#18181b] rounded-b-3xl z-20 mt-auto">
             <button
               type="button"
               className="flex-1 py-3 rounded-xl bg-[#fd6a32] hover:bg-[#e65a1e] text-white font-semibold text-base transition disabled:opacity-50 disabled:cursor-not-allowed"
-              disabled={loading}
+              disabled={loading || (payMethod === 'balance' && (!user || typeof user.balance !== 'number' || user.balance < Number(String(price).replace(/[^\d]/g, ''))))}
               onClick={handlePay}
             >
               {t.pay} <span className="ml-2 font-bold">{price}</span>

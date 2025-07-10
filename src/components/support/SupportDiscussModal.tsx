@@ -52,11 +52,11 @@ export const SupportDiscussModal: React.FC<SupportDiscussModalProps> = ({ isOpen
           </button>
         </div>
         <div className="flex flex-col items-center px-6 pb-6 pt-2 gap-6 overflow-y-auto">
-          <div className="bg-[#232323] rounded-2xl border-2 border-[#fd6a32] p-6 md:p-8 flex flex-col items-center gap-6 max-w-xl w-full shadow-lg mx-auto">
-            <svg className="w-24 h-24" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 48 48"><path d="M22 38l-2-6-8-2c-2-.5-2-2.5 0-3l32-12c2-.5 3 1.5 2.5 3l-6 32c-.5 2-2.5 2-3 0l-2-8-6-2z" fill="#a259ff"/><path d="M22 38l-2-6-8-2c-2-.5-2-2.5 0-3l32-12c2-.5 3 1.5 2.5 3l-6 32c-.5 2-2.5 2-3 0l-2-8-6-2z" stroke="#fd6a32" strokeWidth={3}/></svg>
-            <h3 className="text-xl md:text-2xl font-extrabold text-[#fd6a32] mb-2">{t.tgTitle}</h3>
-            <div className="text-base md:text-lg text-gray-200 text-center mb-4 whitespace-pre-line">{t.tgDesc}</div>
-            <a href={t.tgLink} target="_blank" rel="noopener" className="bg-gradient-to-r from-[#fd6a32] to-purple-600 hover:from-[#fd6a32] hover:to-purple-700 text-white font-bold text-lg rounded-2xl px-8 py-4 shadow-lg transition-all duration-200">{t.tgBtn}</a>
+          <div className="flex flex-col items-center gap-6 max-w-xl w-full mx-auto">
+            <img src="/assets/relegram.png" alt="Telegram" className="w-24 h-24 mb-2 select-none pointer-events-none" draggable={false} />
+            <h3 className="text-xl md:text-2xl font-bold text-white mb-2">{t.tgTitle}</h3>
+            <div className="text-base md:text-lg text-gray-100 text-center mb-4 whitespace-pre-line">{t.tgDesc}</div>
+            <a href={t.tgLink} target="_blank" rel="noopener" className="bg-[#fd6a32] hover:bg-[#e65a1e] text-white font-bold text-lg rounded-2xl px-8 py-4 shadow-lg transition-all duration-200">{t.tgBtn}</a>
           </div>
         </div>
       </div>

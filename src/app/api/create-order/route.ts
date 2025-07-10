@@ -1,8 +1,14 @@
 import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {
+  let body;
   try {
-    const body = await request.json();
+    body = await request.json();
+  } catch (e) {
+    console.error('Ошибка парсинга JSON в create-order:', e);
+    return NextResponse.json({ success: false, error: 'Invalid JSON', details: e }, { status: 400 });
+  }
+  try {
     console.log('CREATE-ORDER BODY:', body);
     const { user_id, package_days, order_id, method, amount } = body;
     if (!user_id || !package_days || !order_id || !method || !amount) {
@@ -32,9 +38,8 @@ export async function POST(request: Request) {
     try {
       data = await resp.json();
     } catch (jsonErr) {
-      const text = await resp.text();
-      console.error('Ошибка парсинга JSON от WATA:', jsonErr, 'Ответ:', text);
-      return NextResponse.json({ success: false, error: 'WATA returned invalid JSON', details: text }, { status: 500 });
+      console.error('Ошибка парсинга JSON от WATA:', jsonErr);
+      return NextResponse.json({ success: false, error: 'WATA returned invalid JSON', details: jsonErr }, { status: 500 });
     }
     if (data && data.paymentUrl) {
       console.log('WATA paymentUrl:', data.paymentUrl);

@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import { useLang } from '@/lib/LanguageContext';
 import Image from 'next/image';
+import { v4 as uuidv4 } from 'uuid';
 
 const chatTexts = {
   ru: {

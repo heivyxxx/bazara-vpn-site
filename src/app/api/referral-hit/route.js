@@ -28,4 +28,28 @@ export async function POST(req) {
   } catch (e) {
     return NextResponse.json({ error: e.message }, { status: 500 });
   }
+}
+
+export async function PUT(req) {
+  try {
+    const body = await req.json();
+    const { userId, name } = body;
+    if (!userId || !name) return NextResponse.json({ error: 'Missing params' }, { status: 400 });
+    // Проверяем, есть ли уже такая запись
+    const { data: refs, error } = await supabase.from('referrals').select('*').eq('user_id', userId);
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    if (refs && refs.length > 0) return NextResponse.json({ status: 'already exists' });
+    // Создаём новую запись
+    const { error: insertError } = await supabase.from('referrals').insert({
+      user_id: userId,
+      name,
+      count: 0,
+      users: [],
+      created_at: new Date().toISOString(),
+    });
+    if (insertError) return NextResponse.json({ error: insertError.message }, { status: 500 });
+    return NextResponse.json({ status: 'created' });
+  } catch (e) {
+    return NextResponse.json({ error: e.message }, { status: 500 });
+  }
 } 

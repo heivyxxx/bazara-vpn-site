@@ -172,6 +172,19 @@ function ReferralBlock({ userId }: { userId: string }) {
       });
   }, [userId]);
   const referralLink = `https://t.me/BazaraVPN_bot?startapp=ref_${userId}`;
+
+  // Добавляю создание реферальной записи при первом открытии модалки
+  const handleOpenModal = async () => {
+    setModalOpen(true);
+    // Проверяем и создаём запись, если её нет
+    try {
+      await fetch('/api/referral-hit', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId, name: `ref_${userId}` })
+      });
+    } catch (e) { /* ignore */ }
+  };
   return (
     <Disclosure defaultOpen>
       {({ open }) => (
@@ -209,7 +222,7 @@ function ReferralBlock({ userId }: { userId: string }) {
                 <span className="text-gray-400 text-base">Рефералов: <span className="text-white font-bold">{stats.count}</span></span>
                 <span className="text-gray-400 text-base">Заработок: <span className="text-white font-bold">{stats.earned} RUB</span></span>
               </div>
-              <button className="w-full mt-2 py-2 rounded-xl font-semibold text-sm transition bg-[#23232b] border border-[#23232b] text-[#fd6a32] hover:bg-[#23232b]/80" onClick={() => setModalOpen(true)}>
+              <button className="w-full mt-2 py-2 rounded-xl font-semibold text-sm transition bg-[#23232b] border border-[#23232b] text-[#fd6a32] hover:bg-[#23232b]/80" onClick={handleOpenModal}>
                 Пригласить друга
               </button>
               <ReferralModal open={modalOpen} onClose={() => setModalOpen(false)} referralLink={referralLink} />

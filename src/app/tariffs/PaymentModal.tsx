@@ -240,7 +240,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, tar
           <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 w-full">
             <button type="button" onClick={()=>setPayMethod('sbp')} className={`flex-1 pay-method${payMethod==='sbp'?' selected':''} min-w-0`}>{t.sbp}</button>
             <button type="button" onClick={()=>setPayMethod('card')} className={`flex-1 pay-method${payMethod==='card'?' selected':''} min-w-0`}>{t.card}</button>
-            <button type="button" onClick={()=>setPayMethod('crypto')} className={`flex-1 pay-method${payMethod==='crypto'?' selected':''} min-w-0`}>{t.crypto}</button>
+            {/* <button type="button" onClick={()=>setPayMethod('crypto')} className={`flex-1 pay-method${payMethod==='crypto'?' selected':''} min-w-0`}>{t.crypto}</button> */}
             <button type="button" onClick={()=>setPayMethod('balance')} className={`flex-1 pay-method${payMethod==='balance'?' selected':''} min-w-0`}>Баланс {user && typeof user.balance === 'number' ? `(${user.balance.toFixed(2)}₽)` : ''}</button>
           </div>
           {error && <div className="text-red-500 text-sm text-center">{error}</div>}

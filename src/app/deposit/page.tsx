@@ -146,7 +146,7 @@ export default function DepositPage() {
       <div className="flex flex-row gap-4 w-full max-w-md mb-6 justify-center">
         <button type="button" onClick={()=>setPayMethod('sbp')} className={`flex-1 py-3 rounded-xl font-semibold text-base transition ${payMethod==='sbp' ? 'bg-[#fd6a32] text-white' : 'bg-[#232323] text-[#fd6a32]'} border border-[#fd6a32]`}>{t.sbp}</button>
         <button type="button" onClick={()=>setPayMethod('card')} className={`flex-1 py-3 rounded-xl font-semibold text-base transition ${payMethod==='card' ? 'bg-[#fd6a32] text-white' : 'bg-[#232323] text-[#fd6a32]'} border border-[#fd6a32]`}>{t.card}</button>
-        <button type="button" onClick={()=>setPayMethod('crypto')} className={`flex-1 py-3 rounded-xl font-semibold text-base transition ${payMethod==='crypto' ? 'bg-[#fd6a32] text-white' : 'bg-[#232323] text-[#fd6a32]'} border border-[#fd6a32]`}>{t.crypto}</button>
+        {/* <button type="button" onClick={()=>setPayMethod('crypto')} className={`flex-1 py-3 rounded-xl font-semibold text-base transition ${payMethod==='crypto' ? 'bg-[#fd6a32] text-white' : 'bg-[#232323] text-[#fd6a32]'} border border-[#fd6a32]`}>{t.crypto}</button> */}
       </div>
       {/* Ввод суммы */}
       {payMethod && (

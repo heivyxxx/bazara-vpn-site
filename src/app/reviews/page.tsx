@@ -96,44 +96,23 @@ const ReviewRow = ({ review, avatar }: { review: Review; avatar: string }) => {
   );
 };
 
-// Модалка фильтров для отзывов (по образцу Eclipse, только сортировка и цена)
+// Модалка фильтров для отзывов (только сортировка, без цены)
 const SORT_OPTIONS = [
   { label: 'Сначала новые', value: 'new' },
   { label: 'Сначала старые', value: 'old' },
-  { label: 'Цена: по возрастанию', value: 'price-asc' },
-  { label: 'Цена: по убыванию', value: 'price-desc' },
   { label: 'Дата ↑', value: 'date-asc' },
   { label: 'Дата ↓', value: 'date-desc' },
 ];
 
-const FilterModal = ({ open, onClose, sort, setSort, priceRange, setPriceRange, minPrice, maxPrice, priceInput, setPriceInput, resetAllFilters, resetPrice }: {
+const FilterModal = ({ open, onClose, sort, setSort, resetAllFilters }: {
   open: boolean;
   onClose: () => void;
   sort: string;
   setSort: (s: string) => void;
-  priceRange: [number, number];
-  setPriceRange: (v: [number, number]) => void;
-  minPrice: number;
-  maxPrice: number;
-  priceInput: [string, string];
-  setPriceInput: (v: [string, string]) => void;
   resetAllFilters: () => void;
-  resetPrice: () => void;
 }) => {
-  const [openSection, setOpenSection] = useState<'sort' | 'price' | null>('sort');
+  const [openSection, setOpenSection] = useState<'sort' | null>('sort');
   const [closing, setClosing] = useState(false);
-
-  // Двухсторонний ползунок
-  const handleSlider = (idx: 0 | 1, value: number) => {
-    let [min, max] = priceRange;
-    if (idx === 0) {
-      min = Math.min(value, max);
-    } else {
-      max = Math.max(value, min);
-    }
-    setPriceRange([min, max]);
-    setPriceInput([String(min), String(max)]);
-  };
 
   // Анимация закрытия вниз
   const handleClose = () => {
@@ -149,7 +128,7 @@ const FilterModal = ({ open, onClose, sort, setSort, priceRange, setPriceRange, 
     <div className="fixed inset-0 z-[9999] w-full h-full bg-black/80 flex items-end justify-center">
       <div className="absolute inset-0" onClick={handleClose} />
       <div className={`relative w-full bg-[#18181b] rounded-t-3xl flex flex-col animate-fadeInUp ${closing ? 'animate-slideOutDown' : 'animate-slideInUp'}`}
-        style={{ minHeight: '50vh', maxHeight: '70vh', boxShadow: '0 8px 32px 0 rgba(0,0,0,0.25)' }}
+        style={{ minHeight: '30vh', maxHeight: '50vh', boxShadow: '0 8px 32px 0 rgba(0,0,0,0.25)' }}
       >
         {/* Заголовок и крестик */}
         <div className="flex flex-row items-center justify-between px-6 pt-6 pb-2 sticky top-0 z-10 bg-[#18181b] rounded-t-3xl">
@@ -158,7 +137,7 @@ const FilterModal = ({ open, onClose, sort, setSort, priceRange, setPriceRange, 
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M6 18L18 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
           </button>
         </div>
-        <div className="flex-1 overflow-y-auto pb-32 px-6 pt-2">
+        <div className="flex-1 overflow-y-auto pb-8 px-6 pt-2">
           {/* Сортировка */}
           <div className="bg-[#23232b] rounded-2xl mb-4 p-0">
             <button className="w-full flex items-center justify-between px-6 py-4 bg-transparent text-white font-semibold text-base rounded-2xl" onClick={() => setOpenSection(openSection === 'sort' ? null : 'sort')}>
@@ -173,77 +152,6 @@ const FilterModal = ({ open, onClose, sort, setSort, priceRange, setPriceRange, 
                     <span className="text-white text-base">{opt.label}</span>
                   </label>
                 ))}
-              </div>
-            )}
-          </div>
-          {/* Цена */}
-          <div className="bg-[#23232b] rounded-2xl mb-4 p-0">
-            <div className="flex items-center justify-between">
-              <button className="w-full flex items-center justify-between px-6 py-4 bg-transparent text-white font-semibold text-base text-left rounded-2xl" onClick={() => setOpenSection(openSection === 'price' ? null : 'price')}>
-                Цена
-                <span className={`transition-transform ${openSection === 'price' ? 'rotate-180' : ''}`}>▼</span>
-              </button>
-              {(priceRange[0] !== minPrice || priceRange[1] !== maxPrice) && openSection === 'price' && (
-                <button className="text-[#fd6a32] text-sm font-bold absolute right-8 top-4" onClick={resetPrice}>Сбросить</button>
-              )}
-            </div>
-            {openSection === 'price' && (
-              <div className="px-6 pb-4 pt-2 flex flex-col gap-2 bg-transparent">
-                {/* Двухсторонний ползунок */}
-                <div className="relative w-full h-8 flex items-center mb-2">
-                  <input
-                    type="range"
-                    min={minPrice}
-                    max={maxPrice}
-                    value={priceRange[0]}
-                    onChange={e => handleSlider(0, Number(e.target.value))}
-                    className="absolute w-full h-2 accent-[#fd6a32] pointer-events-auto z-10"
-                    style={{ zIndex: priceRange[0] < priceRange[1] ? 20 : 10 }}
-                  />
-                  <input
-                    type="range"
-                    min={minPrice}
-                    max={maxPrice}
-                    value={priceRange[1]}
-                    onChange={e => handleSlider(1, Number(e.target.value))}
-                    className="absolute w-full h-2 accent-[#fd6a32] pointer-events-auto z-10"
-                    style={{ zIndex: priceRange[1] > priceRange[0] ? 20 : 10 }}
-                  />
-                  {/* Трек */}
-                  <div className="absolute w-full h-2 bg-[#23232b] rounded-full" />
-                  <div
-                    className="absolute h-2 bg-[#fd6a32] rounded-full"
-                    style={{ left: `${((priceRange[0] - minPrice) / (maxPrice - minPrice)) * 100}%`, width: `${((priceRange[1] - priceRange[0]) / (maxPrice - minPrice)) * 100}%` }}
-                  />
-                </div>
-                <div className="flex gap-2">
-                  <input
-                    type="number"
-                    min={minPrice}
-                    max={maxPrice}
-                    value={priceInput[0]}
-                    onChange={e => {
-                      let v = e.target.value;
-                      if (v === '') v = String(minPrice);
-                      setPriceInput([v, priceInput[1]]);
-                      setPriceRange([Number(v), priceRange[1]]);
-                    }}
-                    className="flex-1 px-3 py-2 rounded-xl bg-[#18181b] text-white text-base border-none outline-none"
-                  />
-                  <input
-                    type="number"
-                    min={minPrice}
-                    max={maxPrice}
-                    value={priceInput[1]}
-                    onChange={e => {
-                      let v = e.target.value;
-                      if (v === '') v = String(maxPrice);
-                      setPriceInput([priceInput[0], v]);
-                      setPriceRange([priceRange[0], Number(v)]);
-                    }}
-                    className="flex-1 px-3 py-2 rounded-xl bg-[#18181b] text-white text-base border-none outline-none"
-                  />
-                </div>
               </div>
             )}
           </div>
@@ -272,7 +180,7 @@ export default function ReviewsPage() {
   const [starFilter, setStarFilter] = useState<number | null>(null);
   const [viewMode, setViewMode] = useState<'cards' | 'rows'>('cards');
   const [filterOpen, setFilterOpen] = useState(false);
-  // состояние для фильтрации по цене
+  // состояние для фильтра
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 10000]);
   const [priceInput, setPriceInput] = useState<[string, string]>(['0', '10000']);
   const minPrice = 0;
@@ -331,21 +239,16 @@ export default function ReviewsPage() {
     (search.trim() === '' ||
       r.text.toLowerCase().includes(search.trim().toLowerCase()) ||
       (r.userName || '').toLowerCase().includes(search.trim().toLowerCase())
-    ) &&
-    (Number(r.price || 0) >= priceRange[0] && Number(r.price || 0) <= priceRange[1])
+    )
   );
   if (sort === 'new') filtered = filtered.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
   else if (sort === 'old') filtered = filtered.sort((a, b) => a.createdAt.localeCompare(b.createdAt));
-  else if (sort === 'price-asc') filtered = filtered.slice().sort((a, b) => (a.price || 0) - (b.price || 0));
-  else if (sort === 'price-desc') filtered = filtered.slice().sort((a, b) => (b.price || 0) - (a.price || 0));
   else if (sort === 'date-asc') filtered = filtered.sort((a, b) => a.createdAt.localeCompare(b.createdAt));
   else if (sort === 'date-desc') filtered = filtered.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
 
   // сброс фильтров
   const resetAllFilters = () => {
     setSort('new');
-    setPriceRange([minPrice, maxPrice]);
-    setPriceInput([String(minPrice), String(maxPrice)]);
   };
   const resetPrice = () => {
     setPriceRange([minPrice, maxPrice]);
@@ -481,14 +384,7 @@ export default function ReviewsPage() {
           onClose={() => setFilterOpen(false)}
           sort={sort}
           setSort={setSort}
-          priceRange={priceRange}
-          setPriceRange={setPriceRange}
-          minPrice={minPrice}
-          maxPrice={maxPrice}
-          priceInput={priceInput}
-          setPriceInput={setPriceInput}
           resetAllFilters={resetAllFilters}
-          resetPrice={resetPrice}
         />
       </div>
       {/* <Footer /> */}

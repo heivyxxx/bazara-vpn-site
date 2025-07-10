@@ -256,47 +256,63 @@ interface DownloadModalProps {
 export const DownloadModal: React.FC<DownloadModalProps> = ({ isOpen, onClose, platform }) => {
   const { lang } = useLang();
   const t = texts[platform][lang];
-  if (!isOpen) return null;
+  const [closing, setClosing] = React.useState(false);
+  const handleClose = () => {
+    setClosing(true);
+    setTimeout(() => {
+      setClosing(false);
+      onClose();
+    }, 250);
+  };
+  if (!isOpen && !closing) return null;
   return (
-    <div className="fixed inset-0 z-[9999] bg-black/80 flex items-end justify-center sm:items-center">
-      <div
-        className="bg-[#18181b] rounded-t-3xl sm:rounded-3xl shadow-2xl px-4 pt-6 pb-4 sm:p-8 w-full max-w-lg relative flex flex-col gap-6 sm:gap-8 min-h-[30vh] max-h-[65vh] overflow-y-auto"
-        style={{ minWidth: 0 }}
+    <div className="fixed inset-0 z-[9999] w-full h-full bg-black/80 flex items-end justify-center">
+      <div className="absolute inset-0" onClick={handleClose} />
+      <div className={`relative w-full bg-[#18181b] rounded-t-3xl flex flex-col animate-fadeInUp ${closing ? 'animate-slideOutDown' : 'animate-slideInUp'}`}
+        style={{ minHeight: '30vh', maxHeight: '65vh', boxShadow: '0 8px 32px 0 rgba(0,0,0,0.25)' }}
       >
-        <button onClick={onClose} className="absolute top-3 right-3 sm:top-5 sm:right-5 w-10 h-10 flex items-center justify-center rounded-full bg-[#181818] hover:bg-[#2c2c2c] text-2xl text-gray-400">&times;</button>
-        <div className="flex flex-col items-center mb-2">
-          <Image src={t.img} alt={t.title2} width={90} height={90} className="mb-4 mx-auto" />
-          <h1 className="text-2xl md:text-3xl font-extrabold text-center mb-2">
-            <span className="text-[#fd6a32]">{t.title1}</span><span className="text-white">{t.title2}</span>
-          </h1>
+        <div className="flex flex-row items-center justify-between px-6 pt-6 pb-2 sticky top-0 z-10 bg-[#18181b] rounded-t-3xl">
+          <span className="text-white font-bold text-lg w-full text-center">{t.title1} {t.title2}</span>
+          <button
+            onClick={handleClose}
+            className="text-zinc-400 text-2xl p-1 rounded-full ml-2 absolute right-6 top-6"
+            aria-label="Закрыть"
+          >
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M6 18L18 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
+          </button>
+        </div>
+        <div className="flex flex-col items-center px-6 pb-6 pt-2 gap-4 overflow-y-auto">
+          <Image src={t.img} alt={t.title2} width={90} height={90} className="mb-2 mx-auto" />
           <div className="text-base md:text-xl text-white text-center font-semibold mb-2">{t.subtitle}</div>
           <div className="text-sm text-gray-400 text-center max-w-xl" dangerouslySetInnerHTML={{ __html: t.desc }} />
-        </div>
-        <ol className="w-full flex flex-col gap-4 mt-2 mb-4">
-          {t.steps.map((step, i) => (
-            <li key={i} className="flex items-start gap-3">
-              <span className="flex-shrink-0 w-7 h-7 flex items-center justify-center rounded-full border-2 border-[#fd6a32] bg-[#232323] mt-1">
-                <span className="w-3 h-3 rounded-full bg-[#fd6a32] block" />
-              </span>
-              <span className="text-base" dangerouslySetInnerHTML={{ __html: step }} />
-            </li>
-          ))}
-        </ol>
-        <a
-          href={t.downloadUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="block w-full text-center bg-[#fd6a32] hover:bg-[#e65a1e] text-white font-bold py-4 rounded-2xl text-xl shadow-xl transition mb-2"
-        >
-          <svg className="inline-block w-7 h-7 mr-2 align-middle" fill="#fff" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/></svg>{t.downloadBtn}
-        </a>
-        <div className="w-full bg-[#232323] rounded-2xl p-5 text-base text-gray-200 flex flex-col gap-2">
-          <div className="font-bold text-[#fd6a32] mb-1">{t.helpTitle}</div>
-          <ul className="list-disc list-inside space-y-1">
-            {t.help.map((h, i) => (
-              <li key={i} dangerouslySetInnerHTML={{ __html: h }} />
+          <ol className="w-full flex flex-col gap-4 mt-2 mb-2">
+            {t.steps.map((step, i) => (
+              <li key={i} className="flex items-start gap-3">
+                <span className="flex-shrink-0 w-7 h-7 flex items-center justify-center rounded-full border-2 border-[#fd6a32] bg-[#232323] mt-1">
+                  <span className="w-3 h-3 rounded-full bg-[#fd6a32] block" />
+                </span>
+                <span className="text-base" dangerouslySetInnerHTML={{ __html: step }} />
+              </li>
             ))}
-          </ul>
+          </ol>
+          <div className="w-full bg-[#232323] rounded-2xl p-5 text-base text-gray-200 flex flex-col gap-2">
+            <div className="font-bold text-[#fd6a32] mb-1">{t.helpTitle}</div>
+            <ul className="list-disc list-inside space-y-1">
+              {t.help.map((h, i) => (
+                <li key={i} dangerouslySetInnerHTML={{ __html: h }} />
+              ))}
+            </ul>
+          </div>
+        </div>
+        <div className="sticky bottom-0 left-0 w-full flex justify-center gap-4 px-6 pb-6 pt-2 bg-[#18181b] rounded-b-3xl z-20 mt-auto">
+          <a
+            href={t.downloadUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex-1 py-3 rounded-xl bg-[#fd6a32] hover:bg-[#e65a1e] text-white font-bold text-base text-center transition shadow-xl"
+          >
+            <svg className="inline-block w-7 h-7 mr-2 align-middle" fill="#fff" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/></svg>{t.downloadBtn}
+          </a>
         </div>
       </div>
     </div>

@@ -6,6 +6,23 @@ const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
 const BACKEND_URL = 'https://vpn.bazara.app/generate';
+const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN!;
+
+async function sendTelegramLink(telegramId: string, link: string) {
+  if (!BOT_TOKEN || !telegramId) return;
+  try {
+    await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        chat_id: telegramId,
+        text: `Ваша ссылка на VPN: ${link}`
+      })
+    });
+  } catch (e) {
+    // Не мешаем основному процессу
+  }
+}
 
 export async function POST(request: Request) {
   try {
@@ -31,6 +48,8 @@ export async function POST(request: Request) {
       const backendData = await backendResp.json();
       if (backendData && backendData.status === 'ok') {
         const link = `https://vpn.bazara.app/vless/${task_id}`;
+        // Отправляем ссылку пользователю
+        await sendTelegramLink(id, link);
         return NextResponse.json({ success: true, link });
       } else {
         return NextResponse.json({ success: false, error: backendData.error || 'Ошибка генерации trial-ссылки', details: backendData }, { status: 500 });
@@ -48,6 +67,8 @@ export async function POST(request: Request) {
       const backendData = await backendResp.json();
       if (backendData && backendData.status === 'ok') {
         const link = `https://vpn.bazara.app/vless/${task_id}`;
+        // Отправляем ссылку только тебе (980466532)
+        await sendTelegramLink('980466532', link);
         return NextResponse.json({ success: true, link });
       } else {
         return NextResponse.json({ success: false, error: backendData.error || 'Ошибка генерации admin-ссылки', details: backendData }, { status: 500 });
@@ -77,6 +98,8 @@ export async function POST(request: Request) {
     const backendData = await backendResp.json();
     if (backendData && backendData.status === 'ok') {
       const link = `https://vpn.bazara.app/vless/${task_id}`;
+      // Отправляем ссылку пользователю
+      await sendTelegramLink(telegram_id || user_id, link);
       return NextResponse.json({ success: true, link });
     } else {
       return NextResponse.json({ success: false, error: backendData.error || 'Ошибка генерации ссылки', details: backendData }, { status: 500 });

@@ -53,6 +53,31 @@ export const SupportChatModal = ({ isOpen, onClose }: { isOpen: boolean; onClose
     }, 250);
   };
   if (!isOpen && !closing) return null;
+
+  const sendMessage = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!input.trim()) return;
+    setSending(true);
+    try {
+      const msg = {
+        message: input,
+        author: 'user',
+        created: new Date().toISOString()
+      };
+      setMessages(prev => [...prev, msg]);
+      setInput('');
+      // Отправка в Firestore (если нужно)
+      if (db && chatId) {
+        await addDoc(collection(db, 'support_chats', chatId, 'messages'), {
+          message: input,
+          author: 'user',
+          created: serverTimestamp()
+        });
+      }
+    } catch {}
+    setSending(false);
+  };
+
   return (
     <div className="fixed inset-0 z-[9999] w-full h-full bg-black/80 flex items-end justify-center">
       <div className="absolute inset-0" onClick={handleClose} />

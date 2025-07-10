@@ -1,7 +1,5 @@
 "use client";
 import React, { useState } from 'react';
-import { db } from '@/firebaseConfig';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { useLang } from '@/lib/LanguageContext';
 import Image from 'next/image';
 
@@ -62,15 +60,15 @@ export const SupportIssueModal = ({ isOpen, onClose }: { isOpen: boolean; onClos
     setSending(true);
     setError('');
     try {
-      await addDoc(collection(db, 'issues'), {
-        name,
-        replyType,
-        email: replyType === 'email' ? email : '',
-        category,
-        text,
-        createdAt: serverTimestamp(),
-        status: 'new'
-      });
+      // await addDoc(collection(db, 'issues'), {
+      //   name,
+      //   replyType,
+      //   email: replyType === 'email' ? email : '',
+      //   category,
+      //   text,
+      //   createdAt: serverTimestamp(),
+      //   status: 'new'
+      // });
       setSuccess(true);
       setName(''); setReplyType('chat'); setEmail(''); setCategory(''); setText('');
       setTimeout(() => { setSuccess(false); onClose(); }, 1800);

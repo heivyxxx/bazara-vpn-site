@@ -1,9 +1,7 @@
 "use client";
 import { useEffect, useState, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { onAuthStateChanged } from "firebase/auth";
-import { collection, getDocs, doc, updateDoc, arrayUnion, query, orderBy, addDoc, onSnapshot, setDoc, deleteDoc, writeBatch, where } from "firebase/firestore";
-import { auth, db } from "@/firebaseConfig";
+import { supabase } from '@/lib/supabaseClient';
 import { createClient } from '@supabase/supabase-js';
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
@@ -53,25 +51,24 @@ export default function SupportPage() {
 
   // Auth protection
   useEffect(() => {
-    const unsub = onAuthStateChanged(auth, (user) => {
-      if (!user) router.replace("/admin/login");
+    const unsub = supabase.auth.onAuthStateChange((event, session) => {
+      if (!session?.user) router.replace("/admin/login");
       else setLoading(false);
     });
-    return () => unsub();
+    return () => unsub;
   }, [router]);
 
   // Получение статусов чатов
   useEffect(() => {
     if (loading) return;
-    const unsub = onSnapshot(collection(db, "supportChatStatus"), (snap) => {
+    const unsub = supabase.from('supportChatStatus').on('*', (payload) => {
       const map: ChatStatusMap = {};
-      snap.forEach(docu => {
-        const d = docu.data();
-        map[docu.id] = d.status;
+      payload.new.forEach((doc) => {
+        map[doc.id] = doc.data().status;
       });
       setStatusMap(map);
     });
-    return () => unsub();
+    return () => unsub;
   }, [loading]);
 
   // Subscribe to all messages in real time

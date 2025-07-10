@@ -1,9 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { onAuthStateChanged } from "firebase/auth";
-import { collection, getDocs, doc, updateDoc, query } from "firebase/firestore";
-import { auth, db } from "@/firebaseConfig";
 import { createClient } from '@supabase/supabase-js';
 import { supabase } from '@/lib/supabaseClient';
 

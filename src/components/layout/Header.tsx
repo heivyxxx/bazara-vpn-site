@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { getTelegramUser, signInOrUpWithTelegram, upsertUserProfile, getProfileFromUsersTable } from '@/lib/auth';
 import { User } from '@/lib/types';
 import { PaymentModal } from '@/app/tariffs/PaymentModal';
+import { usePathname } from 'next/navigation';
 
 const translations = {
   ru: {
@@ -41,6 +42,7 @@ export const Header = ({ onLogin, user, onLogout }: HeaderProps) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [depositOpen, setDepositOpen] = useState(false);
+  const pathname = usePathname();
 
   async function handleLogin() {
     setLoading(true);
@@ -63,7 +65,7 @@ export const Header = ({ onLogin, user, onLogout }: HeaderProps) => {
         <div className="flex items-center gap-4 min-w-0">
           <div className="flex flex-col items-start justify-center min-w-0">
             <span className="text-xs text-gray-400 font-semibold mb-1">Общий баланс</span>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1">
               {/* Аватар */}
               {user?.avatar ? (
                 <img
@@ -81,9 +83,9 @@ export const Header = ({ onLogin, user, onLogout }: HeaderProps) => {
                 {typeof user?.balance === 'number' ? user.balance.toFixed(2) : user?.balance === 0 ? '0.00' : '—'}
               </span>
               {/* Иконка рубля */}
-              <svg className="w-5 h-5 text-white ml-0.5" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24" style={{marginLeft: '2px'}}><path d="M8 6h6a3 3 0 1 1 0 6H8V4m0 8v8m0-4h5" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24"><path d="M8 6h6a3 3 0 1 1 0 6H8V4m0 8v8m0-4h5" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"/></svg>
               {/* Плюсик для пополнения */}
-              <Link href="/deposit" className="ml-2 flex items-center justify-center w-8 h-8 rounded-full bg-[#232323] hover:bg-[#fd6a32] transition-colors border border-[#fd6a32] cursor-pointer" title="Пополнить баланс">
+              <Link href="/deposit" className="flex items-center justify-center w-8 h-8 rounded-full bg-[#232323] hover:bg-[#fd6a32] transition-colors border border-[#fd6a32] cursor-pointer" title="Пополнить баланс">
                 <svg className="w-6 h-6 text-[#fd6a32] group-hover:text-white transition" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" stroke="currentColor" strokeLinecap="round"/></svg>
               </Link>
             </div>
@@ -91,12 +93,21 @@ export const Header = ({ onLogin, user, onLogout }: HeaderProps) => {
         </div>
         {/* Actions (язык, скачать) */}
         <div className="flex items-center gap-2 md:gap-4">
-          <Link 
-            href="/download" 
-            className="bg-[#fd6a32] hover:bg-[#e65a1e] text-white font-semibold py-2 px-5 md:px-6 rounded-xl transition text-base md:text-lg"
-          >
-            {t.download}
-          </Link>
+          {pathname === '/profile' ? (
+            <Link 
+              href="/support" 
+              className="bg-[#fd6a32] hover:bg-[#e65a1e] text-white font-semibold py-2 px-5 md:px-6 rounded-xl transition text-base md:text-lg"
+            >
+              {t.support}
+            </Link>
+          ) : (
+            <Link 
+              href="/download" 
+              className="bg-[#fd6a32] hover:bg-[#e65a1e] text-white font-semibold py-2 px-5 md:px-6 rounded-xl transition text-base md:text-lg"
+            >
+              {t.download}
+            </Link>
+          )}
           <button
             className="flex items-center gap-2 px-3 py-2 bg-[#232323] rounded-lg border border-[#fd6a32] text-white hover:bg-[#fd6a32] focus:outline-none text-base ml-1 md:ml-2"
             onClick={() => setLang(lang === 'ru' ? 'en' : 'ru')}

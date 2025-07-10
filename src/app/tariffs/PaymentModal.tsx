@@ -67,6 +67,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, tar
   const [link, setLink] = useState('');
   const [copied, setCopied] = useState(false);
   const [afterPay, setAfterPay] = useState(false);
+  const [closing, setClosing] = useState(false);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -104,7 +105,15 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, tar
     }
   }, []);
 
-  if (!isOpen) return null;
+  const handleClose = () => {
+    setClosing(true);
+    setTimeout(() => {
+      setClosing(false);
+      onClose();
+    }, 250);
+  };
+
+  if (!isOpen && !closing) return null;
 
   const handlePay = async () => {
     setError('');
@@ -122,7 +131,6 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, tar
       const description = (payMethod === 'crypto')
         ? (tariff === 'year' ? t.year : t.month)
         : 'Подписка BazaraVPN';
-      
       const requestBody = {
         amount,
         order_id,
@@ -131,18 +139,12 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, tar
         email,
         package_days
       };
-      
-      console.log('Отправляем запрос:', requestBody);
-      
       const resp = await fetch('/api/pay', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(requestBody)
       });
-      
       const data = await resp.json();
-      console.log('Получен ответ:', data);
-      
       setLoading(false);
       if (data && data.url) {
         if (typeof window !== 'undefined') {
@@ -171,72 +173,85 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, tar
   };
 
   return (
-    <div className="fixed inset-0 z-[9999] bg-black/80 flex items-end justify-center">
-      <div className="bg-[#18181b] rounded-t-3xl rounded-b-none shadow-2xl p-4 sm:p-8 md:p-12 w-full max-w-2xl relative flex flex-col gap-6 sm:gap-8 min-h-[60vh] max-h-[98vh] overflow-y-auto" style={{minWidth:0}}>
-        <button onClick={onClose} className="absolute top-3 right-3 sm:top-5 sm:right-5 w-10 h-10 flex items-center justify-center rounded-full bg-[#181818] hover:bg-[#2c2c2c] text-2xl text-gray-400">&times;</button>
-        <div className="flex items-center gap-3 sm:gap-4 mb-2">
-          <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#181818] flex items-center justify-center text-2xl font-bold text-[#FE6125]">BV</div>
-          <div>
-            <div className="font-bold text-base sm:text-lg text-white">{t.account}</div>
-            <div className="text-gray-400 text-xs sm:text-sm">user@bazaravpn.ru</div>
-          </div>
+    <div className="fixed inset-0 z-[9999] bg-black/80 flex items-end justify-center sm:items-center">
+      <div
+        className={`bg-[#18181b] rounded-t-3xl sm:rounded-3xl shadow-2xl w-full max-w-lg relative flex flex-col animate-fadeInUp ${closing ? 'animate-slideOutDown' : 'animate-slideInUp'} min-h-[40vh] max-h-[70vh] overflow-y-auto`}
+        style={{ minWidth: 0 }}
+      >
+        <div className="flex flex-row items-center justify-between px-6 pt-6 pb-2 sticky top-0 z-10 bg-[#18181b] rounded-t-3xl">
+          <span className="text-white font-bold text-lg w-full text-center">Оплата</span>
+          <button
+            onClick={handleClose}
+            className="text-zinc-400 text-2xl p-1 rounded-full ml-2 absolute right-6 top-6"
+            aria-label="Закрыть"
+          >
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M6 18L18 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
+          </button>
         </div>
-        <div className="font-extrabold text-xl sm:text-2xl text-white mb-2">{tariff === 'year' ? t.year : t.month}</div>
-        <div className="grid grid-cols-2 gap-2 sm:gap-4 mb-4 sm:mb-6">
-          <div className="flex items-center gap-2 sm:gap-3 bg-[#181818] rounded-xl px-3 sm:px-5 py-3 sm:py-4 text-base sm:text-lg text-white font-semibold shadow">
-            <svg className="w-6 h-6 sm:w-7 sm:h-7 text-[#FE6125]" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24"><path d="M12 3C17 5 21 5 21 10C21 19 12 21 12 21C12 21 3 19 3 10C3 5 7 5 12 3Z"/></svg>
-            <span>{t.feature1}</span>
+        <form className="flex-1 flex flex-col px-6 pb-6 pt-2 gap-6" onSubmit={e => { e.preventDefault(); handlePay(); }}>
+          <div className="font-extrabold text-xl sm:text-2xl text-white mb-2 text-center">{tariff === 'year' ? t.year : t.month}</div>
+          <div className="grid grid-cols-2 gap-2 sm:gap-4 mb-2">
+            <div className="flex items-center gap-2 sm:gap-3 bg-[#181818] rounded-xl px-3 sm:px-5 py-3 sm:py-4 text-base sm:text-lg text-white font-semibold shadow">
+              <svg className="w-6 h-6 sm:w-7 sm:h-7 text-[#fd6a32]" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24"><path d="M12 3C17 5 21 5 21 10C21 19 12 21 12 21C12 21 3 19 3 10C3 5 7 5 12 3Z"/></svg>
+              <span>{t.feature1}</span>
+            </div>
+            <div className="flex items-center gap-2 sm:gap-3 bg-[#181818] rounded-xl px-3 sm:px-5 py-3 sm:py-4 text-base sm:text-lg text-white font-semibold shadow">
+              <svg className="w-6 h-6 sm:w-7 sm:h-7 text-[#fd6a32]" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24"><path d="M12 6v12M6 12h12"/></svg>
+              <span>{t.feature2}</span>
+            </div>
+            <div className="flex items-center gap-2 sm:gap-3 bg-[#181818] rounded-xl px-3 sm:px-5 py-3 sm:py-4 text-base sm:text-lg text-white font-semibold shadow">
+              <svg className="w-6 h-6 sm:w-7 sm:h-7 text-[#fd6a32]" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M8 21h8"/></svg>
+              <span>{t.feature3}</span>
+            </div>
+            <div className="flex items-center gap-2 sm:gap-3 bg-[#181818] rounded-xl px-3 sm:px-5 py-3 sm:py-4 text-base sm:text-lg text-white font-semibold shadow">
+              <svg className="w-6 h-6 sm:w-7 sm:h-7 text-[#fd6a32]" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 12l2.5 2.5L16 9"/></svg>
+              <span>{t.feature4}</span>
+            </div>
           </div>
-          <div className="flex items-center gap-2 sm:gap-3 bg-[#181818] rounded-xl px-3 sm:px-5 py-3 sm:py-4 text-base sm:text-lg text-white font-semibold shadow">
-            <svg className="w-6 h-6 sm:w-7 sm:h-7 text-[#FE6125]" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24"><path d="M12 6v12M6 12h12"/></svg>
-            <span>{t.feature2}</span>
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 mb-2 w-full">
+            <button type="button" onClick={()=>setPayMethod('sbp')} className={`flex-1 pay-method${payMethod==='sbp'?' selected':''} min-w-0`}>{t.sbp}</button>
+            <button type="button" onClick={()=>setPayMethod('card')} className={`flex-1 pay-method${payMethod==='card'?' selected':''} min-w-0`}>{t.card}</button>
+            <button type="button" onClick={()=>setPayMethod('crypto')} className={`flex-1 pay-method${payMethod==='crypto'?' selected':''} min-w-0`}>{t.crypto}</button>
           </div>
-          <div className="flex items-center gap-2 sm:gap-3 bg-[#181818] rounded-xl px-3 sm:px-5 py-3 sm:py-4 text-base sm:text-lg text-white font-semibold shadow">
-            <svg className="w-6 h-6 sm:w-7 sm:h-7 text-[#FE6125]" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M8 21h8"/></svg>
-            <span>{t.feature3}</span>
+          <div className="mb-2 w-full">
+            <input value={email} onChange={e=>setEmail(e.target.value)} type="email" required placeholder={t.email} className="w-full rounded-lg px-4 py-3 text-base text-white font-semibold bg-[#181818] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#fd6a32] focus:border-[#fd6a32]" style={{marginBottom:8, display:'block'}} />
           </div>
-          <div className="flex items-center gap-2 sm:gap-3 bg-[#181818] rounded-xl px-3 sm:px-5 py-3 sm:py-4 text-base sm:text-lg text-white font-semibold shadow">
-            <svg className="w-6 h-6 sm:w-7 sm:h-7 text-[#FE6125]" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 12l2.5 2.5L16 9"/></svg>
-            <span>{t.feature4}</span>
+          {error && <div className="text-red-500 text-sm text-center mb-2">{error}</div>}
+          <div className="sticky bottom-0 left-0 w-full flex justify-center gap-4 px-0 pt-2 bg-[#18181b] rounded-b-3xl z-20 mt-auto">
+            <button
+              type="submit"
+              className="flex-1 py-3 rounded-xl bg-[#fd6a32] hover:bg-[#e65a1e] text-white font-semibold text-base transition disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={loading}
+            >
+              {t.pay} <span className="ml-2 font-bold">{price}</span>
+            </button>
           </div>
-        </div>
-        <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 mb-2 sm:mb-4 w-full">
-          <button onClick={()=>setPayMethod('sbp')} className={`flex-1 pay-method${payMethod==='sbp'?' selected':''} min-w-0`}>{t.sbp}</button>
-          <button onClick={()=>setPayMethod('card')} className={`flex-1 pay-method${payMethod==='card'?' selected':''} min-w-0`}>{t.card}</button>
-          <button onClick={()=>setPayMethod('crypto')} className={`flex-1 pay-method${payMethod==='crypto'?' selected':''} min-w-0`}>{t.crypto}</button>
-        </div>
-        <div className="mb-2 sm:mb-4 w-full">
-          <input value={email} onChange={e=>setEmail(e.target.value)} type="email" required placeholder={t.email} className="w-full rounded-lg px-4 py-3 text-base text-white font-semibold bg-[#181818] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#FE6125] focus:border-[#FE6125]" style={{marginBottom:8, display:'block'}} />
-        </div>
-        <button onClick={handlePay} className="relative w-full py-4 rounded-xl font-bold text-lg text-white bg-[#444] flex justify-center items-center px-8 hover:bg-[#FE6125] transition-colors duration-200 cursor-pointer" disabled={loading}>
-          <span className="mx-auto">{t.pay}</span>
-          <span className="absolute right-8 text-lg font-bold text-white opacity-90">{price}</span>
-        </button>
-        <div className="text-xs text-gray-400 mt-2">Нажимая кнопку "Оплатить", вы соглашаетесь с условиями <a href="#" className="underline">лицензионного соглашения</a>.</div>
+          <div className="text-xs text-gray-400 mt-2 text-center">Нажимая кнопку "Оплатить", вы соглашаетесь с условиями <a href="#" className="underline">лицензионного соглашения</a>.</div>
+        </form>
+        <style jsx>{`
+          .pay-method {
+            background: #181818;
+            color: #fff;
+            border-radius: 1rem;
+            padding: 1.25rem 0;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-align: center;
+            transition: background 0.18s, box-shadow 0.18s, border 0.18s;
+            border: 2.5px solid transparent;
+            cursor: pointer;
+          }
+          .pay-method:hover {
+            background: #333;
+          }
+          .pay-method.selected {
+            border: 2.5px solid;
+            border-image: linear-gradient(90deg, #fd6a32 0%, #a259ff 100%) 1;
+            box-shadow: 0 0 0 2px #fd6a3255;
+            border-radius: 1rem !important;
+          }
+        `}</style>
       </div>
-      <style jsx>{`
-        .pay-method {
-          background: #181818;
-          color: #fff;
-          border-radius: 1rem;
-          padding: 1.25rem 0;
-          font-weight: 600;
-          font-size: 1.1rem;
-          text-align: center;
-          transition: background 0.18s, box-shadow 0.18s, border 0.18s;
-          border: 2.5px solid transparent;
-          cursor: pointer;
-        }
-        .pay-method:hover {
-          background: #333;
-        }
-        .pay-method.selected {
-          border: 2.5px solid;
-          border-image: linear-gradient(90deg, #FE6125 0%, #a259ff 100%) 1;
-          box-shadow: 0 0 0 2px #FE612555;
-          border-radius: 1rem !important;
-        }
-      `}</style>
     </div>
   );
 }; 

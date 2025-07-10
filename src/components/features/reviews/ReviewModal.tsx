@@ -13,6 +13,7 @@ interface ReviewModalProps {
 export const ReviewModal = ({ isOpen, onClose, onSubmit, user }: ReviewModalProps) => {
   const [text, setText] = useState('');
   const [rating, setRating] = useState(5);
+  const [closing, setClosing] = useState(false);
 
   useEffect(() => {
     if (!isOpen) {
@@ -27,84 +28,83 @@ export const ReviewModal = ({ isOpen, onClose, onSubmit, user }: ReviewModalProp
     onSubmit(text, rating);
   };
 
-  if (!isOpen) return null;
+  const handleClose = () => {
+    setClosing(true);
+    setTimeout(() => {
+      setClosing(false);
+      onClose();
+    }, 250);
+  };
+
+  if (!isOpen && !closing) return null;
 
   return (
-    <div className="fixed inset-0 z-[9999] bg-black/80 flex items-center justify-center">
-      <div className="bg-[#18181b] rounded-2xl shadow-2xl w-full max-w-lg">
-        <div className="p-4 sm:p-6 border-b border-[#333]">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-xl sm:text-2xl font-bold text-white">
-              Оставить отзыв
-            </h3>
-            <button
-              onClick={onClose}
-              className="text-gray-400 hover:text-white transition w-10 h-10 flex items-center justify-center"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-          </div>
-
-          {!user ? null : (
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Оценка
-                </label>
-                <div className="flex gap-2">
-                  {Array(5).fill(0).map((_, i) => (
-                    <button
-                      key={i}
-                      type="button"
-                      onClick={() => setRating(i + 1)}
-                      className="text-2xl focus:outline-none"
-                    >
-                      <svg 
-                        className={`w-8 h-8 ${i < rating ? 'text-[#fd6a32]' : 'text-gray-400'}`} 
-                        fill="currentColor" 
-                        viewBox="0 0 20 20"
-                      >
-                        <polygon points="10,1 12.59,7.36 19.51,7.64 14,12.14 15.82,19.02 10,15.27 4.18,19.02 6,12.14 0.49,7.64 7.41,7.36"/>
-                      </svg>
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Ваш отзыв
-                </label>
-                <textarea
-                  value={text}
-                  onChange={(e) => setText(e.target.value)}
-                  rows={4}
-                  className="w-full px-4 py-3 bg-[#181818] border border-[#333] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#fd6a32] focus:border-transparent resize-none text-base"
-                  placeholder="Расскажите о вашем опыте использования BazaraVPN..."
-                />
-              </div>
-
-              <div className="flex flex-col sm:flex-row justify-end gap-3 sm:gap-4 w-full">
-                <button
-                  type="button"
-                  onClick={onClose}
-                  className="px-6 py-2 text-gray-300 hover:text-white transition w-full sm:w-auto"
-                >
-                  Отмена
-                </button>
-                <button
-                  type="submit"
-                  disabled={!text.trim()}
-                  className="px-6 py-2 bg-[#fd6a32] hover:bg-[#fd6a32] text-white font-semibold rounded-xl shadow transition disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto"
-                >
-                  Отправить
-                </button>
-              </div>
-            </form>
-          )}
+    <div className="fixed inset-0 z-[9999] bg-black/80 flex items-end justify-center sm:items-center">
+      <div
+        className={`bg-[#18181b] rounded-t-3xl sm:rounded-3xl shadow-2xl w-full max-w-lg relative flex flex-col animate-fadeInUp ${closing ? 'animate-slideOutDown' : 'animate-slideInUp'} min-h-[30vh] max-h-[65vh] overflow-y-auto`}
+        style={{ minWidth: 0 }}
+      >
+        <div className="flex flex-row items-center justify-between px-6 pt-6 pb-2 sticky top-0 z-10 bg-[#18181b] rounded-t-3xl">
+          <span className="text-white font-bold text-lg w-full text-center">Оставить отзыв</span>
+          <button
+            onClick={handleClose}
+            className="text-zinc-400 text-2xl p-1 rounded-full ml-2 absolute right-6 top-6"
+            aria-label="Закрыть"
+          >
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M6 18L18 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
+          </button>
         </div>
+        {!user ? null : (
+          <form onSubmit={handleSubmit} className="flex-1 flex flex-col px-6 pb-6 pt-2 gap-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Оценка</label>
+              <div className="flex gap-2">
+                {Array(5).fill(0).map((_, i) => (
+                  <button
+                    key={i}
+                    type="button"
+                    onClick={() => setRating(i + 1)}
+                    className="text-2xl focus:outline-none"
+                  >
+                    <svg
+                      className={`w-8 h-8 ${i < rating ? 'text-[#fd6a32]' : 'text-gray-400'}`}
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <polygon points="10,1 12.59,7.36 19.51,7.64 14,12.14 15.82,19.02 10,15.27 4.18,19.02 6,12.14 0.49,7.64 7.41,7.36"/>
+                    </svg>
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Ваш отзыв</label>
+              <textarea
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+                rows={4}
+                className="w-full px-4 py-3 bg-[#181818] border border-[#333] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#fd6a32] focus:border-transparent resize-none text-base"
+                placeholder="Расскажите о вашем опыте использования BazaraVPN..."
+              />
+            </div>
+            <div className="sticky bottom-0 left-0 w-full flex justify-between gap-4 px-0 pt-2 bg-[#18181b] rounded-b-3xl z-20 mt-auto">
+              <button
+                type="button"
+                onClick={handleClose}
+                className="flex-1 py-3 rounded-xl text-white font-semibold text-base bg-transparent hover:bg-zinc-800 transition"
+              >
+                Отмена
+              </button>
+              <button
+                type="submit"
+                disabled={!text.trim()}
+                className="flex-1 py-3 rounded-xl bg-[#fd6a32] hover:bg-[#e65a1e] text-white font-semibold text-base transition disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Отправить
+              </button>
+            </div>
+          </form>
+        )}
       </div>
     </div>
   );

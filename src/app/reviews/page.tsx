@@ -8,6 +8,7 @@ import { useLang, useUser } from '@/lib/LanguageContext';
 import { Header } from '@/components/layout/Header';
 // import { Footer } from '@/components/layout/Footer';
 import { LanguageProvider } from '@/lib/LanguageContext';
+import { supabase } from '@/lib/supabaseClient';
 
 const reviewsTexts = {
   ru: {
@@ -79,6 +80,7 @@ export default function ReviewsPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showAuth, setShowAuth] = useState(false);
   const [reviews, setReviews] = useState<Review[]>([]);
+  const [usersMap, setUsersMap] = useState<Record<string, User>>({});
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [sort, setSort] = useState<'new' | 'old'>('new');
@@ -107,9 +109,23 @@ export default function ReviewsPage() {
       try {
         const res = await fetch('/api/reviews');
         const data = await res.json();
-        if (data.success) setReviews(data.reviews);
+        if (data.success) {
+          setReviews(data.reviews);
+          // Получаем userId из отзывов
+          const userIds = Array.from(new Set(data.reviews.map((r: any) => r.userId)));
+          if (userIds.length > 0) {
+            const { data: users } = await supabase
+              .from('users')
+              .select('id, name, username, avatar')
+              .in('id', userIds);
+            const map: Record<string, User> = {};
+            (users || []).forEach((u: User) => { map[u.id] = u; });
+            setUsersMap(map);
+          }
+        }
       } catch (e) {
         setReviews([]);
+        setUsersMap({});
       } finally {
         setLoading(false);
       }
@@ -185,9 +201,12 @@ export default function ReviewsPage() {
             ) : filtered.length === 0 ? (
               <div className="text-center text-gray-400 py-12 md:py-16 text-base md:text-xl w-full col-span-2">{t.noReviews}</div>
             ) : (
-              filtered.map((review) => (
-                <ReviewCard key={review.id} review={review} avatar={avatarMap[review.id] || AVATARS[0]} />
-              ))
+              filtered.map((review) => {
+                const u = usersMap[review.userId?.toString?.() || review.userId];
+                return (
+                  <ReviewCard key={review.id} review={{...review, userName: u?.name || 'Аноним'}} avatar={u?.avatar || AVATARS[0]} />
+                );
+              })
             )}
           </div>
         </main>

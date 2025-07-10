@@ -25,8 +25,19 @@ export default function Header() {
     if (megaOpen) document.addEventListener('mousedown', handler);
     return () => document.removeEventListener('mousedown', handler);
   }, [megaOpen]);
+
+  // Добавляем вычисление паддингов как в Eclipse
+  const isIOS = typeof window !== 'undefined' && /iPad|iPhone|iPod/.test(navigator.userAgent);
+  const isMobile = typeof window !== 'undefined' && (window.innerWidth <= 600 || /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent));
+  const baseMinHeight = 92;
+  const basePaddingTop = isMobile ? 72 : 10;
+  const minHeight = isIOS ? baseMinHeight + 16 : baseMinHeight;
+  const paddingTop = isIOS ? basePaddingTop + 50 : basePaddingTop;
+
   return (
-    <nav className="fixed top-0 left-0 w-full z-20 bg-[#181818] shadow-sm border-b border-orange-900" id="main-navbar">
+    <nav className="fixed top-0 left-0 w-full z-20 bg-[#181818] shadow-sm border-b border-orange-900" id="main-navbar"
+      style={{ minHeight, paddingTop: `calc(var(--tg-viewport-safe-area-inset-top, 0px) + ${paddingTop}px)`, paddingBottom: 16 }}
+    >
       <div className="max-w-6xl mx-auto flex items-center justify-between py-4 px-4 md:px-8 text-lg gap-8">
         <div className="flex items-center gap-3 logo-home cursor-pointer flex-shrink-0">
           <Link href="/" className="flex items-center gap-3">

@@ -205,20 +205,11 @@ export default function HomePage() {
     <>
       <Header user={user} onLogin={() => setAuthOpen(true)} onLogout={() => { setUser(null); if (typeof window !== 'undefined') localStorage.removeItem('bazaraUser'); }} />
       <ReviewModal isOpen={isModalOpen && !!user} onClose={() => setIsModalOpen(false)} onSubmit={handleSubmitReview} user={user} />
-      <main className="min-h-screen bg-black">
+      <main className="min-h-screen bg-black pt-[calc(var(--tg-viewport-safe-area-inset-top)+0px)] pb-[calc(var(--tg-viewport-safe-area-inset-bottom)+56px)]">
         <Hero />
         <PromoCards />
         <Reviews />
-        {/* Кнопка оставить отзыв — только под отзывами */}
-        <section className="max-w-3xl mx-auto mt-0 mb-10 px-4 flex justify-center gap-4">
-          <button onClick={() => { user ? setIsModalOpen(true) : setAuthOpen(true); }} className="flex items-center gap-2 bg-gradient-to-r from-[#FE6125] to-[#FE6125] hover:from-[#FE6125] hover:to-[#FE6125] text-white text-[22px] font-bold py-4 px-10 rounded-xl shadow-lg transition-all duration-200">
-            <svg className="w-6 h-6" fill="none" stroke="white" strokeWidth="2" viewBox="0 0 24 24">
-              <path d="M12 20h9" />
-              <path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19.5 3 21l1.5-4L16.5 3.5Z" />
-            </svg>
-            <span>Оставить отзыв</span>
-          </button>
-        </section>
+        {/* Удалён section с кнопкой оставить отзыв */}
         <Features />
         <HowItWorks />
         <FAQ />

@@ -6,13 +6,16 @@ export const SafeArea: React.FC<{ children: React.ReactNode }> = ({ children }) 
 
   React.useEffect(() => {
     function updatePadding() {
-      if (window.innerWidth <= 600) {
-        setPaddingTop('40px'); // Мобильные
-        setPaddingBottom('54px'); // 34 + 20
-      } else {
-        setPaddingTop('10px'); // Десктоп
-        setPaddingBottom('34px');
+      let pt = 10, pb = 34;
+      const isMobile = window.innerWidth <= 600 || /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+      if (isMobile) {
+        pt = 40;
+        pb = 54;
+        if (isIOS) pt += 50;
       }
+      setPaddingTop(`calc(var(--tg-viewport-safe-area-inset-top, 0px) + ${pt}px)`);
+      setPaddingBottom(`calc(var(--tg-viewport-safe-area-inset-bottom, 0px) + ${pb}px)`);
     }
     updatePadding();
     window.addEventListener('resize', updatePadding);
@@ -22,8 +25,8 @@ export const SafeArea: React.FC<{ children: React.ReactNode }> = ({ children }) 
   return (
     <div
       style={{
-        paddingTop: paddingTop,
-        paddingBottom: paddingBottom,
+        paddingTop,
+        paddingBottom,
         minHeight: '100vh',
         boxSizing: 'border-box',
         background: '#000',

@@ -4,22 +4,30 @@ import { useRouter } from "next/navigation";
 import { onAuthStateChanged } from "firebase/auth";
 import { collection, getDocs, doc, updateDoc, query } from "firebase/firestore";
 import { auth, db } from "@/firebaseConfig";
+import { createClient } from '@supabase/supabase-js';
+import { supabase } from '@/lib/supabaseClient';
 
 interface Review {
   id: string;
-  name: string;
+  userId: string;
   text: string;
   rating: number;
   status: string;
-  createdAt: any;
+  createdAt: string;
+}
+interface UserInfo {
+  id: string;
+  name: string;
+  avatar?: string;
 }
 
 export default function ReviewsPage() {
   const [loading, setLoading] = useState(true);
   const [reviews, setReviews] = useState<Review[]>([]);
+  const [usersMap, setUsersMap] = useState<Record<string, UserInfo>>({});
   const router = useRouter();
 
-  // Auth protection
+  // Auth protection (оставляем через Firebase)
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (user) => {
       if (!user) router.replace("/admin/login");
@@ -28,31 +36,30 @@ export default function ReviewsPage() {
     return () => unsub();
   }, [router]);
 
-  // Fetch reviews
+  // Fetch reviews from Supabase
   const fetchReviews = async () => {
-    const q = query(collection(db, "reviews"));
-    const snap = await getDocs(q);
-    const arr: Review[] = [];
-    snap.forEach(docu => {
-      const d = docu.data();
-      if (d.status === "moderation") {
-        arr.push({
-          id: docu.id,
-          name: d.name || "Аноним",
-          text: d.text || "",
-          rating: d.rating || 0,
-          status: d.status,
-          createdAt: d.createdAt || null
-        });
-      }
-    });
-    // Сортировка: свежие сверху
-    arr.sort((a, b) => {
-      const aTime = a.createdAt && a.createdAt.toDate ? a.createdAt.toDate().getTime() : 0;
-      const bTime = b.createdAt && b.createdAt.toDate ? b.createdAt.toDate().getTime() : 0;
-      return bTime - aTime;
-    });
-    setReviews(arr);
+    setLoading(true);
+    const { data, error } = await supabase
+      .from('reviews')
+      .select('*')
+      .eq('status', 'moderation')
+      .order('createdAt', { ascending: false });
+    if (error) { setReviews([]); setUsersMap({}); setLoading(false); return; }
+    setReviews(data || []);
+    // Получаем userId из отзывов
+    const userIds = Array.from(new Set((data || []).map((r: any) => r.userId)));
+    if (userIds.length > 0) {
+      const { data: users } = await supabase
+        .from('users')
+        .select('id, name, avatar')
+        .in('id', userIds);
+      const map: Record<string, UserInfo> = {};
+      (users || []).forEach((u: UserInfo) => { map[u.id] = u; });
+      setUsersMap(map);
+    } else {
+      setUsersMap({});
+    }
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -61,7 +68,7 @@ export default function ReviewsPage() {
 
   // Действия
   const setStatus = async (id: string, status: string) => {
-    await updateDoc(doc(db, "reviews", id), { status });
+    await supabase.from('reviews').update({ status }).eq('id', id);
     await fetchReviews();
   };
 
@@ -86,20 +93,24 @@ export default function ReviewsPage() {
       {reviews.length === 0 && (
         <div className="text-gray-400 text-center mt-10">Нет отзывов на модерации</div>
       )}
-      {reviews.map((review) => (
-        <div key={review.id} className="review-card flex flex-col gap-3">
-          <div className="flex items-center gap-4 mb-1">
-            <div className="font-bold text-lg text-purple-400 flex-1">{review.name || "Аноним"}</div>
-            <div className="stars">{'★'.repeat(review.rating)}{'☆'.repeat(5-review.rating)}</div>
-            <div className="text-sm text-gray-400">{review.createdAt && review.createdAt.toDate ? review.createdAt.toDate().toLocaleString() : "-"}</div>
+      {reviews.map((review) => {
+        const u = usersMap[review.userId?.toString?.() || review.userId];
+        return (
+          <div key={review.id} className="review-card flex flex-col gap-3">
+            <div className="flex items-center gap-4 mb-1">
+              {u?.avatar && <img src={u.avatar} alt="avatar" className="w-10 h-10 rounded-full object-cover border border-gray-700 bg-gray-800" />}
+              <div className="font-bold text-lg text-purple-400 flex-1">{u?.name || "Аноним"}</div>
+              <div className="stars">{'★'.repeat(review.rating)}{'☆'.repeat(5-review.rating)}</div>
+              <div className="text-sm text-gray-400">{review.createdAt ? new Date(review.createdAt).toLocaleString() : "-"}</div>
+            </div>
+            <div className="text-base mb-2">{review.text}</div>
+            <div className="flex gap-2">
+              <button className="review-btn" onClick={() => setStatus(review.id, "published")}>✅ Утвердить</button>
+              <button className="review-btn" onClick={() => setStatus(review.id, "deleted")}>❌ Удалить</button>
+            </div>
           </div>
-          <div className="text-base mb-2">{review.text}</div>
-          <div className="flex gap-2">
-            <button className="review-btn" onClick={() => setStatus(review.id, "published")}>✅ Утвердить</button>
-            <button className="review-btn" onClick={() => setStatus(review.id, "deleted")}>❌ Удалить</button>
-          </div>
-        </div>
-      ))}
+        );
+      })}
       <style jsx global>{`
         .review-card {
           background: #232323;

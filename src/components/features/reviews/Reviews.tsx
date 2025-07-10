@@ -10,6 +10,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, A11y } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
+import { supabase } from '@/lib/supabaseClient';
 
 interface ReviewCardProps {
   avatar: string;
@@ -69,6 +70,7 @@ export const Reviews = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [reviews, setReviews] = useState<Review[]>([]);
+  const [usersMap, setUsersMap] = useState<Record<string, User>>({});
   const [loading, setLoading] = useState(true);
   const { lang } = useLang();
   const t = reviewsTexts[lang];
@@ -81,9 +83,23 @@ export const Reviews = () => {
       try {
         const res = await fetch('/api/reviews');
         const data = await res.json();
-        if (data.success) setReviews(data.reviews);
+        if (data.success) {
+          setReviews(data.reviews);
+          // Получаем userId из отзывов
+          const userIds = Array.from(new Set(data.reviews.map((r: any) => r.userId)));
+          if (userIds.length > 0) {
+            const { data: users } = await supabase
+              .from('users')
+              .select('id, name, username, avatar')
+              .in('id', userIds);
+            const map: Record<string, User> = {};
+            (users || []).forEach((u: User) => { map[u.id] = u; });
+            setUsersMap(map);
+          }
+        }
       } catch (e) {
         setReviews([]);
+        setUsersMap({});
       } finally {
         setLoading(false);
       }
@@ -164,17 +180,20 @@ export const Reviews = () => {
             className="reviews-track-3d flex gap-4 sm:gap-8"
             style={{alignItems:'center', minHeight:320}}
           >
-            {reviews.map((review, index) => (
-              <SwiperSlide key={review.id} style={{display:'flex',justifyContent:'center'}}>
-                <ReviewCard
-                  avatar={`/assets/avatar${(index % 3) + 1}.png`}
-                  name={review.userName}
-                  rating={review.rating}
-                  text={review.text}
-                  date={new Date(review.createdAt).toLocaleString(lang === 'ru' ? 'ru-RU' : 'en-GB', { day: '2-digit', month: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit' })}
-                />
-              </SwiperSlide>
-            ))}
+            {reviews.map((review, index) => {
+              const u = usersMap[review.userId?.toString?.() || review.userId];
+              return (
+                <SwiperSlide key={review.id} style={{display:'flex',justifyContent:'center'}}>
+                  <ReviewCard
+                    avatar={u?.avatar || `/assets/avatar${(index % 3) + 1}.png`}
+                    name={u?.name || 'Аноним'}
+                    rating={review.rating}
+                    text={review.text}
+                    date={new Date(review.createdAt).toLocaleString(lang === 'ru' ? 'ru-RU' : 'en-GB', { day: '2-digit', month: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit' })}
+                  />
+                </SwiperSlide>
+              );
+            })}
             <button ref={prevRef} className="carousel-arrow left" aria-label="Назад">
               <svg width="32" height="32" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg>
             </button>

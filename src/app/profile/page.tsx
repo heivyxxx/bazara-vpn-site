@@ -50,7 +50,7 @@ export default function ProfilePage() {
   return (
     <>
       <Header user={effectiveUser} onLogout={() => setUser(null)} />
-      <main className="min-h-screen bg-black flex flex-col items-center pt-24 pb-8">
+      <main className="min-h-screen bg-black flex flex-col items-center pt-[calc(var(--tg-viewport-safe-area-inset-top)+0px)] pb-[calc(var(--tg-viewport-safe-area-inset-bottom)+56px)]">
         {/* Профиль */}
         <div className="w-full max-w-2xl mx-auto flex flex-col items-center gap-4 mb-6">
           <Image src={effectiveUser?.avatar || "/assets/avatar1.png"} alt="avatar" width={96} height={96} className="rounded-2xl w-24 h-24 object-cover border-4 border-[#232323]" />

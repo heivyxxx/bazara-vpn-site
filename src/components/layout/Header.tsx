@@ -6,6 +6,7 @@ import { useLang } from '@/lib/LanguageContext';
 import { useState } from 'react';
 import { getTelegramUser, signInOrUpWithTelegram, upsertUserProfile, getProfileFromUsersTable } from '@/lib/auth';
 import { User } from '@/lib/types';
+import { PaymentModal } from '@/app/tariffs/PaymentModal';
 
 const translations = {
   ru: {
@@ -39,6 +40,7 @@ export const Header = ({ onLogin, user, onLogout }: HeaderProps) => {
   const t = translations[lang];
   const [menuOpen, setMenuOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [depositOpen, setDepositOpen] = useState(false);
 
   async function handleLogin() {
     setLoading(true);
@@ -79,11 +81,11 @@ export const Header = ({ onLogin, user, onLogout }: HeaderProps) => {
                 {typeof user?.balance === 'number' ? user.balance.toFixed(2) : user?.balance === 0 ? '0.00' : '—'}
               </span>
               {/* Иконка рубля */}
-              <svg className="w-6 h-6 text-gray-300 ml-1" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24"><path d="M8 6h6a3 3 0 1 1 0 6H8V4m0 8v8m0-4h5" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"/></svg>
-            </div>
-            {/* Имя пользователя */}
-            <div className="text-white font-bold text-base mt-1 truncate max-w-[120px]">
-              {user?.name || user?.username || '—'}
+              <svg className="w-5 h-5 text-white ml-0.5" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24" style={{marginLeft: '2px'}}><path d="M8 6h6a3 3 0 1 1 0 6H8V4m0 8v8m0-4h5" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              {/* Плюсик для пополнения */}
+              <Link href="/deposit" className="ml-2 flex items-center justify-center w-8 h-8 rounded-full bg-[#232323] hover:bg-[#fd6a32] transition-colors border border-[#fd6a32] cursor-pointer" title="Пополнить баланс">
+                <svg className="w-6 h-6 text-[#fd6a32] group-hover:text-white transition" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" stroke="currentColor" strokeLinecap="round"/></svg>
+              </Link>
             </div>
           </div>
         </div>
@@ -105,6 +107,7 @@ export const Header = ({ onLogin, user, onLogout }: HeaderProps) => {
           </button>
         </div>
       </div>
+      <PaymentModal isOpen={depositOpen} onClose={() => setDepositOpen(false)} tariff={"month"} price={""} />
       <style jsx>{`
         @media (max-width: 600px) {
           .text-2xl { font-size: 1.2rem; }

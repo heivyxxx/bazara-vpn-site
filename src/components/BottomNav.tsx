@@ -27,12 +27,13 @@ const BottomNav = () => {
             key={nav.to}
             href={nav.to}
             className={clsx(
-              'flex flex-col items-center justify-center flex-1 h-full py-1 select-none transition-colors',
+              'flex flex-col items-center justify-center flex-1 h-full select-none transition-colors',
               isActive ? 'text-white font-bold' : 'text-gray-400'
             )}
             onClick={hapticSelection}
+            style={{display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', height:'100%'}}
           >
-            <span className="mb-1" style={{ lineHeight: 0 }}>
+            <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 32 }}>
               <Image
                 src={isActive ? nav.iconActive : nav.icon}
                 alt={nav.label}
@@ -42,7 +43,7 @@ const BottomNav = () => {
                 draggable={false}
               />
             </span>
-            <span className="text-xs mt-0.5 font-medium tracking-wide">{nav.label}</span>
+            <span className="text-xs font-medium tracking-wide mt-1" style={{lineHeight:'1.1', textAlign:'center'}}>{nav.label}</span>
           </Link>
         );
       })}

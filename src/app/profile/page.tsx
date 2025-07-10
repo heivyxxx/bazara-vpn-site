@@ -225,6 +225,7 @@ export default function ProfilePage() {
   const [user, setUser] = useUser();
   const [supabaseUser, setSupabaseUser] = useState<any>(null);
   const [supabaseUserLoading, setSupabaseUserLoading] = useState(false);
+  const [avatarDark, setAvatarDark] = useState(false);
   useEffect(() => {
     if (typeof window === 'undefined') return;
     const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
@@ -262,8 +263,10 @@ export default function ProfilePage() {
             alt="avatar"
             width={96}
             height={96}
-            className="rounded-2xl w-24 h-24 object-cover border-4 border-[#232323]"
+            className={`rounded-2xl w-24 h-24 object-cover border-4 border-[#232323] ${avatarDark ? 'opacity-60 transition-opacity duration-200' : 'transition-opacity duration-200'}`}
             onClick={(() => {
+              setAvatarDark(true);
+              setTimeout(() => setAvatarDark(false), 500);
               let clickCount = 0;
               let lastClick = 0;
               return function (e) {

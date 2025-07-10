@@ -1,5 +1,5 @@
 "use client";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
@@ -23,6 +23,19 @@ async function generateAdminLinks(days: number, count: number, user_id: string) 
 
 export default function AdminPanel() {
   const router = useRouter();
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.Telegram?.WebApp?.BackButton) {
+      window.Telegram.WebApp.BackButton.show();
+      window.Telegram.WebApp.BackButton.onClick(() => {
+        router.push('/admin');
+      });
+    }
+    return () => {
+      if (window.Telegram?.WebApp?.BackButton) {
+        window.Telegram.WebApp.BackButton.hide();
+      }
+    };
+  }, [router]);
   const [showModal, setShowModal] = useState(false);
   const [days, setDays] = useState(30);
   const [numLinks, setNumLinks] = useState(1);
@@ -50,12 +63,7 @@ export default function AdminPanel() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center text-3xl text-white bg-black relative">
-      <button
-        className="absolute left-4 top-4 px-5 py-2 rounded-xl bg-[#23232b] hover:bg-[#23232b]/80 text-white font-semibold text-base border border-[#23232b] transition"
-        onClick={() => router.push('/admin')}
-      >
-        Назад
-      </button>
+      {/* Кастомная кнопка Назад убираю, теперь только Telegram BackButton */}
       <div>Общая панель</div>
       <div className="flex flex-col md:flex-row gap-10 w-full justify-center items-center">
         {/* Блок: Генерация ссылок */}

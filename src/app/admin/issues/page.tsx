@@ -1,9 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { onAuthStateChanged } from "firebase/auth";
-import { collection, getDocs, doc, updateDoc, query, orderBy } from "firebase/firestore";
-import { auth, db } from "@/firebaseConfig";
 
 interface Issue {
   id: string;

@@ -39,10 +39,10 @@ export const ReviewModal = ({ isOpen, onClose, onSubmit, user }: ReviewModalProp
   if (!isOpen && !closing) return null;
 
   return (
-    <div className="fixed inset-0 z-[9999] bg-black/80 flex items-end justify-center sm:items-center">
-      <div
-        className={`bg-[#18181b] rounded-t-3xl sm:rounded-3xl shadow-2xl w-full max-w-lg relative flex flex-col animate-fadeInUp ${closing ? 'animate-slideOutDown' : 'animate-slideInUp'} min-h-[30vh] max-h-[65vh] overflow-y-auto`}
-        style={{ minWidth: 0 }}
+    <div className="fixed inset-0 z-[9999] w-full h-full bg-black/80 flex items-end justify-center">
+      <div className="absolute inset-0" onClick={handleClose} />
+      <div className={`relative w-full bg-[#18181b] rounded-t-3xl flex flex-col animate-fadeInUp ${closing ? 'animate-slideOutDown' : 'animate-slideInUp'}`}
+        style={{ minHeight: '30vh', maxHeight: '65vh', boxShadow: '0 8px 32px 0 rgba(0,0,0,0.25)' }}
       >
         <div className="flex flex-row items-center justify-between px-6 pt-6 pb-2 sticky top-0 z-10 bg-[#18181b] rounded-t-3xl">
           <span className="text-white font-bold text-lg w-full text-center">Оставить отзыв</span>
@@ -55,7 +55,7 @@ export const ReviewModal = ({ isOpen, onClose, onSubmit, user }: ReviewModalProp
           </button>
         </div>
         {!user ? null : (
-          <form onSubmit={handleSubmit} className="flex-1 flex flex-col px-6 pb-6 pt-2 gap-6">
+          <form onSubmit={handleSubmit} className="flex-1 flex flex-col px-6 pb-6 pt-2 gap-6 overflow-y-auto">
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">Оценка</label>
               <div className="flex gap-2">
@@ -87,7 +87,7 @@ export const ReviewModal = ({ isOpen, onClose, onSubmit, user }: ReviewModalProp
                 placeholder="Расскажите о вашем опыте использования BazaraVPN..."
               />
             </div>
-            <div className="sticky bottom-0 left-0 w-full flex justify-between gap-4 px-0 pt-2 bg-[#18181b] rounded-b-3xl z-20 mt-auto">
+            <div className="sticky bottom-0 left-0 w-full flex justify-center gap-4 px-0 pt-2 bg-[#18181b] rounded-b-3xl z-20 mt-auto">
               <button
                 type="button"
                 onClick={handleClose}

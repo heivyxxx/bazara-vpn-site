@@ -174,10 +174,10 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, tar
   };
 
   return (
-    <div className="fixed inset-0 z-[9999] bg-black/80 flex items-end justify-center sm:items-center">
-      <div
-        className={`bg-[#18181b] rounded-t-3xl sm:rounded-3xl shadow-2xl w-full max-w-lg relative flex flex-col animate-fadeInUp ${closing ? 'animate-slideOutDown' : 'animate-slideInUp'} min-h-[40vh] max-h-[70vh] overflow-y-auto`}
-        style={{ minWidth: 0 }}
+    <div className="fixed inset-0 z-[9999] w-full h-full bg-black/80 flex items-end justify-center">
+      <div className="absolute inset-0" onClick={handleClose} />
+      <div className={`relative w-full bg-[#18181b] rounded-t-3xl flex flex-col animate-fadeInUp ${closing ? 'animate-slideOutDown' : 'animate-slideInUp'}`}
+        style={{ minHeight: '30vh', maxHeight: '65vh', boxShadow: '0 8px 32px 0 rgba(0,0,0,0.25)' }}
       >
         <div className="flex flex-row items-center justify-between px-6 pt-6 pb-2 sticky top-0 z-10 bg-[#18181b] rounded-t-3xl">
           <span className="text-white font-bold text-lg w-full text-center">Оплата</span>
@@ -189,10 +189,9 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, tar
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M6 18L18 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
           </button>
         </div>
-        <div className="flex flex-col items-center px-6 pb-6 pt-2 gap-6">
-          {/* email input убран */}
-          <div className="font-extrabold text-xl sm:text-2xl text-white mb-2 text-center">{tariff === 'year' ? t.year : t.month}</div>
-          <div className="grid grid-cols-2 gap-2 sm:gap-4 mb-2">
+        <div className="flex flex-col items-center px-6 pb-6 pt-2 gap-6 overflow-y-auto">
+          <div className="font-extrabold text-xl sm:text-2xl text-white text-center">{tariff === 'year' ? t.year : t.month}</div>
+          <div className="grid grid-cols-2 gap-2 sm:gap-4">
             <div className="flex items-center gap-2 sm:gap-3 bg-[#181818] rounded-xl px-3 sm:px-5 py-3 sm:py-4 text-base sm:text-lg text-white font-semibold shadow">
               <svg className="w-6 h-6 sm:w-7 sm:h-7 text-[#fd6a32]" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24"><path d="M12 3C17 5 21 5 21 10C21 19 12 21 12 21C12 21 3 19 3 10C3 5 7 5 12 3Z"/></svg>
               <span>{t.feature1}</span>
@@ -210,17 +209,18 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, tar
               <span>{t.feature4}</span>
             </div>
           </div>
-          <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 mb-2 w-full">
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 w-full">
             <button type="button" onClick={()=>setPayMethod('sbp')} className={`flex-1 pay-method${payMethod==='sbp'?' selected':''} min-w-0`}>{t.sbp}</button>
             <button type="button" onClick={()=>setPayMethod('card')} className={`flex-1 pay-method${payMethod==='card'?' selected':''} min-w-0`}>{t.card}</button>
             <button type="button" onClick={()=>setPayMethod('crypto')} className={`flex-1 pay-method${payMethod==='crypto'?' selected':''} min-w-0`}>{t.crypto}</button>
           </div>
-          {error && <div className="text-red-500 text-sm text-center mb-2">{error}</div>}
+          {error && <div className="text-red-500 text-sm text-center">{error}</div>}
           <div className="sticky bottom-0 left-0 w-full flex justify-center gap-4 px-0 pt-2 bg-[#18181b] rounded-b-3xl z-20 mt-auto">
             <button
-              type="submit"
+              type="button"
               className="flex-1 py-3 rounded-xl bg-[#fd6a32] hover:bg-[#e65a1e] text-white font-semibold text-base transition disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={loading}
+              onClick={handlePay}
             >
               {t.pay} <span className="ml-2 font-bold">{price}</span>
             </button>

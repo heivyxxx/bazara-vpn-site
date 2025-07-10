@@ -30,8 +30,10 @@ export async function POST(request: Request) {
         orderId: order_id,
         amount,
         currency: 'RUB',
-        type: method === 'sbp' ? 'SBP' : 'CardCrypto',
-        description: `BazaraVPN ${package_days} days for user ${user_id}`
+        description: `BazaraVPN ${package_days} days for user ${user_id}`,
+        paymentMethod: method === 'sbp' ? 'SBP' : 'CardCrypto',
+        successUrl: 'https://bazara.app/success',
+        failUrl: 'https://bazara.app/fail'
       })
     });
     let data;
@@ -49,7 +51,7 @@ export async function POST(request: Request) {
     }
     if (data && data.paymentUrl) {
       console.log('WATA paymentUrl:', data.paymentUrl);
-      return NextResponse.json({ success: true, url: data.paymentUrl });
+      return NextResponse.json({ success: true, paymentUrl: data.paymentUrl });
     } else {
       console.error('Ошибка WATA:', data);
       return NextResponse.json({ success: false, error: data?.error || 'Ошибка создания ссылки на оплату', details: data }, { status: 500 });

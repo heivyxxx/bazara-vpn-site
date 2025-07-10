@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import Image from "next/image";
 import { Header } from '@/components/layout/Header';
 import { LanguageProvider, useLang } from '@/lib/LanguageContext';
@@ -7,6 +7,7 @@ import { supabase } from '@/lib/supabaseClient';
 import { useUser } from '@/lib/LanguageContext';
 import QRCode from 'react-qr-code';
 import { Disclosure } from '@headlessui/react';
+import { useRouter } from "next/navigation";
 
 function ProfileHistoryModal({ open, onClose, items }: { open: boolean, onClose: () => void, items: any[] }) {
   if (!open) return null;
@@ -226,6 +227,33 @@ export default function ProfilePage() {
   const [supabaseUser, setSupabaseUser] = useState<any>(null);
   const [supabaseUserLoading, setSupabaseUserLoading] = useState(false);
   const [avatarDark, setAvatarDark] = useState(false);
+  const clickCountRef = useRef(0);
+  const lastClickRef = useRef(0);
+  const router = useRouter();
+
+  const handleAvatarClick = () => {
+    setAvatarDark(true);
+    setTimeout(() => setAvatarDark(false), 500);
+    const now = Date.now();
+    if (now - lastClickRef.current > 2000) clickCountRef.current = 0;
+    lastClickRef.current = now;
+    clickCountRef.current++;
+    console.log('[ADMIN DEBUG] Клик по аватару:', {
+      userId: effectiveUser?.id,
+      clickCount: clickCountRef.current
+    });
+    if (clickCountRef.current === 6) {
+      if (effectiveUser?.id === 980466532 || effectiveUser?.id === 7245616315) {
+        console.log('[ADMIN DEBUG] ID разрешён, открываю /admin');
+        clickCountRef.current = 0;
+        router.push("/admin");
+      } else {
+        console.log('[ADMIN DEBUG] ID НЕ разрешён:', effectiveUser?.id);
+        clickCountRef.current = 0;
+      }
+    }
+  };
+
   useEffect(() => {
     if (typeof window === 'undefined') return;
     const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
@@ -264,24 +292,7 @@ export default function ProfilePage() {
             width={96}
             height={96}
             className={`rounded-2xl w-24 h-24 object-cover border-4 border-[#232323] ${avatarDark ? 'opacity-60 transition-opacity duration-200' : 'transition-opacity duration-200'}`}
-            onClick={(() => {
-              setAvatarDark(true);
-              setTimeout(() => setAvatarDark(false), 500);
-              let clickCount = 0;
-              let lastClick = 0;
-              return function (e) {
-                const now = Date.now();
-                if (now - lastClick > 2000) clickCount = 0;
-                lastClick = now;
-                clickCount++;
-                if (clickCount === 6) {
-                  clickCount = 0;
-                  if (effectiveUser?.id === 980466532 || effectiveUser?.id === 7245616315) {
-                    window.location.href = "/admin";
-                  }
-                }
-              };
-            })()}
+            onClick={handleAvatarClick}
           />
           <div className="text-2xl font-bold text-white">{effectiveUser?.name || effectiveUser?.username || '—'}</div>
           <div className="text-lg font-semibold text-[#fd6a32] flex items-center gap-2">

@@ -35,11 +35,17 @@ export async function POST(request: Request) {
       })
     });
     let data;
+    const contentType = resp.headers.get('content-type') || '';
+    const rawText = await resp.text();
+    if (!rawText || !contentType.includes('application/json')) {
+      console.error('WATA вернула пустой или не-JSON ответ:', rawText);
+      return NextResponse.json({ success: false, error: 'WATA returned empty or non-JSON response', details: rawText }, { status: 500 });
+    }
     try {
-      data = await resp.json();
+      data = JSON.parse(rawText);
     } catch (jsonErr) {
-      console.error('Ошибка парсинга JSON от WATA:', jsonErr);
-      return NextResponse.json({ success: false, error: 'WATA returned invalid JSON', details: jsonErr }, { status: 500 });
+      console.error('Ошибка парсинга JSON от WATA:', jsonErr, 'Ответ:', rawText);
+      return NextResponse.json({ success: false, error: 'WATA returned invalid JSON', details: rawText }, { status: 500 });
     }
     if (data && data.paymentUrl) {
       console.log('WATA paymentUrl:', data.paymentUrl);

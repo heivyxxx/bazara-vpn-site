@@ -96,7 +96,6 @@ export default function DepositPage() {
       if (data && data.url) {
         // Ожидаем успешной оплаты через afterpay (как на тарифах)
         if (typeof window !== 'undefined') {
-          localStorage.setItem('pay_email', user?.email || '');
           localStorage.setItem('pay_package_days', '0');
           localStorage.setItem('pay_task_id', order_id);
         }

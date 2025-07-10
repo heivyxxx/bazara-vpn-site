@@ -20,21 +20,25 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: false, error: 'Unsupported method' }, { status: 400 });
     }
     const paymentApiUrl = 'https://api.wata.pro/api/h2h/payment-link';
+    const paymentBody: any = {
+      orderId: order_id,
+      amount,
+      currency: 'RUB',
+      description: `BazaraVPN ${package_days} days for user ${user_id}`,
+      paymentMethod: method === 'sbp' ? 'SBP' : 'CardCrypto',
+      successUrl: 'https://bazara.app/success',
+      failUrl: 'https://bazara.app/fail'
+    };
+    if (process.env.WATA_TERMINAL_ID) {
+      paymentBody.terminalId = process.env.WATA_TERMINAL_ID;
+    }
     const resp = await fetch(paymentApiUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${process.env.WATA_API_TOKEN}`
       },
-      body: JSON.stringify({
-        orderId: order_id,
-        amount,
-        currency: 'RUB',
-        description: `BazaraVPN ${package_days} days for user ${user_id}`,
-        paymentMethod: method === 'sbp' ? 'SBP' : 'CardCrypto',
-        successUrl: 'https://bazara.app/success',
-        failUrl: 'https://bazara.app/fail'
-      })
+      body: JSON.stringify(paymentBody)
     });
     let data;
     const contentType = resp.headers.get('content-type') || '';

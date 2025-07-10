@@ -40,9 +40,14 @@ export async function POST(request: Request) {
       },
       body: JSON.stringify(paymentBody)
     });
+    // Расширенное логирование
+    console.log('WATA request body:', paymentBody);
+    console.log('WATA status:', resp.status, resp.statusText);
+    console.log('WATA headers:', JSON.stringify([...resp.headers]));
+    const rawText = await resp.text();
+    console.log('WATA rawText:', rawText);
     let data;
     const contentType = resp.headers.get('content-type') || '';
-    const rawText = await resp.text();
     if (!rawText || !contentType.includes('application/json')) {
       console.error('WATA вернула пустой или не-JSON ответ:', rawText);
       return NextResponse.json({ success: false, error: 'WATA returned empty or non-JSON response', details: rawText }, { status: 500 });

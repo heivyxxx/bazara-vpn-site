@@ -63,9 +63,7 @@ export default function DepositPage() {
         amount: numAmount,
         order_id,
         description,
-        method: payMethod,
-        email: user?.email || '',
-        package_days: 0
+        method: payMethod
       };
       const resp = await fetch('/api/pay', {
         method: 'POST',

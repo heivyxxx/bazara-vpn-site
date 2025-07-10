@@ -1,7 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { db } from '@/firebaseConfig';
-import { collection, addDoc, getDocs, query, orderBy } from 'firebase/firestore';
+import { createClient } from '@supabase/supabase-js';
 
 export default function ReferralsPage() {
   const [links, setLinks] = useState([]);
@@ -9,34 +8,31 @@ export default function ReferralsPage() {
   const [newName, setNewName] = useState('');
   const [loading, setLoading] = useState(true);
 
+  const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+  const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
   useEffect(() => {
-    // Загружаем все реферальные ссылки из Firestore
-    const fetchLinks = async () => {
+    async function fetchLinks() {
       setLoading(true);
-      const q = query(collection(db, 'referrals'), orderBy('createdAt', 'desc'));
-      const snap = await getDocs(q);
-      setLinks(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+      const { data, error } = await supabase.from('referrals').select('*').order('created_at', { ascending: false });
+      setLinks(data || []);
       setLoading(false);
-    };
+    }
     fetchLinks();
   }, []);
 
   const handleCreate = async () => {
     if (!newName) return;
     const url = `https://bazara-vpn-site.vercel.app/?ref=${encodeURIComponent(newName)}`;
-    await addDoc(collection(db, 'referrals'), {
-      name: newName,
-      url,
-      count: 0,
-      users: [],
-      createdAt: Date.now(),
-    });
+    // user_id можно получить из auth или временно захардкодить
+    const user_id = 'admin';
+    await supabase.from('referrals').insert({ name: newName, url, user_id });
     setModalOpen(false);
     setNewName('');
     // Перезагружаем список
-    const q = query(collection(db, 'referrals'), orderBy('createdAt', 'desc'));
-    const snap = await getDocs(q);
-    setLinks(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+    const { data } = await supabase.from('referrals').select('*').order('created_at', { ascending: false });
+    setLinks(data || []);
   };
 
   return (
@@ -63,6 +59,8 @@ export default function ReferralsPage() {
             <div>
               <div className="text-lg font-bold">{link.name}</div>
               <div className="text-sm text-gray-400 break-all">{link.url}</div>
+              <div className="text-xs text-gray-500 mt-1">Владелец: {link.user_id}</div>
+              <div className="text-xs text-gray-500 mt-1">Создано: {link.created_at ? new Date(link.created_at).toLocaleString() : '-'}</div>
             </div>
             <div className="mt-2 md:mt-0 text-orange-400 font-bold text-lg">Приведено: {link.count}</div>
           </div>

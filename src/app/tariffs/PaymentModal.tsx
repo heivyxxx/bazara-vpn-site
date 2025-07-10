@@ -71,6 +71,10 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, tar
   const [copied, setCopied] = useState(false);
   const [afterPay, setAfterPay] = useState(false);
   const [closing, setClosing] = useState(false);
+  // 1. Добавляю состояние для ссылки на оплату и polling
+  const [paymentUrl, setPaymentUrl] = useState('');
+  const [polling, setPolling] = useState(false);
+  let pollingInterval: NodeJS.Timeout | null = null;
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -118,6 +122,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, tar
 
   if (!isOpen && !closing) return null;
 
+  // 2. handlePay теперь для sbp/card только создаёт заказ и paymentUrl, а не вызывает /api/pay
   const handlePay = async () => {
     setError('');
     if (!payMethod) {
@@ -132,8 +137,38 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, tar
     const package_days = tariff === 'year' ? 365 : 30;
     const order_id = `${payMethod}_${user.id}_${Date.now()}`;
     setLoading(true);
+    if (payMethod === 'balance') {
+      // Баланс — всё как было
+      try {
+        const resp = await fetch('/api/pay', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            user_id: user.id,
+            package_days,
+            order_id,
+            method: payMethod,
+            amount
+          })
+        });
+        const data = await resp.json();
+        setLoading(false);
+        if (data && data.success && data.link) {
+          setLink(data.link);
+          setSuccess(true);
+          setUser({ ...user, balance: user.balance - amount });
+        } else {
+          setError(data.error || 'Ошибка оплаты');
+        }
+      } catch (e: any) {
+        setLoading(false);
+        setError(e.message || 'Ошибка соединения');
+      }
+      return;
+    }
+    // Для sbp/card — создаём заказ, получаем ссылку на оплату
     try {
-      const resp = await fetch('/api/pay', {
+      const resp = await fetch('/api/create-order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -146,12 +181,22 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, tar
       });
       const data = await resp.json();
       setLoading(false);
-      if (data && data.success && data.link) {
-        setLink(data.link);
-        setSuccess(true);
-        if (payMethod === 'balance') setUser({ ...user, balance: user.balance - amount });
+      if (data && data.success && data.paymentUrl) {
+        setPaymentUrl(data.paymentUrl);
+        setPolling(true);
+        // Запускаем polling
+        pollingInterval = setInterval(async () => {
+          const pollResp = await fetch(`/api/pay?orderId=${order_id}`);
+          const pollData = await pollResp.json();
+          if (pollData && pollData.success && pollData.link) {
+            setLink(pollData.link);
+            setSuccess(true);
+            setPolling(false);
+            if (pollingInterval) clearInterval(pollingInterval);
+          }
+        }, 3000);
       } else {
-        setError(data.error || 'Ошибка оплаты');
+        setError(data.error || 'Ошибка создания заказа');
       }
     } catch (e: any) {
       setLoading(false);
@@ -211,14 +256,20 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, tar
           </div>
           {error && <div className="text-red-500 text-sm text-center">{error}</div>}
           <div className="sticky bottom-0 left-0 w-full flex justify-center gap-4 px-0 pt-2 bg-[#18181b] rounded-b-3xl z-20 mt-auto">
-            <button
-              type="button"
-              className="flex-1 py-3 rounded-xl bg-[#fd6a32] hover:bg-[#e65a1e] text-white font-semibold text-base transition disabled:opacity-50 disabled:cursor-not-allowed"
-              disabled={loading || (payMethod === 'balance' && (!user || typeof user.balance !== 'number' || user.balance < Number(String(price).replace(/[^\d]/g, ''))))}
-              onClick={handlePay}
-            >
-              {t.pay} <span className="ml-2 font-bold">{price}</span>
-            </button>
+            {polling && !link ? (
+              <div className="flex-1 py-3 rounded-xl bg-[#fd6a32] hover:bg-[#e65a1e] text-white font-semibold text-base transition disabled:opacity-50 disabled:cursor-not-allowed">
+                {t.loading}
+              </div>
+            ) : (
+              <button
+                type="button"
+                className="flex-1 py-3 rounded-xl bg-[#fd6a32] hover:bg-[#e65a1e] text-white font-semibold text-base transition disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={loading || (payMethod === 'balance' && (!user || typeof user.balance !== 'number' || user.balance < Number(String(price).replace(/[^\d]/g, ''))))}
+                onClick={handlePay}
+              >
+                {t.pay} <span className="ml-2 font-bold">{price}</span>
+              </button>
+            )}
           </div>
           <div className="text-xs text-gray-400 mt-2 text-center">Нажимая кнопку "Оплатить", вы соглашаетесь с условиями <a href="#" className="underline">лицензионного соглашения</a>.</div>
         </div>

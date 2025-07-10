@@ -57,7 +57,6 @@ function SupportContent() {
     <main className="flex-1 flex flex-col pt-24 items-center w-full min-h-screen bg-black">
       <Image src="/assets/trader.gif" alt="BazaraVPN" width={208} height={208} className="w-52 h-52 mx-auto mb-8 select-none pointer-events-none cursor-pointer" draggable={false} onClick={() => setChatOpen(true)} />
       <SupportChatModal isOpen={chatOpen} onClose={() => setChatOpen(false)} />
-      <SupportIssueModal isOpen={issueOpen} onClose={() => setIssueOpen(false)} />
       <SupportKbModal isOpen={kbOpen} onClose={() => setKbOpen(false)} />
       <SupportDiscussModal isOpen={discussOpen} onClose={() => setDiscussOpen(false)} />
       <h1 className="text-3xl md:text-4xl font-bold text-[#fd6a32] text-center mb-6">{t.title}</h1>
@@ -94,17 +93,6 @@ function SupportContent() {
             className="w-full max-w-xs py-3 md:py-4 rounded-2xl font-bold text-base md:text-lg text-white shadow-lg transition-all duration-200 bg-[#fd6a32] hover:bg-[#e65a1e] mt-0 text-center block"
           >
             {t.discussBtn}
-          </button>
-        </div>
-        <div className="bg-[#18181b] rounded-[2.2rem] shadow-xl p-6 md:p-10 flex flex-col items-center text-center">
-          <Image src="/assets/bug-3d.png" alt="Сообщить о проблеме" width={64} height={64} className="w-16 h-16 md:w-20 md:h-20 mb-4 md:mb-6 select-none pointer-events-none mx-auto" draggable={false} />
-          <div className="text-lg md:text-2xl font-extrabold text-white mb-2">{lang === 'ru' ? 'Сообщить о проблеме' : 'Report a Problem'}</div>
-          <div className="text-sm md:text-[16px] text-[#B8B8B8] mb-4 md:mb-5">{lang === 'ru' ? 'Оставьте отзыв или сообщите о проблеме — мы всегда на связи!' : 'Leave feedback or report a problem — we are always in touch!'}</div>
-          <button
-            onClick={() => setIssueOpen(true)}
-            className="w-full max-w-xs py-3 md:py-4 rounded-2xl font-bold text-base md:text-lg text-white shadow-lg transition-all duration-200 bg-[#fd6a32] hover:bg-[#e65a1e] mt-0"
-          >
-            {lang === 'ru' ? 'Сообщить о проблеме' : 'Report a Problem'}
           </button>
         </div>
       </section>

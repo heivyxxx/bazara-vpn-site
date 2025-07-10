@@ -1,6 +1,8 @@
-import { db } from '@/firebaseConfig';
-import { collection, getDocs, doc, updateDoc, arrayUnion, increment } from 'firebase/firestore';
 import { NextResponse } from 'next/server';
+import { createClient } from '@supabase/supabase-js';
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
 export async function POST(req) {
   try {
@@ -8,22 +10,17 @@ export async function POST(req) {
     const { ref, userId } = body;
     if (!ref || !userId) return NextResponse.json({ error: 'Missing params' }, { status: 400 });
 
-    const q = collection(db, 'referrals');
-    const snap = await getDocs(q);
-    const docSnap = snap.docs.find(d => d.data().name === ref);
-    if (!docSnap) return NextResponse.json({ error: 'Ref not found' }, { status: 404 });
-
-    const data = docSnap.data();
-    if (!data.users) data.users = [];
-    if (data.users.includes(userId)) {
+    // Ищем реферальную ссылку по name
+    const { data: refs, error } = await supabase.from('referrals').select('*').eq('name', ref);
+    if (error || !refs || refs.length === 0) return NextResponse.json({ error: 'Ref not found' }, { status: 404 });
+    const referral = refs[0];
+    const users = referral.users || [];
+    if (users.includes(userId)) {
       return NextResponse.json({ status: 'already counted' });
     }
-
-    await updateDoc(doc(db, 'referrals', docSnap.id), {
-      users: arrayUnion(userId),
-      count: increment(1)
-    });
-
+    // Добавляем userId в users и увеличиваем count
+    const newUsers = [...users, userId];
+    await supabase.from('referrals').update({ users: newUsers, count: referral.count + 1 }).eq('id', referral.id);
     return NextResponse.json({ status: 'ok' });
   } catch (e) {
     return NextResponse.json({ error: e.message }, { status: 500 });

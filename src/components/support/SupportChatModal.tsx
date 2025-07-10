@@ -1,8 +1,6 @@
 "use client";
 import React, { useEffect, useRef, useState } from 'react';
-import { db } from '@/firebaseConfig';
-import { collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, setDoc } from 'firebase/firestore';
-import { v4 as uuidv4 } from 'uuid';
+import { createClient } from '@supabase/supabase-js';
 import { useLang } from '@/lib/LanguageContext';
 import Image from 'next/image';
 
@@ -54,26 +52,44 @@ export const SupportChatModal = ({ isOpen, onClose }: { isOpen: boolean; onClose
   };
   if (!isOpen && !closing) return null;
 
+  useEffect(() => {
+    let sub: any = null;
+    let mounted = true;
+    async function initChat() {
+      setLoading(true);
+      // Проверяем, есть ли чат
+      let { data: chat } = await supabase.from('chats').select('*').eq('chat_id', chatId).single();
+      if (!chat) {
+        // Создаём чат
+        await supabase.from('chats').insert({ chat_id: chatId, status: 'new', last_message_at: new Date().toISOString() });
+      }
+      // Загружаем сообщения
+      const { data: msgs } = await supabase.from('chat_messages').select('*').eq('chat_id', chatId).order('created_at', { ascending: true });
+      if (mounted) setMessages(msgs || []);
+      setLoading(false);
+      // Подписка на новые сообщения
+      sub = supabase.channel('chat_'+chatId)
+        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'chat_messages', filter: `chat_id=eq.${chatId}` }, payload => {
+          setMessages(prev => [...prev, payload.new]);
+        })
+        .subscribe();
+    }
+    if (chatId) initChat();
+    return () => { mounted = false; if (sub) supabase.removeChannel(sub); };
+  }, [chatId]);
+
   const sendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim()) return;
     setSending(true);
     try {
-      const msg = {
-        message: input,
+      await supabase.from('chat_messages').insert({
+        chat_id: chatId,
         author: 'user',
-        created: new Date().toISOString()
-      };
-      setMessages(prev => [...prev, msg]);
+        message: input
+      });
+      await supabase.from('chats').update({ last_message_at: new Date().toISOString() }).eq('chat_id', chatId);
       setInput('');
-      // Отправка в Firestore (если нужно)
-      if (db && chatId) {
-        await addDoc(collection(db, 'support_chats', chatId, 'messages'), {
-          message: input,
-          author: 'user',
-          created: serverTimestamp()
-        });
-      }
     } catch {}
     setSending(false);
   };

@@ -24,6 +24,13 @@ async function sendTelegramLink(telegramId: string, link: string) {
   }
 }
 
+function randomId(prefix: string) {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let out = prefix;
+  for (let i = 0; i < 8; ++i) out += chars[Math.floor(Math.random() * chars.length)];
+  return out;
+}
+
 export async function POST(request: Request) {
   try {
     const body = await request.json();
@@ -39,7 +46,7 @@ export async function POST(request: Request) {
       // Ставим trial=true
       await supabase.from('users').update({ trial: true }).eq('id', id);
       // Генерируем ссылку на 3 дня
-      const task_id = `trial_${id}_${Date.now()}`;
+      const task_id = randomId('T');
       const backendResp = await fetch(BACKEND_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -58,7 +65,7 @@ export async function POST(request: Request) {
     // 2. ADMIN: любое число дней, без оплаты
     if (is_admin) {
       if (!user_id || !package_days) return NextResponse.json({ success: false, error: 'Missing params' }, { status: 400 });
-      const task_id = order_id || `admin_${user_id}_${Date.now()}`;
+      const task_id = randomId('A');
       const backendResp = await fetch(BACKEND_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -75,7 +82,7 @@ export async function POST(request: Request) {
       }
     }
     // 3. Обычная покупка (balance, sbp, card, crypto): 30 или 365 дней
-    if (!user_id || !package_days || !order_id || !method) {
+    if (!user_id || !package_days || !method) {
       return NextResponse.json({ success: false, error: 'Missing params' }, { status: 400 });
     }
     // Если оплата с баланса — сначала списываем баланс
@@ -88,8 +95,12 @@ export async function POST(request: Request) {
       // Списываем баланс
       await supabase.from('users').update({ balance: user.balance - amount }).eq('id', user_id);
     }
-    // Генерируем ссылку
-    const task_id = order_id;
+    // Префиксы: B - balance, S - sbp, K - card, C - crypto
+    let prefix = 'B';
+    if (method === 'sbp') prefix = 'S';
+    else if (method === 'card') prefix = 'K';
+    else if (method === 'crypto') prefix = 'C';
+    const task_id = randomId(prefix);
     const backendResp = await fetch(BACKEND_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -106,5 +117,17 @@ export async function POST(request: Request) {
     }
   } catch (e: any) {
     return NextResponse.json({ success: false, error: e.message || 'Server error' }, { status: 500 });
+  }
+}
+
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const orderId = searchParams.get('orderId');
+  if (!orderId) return NextResponse.json({ success: false, error: 'No orderId' }, { status: 400 });
+  const { data, error } = await supabase.from('links').select('link').eq('order_id', orderId).single();
+  if (data && data.link) {
+    return NextResponse.json({ success: true, link: data.link });
+  } else {
+    return NextResponse.json({ success: false, error: 'Not ready' }, { status: 404 });
   }
 } 

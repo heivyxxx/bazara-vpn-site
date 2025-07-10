@@ -4,6 +4,10 @@ import { useRouter } from "next/navigation";
 import { onAuthStateChanged } from "firebase/auth";
 import { collection, getDocs, doc, updateDoc, arrayUnion, query, orderBy, addDoc, onSnapshot, setDoc, deleteDoc, writeBatch, where } from "firebase/firestore";
 import { auth, db } from "@/firebaseConfig";
+import { createClient } from '@supabase/supabase-js';
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 interface Message {
   author: string;
@@ -73,37 +77,19 @@ export default function SupportPage() {
   // Subscribe to all messages in real time
   useEffect(() => {
     if (loading) return;
-    const q = query(collection(db, "supportChats"), orderBy("createdAt"));
-    const unsub = onSnapshot(q, (snap) => {
-      const allMsgs: any[] = [];
-      snap.forEach(docu => {
-        allMsgs.push({ id: docu.id, ...docu.data() });
-      });
-      // Группируем по chatId
-      const chatMap: Record<string, Message[]> = {};
-      allMsgs.forEach(m => {
-        if (!m.chatId) return;
-        if (!chatMap[m.chatId]) chatMap[m.chatId] = [];
-        chatMap[m.chatId].push({
-          author: m.author,
-          message: m.message,
-          createdAt: m.createdAt && m.createdAt.seconds ? m.createdAt.seconds * 1000 : Date.now()
-        });
-      });
-      // Преобразуем в массив чатов
-      const chatArr: Chat[] = Object.entries(chatMap).map(([chatId, messages]) => ({
-        chatId,
-        messages: messages.sort((a, b) => a.createdAt - b.createdAt)
+    async function fetchChats() {
+      setLoading(true);
+      // Получаем все чаты
+      const { data: chatsData } = await supabase.from('chats').select('*').order('last_message_at', { ascending: false });
+      // Для каждого чата получаем сообщения
+      const chatsWithMessages = await Promise.all((chatsData || []).map(async (chat: any) => {
+        const { data: messages } = await supabase.from('chat_messages').select('*').eq('chat_id', chat.chat_id).order('created_at', { ascending: true });
+        return { ...chat, messages: messages || [] };
       }));
-      // Сортируем чаты по времени последнего сообщения
-      chatArr.sort((a, b) => {
-        const t1 = a.messages.length ? a.messages[a.messages.length-1].createdAt : 0;
-        const t2 = b.messages.length ? b.messages[b.messages.length-1].createdAt : 0;
-        return t2 - t1;
-      });
-      setChats(chatArr);
-    });
-    return () => unsub();
+      setChats(chatsWithMessages);
+      setLoading(false);
+    }
+    fetchChats();
   }, [loading]);
 
   // Scroll to bottom on new message
@@ -178,44 +164,30 @@ export default function SupportPage() {
   const sendMessage = async () => {
     if (!msg.trim() || sending || !chats[selected]) return;
     setSending(true);
-    const chatId = chats[selected].chatId;
-    await addDoc(collection(db, "supportChats"), {
-      chatId,
-      author: "admin",
-      message: msg,
-      createdAt: new Date()
+    const chatId = chats[selected].chat_id;
+    await supabase.from('chat_messages').insert({
+      chat_id: chatId,
+      author: 'admin',
+      message: msg
     });
+    // Обновляем last_message_at
+    await supabase.from('chats').update({ last_message_at: new Date().toISOString() }).eq('chat_id', chatId);
     setMsg("");
     setSending(false);
+    // Обновляем чаты
+    setLoading(false); setLoading(true);
   };
 
   // Установка статуса чата
   const setChatStatus = async (chatId: string, status: 'new' | 'progress' | 'done') => {
-    await setDoc(doc(db, "supportChatStatus", chatId), { status }, { merge: true });
+    await supabase.from('chats').update({ status }).eq('chat_id', chatId);
+    setLoading(false); setLoading(true);
   };
 
-  // Удаление чата (все сообщения и статус)
+  // Удаление чата (каскадно удалятся сообщения)
   const deleteChat = async (chatId: string) => {
-    // Удаляем все сообщения с этим chatId
-    const q = query(collection(db, "supportChats"), where("chatId", "==", chatId));
-    const snap = await getDocs(q);
-    const batch = writeBatch(db);
-    snap.forEach(docu => batch.delete(docu.ref));
-    // Удаляем статус
-    batch.delete(doc(db, "supportChatStatus", chatId));
-    await batch.commit();
-    // Сброс selected, если удалённый чат был выбран
-    setChats(prev => {
-      const idx = prev.findIndex(c => c.chatId === chatId);
-      let newSelected = selected;
-      if (idx === selected) {
-        newSelected = 0;
-      } else if (selected > idx) {
-        newSelected = selected - 1;
-      }
-      setSelected(Math.max(0, Math.min(newSelected, prev.length - 2)));
-      return prev;
-    });
+    await supabase.from('chats').delete().eq('chat_id', chatId);
+    setLoading(false); setLoading(true);
   };
 
   // Быстрые ответы

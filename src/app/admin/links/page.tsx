@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
+import { createClient } from '@supabase/supabase-js';
 
 // --- Укажи здесь адрес своего Python-бэкенда! ---
 const API_URL = "https://vpn.bazara.app";
@@ -62,6 +63,10 @@ interface DeleteAllProgress {
   details: string | null;
 }
 
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
 export default function LinksPage() {
   const [links, setLinks] = useState<Link[]>([]);
   const [loading, setLoading] = useState(true);
@@ -89,9 +94,8 @@ export default function LinksPage() {
     async function fetchLinks() {
       setLoading(true);
       try {
-        const resp = await fetch("https://vpn.bazara.app/api/links");
-        const data = await resp.json();
-        setLinks(data.links || []);
+        const { data, error } = await supabase.from('links').select('*').order('created_at', { ascending: false });
+        setLinks(data || []);
       } catch (e) {
         setLinks([]);
       }

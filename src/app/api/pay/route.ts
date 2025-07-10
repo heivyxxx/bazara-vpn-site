@@ -32,8 +32,14 @@ function randomId(prefix: string) {
 }
 
 export async function POST(request: Request) {
+  let body;
   try {
-    const body = await request.json();
+    body = await request.json();
+  } catch (e) {
+    console.error('Ошибка парсинга JSON в pay:', e);
+    return NextResponse.json({ success: false, error: 'Invalid JSON', details: e }, { status: 400 });
+  }
+  try {
     console.log('PAY API BODY:', body);
     // --- Депозит (только amount, order_id, description, method) ---
     if (body.description === 'Пополнение баланса' && body.amount && body.order_id && body.method) {

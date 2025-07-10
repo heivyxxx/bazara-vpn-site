@@ -108,7 +108,6 @@ function ReferralModal({ open, onClose, referralLink }: { open: boolean, onClose
     navigator.clipboard.writeText(referralLink);
     setCopied(true);
     setTimeout(() => setCopied(false), 1200);
-    onClose();
   };
   const handleClose = () => {
     setClosing(true);
@@ -135,8 +134,8 @@ function ReferralModal({ open, onClose, referralLink }: { open: boolean, onClose
           </button>
         </div>
         <div className="flex flex-col items-center px-6 pb-6 pt-2 gap-6">
-          <div style={{ background: '#fff', padding: 20, borderRadius: 20 }} className="mb-2 mt-2">
-            <QRCode value={referralLink} bgColor="#fff" fgColor="#18181b" size={180} />
+          <div className="bg-white rounded-2xl p-4 flex items-center justify-center mb-2 mt-2">
+            <QRCode value={referralLink} bgColor="#fff" fgColor="#18181b" size={160} />
           </div>
           <div className="w-full text-center text-gray-300 text-base break-all select-all mb-2">{referralLink}</div>
         </div>

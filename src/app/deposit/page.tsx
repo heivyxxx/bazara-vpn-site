@@ -78,43 +78,23 @@ export default function DepositPage() {
     if (numAmount > maxAmount) { setError(t.max); return; }
     setLoading(true);
     try {
-      const order_id = 'deposit_' + Date.now();
-      const description = 'Пополнение баланса';
-      const requestBody = {
-        amount: numAmount,
-        order_id,
-        description,
-        method: payMethod
-      };
-      const resp = await fetch('/api/pay', {
+      const order_id = `deposit_${user.id}_${Date.now()}`;
+      const resp = await fetch('/api/create-order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(requestBody)
+        body: JSON.stringify({
+          user_id: user.id,
+          order_id,
+          amount: numAmount,
+          method: payMethod,
+          description: 'Пополнение баланса'
+        })
       });
       const data = await resp.json();
       setLoading(false);
-      if (data && data.url) {
-        // Ожидаем успешной оплаты через afterpay (как на тарифах)
-        if (typeof window !== 'undefined') {
-          localStorage.setItem('pay_package_days', '0');
-          localStorage.setItem('pay_task_id', order_id);
-        }
-        window.open(data.url, '_blank');
-        // Ждём подтверждения оплаты (polling или ручное обновление)
-        // Для MVP — просто покажем успех и обновим баланс через Supabase
+      if (data && data.success && data.paymentUrl) {
+        window.open(data.paymentUrl, '_blank');
         setSuccess(true);
-        // Пополняем баланс в Supabase
-        if (user?.id) {
-          await supabase.from('users').update({ balance: (user.balance || 0) + numAmount }).eq('id', user.id);
-          setUser({ ...user, balance: (user.balance || 0) + numAmount });
-          // Записываем транзакцию
-          await supabase.from('transactions').insert({
-            user_id: user.id,
-            amount: numAmount,
-            type: 'deposit',
-            meta: { method: payMethod },
-          });
-        }
       } else {
         setError(data.error || t.error);
       }

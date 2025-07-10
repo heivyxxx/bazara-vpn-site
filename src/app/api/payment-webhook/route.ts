@@ -23,6 +23,46 @@ export async function POST(request: Request) {
     if (getError) {
       console.error('SUPABASE getError:', getError);
     }
+    // --- Депозит ---
+    if (orderId.startsWith('deposit_') || (body.orderDescription && body.orderDescription.includes('Пополнение баланса'))) {
+      // Найти пользователя по email или другим данным (если есть)
+      // В твоём случае user_id можно попробовать достать из orderId или email
+      // Пример: deposit_{user_id}_{timestamp} или просто deposit_{timestamp}
+      // Если user_id не в orderId, потребуется хранить соответствие orderId <-> user_id при создании заказа
+      // Здесь предполагаем, что user_id в orderId: deposit_{user_id}_{timestamp}
+      const parts = orderId.split('_');
+      let user_id = parts.length >= 3 ? parts[1] : null;
+      if (!user_id) {
+        console.error('DEPOSIT: user_id not found in orderId', orderId);
+        return NextResponse.json({ success: false, error: 'user_id not found in orderId' }, { status: 400 });
+      }
+      // Получаем текущий баланс
+      const { data: user, error: userError } = await supabase.from('users').select('balance').eq('id', user_id).single();
+      if (userError || !user) {
+        console.error('DEPOSIT: user not found', userError);
+        return NextResponse.json({ success: false, error: 'User not found' }, { status: 400 });
+      }
+      const newBalance = (user.balance || 0) + Number(amount);
+      const { error: updateError } = await supabase.from('users').update({ balance: newBalance }).eq('id', user_id);
+      if (updateError) {
+        console.error('DEPOSIT: balance update error', updateError);
+        return NextResponse.json({ success: false, error: 'Balance update error' }, { status: 500 });
+      }
+      // Записываем транзакцию (если есть таблица transactions)
+      try {
+        await supabase.from('transactions').insert({
+          user_id,
+          amount: Number(amount),
+          type: 'deposit',
+          meta: { orderId, paymentTime, method: 'deposit' },
+        });
+      } catch (e) {
+        console.error('DEPOSIT: transaction insert error', e);
+      }
+      console.log('DEPOSIT: balance updated for user', user_id, 'new balance:', newBalance);
+      return NextResponse.json({ success: true, balance: newBalance });
+    }
+    // --- Конец блока депозита ---
     if (existing && existing.link) {
       console.log('WATA WEBHOOK: link already exists', existing.link);
       return NextResponse.json({ success: true, link: existing.link });

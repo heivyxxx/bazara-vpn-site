@@ -11,14 +11,20 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 export async function POST(request: Request) {
   try {
     const body = await request.json();
+    console.log('WATA WEBHOOK BODY:', body);
     const { transactionStatus, orderId, amount, transactionType, paymentTime, email } = body;
     // TODO: Проверка подписи X-Signature
     if (transactionStatus !== 'Paid') {
+      console.log('WATA WEBHOOK: not paid, skipping');
       return NextResponse.json({ success: true }); // Не оплачено — ничего не делаем
     }
     // Проверяем, есть ли уже ссылка для этого orderId
     const { data: existing, error: getError } = await supabase.from('links').select('link').eq('order_id', orderId).single();
+    if (getError) {
+      console.error('SUPABASE getError:', getError);
+    }
     if (existing && existing.link) {
+      console.log('WATA WEBHOOK: link already exists', existing.link);
       return NextResponse.json({ success: true, link: existing.link });
     }
     // Генерируем ссылку (вызываем /api/pay или напрямую)
@@ -28,26 +34,42 @@ export async function POST(request: Request) {
     const type = method === 'sbp' ? 'sbp' : (method === 'card' ? 'card' : 'other');
     const package_days = 30; // или 365, если нужно (можно хранить в orderId или в БД)
     // Генерируем ссылку через /api/pay
-    const payResp = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/pay`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        user_id,
-        package_days,
-        order_id: orderId,
-        method,
-        amount
-      })
-    });
-    const payData = await payResp.json();
+    let payResp, payData;
+    try {
+      payResp = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/pay`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          user_id,
+          package_days,
+          order_id: orderId,
+          method,
+          amount
+        })
+      });
+      payData = await payResp.json();
+      console.log('WATA WEBHOOK payData:', payData);
+    } catch (e) {
+      console.error('WATA WEBHOOK: fetch /api/pay error:', e);
+      return NextResponse.json({ success: false, error: 'fetch /api/pay error', details: e }, { status: 500 });
+    }
     if (payData && payData.success && payData.link) {
-      // Сохраняем ссылку по orderId в links
-      await supabase.from('links').insert({ order_id: orderId, user_id, link: payData.link, type, package_days, amount, telegram_id: email });
+      try {
+        const insertRes = await supabase.from('links').insert({ order_id: orderId, user_id, link: payData.link, type, package_days, amount, telegram_id: email });
+        if (insertRes.error) {
+          console.error('SUPABASE insert error:', insertRes.error);
+        }
+        console.log('WATA WEBHOOK: link inserted', payData.link);
+      } catch (e) {
+        console.error('SUPABASE insert exception:', e);
+      }
       return NextResponse.json({ success: true, link: payData.link });
     } else {
-      return NextResponse.json({ success: false, error: payData.error || 'Ошибка генерации ссылки' }, { status: 500 });
+      console.error('WATA WEBHOOK: payData error', payData);
+      return NextResponse.json({ success: false, error: payData?.error || 'Ошибка генерации ссылки', details: payData }, { status: 500 });
     }
   } catch (e: any) {
-    return NextResponse.json({ success: false, error: e.message || 'Server error' }, { status: 500 });
+    console.error('WEBHOOK FATAL ERROR:', e);
+    return NextResponse.json({ success: false, error: e.message || 'Server error', details: e }, { status: 500 });
   }
 } 

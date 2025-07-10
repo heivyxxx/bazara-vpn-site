@@ -47,25 +47,18 @@ export default function SupportPage() {
 
   // Auth protection
   useEffect(() => {
-    const unsub = supabase.auth.onAuthStateChange((event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (!session?.user) router.replace("/admin/login");
       else setLoading(false);
     });
-    return () => unsub;
+    return () => subscription.unsubscribe();
   }, [router]);
 
-  // Получение статусов чатов
-  useEffect(() => {
-    if (loading) return;
-    const unsub = supabase.from('supportChatStatus').on('*', (payload) => {
-      const map: ChatStatusMap = {};
-      payload.new.forEach((doc) => {
-        map[doc.id] = doc.data().status;
-      });
-      setStatusMap(map);
-    });
-    return () => unsub;
-  }, [loading]);
+  // Получение статусов чатов (реалтайм через supabase-js не поддерживается для обычных таблиц)
+  // useEffect(() => {
+  //   if (loading) return;
+  //   // Здесь можно реализовать polling или подписку через Edge Functions, если нужно
+  // }, [loading]);
 
   // Subscribe to all messages in real time
   useEffect(() => {
@@ -157,7 +150,7 @@ export default function SupportPage() {
   const sendMessage = async () => {
     if (!msg.trim() || sending || !chats[selected]) return;
     setSending(true);
-    const chatId = chats[selected].chat_id;
+    const chatId = chats[selected].chatId;
     await supabase.from('chat_messages').insert({
       chat_id: chatId,
       author: 'admin',

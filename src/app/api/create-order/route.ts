@@ -52,7 +52,7 @@ export async function POST(request: Request) {
     // Расширенное логирование
     console.log('WATA request body:', paymentBody);
     console.log('WATA status:', resp.status, resp.statusText);
-    console.log('WATA headers:', JSON.stringify([...resp.headers]));
+    console.log('WATA headers:', JSON.stringify(Array.from(resp.headers.entries())));
     const rawText = await resp.text();
     console.log('WATA rawText:', rawText);
     let data;

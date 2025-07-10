@@ -3,15 +3,16 @@ import { NextResponse } from 'next/server';
 export async function POST(request: Request) {
   try {
     const body = await request.json();
+    console.log('CREATE-ORDER BODY:', body);
     const { user_id, package_days, order_id, method, amount } = body;
     if (!user_id || !package_days || !order_id || !method || !amount) {
-      return NextResponse.json({ success: false, error: 'Missing params' }, { status: 400 });
+      console.error('Missing params:', { user_id, package_days, order_id, method, amount });
+      return NextResponse.json({ success: false, error: 'Missing params', details: { user_id, package_days, order_id, method, amount } }, { status: 400 });
     }
-    // Только для sbp и card
     if (method !== 'sbp' && method !== 'card') {
+      console.error('Unsupported method:', method);
       return NextResponse.json({ success: false, error: 'Unsupported method' }, { status: 400 });
     }
-    // Пример запроса к платёжке (замени на реальный API)
     const paymentApiUrl = 'https://api.wata.pro/api/h2h/payment-link';
     const resp = await fetch(paymentApiUrl, {
       method: 'POST',
@@ -27,13 +28,23 @@ export async function POST(request: Request) {
         description: `BazaraVPN ${package_days} days for user ${user_id}`
       })
     });
-    const data = await resp.json();
+    let data;
+    try {
+      data = await resp.json();
+    } catch (jsonErr) {
+      const text = await resp.text();
+      console.error('Ошибка парсинга JSON от WATA:', jsonErr, 'Ответ:', text);
+      return NextResponse.json({ success: false, error: 'WATA returned invalid JSON', details: text }, { status: 500 });
+    }
     if (data && data.paymentUrl) {
+      console.log('WATA paymentUrl:', data.paymentUrl);
       return NextResponse.json({ success: true, url: data.paymentUrl });
     } else {
-      return NextResponse.json({ success: false, error: data.error || 'Ошибка создания ссылки на оплату', details: data }, { status: 500 });
+      console.error('Ошибка WATA:', data);
+      return NextResponse.json({ success: false, error: data?.error || 'Ошибка создания ссылки на оплату', details: data }, { status: 500 });
     }
   } catch (e: any) {
-    return NextResponse.json({ success: false, error: e.message || 'Server error' }, { status: 500 });
+    console.error('FATAL ERROR /api/create-order:', e);
+    return NextResponse.json({ success: false, error: e.message || 'Server error', details: e }, { status: 500 });
   }
 } 

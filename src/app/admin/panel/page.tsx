@@ -1,6 +1,7 @@
 "use client";
 import { useState, useRef } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 async function generateAdminLinks(days: number, count: number, user_id: string) {
   const links: string[] = [];
@@ -21,6 +22,7 @@ async function generateAdminLinks(days: number, count: number, user_id: string) 
 }
 
 export default function AdminPanel() {
+  const router = useRouter();
   const [showModal, setShowModal] = useState(false);
   const [days, setDays] = useState(30);
   const [numLinks, setNumLinks] = useState(1);
@@ -47,8 +49,14 @@ export default function AdminPanel() {
   };
 
   return (
-    <main className="w-full max-w-2xl mx-auto flex flex-col gap-10 py-16 px-4 items-center">
-      <h1 className="text-3xl font-extrabold text-white mb-12">Общая панель</h1>
+    <div className="min-h-screen flex flex-col items-center justify-center text-3xl text-white bg-black relative">
+      <button
+        className="absolute left-4 top-4 px-5 py-2 rounded-xl bg-[#23232b] hover:bg-[#23232b]/80 text-white font-semibold text-base border border-[#23232b] transition"
+        onClick={() => router.push('/admin')}
+      >
+        Назад
+      </button>
+      <div>Общая панель</div>
       <div className="flex flex-col md:flex-row gap-10 w-full justify-center items-center">
         {/* Блок: Генерация ссылок */}
         <div
@@ -104,6 +112,6 @@ export default function AdminPanel() {
           </div>
         </div>
       )}
-    </main>
+    </div>
   );
 } 

@@ -121,7 +121,7 @@ export default function HomePage() {
             authDone.current = true;
           }
         } else {
-          // Если не найден — регистрация
+          // Если не найdден — регистрация
           const initData = window.Telegram.WebApp.initData || '';
           const regRes = await fetch('/api/auth/telegram', {
             method: 'POST',

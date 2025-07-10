@@ -29,7 +29,7 @@ export async function POST(request: Request) {
     });
     const data = await resp.json();
     if (data && data.paymentUrl) {
-      return NextResponse.json({ success: true, paymentUrl: data.paymentUrl });
+      return NextResponse.json({ success: true, url: data.paymentUrl });
     } else {
       return NextResponse.json({ success: false, error: data.error || 'Ошибка создания ссылки на оплату', details: data }, { status: 500 });
     }

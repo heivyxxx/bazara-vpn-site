@@ -1,23 +1,177 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { Header } from '@/components/layout/Header';
 import { LanguageProvider, useLang } from '@/lib/LanguageContext';
 import { createClient } from '@supabase/supabase-js';
 import { useUser } from '@/lib/LanguageContext';
+import QRCode from 'react-qr-code';
 
-const mockUser = {
-  name: "heivyxxx",
-  balance: 79.60,
-  avatar: "/assets/avatar1.png",
-};
+function ProfileHistoryModal({ open, onClose, items }: { open: boolean, onClose: () => void, items: any[] }) {
+  if (!open) return null;
+  return (
+    <div className="fixed inset-0 z-[9999] bg-black/80 flex items-center justify-center">
+      <div className="bg-[#18181b] rounded-2xl shadow-2xl w-full max-w-md max-h-[80vh] overflow-y-auto relative">
+        <div className="flex items-center justify-between px-6 pt-6 pb-2 sticky top-0 z-10 bg-[#18181b] rounded-t-2xl">
+          <span className="text-white font-bold text-lg">Вся история</span>
+          <button className="text-zinc-400 text-2xl p-1 rounded-full ml-2" onClick={onClose} aria-label="Закрыть">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M6 18L18 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
+          </button>
+        </div>
+        <div className="flex flex-col gap-2 p-6 pt-2">
+          {items.length === 0 && <div className="text-gray-400 text-center py-4">Нет операций</div>}
+          {items.map((item, idx) => (
+            <div key={item.id || idx} className="flex items-center gap-4 py-4 border-b border-[#23232b] last:border-0 bg-[#18181b] rounded-2xl px-4">
+              <span className={item.type === 'buy' ? 'text-[#fd6a32] font-bold text-lg' : 'text-green-400 font-bold text-lg'}>{item.type === 'buy' ? 'Пополнение' : 'Списание'}</span>
+              <span className="flex items-center gap-1 text-white font-bold text-lg">{item.price} <span className="text-gray-400 text-base font-normal">RUB</span></span>
+              <span className="text-zinc-500 text-base ml-auto whitespace-nowrap">{item.date}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ProfileHistoryBlock({ userId }: { userId: string }) {
+  const [items, setItems] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [modalOpen, setModalOpen] = useState(false);
+  useEffect(() => {
+    if (!userId) return;
+    setLoading(true);
+    const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!);
+    supabase
+      .from('transactions')
+      .select('*')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false })
+      .then(({ data }) => {
+        setItems(data || []);
+        setLoading(false);
+      });
+  }, [userId]);
+
+  const mapped = (items || []).map(tx => ({
+    type: tx.type === 'deposit' ? 'buy' : 'sell',
+    price: tx.amount,
+    date: tx.created_at?.slice(0, 10) || '',
+    id: tx.id,
+  }));
+
+  const showItems = mapped.slice(0, 3);
+
+  return (
+    <>
+      <div className="w-full flex flex-col gap-2">
+        {loading ? <div className="text-gray-400 text-center py-4">Загрузка...</div> : null}
+        {!loading && mapped.length === 0 && <div className="text-gray-400 text-center py-4">Нет операций</div>}
+        {showItems.map((item, idx) => (
+          <div key={item.id || idx} className="flex items-center gap-4 py-4 border-b border-[#23232b] last:border-0 bg-[#18181b] rounded-2xl px-4">
+            <span className={item.type === 'buy' ? 'text-[#fd6a32] font-bold text-lg' : 'text-green-400 font-bold text-lg'}>{item.type === 'buy' ? 'Пополнение' : 'Списание'}</span>
+            <span className="flex items-center gap-1 text-white font-bold text-lg">{item.price} <span className="text-gray-400 text-base font-normal">RUB</span></span>
+            <span className="text-zinc-500 text-base ml-auto whitespace-nowrap">{item.date}</span>
+          </div>
+        ))}
+        {mapped.length > 3 && (
+          <button className="w-full mt-2 py-2 rounded-xl font-semibold text-sm transition bg-[#23232b] border border-[#23232b] text-[#fd6a32] hover:bg-[#23232b]/80" onClick={() => setModalOpen(true)}>
+            Посмотреть всё
+          </button>
+        )}
+      </div>
+      <ProfileHistoryModal open={modalOpen} onClose={() => setModalOpen(false)} items={mapped} />
+    </>
+  );
+}
+
+function ReferralModal({ open, onClose, referralLink }: { open: boolean, onClose: () => void, referralLink: string }) {
+  if (!open) return null;
+  return (
+    <div className="fixed inset-0 z-[9999] bg-black/80 flex items-center justify-center">
+      <div className="bg-[#18181b] rounded-2xl shadow-2xl w-full max-w-md max-h-[80vh] overflow-y-auto relative flex flex-col items-center">
+        <button className="absolute top-4 right-4 text-zinc-400 text-xl p-1 rounded-full" onClick={onClose} aria-label="Закрыть">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M6 18L18 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
+        </button>
+        <div className="text-white font-bold text-lg mb-6 mt-8">Пригласить друга</div>
+        <div style={{ background: '#fff', padding: 20, borderRadius: 20 }} className="mb-6">
+          <QRCode value={referralLink} bgColor="#fff" fgColor="#18181b" size={220} />
+        </div>
+        <button className="w-full py-3 rounded-xl bg-[#fd6a32] text-white font-semibold text-base hover:bg-[#e65a1e] transition mb-4 mt-2"
+                onClick={() => {navigator.clipboard.writeText(referralLink); onClose();}}>
+          Скопировать ссылку
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function ReferralBlock({ userId }: { userId: string }) {
+  const [modalOpen, setModalOpen] = useState(false);
+  const [stats, setStats] = useState({ count: 0, turnover: 0, earned: 0, lvl: 1, nextLvlTurnover: 100, progress: 0 });
+  useEffect(() => {
+    if (!userId) return;
+    const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!);
+    (async () => {
+      const { data: refs } = await supabase
+        .from('referrals')
+        .select('*')
+        .eq('user_id', userId);
+      const count = refs?.length || 0;
+      const turnover = refs?.reduce((sum, r) => sum + Number(r.total_turnover || 0), 0);
+      const earned = refs?.reduce((sum, r) => sum + Number(r.total_earned_rub || 0), 0);
+      const lvl = Math.floor(turnover / 100) + 1;
+      const nextLvlTurnover = lvl * 100;
+      const progress = Math.min(100, Math.round((turnover / nextLvlTurnover) * 100));
+      setStats({ count, turnover, earned, lvl, nextLvlTurnover, progress });
+    })();
+  }, [userId]);
+  const referralLink = `https://t.me/BazaraVPN_bot?startapp=ref_${userId}`;
+  return (
+    <>
+      <div className="bg-[#18181b] rounded-2xl p-6 flex flex-col items-center gap-4 w-full mt-2">
+        <div className="text-gray-400 text-center mb-2">Приглашайте друзей — зарабатывайте RUB и очки сезона</div>
+        <div className="flex flex-row gap-4 justify-center mb-2 w-full max-w-xs mx-auto">
+          <div className="flex-1 bg-[#23232b] rounded-2xl p-4 flex flex-col items-center min-w-[120px]">
+            <div className="text-white font-bold text-lg mb-1">RUB</div>
+            <div className="text-gray-300 text-base mb-1">Зарабатывай</div>
+            <div className="text-[#fd6a32] text-2xl font-extrabold mb-1">2%</div>
+            <div className="text-gray-400 text-xs text-center">от всех продаж твоих рефералов</div>
+          </div>
+          <div className="flex-1 bg-[#23232b] rounded-2xl p-4 flex flex-col items-center min-w-[120px]">
+            <div className="text-white font-bold text-lg mb-1">Очки сезона</div>
+            <div className="text-gray-300 text-base mb-1">Зарабатывай</div>
+            <div className="text-yellow-400 text-2xl font-extrabold mb-1">10%</div>
+            <div className="text-gray-400 text-xs text-center">от всех продаж твоих рефералов</div>
+          </div>
+        </div>
+        <div className="w-full max-w-md mx-auto flex flex-col items-center mb-2">
+          <div className="text-gray-400 text-sm mb-1">Твой прогресс</div>
+          <div className="relative w-full max-w-xs h-10 bg-[#23232b] rounded-full overflow-hidden flex items-center">
+            <div className="absolute left-0 top-0 h-full bg-gradient-to-r from-[#fd6a32] via-[#fd6a32] to-[#FFD700] transition-all duration-700" style={{ width: `${stats.progress}%` }}></div>
+            <div className="relative z-10 w-full flex flex-row justify-between items-center px-4 text-white font-bold text-base">
+              <span>LVL {stats.lvl}</span>
+              <span>{stats.turnover} / {stats.nextLvlTurnover} RUB оборота</span>
+            </div>
+          </div>
+        </div>
+        <div className="w-full max-w-xs mx-auto flex flex-row justify-between mb-2 px-2">
+          <span className="text-gray-400 text-base">Рефералов: <span className="text-white font-bold">{stats.count}</span></span>
+          <span className="text-gray-400 text-base">Заработок: <span className="text-white font-bold">{stats.earned} RUB</span></span>
+        </div>
+        <button className="w-full mt-2 py-2 rounded-xl font-semibold text-sm transition bg-[#23232b] border border-[#23232b] text-[#fd6a32] hover:bg-[#23232b]/80" onClick={() => setModalOpen(true)}>
+          Пригласить друга
+        </button>
+      </div>
+      <ReferralModal open={modalOpen} onClose={() => setModalOpen(false)} referralLink={referralLink} />
+    </>
+  );
+}
 
 export default function ProfilePage() {
   const { lang } = useLang();
   const [user, setUser] = useUser();
   const [supabaseUser, setSupabaseUser] = useState<any>(null);
   const [supabaseUserLoading, setSupabaseUserLoading] = useState(false);
-  // fallback: если user нет, ищем по telegram_id
   useEffect(() => {
     if (typeof window === 'undefined') return;
     const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
@@ -44,8 +198,6 @@ export default function ProfilePage() {
     }
   }, []);
   const effectiveUser = user || supabaseUser;
-  // Моки истории и рефки
-  const [historyOpen, setHistoryOpen] = useState(false);
   const [refOpen, setRefOpen] = useState(true);
   return (
     <>
@@ -61,52 +213,15 @@ export default function ProfilePage() {
         </div>
         {/* История */}
         <div className="w-full max-w-2xl mx-auto mb-6">
-          <button onClick={()=>setHistoryOpen(v=>!v)} className="w-full flex justify-between items-center bg-[#18181b] rounded-2xl px-6 py-4 text-lg font-bold text-white mb-2 shadow border border-[#232323]">
+          <div className="w-full flex justify-between items-center bg-[#18181b] rounded-2xl px-6 py-4 text-lg font-bold text-white mb-2 shadow border border-[#232323]">
             <span>История</span>
-            <svg className={`w-6 h-6 transition-transform ${historyOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" strokeWidth={2.2} viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
-          </button>
-          {historyOpen && (
-            <div className="bg-[#232323] rounded-2xl p-6 text-gray-200 text-base flex flex-col gap-2 border border-[#232323]">
-              <div className="text-center text-gray-400">Нет операций</div>
-            </div>
-          )}
+          </div>
+          <div className="bg-[#232323] rounded-2xl p-0 text-gray-200 text-base flex flex-col gap-2 border border-[#232323]">
+            {effectiveUser?.id && <ProfileHistoryBlock userId={effectiveUser.id} />}
+          </div>
         </div>
         {/* Реферальная программа */}
-        <div className="w-full max-w-2xl mx-auto mb-6">
-          <button onClick={()=>setRefOpen(v=>!v)} className="w-full flex justify-between items-center bg-[#18181b] rounded-2xl px-6 py-4 text-lg font-bold text-white mb-2 shadow border border-[#232323]">
-            <span>Реферальная Орбита</span>
-            <svg className={`w-6 h-6 transition-transform ${refOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" strokeWidth={2.2} viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
-          </button>
-          {refOpen && (
-            <div className="bg-[#232323] rounded-2xl p-6 text-gray-200 text-base flex flex-col gap-4 border border-[#232323]">
-              <div className="text-center text-lg font-bold text-white mb-2">Приглашайте друзей — зарабатывайте RUB и очки сезона</div>
-              <div className="flex gap-4 flex-col sm:flex-row justify-center items-center">
-                <div className="bg-[#18181b] rounded-2xl p-6 flex-1 min-w-[160px] flex flex-col items-center">
-                  <div className="text-white text-lg font-bold mb-1">RUB</div>
-                  <div className="text-gray-400 text-sm mb-1">Зарабатывай</div>
-                  <div className="text-2xl font-extrabold text-[#00c3ff] mb-1">2%</div>
-                  <div className="text-xs text-gray-400 text-center">от всех продаж твоих рефералов</div>
-                </div>
-                <div className="bg-[#18181b] rounded-2xl p-6 flex-1 min-w-[160px] flex flex-col items-center">
-                  <div className="text-white text-lg font-bold mb-1">Очки сезона</div>
-                  <div className="text-gray-400 text-sm mb-1">Зарабатывай</div>
-                  <div className="text-2xl font-extrabold text-yellow-400 mb-1">10%</div>
-                  <div className="text-xs text-gray-400 text-center">от всех продаж твоих рефералов</div>
-                </div>
-              </div>
-              <div className="text-center text-white mt-4 mb-2">Твой прогресс</div>
-              <div className="flex justify-center gap-4 mb-2">
-                <div className="bg-[#18181b] rounded-xl px-6 py-2 text-white font-bold">LVL 1</div>
-                <div className="bg-[#18181b] rounded-xl px-6 py-2 text-white font-bold">0 / 100 RUB оборота</div>
-              </div>
-              <div className="flex justify-between text-sm text-gray-400">
-                <div>Рефералов: 0</div>
-                <div>Заработок: 0 RUB</div>
-              </div>
-              <button className="mt-4 w-full bg-[#232323] hover:bg-[#18181b] text-[#00c3ff] font-bold py-3 rounded-xl transition">Пригласить друга</button>
-            </div>
-          )}
-        </div>
+        {effectiveUser?.id && <ReferralBlock userId={effectiveUser.id} />}
       </main>
     </>
   );

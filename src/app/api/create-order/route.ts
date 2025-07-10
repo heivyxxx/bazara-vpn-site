@@ -19,24 +19,33 @@ export async function POST(request: Request) {
       console.error('Unsupported method:', method);
       return NextResponse.json({ success: false, error: 'Unsupported method' }, { status: 400 });
     }
-    const paymentApiUrl = 'https://api.wata.pro/api/h2h/payment-link';
-    const paymentBody: any = {
-      orderId: order_id,
-      amount,
+    // Выбор токена и терминала по методу оплаты
+    let apiKey = process.env.WATA_API_TOKEN;
+    let terminalId = process.env.WATA_TERMINAL_ID;
+    if (method === 'card' && process.env.WATA_API_TOKEN_CARD && process.env.WATA_TERMINAL_ID_CARD) {
+      apiKey = process.env.WATA_API_TOKEN_CARD;
+      terminalId = process.env.WATA_TERMINAL_ID_CARD;
+    }
+    // expirationDateTime: +2 дня
+    const now = new Date();
+    now.setDate(now.getDate() + 2);
+    now.setMilliseconds(0);
+    const paymentApiUrl = 'https://api.wata.pro/api/h2h/links';
+    const paymentBody = {
+      amount: Number(amount),
       currency: 'RUB',
       description: `BazaraVPN ${package_days} days for user ${user_id}`,
-      paymentMethod: method === 'sbp' ? 'SBP' : 'CardCrypto',
-      successUrl: 'https://bazara.app/success',
-      failUrl: 'https://bazara.app/fail'
+      orderId: order_id,
+      terminalId: terminalId,
+      successRedirectUrl: 'https://bazara.app/success',
+      failRedirectUrl: 'https://bazara.app/fail',
+      expirationDateTime: now.toISOString()
     };
-    if (process.env.WATA_TERMINAL_ID) {
-      paymentBody.terminalId = process.env.WATA_TERMINAL_ID;
-    }
     const resp = await fetch(paymentApiUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${process.env.WATA_API_TOKEN}`
+        'Authorization': `Bearer ${apiKey}`
       },
       body: JSON.stringify(paymentBody)
     });
@@ -58,9 +67,10 @@ export async function POST(request: Request) {
       console.error('Ошибка парсинга JSON от WATA:', jsonErr, 'Ответ:', rawText);
       return NextResponse.json({ success: false, error: 'WATA returned invalid JSON', details: rawText }, { status: 500 });
     }
-    if (data && data.paymentUrl) {
-      console.log('WATA paymentUrl:', data.paymentUrl);
-      return NextResponse.json({ success: true, paymentUrl: data.paymentUrl });
+    if (data && (data.url || data.paymentUrl)) {
+      const url = data.url || data.paymentUrl;
+      console.log('WATA url:', url);
+      return NextResponse.json({ success: true, paymentUrl: url });
     } else {
       console.error('Ошибка WATA:', data);
       return NextResponse.json({ success: false, error: data?.error || 'Ошибка создания ссылки на оплату', details: data }, { status: 500 });

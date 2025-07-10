@@ -35,7 +35,7 @@ export async function POST(request: Request) {
     const paymentBody = {
       amount: Number(amount),
       currency: 'RUB',
-      description: `BazaraVPN ${package_days} days for user ${user_id}`,
+      description: isDeposit ? 'BazaraVpn Deposit' : `BazaraVPN ${package_days} days for user ${user_id}`,
       orderId: order_id,
       terminalId: terminalId,
       successRedirectUrl: 'https://bazara.app/success',

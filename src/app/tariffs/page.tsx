@@ -330,12 +330,10 @@ function TariffsContent() {
         <div className="flex-1 flex flex-col items-start md:items-start text-left mb-8 md:mb-0">
           <h2 className="text-3xl font-bold text-[#fd6a32] mb-4">{t.appsTitle}</h2>
           <p className="text-lg text-white mb-6 max-w-lg">{t.appsDesc}</p>
-          <div className="flex flex-wrap gap-4">
-            <span className="device-anim bg-[#fd6a32] text-white font-semibold px-4 py-2 rounded-lg flex items-center gap-2 shadow-lg"><Image src="/assets/windows.png" alt="Windows" width={28} height={28} className="w-7 h-7" />Windows</span>
-            <span className="device-anim bg-[#fd6a32] text-white font-semibold px-4 py-2 rounded-lg flex items-center gap-2 shadow-lg"><Image src="/assets/apple.png" alt="macOS" width={28} height={28} className="w-7 h-7" />macOS</span>
-            <span className="device-anim bg-[#fd6a32] text-white font-semibold px-4 py-2 rounded-lg flex items-center gap-2 shadow-lg"><Image src="/assets/android.png" alt="Android" width={28} height={28} className="w-7 h-7" />Android</span>
-            <span className="device-anim bg-[#fd6a32] text-white font-semibold px-4 py-2 rounded-lg flex items-center gap-2 shadow-lg"><Image src="/assets/apple.png" alt="iOS" width={28} height={28} className="w-7 h-7" />iOS</span>
-            <span className="device-anim bg-[#fd6a32] text-white font-semibold px-4 py-2 rounded-lg flex items-center gap-2 shadow-lg"><Image src="/assets/linux.png" alt="Linux" width={28} height={28} className="w-7 h-7" style={{filter:'invert(1)'}} />Linux</span>
+          <div className="w-full flex justify-center">
+            <a href="/download" target="_blank" rel="noopener noreferrer" className="w-full max-w-xs py-5 rounded-2xl font-bold text-xl text-white shadow-lg transition-all duration-200 bg-[#fd6a32] hover:bg-[#e65a1e] text-center block">
+              Установить сейчас
+            </a>
           </div>
         </div>
         <div className="flex-1 flex justify-center items-center">

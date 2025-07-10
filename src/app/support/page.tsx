@@ -77,7 +77,7 @@ function SupportContent() {
           <div className="text-2xl md:text-3xl font-extrabold text-white mb-2">{lang === 'ru' ? 'Чат поддержки' : 'Support Chat'}</div>
           <div className="text-base md:text-lg text-[#B8B8B8] mb-4 md:mb-5">{lang === 'ru' ? 'Быстрые ответы на ваши вопросы в чате с поддержкой.' : 'Quick answers to your questions in support chat.'}</div>
           <button
-            onClick={() => setChatOpen(true)}
+            onClick={() => window.open('https://t.me/bazarasupport', '_blank')}
             className="w-full max-w-xs py-4 md:py-5 rounded-2xl font-bold text-lg md:text-xl text-white shadow-lg transition-all duration-200 bg-[#fd6a32] hover:bg-[#e65a1e] mt-0"
           >
             {lang === 'ru' ? 'Открыть чат поддержки' : 'Open Support Chat'}

@@ -87,7 +87,7 @@ export default function DepositPage() {
           order_id,
           amount: numAmount,
           method: payMethod,
-          description: 'Пополнение баланса'
+          description: 'BazaraVpn Deposit'
         })
       });
       const data = await resp.json();

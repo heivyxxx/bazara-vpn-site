@@ -68,6 +68,11 @@ export async function POST(request: Request) {
       console.error('Ошибка парсинга JSON от WATA:', jsonErr, 'Ответ:', rawText);
       return NextResponse.json({ success: false, error: 'WATA returned invalid JSON', details: rawText }, { status: 500 });
     }
+    if (isDeposit && data && (data.url || data.paymentUrl)) {
+      const url = data.url || data.paymentUrl;
+      console.log('DEPOSIT paymentUrl:', url);
+      return NextResponse.json({ success: true, paymentUrl: url });
+    }
     if (data && (data.url || data.paymentUrl)) {
       const url = data.url || data.paymentUrl;
       console.log('WATA url:', url);

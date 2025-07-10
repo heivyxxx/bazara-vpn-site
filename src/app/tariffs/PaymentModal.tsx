@@ -60,7 +60,8 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, tar
   const { lang } = useLang();
   const t = paymentTexts[lang];
   const [payMethod, setPayMethod] = useState<'sbp' | 'card' | 'crypto' | null>(null);
-  const [email, setEmail] = useState('');
+  // Удаляю email
+  // const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
@@ -117,7 +118,8 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, tar
 
   const handlePay = async () => {
     setError('');
-    if (!payMethod || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+    // убираю валидацию email
+    if (!payMethod) {
       setError(t.error);
       return;
     }
@@ -136,7 +138,6 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, tar
         order_id,
         description,
         method: payMethod,
-        email,
         package_days
       };
       const resp = await fetch('/api/pay', {
@@ -148,7 +149,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, tar
       setLoading(false);
       if (data && data.url) {
         if (typeof window !== 'undefined') {
-          localStorage.setItem('pay_email', email);
+          // localStorage.setItem('pay_email', email); // убрано
           localStorage.setItem('pay_package_days', String(package_days));
           localStorage.setItem('pay_task_id', order_id);
         }
@@ -188,7 +189,8 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, tar
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M6 18L18 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
           </button>
         </div>
-        <form className="flex-1 flex flex-col px-6 pb-6 pt-2 gap-6" onSubmit={e => { e.preventDefault(); handlePay(); }}>
+        <div className="flex flex-col items-center px-6 pb-6 pt-2 gap-6">
+          {/* email input убран */}
           <div className="font-extrabold text-xl sm:text-2xl text-white mb-2 text-center">{tariff === 'year' ? t.year : t.month}</div>
           <div className="grid grid-cols-2 gap-2 sm:gap-4 mb-2">
             <div className="flex items-center gap-2 sm:gap-3 bg-[#181818] rounded-xl px-3 sm:px-5 py-3 sm:py-4 text-base sm:text-lg text-white font-semibold shadow">
@@ -213,9 +215,6 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, tar
             <button type="button" onClick={()=>setPayMethod('card')} className={`flex-1 pay-method${payMethod==='card'?' selected':''} min-w-0`}>{t.card}</button>
             <button type="button" onClick={()=>setPayMethod('crypto')} className={`flex-1 pay-method${payMethod==='crypto'?' selected':''} min-w-0`}>{t.crypto}</button>
           </div>
-          <div className="mb-2 w-full">
-            <input value={email} onChange={e=>setEmail(e.target.value)} type="email" required placeholder={t.email} className="w-full rounded-lg px-4 py-3 text-base text-white font-semibold bg-[#181818] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#fd6a32] focus:border-[#fd6a32]" style={{marginBottom:8, display:'block'}} />
-          </div>
           {error && <div className="text-red-500 text-sm text-center mb-2">{error}</div>}
           <div className="sticky bottom-0 left-0 w-full flex justify-center gap-4 px-0 pt-2 bg-[#18181b] rounded-b-3xl z-20 mt-auto">
             <button
@@ -227,7 +226,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, tar
             </button>
           </div>
           <div className="text-xs text-gray-400 mt-2 text-center">Нажимая кнопку "Оплатить", вы соглашаетесь с условиями <a href="#" className="underline">лицензионного соглашения</a>.</div>
-        </form>
+        </div>
         <style jsx>{`
           .pay-method {
             background: #181818;

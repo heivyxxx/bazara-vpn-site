@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useUser } from '@/lib/LanguageContext';
 import { supabase } from '@/lib/supabaseClient';
 import Image from 'next/image';
@@ -48,6 +48,27 @@ export default function DepositPage() {
   const minAmount = 50;
   const maxAmount = 10000;
 
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.Telegram?.WebApp?.BackButton) {
+      window.Telegram.WebApp.BackButton.show();
+      window.Telegram.WebApp.BackButton.onClick(() => {
+        window.history.back();
+      });
+    }
+    // Скрыть Header
+    const style = document.createElement('style');
+    style.innerHTML = `header, .Header, .header { display: none !important; }`;
+    style.setAttribute('data-hide-header', '1');
+    document.head.appendChild(style);
+    return () => {
+      if (window.Telegram?.WebApp?.BackButton) {
+        window.Telegram.WebApp.BackButton.hide();
+      }
+      const s = document.querySelector('style[data-hide-header="1"]');
+      if (s) s.remove();
+    };
+  }, []);
+
   const handlePay = async () => {
     setError('');
     setSuccess(false);
@@ -87,6 +108,13 @@ export default function DepositPage() {
         if (user?.id) {
           await supabase.from('users').update({ balance: (user.balance || 0) + numAmount }).eq('id', user.id);
           setUser({ ...user, balance: (user.balance || 0) + numAmount });
+          // Записываем транзакцию
+          await supabase.from('transactions').insert({
+            user_id: user.id,
+            amount: numAmount,
+            type: 'deposit',
+            meta: { method: payMethod },
+          });
         }
       } else {
         setError(data.error || t.error);

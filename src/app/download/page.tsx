@@ -74,6 +74,28 @@ export default function DownloadPage() {
   const gridCols = platforms.length <= 5 ? "md:grid-cols-2 lg:grid-cols-3" : "md:grid-cols-3";
   // Если карточек 5 — добавляем плейсхолдер
   const needPlaceholder = platforms.length % 3 !== 0;
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.Telegram?.WebApp?.BackButton) {
+      window.Telegram.WebApp.BackButton.show();
+      window.Telegram.WebApp.BackButton.onClick(() => {
+        window.history.back();
+      });
+    }
+    // Скрыть Header
+    const style = document.createElement('style');
+    style.innerHTML = `header, .Header, .header { display: none !important; }`;
+    style.setAttribute('data-hide-header', '1');
+    document.head.appendChild(style);
+    return () => {
+      if (window.Telegram?.WebApp?.BackButton) {
+        window.Telegram.WebApp.BackButton.hide();
+      }
+      const s = document.querySelector('style[data-hide-header="1"]');
+      if (s) s.remove();
+    };
+  }, []);
+
   return (
     <LanguageProvider>
       <Header user={user} onLogout={() => { setUser(null); if (typeof window !== 'undefined') localStorage.removeItem('bazaraUser'); }} />

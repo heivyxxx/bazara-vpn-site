@@ -10,8 +10,9 @@ export async function POST(request: Request) {
   }
   try {
     console.log('CREATE-ORDER BODY:', body);
-    const { user_id, package_days, order_id, method, amount } = body;
-    if (!user_id || !package_days || !order_id || !method || !amount) {
+    const { user_id, package_days, order_id, method, amount, description } = body;
+    const isDeposit = (description && description.includes('Пополнение баланса')) || (order_id && order_id.startsWith('deposit_'));
+    if (!user_id || !order_id || !method || !amount || (!isDeposit && !package_days)) {
       console.error('Missing params:', { user_id, package_days, order_id, method, amount });
       return NextResponse.json({ success: false, error: 'Missing params', details: { user_id, package_days, order_id, method, amount } }, { status: 400 });
     }

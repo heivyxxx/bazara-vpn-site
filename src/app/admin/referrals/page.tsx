@@ -1,16 +1,12 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { createClient } from '@supabase/supabase-js';
+import { supabase } from '@/lib/supabaseClient';
 
 export default function ReferralsPage() {
   const [links, setLinks] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [newName, setNewName] = useState('');
   const [loading, setLoading] = useState(true);
-
-  const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-  const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   useEffect(() => {
     async function fetchLinks() {

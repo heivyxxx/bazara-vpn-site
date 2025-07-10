@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useTelegramInit } from '@/hooks/useTelegramInit';
 import { signInOrUpWithTelegram } from './auth';
-import { createClient } from '@supabase/supabase-js';
+import { supabase } from '@/lib/supabaseClient';
 import { User } from './types';
 
 type Lang = 'ru' | 'en';
@@ -62,7 +62,6 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     if (typeof window === 'undefined') return;
     const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
     if (tgUser && tgUser.id) {
-      const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!);
       supabase
         .from('users')
         .select('*')

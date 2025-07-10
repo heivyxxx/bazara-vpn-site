@@ -3,7 +3,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { Header } from '@/components/layout/Header';
 import { LanguageProvider, useLang } from '@/lib/LanguageContext';
-import { createClient } from '@supabase/supabase-js';
+import { supabase } from '@/lib/supabaseClient';
 import { useUser } from '@/lib/LanguageContext';
 import QRCode from 'react-qr-code';
 import { Disclosure } from '@headlessui/react';
@@ -41,7 +41,6 @@ function ProfileHistoryBlock({ userId }: { userId: string }) {
   useEffect(() => {
     if (!userId) return;
     setLoading(true);
-    const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!);
     supabase
       .from('transactions')
       .select('*')
@@ -157,20 +156,19 @@ function ReferralBlock({ userId }: { userId: string }) {
   const [stats, setStats] = useState({ count: 0, turnover: 0, earned: 0, lvl: 1, nextLvlTurnover: 100, progress: 0 });
   useEffect(() => {
     if (!userId) return;
-    const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!);
-    (async () => {
-      const { data: refs } = await supabase
-        .from('referrals')
-        .select('*')
-        .eq('user_id', userId);
-      const count = refs?.length || 0;
-      const turnover = refs?.reduce((sum, r) => sum + Number(r.total_turnover || 0), 0);
-      const earned = refs?.reduce((sum, r) => sum + Number(r.total_earned_rub || 0), 0);
-      const lvl = Math.floor(turnover / 100) + 1;
-      const nextLvlTurnover = lvl * 100;
-      const progress = Math.min(100, Math.round((turnover / nextLvlTurnover) * 100));
-      setStats({ count, turnover, earned, lvl, nextLvlTurnover, progress });
-    })();
+    supabase
+      .from('referrals')
+      .select('*')
+      .eq('user_id', userId)
+      .then(({ data }) => {
+        const count = data?.length || 0;
+        const turnover = data?.reduce((sum, r) => sum + Number(r.total_turnover || 0), 0);
+        const earned = data?.reduce((sum, r) => sum + Number(r.total_earned_rub || 0), 0);
+        const lvl = Math.floor(turnover / 100) + 1;
+        const nextLvlTurnover = lvl * 100;
+        const progress = Math.min(100, Math.round((turnover / nextLvlTurnover) * 100));
+        setStats({ count, turnover, earned, lvl, nextLvlTurnover, progress });
+      });
   }, [userId]);
   const referralLink = `https://t.me/BazaraVPN_bot?startapp=ref_${userId}`;
   return (
@@ -232,7 +230,6 @@ export default function ProfilePage() {
     const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
     if (tgUser && tgUser.id) {
       setSupabaseUserLoading(true);
-      const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!);
       supabase
         .from('users')
         .select('*')

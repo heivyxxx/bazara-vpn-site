@@ -55,24 +55,37 @@ function SupportContent() {
   const [discussOpen, setDiscussOpen] = React.useState(false);
   return (
     <main className="flex-1 flex flex-col pt-24 items-center w-full min-h-screen bg-black">
-      <Image src="/assets/trader.gif" alt="BazaraVPN" width={208} height={208} className="w-52 h-52 mx-auto mb-8 select-none pointer-events-none cursor-pointer" draggable={false} onClick={() => setChatOpen(true)} />
+      {/* Блок с почтой */}
+      <div className="flex justify-center mt-0 mb-8">
+        <button
+          onClick={() => {navigator.clipboard.writeText(t.mailValue); setCopied(true); setTimeout(()=>setCopied(false), 1500);}}
+          className="group flex flex-col items-center bg-[#18181b] rounded-2xl shadow-xl px-8 py-6 transition hover:shadow-2xl relative"
+          style={{boxShadow:'0 8px 32px 0 #00000044, 0 2px 8px 0 #a259ff22'}}
+        >
+          <Image src="/assets/mail-3d.png" alt="Почта поддержки" width={80} height={80} className="w-20 h-20 mb-3 z-10 transition-transform duration-300 group-hover:-rotate-12 select-none pointer-events-none" draggable={false} />
+          <span className="text-xl font-bold text-white z-10 select-none opacity-100 transition-opacity duration-300" style={{whiteSpace:'nowrap'}}>{t.mailValue}</span>
+          <span className={`absolute -top-8 left-1/2 -translate-x-1/2 bg-[#232323] text-white text-sm font-semibold px-4 py-2 rounded-xl shadow-lg ${copied ? 'opacity-100' : 'opacity-0'} pointer-events-none transition-opacity duration-300`} style={{zIndex:20}}>{t.mailCopied}</span>
+        </button>
+      </div>
       <SupportChatModal isOpen={chatOpen} onClose={() => setChatOpen(false)} />
       <SupportKbModal isOpen={kbOpen} onClose={() => setKbOpen(false)} />
       <SupportDiscussModal isOpen={discussOpen} onClose={() => setDiscussOpen(false)} />
-      <h1 className="text-3xl md:text-4xl font-bold text-[#fd6a32] text-center mb-6">{t.title}</h1>
-      <div className="text-base md:text-lg text-gray-300 mb-10 text-center max-w-2xl font-normal">{t.desc}</div>
-      <section className="w-full max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12 mb-8 md:mb-12 px-2 sm:px-4">
-        <div className="bg-[#18181b] rounded-[2.2rem] shadow-xl p-6 md:p-10 flex flex-col items-center text-center">
+      {/* Большой блок Чат поддержки */}
+      <section className="w-full max-w-3xl mx-auto mb-8 px-2 sm:px-4">
+        <div className="bg-[#18181b] rounded-[2.2rem] shadow-xl p-8 md:p-12 flex flex-col items-center text-center">
           <Image src="/assets/faq-3d.png" alt="Чат поддержки" width={64} height={64} className="w-16 h-16 md:w-20 md:h-20 mb-4 md:mb-6 select-none pointer-events-none mx-auto" draggable={false} />
-          <div className="text-lg md:text-2xl font-extrabold text-white mb-2">{lang === 'ru' ? 'Чат поддержки' : 'Support Chat'}</div>
-          <div className="text-sm md:text-[16px] text-[#B8B8B8] mb-4 md:mb-5">{lang === 'ru' ? 'Быстрые ответы на ваши вопросы в чате с поддержкой.' : 'Quick answers to your questions in support chat.'}</div>
+          <div className="text-2xl md:text-3xl font-extrabold text-white mb-2">{lang === 'ru' ? 'Чат поддержки' : 'Support Chat'}</div>
+          <div className="text-base md:text-lg text-[#B8B8B8] mb-4 md:mb-5">{lang === 'ru' ? 'Быстрые ответы на ваши вопросы в чате с поддержкой.' : 'Quick answers to your questions in support chat.'}</div>
           <button
             onClick={() => setChatOpen(true)}
-            className="w-full max-w-xs py-3 md:py-4 rounded-2xl font-bold text-base md:text-lg text-white shadow-lg transition-all duration-200 bg-[#fd6a32] hover:bg-[#e65a1e] mt-0"
+            className="w-full max-w-xs py-4 md:py-5 rounded-2xl font-bold text-lg md:text-xl text-white shadow-lg transition-all duration-200 bg-[#fd6a32] hover:bg-[#e65a1e] mt-0"
           >
             {lang === 'ru' ? 'Открыть чат поддержки' : 'Open Support Chat'}
           </button>
         </div>
+      </section>
+      {/* База знаний и Обсудить на одном уровне */}
+      <section className="w-full max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12 mb-8 md:mb-12 px-2 sm:px-4">
         <div className="bg-[#18181b] rounded-[2.2rem] shadow-xl p-6 md:p-10 flex flex-col items-center text-center">
           <Image src="/assets/kb-3d.png" alt="База знаний" width={64} height={64} className="w-16 h-16 md:w-20 md:h-20 mb-4 md:mb-6 select-none pointer-events-none mx-auto" draggable={false} />
           <div className="text-lg md:text-2xl font-extrabold text-white mb-2">{t.kb}</div>
@@ -96,18 +109,6 @@ function SupportContent() {
           </button>
         </div>
       </section>
-      <div className="flex justify-center mt-8 mb-4">
-        <button
-          onClick={() => {navigator.clipboard.writeText(t.mailValue); setCopied(true); setTimeout(()=>setCopied(false), 1500);}}
-          className="group flex flex-col items-center bg-[#18181b] rounded-2xl shadow-xl px-8 py-6 transition hover:shadow-2xl relative"
-          style={{boxShadow:'0 8px 32px 0 #00000044, 0 2px 8px 0 #a259ff22'}}
-        >
-          <span className="absolute inset-0 rounded-2xl pointer-events-none opacity-0 group-hover:opacity-100 transition duration-300" style={{boxShadow:'0 0 16px 2px #a259ff55'}}></span>
-          <Image src="/assets/mail-3d.png" alt="Почта поддержки" width={80} height={80} className="w-20 h-20 mb-3 z-10 transition-transform duration-300 group-hover:-rotate-12 select-none pointer-events-none" draggable={false} />
-          <span className="text-xl font-bold text-white z-10 select-none opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{whiteSpace:'nowrap'}}>{t.mailValue}</span>
-          <span className={`absolute -top-8 left-1/2 -translate-x-1/2 bg-[#232323] text-white text-sm font-semibold px-4 py-2 rounded-xl shadow-lg ${copied ? 'opacity-100' : 'opacity-0'} pointer-events-none transition-opacity duration-300`} style={{zIndex:20}}>{t.mailCopied}</span>
-        </button>
-      </div>
     </main>
   );
 }

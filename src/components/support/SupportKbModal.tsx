@@ -60,18 +60,20 @@ export const SupportKbModal: React.FC<SupportKbModalProps> = ({ isOpen, onClose 
           </button>
         </div>
         <div className="flex flex-col items-center px-6 pb-6 pt-2 gap-6 overflow-y-auto">
-          <div className="text-base md:text-lg text-gray-300 text-center">{t.desc}</div>
-          {t.blocks.map((block, i) => (
-            <div key={i} className="bg-[#232323] rounded-2xl border-2 border-[#fd6a32] p-6 md:p-8 shadow-lg w-full max-w-xl mx-auto mb-2">
-              <h3 className="text-xl md:text-2xl font-extrabold text-[#fd6a32] mb-2">{block.title}</h3>
-              <div className="text-base text-gray-200 mb-2">{block.desc}</div>
-              {block.list && (
-                <ul className="list-disc ml-6 text-[#fd6a32]">
-                  {block.list.map((li, j) => <li key={j} className="text-gray-200">{li}</li>)}
-                </ul>
-              )}
-            </div>
-          ))}
+          <div className="text-base md:text-lg text-gray-100 text-left w-full max-w-2xl mx-auto mb-2">{t.desc}</div>
+          <div className="w-full max-w-2xl mx-auto text-left">
+            {t.blocks.map((block, i) => (
+              <div key={i} className="mb-6">
+                <h3 className="text-xl md:text-2xl font-bold text-white mb-2">{block.title}</h3>
+                <div className="text-base text-gray-100 mb-2">{block.desc}</div>
+                {block.list && (
+                  <ul className="list-disc ml-6 text-gray-100">
+                    {block.list.map((li, j) => <li key={j}>{li}</li>)}
+                  </ul>
+                )}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>

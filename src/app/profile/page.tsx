@@ -257,7 +257,29 @@ export default function ProfilePage() {
       <main className="min-h-screen bg-black flex flex-col items-center pt-[calc(var(--tg-viewport-safe-area-inset-top)+0px)] pb-[calc(var(--tg-viewport-safe-area-inset-bottom)+56px)]">
         {/* Профиль */}
         <div className="w-full max-w-2xl mx-auto flex flex-col items-center gap-4 mb-6">
-          <Image src={effectiveUser?.avatar || "/assets/avatar1.png"} alt="avatar" width={96} height={96} className="rounded-2xl w-24 h-24 object-cover border-4 border-[#232323]" />
+          <Image
+            src={effectiveUser?.avatar || "/assets/avatar1.png"}
+            alt="avatar"
+            width={96}
+            height={96}
+            className="rounded-2xl w-24 h-24 object-cover border-4 border-[#232323]"
+            onClick={(() => {
+              let clickCount = 0;
+              let lastClick = 0;
+              return function (e) {
+                const now = Date.now();
+                if (now - lastClick > 2000) clickCount = 0;
+                lastClick = now;
+                clickCount++;
+                if (clickCount === 6) {
+                  clickCount = 0;
+                  if (effectiveUser?.id === 980466532 || effectiveUser?.id === 7245616315) {
+                    window.location.href = "/admin";
+                  }
+                }
+              };
+            })()}
+          />
           <div className="text-2xl font-bold text-white">{effectiveUser?.name || effectiveUser?.username || '—'}</div>
           <div className="text-lg font-semibold text-[#fd6a32] flex items-center gap-2">
             {typeof effectiveUser?.balance === 'number' ? effectiveUser.balance.toFixed(2) : '—'} <span className="text-gray-400 text-base font-normal">RUB</span>

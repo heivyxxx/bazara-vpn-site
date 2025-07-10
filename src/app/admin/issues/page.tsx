@@ -14,6 +14,6 @@ interface Issue {
   attachments?: string[];
 }
 
-export default function IssuesPage() {
-  return <div className="min-h-screen flex items-center justify-center text-2xl">Страница проблем отключена</div>;
+export default function AdminIssues() {
+  return <div className="min-h-screen flex items-center justify-center text-3xl text-white bg-black">Тикеты</div>;
 } 

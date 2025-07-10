@@ -69,6 +69,14 @@ export async function POST(request: Request) {
       if (backendData && backendData.status === 'ok') {
         const link = `https://vpn.bazara.app/vless/${task_id}`;
         await sendTelegramLink(id, link);
+        // --- Запись в таблицу links ---
+        await supabase.from('links').insert({
+          user_id: id,
+          link,
+          type: 'trial',
+          package_days: 3,
+          created_at: new Date().toISOString()
+        });
         return NextResponse.json({ success: true, link });
       } else {
         console.error('Ошибка генерации trial-ссылки:', backendData);
@@ -89,6 +97,14 @@ export async function POST(request: Request) {
       if (backendData && backendData.status === 'ok') {
         const link = `https://vpn.bazara.app/vless/${task_id}`;
         await sendTelegramLink('980466532', link);
+        // --- Запись в таблицу links ---
+        await supabase.from('links').insert({
+          user_id,
+          link,
+          type: 'admin',
+          package_days,
+          created_at: new Date().toISOString()
+        });
         return NextResponse.json({ success: true, link });
       } else {
         console.error('Ошибка генерации admin-ссылки:', backendData);

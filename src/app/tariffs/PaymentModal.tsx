@@ -219,23 +219,15 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, tar
         </div>
         <div className="flex flex-col items-center px-6 pb-6 pt-2 gap-6 overflow-y-auto">
           <div className="font-extrabold text-xl sm:text-2xl text-white text-center">{tariff === 'year' ? t.year : t.month}</div>
-          <div className="grid grid-cols-2 gap-2 sm:gap-4">
-            <div className="flex items-center gap-2 sm:gap-3 bg-[#181818] rounded-xl px-3 sm:px-5 py-3 sm:py-4 text-base sm:text-lg text-white font-semibold shadow">
-              <svg className="w-6 h-6 sm:w-7 sm:h-7 text-[#fd6a32]" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24"><path d="M12 3C17 5 21 5 21 10C21 19 12 21 12 21C12 21 3 19 3 10C3 5 7 5 12 3Z"/></svg>
-              <span>{t.feature1}</span>
-            </div>
-            <div className="flex items-center gap-2 sm:gap-3 bg-[#181818] rounded-xl px-3 sm:px-5 py-3 sm:py-4 text-base sm:text-lg text-white font-semibold shadow">
-              <svg className="w-6 h-6 sm:w-7 sm:h-7 text-[#fd6a32]" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24"><path d="M12 6v12M6 12h12"/></svg>
-              <span>{t.feature2}</span>
-            </div>
-            <div className="flex items-center gap-2 sm:gap-3 bg-[#181818] rounded-xl px-3 sm:px-5 py-3 sm:py-4 text-base sm:text-lg text-white font-semibold shadow">
-              <svg className="w-6 h-6 sm:w-7 sm:h-7 text-[#fd6a32]" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M8 21h8"/></svg>
-              <span>{t.feature3}</span>
-            </div>
-            <div className="flex items-center gap-2 sm:gap-3 bg-[#181818] rounded-xl px-3 sm:px-5 py-3 sm:py-4 text-base sm:text-lg text-white font-semibold shadow">
-              <svg className="w-6 h-6 sm:w-7 sm:h-7 text-[#fd6a32]" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 12l2.5 2.5L16 9"/></svg>
-              <span>{t.feature4}</span>
-            </div>
+          <div className="w-full flex justify-center my-2">
+            <Image
+              src={tariff === 'year' ? '/assets/1year.png' : '/assets/1month.png'}
+              alt={tariff === 'year' ? 'Годовой тариф' : 'Месячный тариф'}
+              width={320}
+              height={120}
+              className="max-w-xs w-full h-auto object-contain rounded-2xl shadow-lg border border-[#23232b] bg-[#181818]"
+              priority
+            />
           </div>
           <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 w-full">
             <button type="button" onClick={()=>setPayMethod('sbp')} className={`flex-1 pay-method${payMethod==='sbp'?' selected':''} min-w-0`}>{t.sbp}</button>

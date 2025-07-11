@@ -7,6 +7,7 @@ import Image from 'next/image';
 import clsx from 'clsx';
 import { PaymentModal, TariffType } from './PaymentModal';
 import { Button } from '@/components/ui/Button';
+import Link from 'next/link';
 
 const tariffsTexts = {
   ru: {
@@ -331,9 +332,9 @@ function TariffsContent() {
           <h2 className="text-3xl font-bold text-[#fd6a32] mb-4">{t.appsTitle}</h2>
           <p className="text-lg text-white mb-6 max-w-lg">{t.appsDesc}</p>
           <div className="w-full flex justify-center">
-            <a href="/download" target="_blank" rel="noopener noreferrer" className="w-full max-w-xs py-5 rounded-2xl font-bold text-xl text-white shadow-lg transition-all duration-200 bg-[#fd6a32] hover:bg-[#e65a1e] text-center block">
+            <Link href="/download" className="w-full max-w-xs py-5 rounded-2xl font-bold text-xl text-white shadow-lg transition-all duration-200 bg-[#fd6a32] hover:bg-[#e65a1e] text-center block">
               Установить сейчас
-            </a>
+            </Link>
           </div>
         </div>
         <div className="flex-1 flex justify-center items-center">

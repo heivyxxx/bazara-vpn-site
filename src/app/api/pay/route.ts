@@ -8,15 +8,20 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 const BACKEND_URL = 'https://vpn.bazara.app/generate';
 const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN!;
 
-async function sendTelegramLink(telegramId: string, link: string) {
+async function sendTelegramLink(telegramId: string, link: string, package_days?: number) {
   if (!BOT_TOKEN || !telegramId) return;
+  let duration = '...';
+  if (package_days === 3) duration = '3 дня';
+  else if (package_days === 30) duration = '30 дней';
+  else if (package_days === 365) duration = '1 год';
+  const text = `Ваша VPN-ссылка готова\n\nПодключайте до 5 устройств.\nБезлимитный трафик.\nСрок действия: ${duration}\n\nПриватный ключ-ссылка:\n${link}\n\nИнструкция по установке находится в разделе «Скачать»\n\nBazaraVPN — Быстро. Безопасно. Анонимно🧡`;
   try {
     await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         chat_id: telegramId,
-        text: `Ваша ссылка на VPN: ${link}`
+        text
       })
     });
   } catch (e) {
@@ -68,7 +73,7 @@ export async function POST(request: Request) {
       try { backendData = await backendResp.json(); } catch (e) { backendData = {}; console.error('Ошибка парсинга backendData (trial):', e); }
       if (backendData && backendData.status === 'ok') {
         const link = `https://vpn.bazara.app/vless/${task_id}`;
-        await sendTelegramLink(id, link);
+        await sendTelegramLink(id, link, 3);
         // --- Запись в таблицу links ---
         await supabase.from('links').insert({
           user_id: id,
@@ -96,7 +101,7 @@ export async function POST(request: Request) {
       try { backendData = await backendResp.json(); } catch (e) { backendData = {}; console.error('Ошибка парсинга backendData (admin):', e); }
       if (backendData && backendData.status === 'ok') {
         const link = `https://vpn.bazara.app/vless/${task_id}`;
-        await sendTelegramLink('980466532', link);
+        await sendTelegramLink('980466532', link, package_days);
         // --- Запись в таблицу links ---
         await supabase.from('links').insert({
           user_id,
@@ -137,7 +142,7 @@ export async function POST(request: Request) {
     try { backendData = await backendResp.json(); } catch (e) { backendData = {}; console.error('Ошибка парсинга backendData (pay):', e); }
     if (backendData && backendData.status === 'ok') {
       const link = `https://vpn.bazara.app/vless/${task_id}`;
-      await sendTelegramLink(telegram_id || user_id, link);
+      await sendTelegramLink(telegram_id || user_id, link, package_days);
       return NextResponse.json({ success: true, link });
     } else {
       console.error('Ошибка генерации ссылки:', backendData);

@@ -80,14 +80,16 @@ export default function AdminPromoReferrals() {
         <button className={`flex-1 py-3 rounded-xl font-bold text-lg transition ${viewType === 'user' ? 'bg-[#fd6a32] text-white' : 'bg-[#23232b] text-gray-300'}`} onClick={() => setViewType('user')}>Обычные</button>
         <button className={`flex-1 py-3 rounded-xl font-bold text-lg transition ${viewType === 'promo' ? 'bg-[#fd6a32] text-white' : 'bg-[#23232b] text-gray-300'}`} onClick={() => setViewType('promo')}>Рекламные</button>
       </div>
-      <button className="bg-orange-500 hover:bg-orange-600 text-white font-bold text-lg rounded-xl px-8 py-4 mb-8 w-full" onClick={() => setModalOpen(true)}>
-        Создать {viewType === 'promo' ? 'рекламную' : 'обычную'} ссылку
-      </button>
-      {modalOpen && (
+      {viewType === 'promo' && (
+        <button className="bg-orange-500 hover:bg-orange-600 text-white font-bold text-lg rounded-xl px-8 py-4 mb-8 w-full" onClick={() => setModalOpen(true)}>
+          Создать рекламную ссылку
+        </button>
+      )}
+      {modalOpen && viewType === 'promo' && (
         <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
           <div className="bg-[#232323] rounded-3xl shadow-2xl p-8 w-full max-w-md flex flex-col gap-6">
-            <h2 className="text-2xl font-bold mb-2">Создать {viewType === 'promo' ? 'рекламную' : 'обычную'} ссылку</h2>
-            <input className="rounded-lg px-4 py-3 text-base text-white font-semibold bg-[#181818] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-400" placeholder={viewType === 'promo' ? "Имя ссылки (например, sanek)" : "Имя ссылки (например, ref_123456)"} value={newName} onChange={e => setNewName(e.target.value)} />
+            <h2 className="text-2xl font-bold mb-2">Создать рекламную ссылку</h2>
+            <input className="rounded-lg px-4 py-3 text-base text-white font-semibold bg-[#181818] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-400" placeholder="Имя ссылки (например, sanek)" value={newName} onChange={e => setNewName(e.target.value)} />
             {error && <div className="text-red-500 text-sm">{error}</div>}
             <div className="flex gap-4">
               <button className="bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-xl px-6 py-3" onClick={handleCreate} disabled={creating}>{creating ? "Создание..." : "Создать"}</button>

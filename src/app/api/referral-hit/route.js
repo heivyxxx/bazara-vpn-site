@@ -7,25 +7,53 @@ if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
 }
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
+export async function GET(req) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const type = searchParams.get('type');
+    let query = supabase.from('referrals').select('*');
+    if (type) query = query.eq('type', type);
+    const { data, error } = await query.order('created_at', { ascending: false });
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ data });
+  } catch (e) {
+    return NextResponse.json({ error: e.message }, { status: 500 });
+  }
+}
+
 export async function POST(req) {
   try {
     const body = await req.json();
-    const { ref, userId } = body;
-    if (!ref || !userId) return NextResponse.json({ error: 'Missing params' }, { status: 400 });
-
-    // Ищем реферальную ссылку по name
-    const { data: refs, error } = await supabase.from('referrals').select('*').eq('name', ref);
-    if (error || !refs || refs.length === 0) return NextResponse.json({ error: 'Ref not found' }, { status: 404 });
+    const { ref, userId, type = 'user' } = body;
+    console.log('[API REFERRAL-HIT][POST] body:', body);
+    if (!ref || (type === 'user' && !userId)) {
+      console.log('[API REFERRAL-HIT][POST] Missing params:', { ref, userId, type });
+      return NextResponse.json({ error: 'Missing params' }, { status: 400 });
+    }
+    // Ищем реферальную ссылку по name и type
+    const { data: refs, error } = await supabase.from('referrals').select('*').eq('name', ref).eq('type', type);
+    console.log('[API REFERRAL-HIT][POST] refs:', refs, 'error:', error);
+    if (error || !refs || refs.length === 0) {
+      console.log('[API REFERRAL-HIT][POST] Ref not found:', { ref, refs, error });
+      return NextResponse.json({ error: 'Ref not found' }, { status: 404 });
+    }
     const referral = refs[0];
     const users = referral.users || [];
     if (users.includes(userId)) {
+      console.log('[API REFERRAL-HIT][POST] userId уже учтён:', userId);
       return NextResponse.json({ status: 'already counted' });
     }
     // Добавляем userId в users и увеличиваем count
     const newUsers = [...users, userId];
-    await supabase.from('referrals').update({ users: newUsers, count: referral.count + 1 }).eq('id', referral.id);
+    const { error: updateError } = await supabase.from('referrals').update({ users: newUsers, count: referral.count + 1 }).eq('id', referral.id);
+    if (updateError) {
+      console.log('[API REFERRAL-HIT][POST] Ошибка обновления:', updateError);
+      return NextResponse.json({ error: updateError.message }, { status: 500 });
+    }
+    console.log('[API REFERRAL-HIT][POST] Успешно обновлено:', { newUsers, count: referral.count + 1 });
     return NextResponse.json({ status: 'ok' });
   } catch (e) {
+    console.log('[API REFERRAL-HIT][POST] Исключение:', e);
     return NextResponse.json({ error: e.message }, { status: 500 });
   }
 }
@@ -33,22 +61,56 @@ export async function POST(req) {
 export async function PUT(req) {
   try {
     const body = await req.json();
-    const { userId, name } = body;
-    if (!userId || !name) return NextResponse.json({ error: 'Missing params' }, { status: 400 });
+    const { userId, name, type = 'user' } = body;
+    console.log('[API REFERRAL-HIT][PUT] body:', body);
+    if (!name || (type === 'user' && !userId)) {
+      console.log('[API REFERRAL-HIT][PUT] Missing params:', { userId, name, type });
+      return NextResponse.json({ error: 'Missing params' }, { status: 400 });
+    }
     // Проверяем, есть ли уже такая запись
-    const { data: refs, error } = await supabase.from('referrals').select('*').eq('user_id', userId);
-    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-    if (refs && refs.length > 0) return NextResponse.json({ status: 'already exists' });
+    let query = supabase.from('referrals').select('*').eq('name', name).eq('type', type);
+    if (type === 'user') query = query.eq('user_id', userId);
+    const { data: refs, error } = await query;
+    console.log('[API REFERRAL-HIT][PUT] refs:', refs, 'error:', error);
+    if (error) {
+      console.log('[API REFERRAL-HIT][PUT] Ошибка выборки:', error);
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+    if (refs && refs.length > 0) {
+      console.log('[API REFERRAL-HIT][PUT] Уже существует:', refs);
+      return NextResponse.json({ status: 'already exists' });
+    }
     // Создаём новую запись
-    const { error: insertError } = await supabase.from('referrals').insert({
-      user_id: userId,
+    const insertData = {
+      user_id: type === 'user' ? userId : null,
       name,
+      type,
       count: 0,
       users: [],
       created_at: new Date().toISOString(),
-    });
-    if (insertError) return NextResponse.json({ error: insertError.message }, { status: 500 });
+      url: `https://t.me/BazaraVPN_bot?startapp=ref_${name}`
+    };
+    const { error: insertError } = await supabase.from('referrals').insert(insertData);
+    if (insertError) {
+      console.log('[API REFERRAL-HIT][PUT] Ошибка вставки:', insertError);
+      return NextResponse.json({ error: insertError.message }, { status: 500 });
+    }
+    console.log('[API REFERRAL-HIT][PUT] Успешно создано:', insertData);
     return NextResponse.json({ status: 'created' });
+  } catch (e) {
+    console.log('[API REFERRAL-HIT][PUT] Исключение:', e);
+    return NextResponse.json({ error: e.message }, { status: 500 });
+  }
+}
+
+export async function DELETE(req) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get('id');
+    if (!id) return NextResponse.json({ error: 'Missing id' }, { status: 400 });
+    const { error } = await supabase.from('referrals').delete().eq('id', id);
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ status: 'deleted' });
   } catch (e) {
     return NextResponse.json({ error: e.message }, { status: 500 });
   }

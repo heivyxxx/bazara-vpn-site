@@ -175,15 +175,27 @@ function ReferralBlock({ userId }: { userId: string }) {
 
   // Добавляю создание реферальной записи при первом открытии модалки
   const handleOpenModal = async () => {
+    console.log('[REFERRAL DEBUG] Открытие модалки. userId:', userId, 'referralLink:', referralLink);
     setModalOpen(true);
     // Проверяем и создаём запись, если её нет
     try {
-      await fetch('/api/referral-hit', {
+      const payload = { userId, name: `ref_${userId}` };
+      console.log('[REFERRAL DEBUG] Отправляю PUT /api/referral-hit с payload:', payload);
+      const res = await fetch('/api/referral-hit', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId, name: `ref_${userId}` })
+        body: JSON.stringify(payload)
       });
-    } catch (e) { /* ignore */ }
+      let text = await res.text();
+      let data;
+      try { data = JSON.parse(text); } catch { data = text; }
+      console.log('[REFERRAL DEBUG] Ответ от /api/referral-hit:', { status: res.status, ok: res.ok, data });
+      if (!res.ok) {
+        console.error('[REFERRAL DEBUG] Ошибка при создании реферала:', data);
+      }
+    } catch (e) {
+      console.error('[REFERRAL DEBUG] Исключение при создании реферала:', e);
+    }
   };
   return (
     <Disclosure defaultOpen>

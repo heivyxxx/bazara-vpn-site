@@ -5,6 +5,7 @@ const ADMIN_SECTIONS = [
   { path: "/admin/panel", label: "Общая панель" },
   { path: "/admin/reviews", label: "Отзывы" },
   { path: "/admin/links", label: "Ссылки" },
+  { path: "/admin/promo-referrals", label: "Рекламные рефералы" },
   // { path: "/admin/support", label: "Поддержка" },
   // { path: "/admin/referrals", label: "Рефералы" },
   // { path: "/admin/issues", label: "Тикеты" },

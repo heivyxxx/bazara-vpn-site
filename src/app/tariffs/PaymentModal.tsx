@@ -223,9 +223,9 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, tar
             <Image
               src={tariff === 'year' ? '/assets/1year.png' : '/assets/1month.png'}
               alt={tariff === 'year' ? 'Годовой тариф' : 'Месячный тариф'}
-              width={140}
-              height={140}
-              className="w-[140px] h-[140px] object-contain my-2"
+              width={180}
+              height={180}
+              className="w-[180px] h-[180px] object-contain my-2"
               priority
             />
           </div>

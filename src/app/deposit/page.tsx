@@ -76,6 +76,7 @@ export default function DepositPage() {
     if (!payMethod) { setError(t.choose); return; }
     if (!numAmount || numAmount < minAmount) { setError(t.min); return; }
     if (numAmount > maxAmount) { setError(t.max); return; }
+    if (!user) { setError('Требуется авторизация'); return; }
     setLoading(true);
     try {
       const order_id = `deposit_${user.id}_${Date.now()}`;

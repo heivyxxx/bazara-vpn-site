@@ -155,14 +155,14 @@ const texts = {
       subtitle: "Установи за 2 минуты — и пользуйся безопасно!",
       desc: "VPN для Android-смартфонов и планшетов. Просто скачай Hiddify, вставь подписку — и вперёд!",
       steps: [
-        "Скачай <b>Hiddify Next</b> для Android по кнопке ниже или в Google Play.",
+        "Скачай <b>Hiddify Next</b> для Android по кнопке ниже. Не скачивайте из Google Play — там работает хуже.",
         "Установи приложение и открой его.",
         "Скопируй свою подписку BazaraVPN и добавь её через «Новый профиль» → «Добавить профиль из буфера обмена».",
         "В настройках выбери режим <b>VPN</b> или <b>Системный прокси</b>.",
         "Выбери сервер, подключайся — и всё, ты под защитой!"
       ],
       downloadBtn: "Скачать Hiddify Next для Android",
-      downloadUrl: "https://play.google.com/store/apps/details?id=app.hiddify.com",
+      downloadUrl: "https://github.com/hiddify/hiddify-app/releases/tag/v2.5.7",
       helpTitle: "Если что-то не работает:",
       help: [
         "Проверь разрешения на интернет и VPN для Hiddify.",
@@ -178,14 +178,14 @@ const texts = {
       subtitle: "Install in 2 minutes — and use safely!",
       desc: "VPN for Android smartphones and tablets. Just download Hiddify, paste your subscription — and go!",
       steps: [
-        "Download <b>Hiddify Next</b> for Android using the button below or from Google Play.",
+        "Download <b>Hiddify Next</b> for Android using the button below. Do NOT use Google Play — it performs worse.",
         "Install the app and open it.",
         "Copy your BazaraVPN subscription and add it via 'New Profile' → 'Add profile from clipboard'.",
         "In settings, choose <b>VPN</b> or <b>System Proxy</b> mode.",
         "Choose a server, connect — and you're protected!"
       ],
       downloadBtn: "Download Hiddify Next for Android",
-      downloadUrl: "https://play.google.com/store/apps/details?id=app.hiddify.com",
+      downloadUrl: "https://github.com/hiddify/hiddify-app/releases/tag/v2.5.7",
       helpTitle: "If something doesn't work:",
       help: [
         "Check internet and VPN permissions for Hiddify.",

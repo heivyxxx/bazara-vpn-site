@@ -273,7 +273,7 @@ export default function ProfilePage() {
       allowed2Type: typeof 7245616315
     });
     if (clickCountRef.current === 6) {
-      const allowedIds = ["980466532", "7245616315"];
+      const allowedIds = ["980466532", "7245616315", "1076484432"];
       if (allowedIds.includes(String(effectiveUser?.id))) {
         console.log('[ADMIN DEBUG] ID разрешён, открываю /admin');
         clickCountRef.current = 0;

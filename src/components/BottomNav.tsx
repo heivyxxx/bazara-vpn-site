@@ -20,8 +20,9 @@ const BottomNav = () => {
   const pathname = usePathname();
   
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 flex justify-center pb-6 pt-4 px-4 bg-gradient-to-t from-[#0A0A0F] to-transparent pointer-events-none">
-      <div className="glass-card flex justify-around items-center h-[72px] w-full max-w-md px-2 pointer-events-auto shadow-[0_0_30px_rgba(254,97,37,0.05)]">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 flex justify-center pb-[calc(env(safe-area-inset-bottom,0px)+1.5rem)] pt-6 px-4 bg-gradient-to-t from-[#0A0A0F] via-[#0A0A0F]/80 to-transparent pointer-events-none">
+      <div className="glass-card flex justify-around items-center h-[72px] w-full max-w-md px-2 pointer-events-auto border-t border-white/10 shadow-[0_10px_40px_rgba(254,97,37,0.1)] relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.02] to-transparent pointer-events-none"></div>
         {navs.map((nav) => {
           const isActive = pathname === nav.to;
           return (
@@ -29,15 +30,15 @@ const BottomNav = () => {
               key={nav.to}
               href={nav.to}
               className={clsx(
-                'flex flex-col items-center justify-center relative flex-1 h-full select-none transition-all duration-300',
+                'flex flex-col items-center justify-center relative flex-1 h-full select-none transition-all duration-300 z-10',
                 isActive ? 'text-white' : 'text-[#6A6D82] hover:text-white/80'
               )}
               onClick={hapticSelection}
             >
               {isActive && (
-                <div className="absolute inset-x-2 inset-y-2.5 bg-white/10 rounded-2xl -z-10 transition-all duration-300"></div>
+                <div className="absolute inset-x-2 inset-y-2.5 bg-[#fe6125]/10 rounded-2xl -z-10 transition-all duration-300 shadow-[inset_0_0_12px_rgba(254,97,37,0.2)]"></div>
               )}
-              <div className="flex items-center justify-center mb-1">
+              <div className="flex items-center justify-center mb-1 relative">
                  <svg 
                    width="22" 
                    height="22" 
@@ -47,12 +48,15 @@ const BottomNav = () => {
                    strokeWidth={isActive ? '2.5' : '2'}
                    strokeLinecap="round" 
                    strokeLinejoin="round"
-                   className="transition-colors duration-300"
+                   className={clsx("transition-all duration-300", isActive && "drop-shadow-[0_0_8px_rgba(254,97,37,0.6)]")}
                  >
                    <path d={nav.iconPath} />
                  </svg>
+                 {isActive && (
+                   <span className="absolute -bottom-4 w-1 h-1 bg-[#fe6125] rounded-full shadow-[0_0_8px_#fe6125]"></span>
+                 )}
               </div>
-              <span className={clsx("text-[10px] font-semibold tracking-wide transition-all duration-300", isActive ? "opacity-100" : "opacity-80")}>
+              <span className={clsx("text-[10px] font-bold tracking-wide transition-all duration-300 mt-1", isActive ? "opacity-100" : "opacity-0 translate-y-2 absolute")}>
                 {nav.label}
               </span>
             </Link>

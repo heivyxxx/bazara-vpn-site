@@ -10,18 +10,20 @@ module.exports = {
     extend: {
       colors: {
         orange: {
-          400: '#fd6a32',
-          500: '#fd6a32',
+          400: '#b275ff', // remapping old orange to new purple globally
+          500: '#A259FF', // remapping old orange to new purple globally
+          600: '#8c42eb',
         },
         purple: {
-          400: '#a259ff',
-          500: '#a259ff',
+          400: '#b275ff',
+          500: '#A259FF',
+          600: '#8c42eb',
         },
-        dark: '#18181b',
-        card: '#18181b',
+        dark: '#0A0A0F',
+        card: '#13141C',
       },
       fontFamily: {
-        sans: ['Segoe UI', 'Arial', 'sans-serif'],
+        sans: ['Inter', 'Segoe UI', 'Arial', 'sans-serif'],
       },
       boxShadow: {
         orange: '0 2px 24px 0 #ff880088',

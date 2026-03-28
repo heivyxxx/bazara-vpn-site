@@ -3,17 +3,42 @@
 @tailwind utilities;
  
 body {
-  @apply bg-black text-white font-sans;
-} 
+  @apply text-white font-sans;
+  background-color: #0A0A0F;
+  background-image: radial-gradient(circle at 50% -20%, #1a1638 0%, #0A0A0F 60%);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 1.25rem;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+}
+
+.glass-btn {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 1rem;
+  transition: all 0.25s ease;
+}
+.glass-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.15);
+}
 
 .btn-glow {
-  background: linear-gradient(90deg, #fd6a32 0%, #a259ff 100%);
+  background: linear-gradient(135deg, #A259FF 0%, #7C3AED 100%);
   color: #fff;
-  box-shadow: 0 0 32px 0 #fd6a3255, 0 2px 8px 0 #a259ff22;
+  box-shadow: 0 4px 20px 0 rgba(162, 89, 255, 0.25);
   transition: box-shadow 0.22s, background 0.18s, transform 0.18s;
 }
 .btn-glow:hover {
-  background: linear-gradient(90deg, #fd6a32 10%, #a259ff 90%);
-  box-shadow: 0 0 48px 0 #fd6a32aa, 0 4px 16px 0 #a259ff44;
-  transform: scale(1.04);
-} 
+  box-shadow: 0 6px 28px 0 rgba(162, 89, 255, 0.4);
+  transform: scale(1.02);
+}

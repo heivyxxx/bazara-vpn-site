@@ -9,24 +9,36 @@ import QRCode from 'react-qr-code';
 import { Disclosure } from '@headlessui/react';
 import { useRouter } from "next/navigation";
 
+// --- HISTORY MODAL ---
 function ProfileHistoryModal({ open, onClose, items }: { open: boolean, onClose: () => void, items: any[] }) {
   if (!open) return null;
   return (
-    <div className="fixed inset-0 z-[9999] bg-black/80 flex items-center justify-center">
-      <div className="bg-[#18181b] rounded-2xl shadow-2xl w-full max-w-md max-h-[80vh] overflow-y-auto relative">
-        <div className="flex items-center justify-between px-6 pt-6 pb-2 sticky top-0 z-10 bg-[#18181b] rounded-t-2xl">
+    <div className="fixed inset-0 z-[9999] bg-[#0A0A0F]/90 backdrop-blur-md flex items-center justify-center p-4">
+      <div className="glass-card w-full max-w-md max-h-[80vh] overflow-y-auto relative flex flex-col">
+        <div className="flex items-center justify-between px-6 py-5 sticky top-0 z-10 bg-[#13141C]/80 backdrop-blur-md border-b border-white/5 rounded-t-2xl">
           <span className="text-white font-bold text-lg">Вся история</span>
-          <button className="text-zinc-400 text-2xl p-1 rounded-full ml-2" onClick={onClose} aria-label="Закрыть">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M6 18L18 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
+          <button className="text-gray-400 hover:text-white transition" onClick={onClose} aria-label="Закрыть">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 6l12 12M6 18L18 6" strokeLinecap="round"/></svg>
           </button>
         </div>
-        <div className="flex flex-col gap-2 p-6 pt-2">
-          {items.length === 0 && <div className="text-gray-400 text-center py-4">Нет операций</div>}
+        <div className="flex flex-col gap-1 p-4">
+          {items.length === 0 && <div className="text-gray-500 text-center py-6">Нет операций</div>}
           {items.map((item, idx) => (
-            <div key={item.id || idx} className="flex items-center gap-4 py-4 border-b border-[#23232b] last:border-0 bg-[#18181b] rounded-2xl px-4">
-              <span className={item.type === 'buy' ? 'text-[#fd6a32] font-bold text-lg' : 'text-green-400 font-bold text-lg'}>{item.type === 'buy' ? 'Пополнение' : 'Списание'}</span>
-              <span className="flex items-center gap-1 text-white font-bold text-lg">{item.price} <span className="text-gray-400 text-base font-normal">RUB</span></span>
-              <span className="text-zinc-500 text-base ml-auto whitespace-nowrap">{item.date}</span>
+            <div key={item.id || idx} className="flex flex-col gap-1 py-3 px-4 rounded-xl hover:bg-white/5 transition border border-transparent hover:border-white/5">
+               <div className="flex justify-between items-center">
+                 <span className={item.type === 'buy' ? 'text-[#A259FF] font-medium text-sm' : 'text-green-400 font-medium text-sm'}>
+                   {item.type === 'buy' ? 'Пополнение' : 'Списание'}
+                 </span>
+                 <span className="text-gray-500 text-xs">{item.date}</span>
+               </div>
+               <div className="flex justify-between items-end">
+                 <span className="text-white text-base font-semibold truncate flex-1 pr-2">
+                   {item.groupName ? <>{item.groupName} <span className="text-gray-500 text-sm">#{item.number}</span></> : '—'}
+                 </span>
+                 <span className="text-white font-bold text-lg whitespace-nowrap">
+                   {item.price} <span className="text-gray-500 text-sm font-normal">₽</span>
+                 </span>
+               </div>
             </div>
           ))}
         </div>
@@ -35,6 +47,7 @@ function ProfileHistoryModal({ open, onClose, items }: { open: boolean, onClose:
   );
 }
 
+// --- HISTORY BLOCK ---
 function ProfileHistoryBlock({ userId }: { userId: string }) {
   const [items, setItems] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -53,7 +66,6 @@ function ProfileHistoryBlock({ userId }: { userId: string }) {
       });
   }, [userId]);
 
-  // Маппинг с поддержкой groupName/number (как в Eclipse)
   const mapped = (items || []).map(tx => ({
     type: tx.type === 'deposit' ? 'buy' : 'sell',
     groupName: tx.meta?.group_name || '',
@@ -66,33 +78,46 @@ function ProfileHistoryBlock({ userId }: { userId: string }) {
   return (
     <Disclosure defaultOpen>
       {({ open }) => (
-        <div className="bg-[#18181b] rounded-2xl p-0 shadow-sm flex flex-col gap-1 w-full">
-          <Disclosure.Button className="flex items-center justify-between w-full px-6 py-4">
-            <span className="text-white font-semibold text-base">История</span>
-            <svg className={`transition-transform ${open ? 'rotate-180' : ''}`} width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke="#fd6a32" strokeWidth="2" strokeLinecap="round"/></svg>
+        <div className="glass-card flex flex-col overflow-hidden transition-all duration-300">
+          <Disclosure.Button className="flex items-center justify-between w-full px-5 py-5 hover:bg-white/[0.02] transition">
+            <div className="flex items-center gap-3">
+               <div className="w-8 h-8 rounded-full bg-[#A259FF]/10 flex items-center justify-center">
+                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A259FF" strokeWidth="2"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" strokeLinecap="round" strokeLinejoin="round"/></svg>
+               </div>
+               <span className="text-white font-bold tracking-wide">История операций</span>
+            </div>
+            <svg className={`transition-transform duration-300 ${open ? 'rotate-180' : ''}`} width="20" height="20" fill="none" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke="#6A6D82" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
           </Disclosure.Button>
           <Disclosure.Panel>
-            <div className="flex flex-col gap-1 mt-1 px-4 pb-4">
+            <div className="flex flex-col gap-0 px-5 pb-5">
               {loading ? (
-                <div className="text-gray-400 text-center py-4">Загрузка...</div>
+                <div className="text-gray-500 text-center py-4 text-sm animate-pulse">Загрузка...</div>
               ) : mapped.length === 0 ? (
-                <div className="text-gray-400 text-center py-4">Нет операций</div>
+                <div className="text-gray-500 text-center py-4 text-sm">Нет операций</div>
               ) : (
-                mapped.slice(0, 5).map((item, idx) => (
-                  <div key={item.id || idx} className="flex items-center gap-4 py-3 border-b border-[#23232b] last:border-0 bg-[#18181b] rounded-xl px-2">
-                    <span className={item.type === 'buy' ? 'text-[#fd6a32] font-bold text-base' : 'text-green-400 font-bold text-base'}>{item.type === 'buy' ? 'Пополнение' : 'Списание'}</span>
-                    <span className="text-white font-bold text-base flex-1 truncate">{item.groupName && (<span>{item.groupName} <span className="text-zinc-400">#{item.number}</span></span>)} </span>
-                    <span className="flex items-center gap-1 text-white font-bold text-base">{item.price} <span className="text-gray-400 text-sm font-normal">RUB</span></span>
-                    <span className="text-zinc-500 text-xs ml-2 whitespace-nowrap">{item.date}</span>
-                  </div>
-                ))
+                <div className="flex flex-col gap-3">
+                  {mapped.slice(0, 3).map((item, idx) => (
+                    <div key={item.id || idx} className="flex justify-between items-center py-3 border-b border-white/5 last:border-0">
+                       <div className="flex flex-col min-w-0 pr-3">
+                          <span className={item.type === 'buy' ? 'text-[#A259FF] text-xs font-semibold uppercase tracking-wider mb-1' : 'text-green-400 text-xs font-semibold uppercase tracking-wider mb-1'}>
+                            {item.type === 'buy' ? 'Пополнение' : 'Списание'}
+                          </span>
+                          <span className="text-white text-sm font-medium truncate">{item.groupName || '—'}{item.number ? ` #${item.number}` : ''}</span>
+                       </div>
+                       <div className="flex flex-col items-end whitespace-nowrap">
+                          <span className="text-white font-bold text-base">{item.price} <span className="text-gray-500 text-xs font-normal">₽</span></span>
+                          <span className="text-gray-500 text-[11px] mt-0.5">{item.date}</span>
+                       </div>
+                    </div>
+                  ))}
+                  {mapped.length > 3 && (
+                    <button className="w-full mt-2 py-2.5 rounded-xl text-sm font-semibold transition glass-btn text-white hover:text-[#A259FF]" onClick={() => setModalOpen(true)}>
+                      Посмотреть всё
+                    </button>
+                  )}
+                </div>
               )}
             </div>
-            {mapped.length > 5 && (
-              <button className="w-full mt-2 py-2 rounded-xl font-semibold text-sm transition bg-[#23232b] border border-[#23232b] text-[#fd6a32] hover:bg-[#23232b]/80" onClick={() => setModalOpen(true)}>
-                Посмотреть всё
-              </button>
-            )}
             <ProfileHistoryModal open={modalOpen} onClose={() => setModalOpen(false)} items={mapped} />
           </Disclosure.Panel>
         </div>
@@ -101,50 +126,32 @@ function ProfileHistoryBlock({ userId }: { userId: string }) {
   );
 }
 
+// --- REFERRAL MODAL ---
 function ReferralModal({ open, onClose, referralLink }: { open: boolean, onClose: () => void, referralLink: string }) {
   const [copied, setCopied] = useState(false);
-  const [closing, setClosing] = useState(false);
-  const handleCopy = () => {
-    navigator.clipboard.writeText(referralLink);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 1200);
-  };
-  const handleClose = () => {
-    setClosing(true);
-    setTimeout(() => {
-      setClosing(false);
-      onClose();
-    }, 250);
-  };
-  if (!open && !closing) return null;
+  if (!open) return null;
   return (
-    <div className="fixed inset-0 z-[9999] w-full h-full bg-black/80 flex items-end justify-center">
-      <div className="absolute inset-0" onClick={handleClose} />
-      <div className={`relative w-full bg-[#18181b] rounded-t-3xl flex flex-col animate-fadeInUp ${closing ? 'animate-slideOutDown' : 'animate-slideInUp'}`}
-        style={{ minHeight: '30vh', maxHeight: '65vh', boxShadow: '0 8px 32px 0 rgba(0,0,0,0.25)' }}
-      >
-        <div className="flex flex-row items-center justify-between px-6 pt-6 pb-2 sticky top-0 z-10 bg-[#18181b] rounded-t-3xl">
-          <span className="text-white font-bold text-lg w-full text-center">Пригласить друга</span>
-          <button
-            onClick={handleClose}
-            className="text-zinc-400 text-2xl p-1 rounded-full ml-2 absolute right-6 top-6"
-            aria-label="Закрыть"
-          >
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M6 18L18 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
+    <div className="fixed inset-0 z-[9999] bg-[#0A0A0F]/90 backdrop-blur-md flex items-end sm:items-center justify-center">
+      <div className="w-full sm:max-w-md glass-card rounded-b-none sm:rounded-2xl flex flex-col border-b-0 sm:border-b p-6 pb-8 animate-slideInUp sm:animate-fadeIn">
+        <div className="flex items-center justify-between mb-6">
+          <span className="text-white font-bold text-xl">Пригласить друга</span>
+          <button onClick={onClose} className="text-gray-400 hover:text-white transition p-1 bg-white/5 rounded-full">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 6l12 12M6 18L18 6" strokeLinecap="round"/></svg>
           </button>
         </div>
-        <div className="flex flex-col items-center px-6 pb-6 pt-2 gap-6">
-          <div className="bg-white rounded-2xl p-4 flex items-center justify-center mb-2 mt-2">
-            <QRCode value={referralLink} bgColor="#fff" fgColor="#18181b" size={160} />
+        <div className="flex flex-col items-center gap-6">
+          <div className="bg-white p-4 rounded-3xl shadow-[0_0_40px_rgba(162,89,255,0.15)] flex items-center justify-center">
+            <QRCode value={referralLink} bgColor="#fff" fgColor="#13141C" size={180} />
           </div>
-          <div className="w-full text-center text-gray-300 text-base break-all select-all mb-2">{referralLink}</div>
-        </div>
-        <div className="sticky bottom-0 left-0 w-full flex justify-center gap-4 px-6 pb-6 pt-2 bg-[#18181b] rounded-b-3xl z-20 mt-auto">
+          <div className="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-center text-gray-300 text-sm break-all font-mono">
+            {referralLink}
+          </div>
           <button
-            className="flex-1 py-3 rounded-xl bg-[#fd6a32] hover:bg-[#e65a1e] text-white font-semibold text-base transition"
-            onClick={handleCopy}
+            className="w-full py-3.5 rounded-xl btn-glow font-bold text-base transition relative overflow-hidden group"
+            onClick={() => { navigator.clipboard.writeText(referralLink); setCopied(true); setTimeout(() => setCopied(false), 1200); }}
           >
             {copied ? 'Скопировано!' : 'Скопировать ссылку'}
+            <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
           </button>
         </div>
       </div>
@@ -152,16 +159,14 @@ function ReferralModal({ open, onClose, referralLink }: { open: boolean, onClose
   );
 }
 
+// --- REFERRAL BLOCK ---
 function ReferralBlock({ userId }: { userId: string }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [stats, setStats] = useState({ count: 0, turnover: 0, earned: 0, lvl: 1, nextLvlTurnover: 100, progress: 0 });
+  
   useEffect(() => {
     if (!userId) return;
-    supabase
-      .from('referrals')
-      .select('*')
-      .eq('user_id', userId)
-      .then(({ data }) => {
+    supabase.from('referrals').select('*').eq('user_id', userId).then(({ data }) => {
         const count = data?.length || 0;
         const turnover = data?.reduce((sum, r) => sum + Number(r.total_turnover || 0), 0);
         const earned = data?.reduce((sum, r) => sum + Number(r.total_earned_rub || 0), 0);
@@ -169,133 +174,75 @@ function ReferralBlock({ userId }: { userId: string }) {
         const nextLvlTurnover = lvl * 100;
         const progress = Math.min(100, Math.round((turnover / nextLvlTurnover) * 100));
         setStats({ count, turnover, earned, lvl, nextLvlTurnover, progress });
-      });
+    });
   }, [userId]);
+  
   const referralLink = `https://t.me/BazaraVPN_bot?startapp=ref_${userId}`;
 
-  // Добавляю создание реферальной записи при первом открытии модалки
   const handleOpenModal = async () => {
-    console.log('[REFERRAL DEBUG] Открытие модалки. userId:', userId, 'referralLink:', referralLink);
     setModalOpen(true);
-    // Проверяем и создаём запись, если её нет
     try {
-      const payload = { userId, name: `ref_${userId}` };
-      console.log('[REFERRAL DEBUG] Отправляю PUT /api/referral-hit с payload:', payload);
-      const res = await fetch('/api/referral-hit', {
+      await fetch('/api/referral-hit', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+        body: JSON.stringify({ userId, name: `ref_${userId}` })
       });
-      let text = await res.text();
-      let data;
-      try { data = JSON.parse(text); } catch { data = text; }
-      console.log('[REFERRAL DEBUG] Ответ от /api/referral-hit:', { status: res.status, ok: res.ok, data });
-      if (!res.ok) {
-        console.error('[REFERRAL DEBUG] Ошибка при создании реферала:', data);
-      }
-    } catch (e) {
-      console.error('[REFERRAL DEBUG] Исключение при создании реферала:', e);
-    }
+    } catch (e) {}
   };
+
   return (
-    <Disclosure defaultOpen>
-      {({ open }) => (
-        <div className="bg-[#18181b] rounded-2xl p-0 shadow-sm flex flex-col gap-1 w-full mt-2">
-          <Disclosure.Button className="flex items-center justify-between w-full px-6 py-4">
-            <span className="text-white font-semibold text-base">Реферальная программа</span>
-            <svg className={`transition-transform ${open ? 'rotate-180' : ''}`} width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke="#fd6a32" strokeWidth="2" strokeLinecap="round"/></svg>
-          </Disclosure.Button>
-          <Disclosure.Panel>
-            <div className="flex flex-col items-center gap-4 w-full pt-2 pb-1 px-4">
-              <div className="text-gray-400 text-center mb-2">Приглашайте друзей — зарабатывайте RUB и очки сезона</div>
-              <div className="flex flex-row gap-4 justify-center mb-2 w-full">
-                <div className="flex-1 bg-[#23232b] rounded-2xl p-4 flex flex-col items-center min-w-[120px]">
-                  <div className="text-white font-bold text-lg mb-1">RUB</div>
-                  <div className="text-gray-300 text-base mb-1">Зарабатывай</div>
-                  <div className="text-[#fd6a32] text-2xl font-extrabold mb-1">2%</div>
-                  <div className="text-gray-400 text-xs text-center">от всех продаж твоих рефералов</div>
-                </div>
-                <div className="flex-1 bg-[#23232b] rounded-2xl p-4 flex flex-col items-center min-w-[120px]">
-                  <div className="text-white font-bold text-lg mb-1">Очки сезона</div>
-                  <div className="text-gray-300 text-base mb-1">Зарабатывай</div>
-                  <div className="text-yellow-400 text-2xl font-extrabold mb-1">10%</div>
-                  <div className="text-gray-400 text-xs text-center">от всех продаж твоих рефералов</div>
-                </div>
-              </div>
-              <div className="text-gray-400 text-sm mb-1">Твой прогресс</div>
-              <div className="relative w-full max-w-xs h-10 bg-[#23232b] rounded-full overflow-hidden flex items-center">
-                <div className="absolute left-0 top-0 h-full bg-gradient-to-r from-[#fd6a32] via-[#fd6a32] to-[#FFD700] transition-all duration-700" style={{ width: `${stats.progress}%` }}></div>
-                <div className="relative z-10 w-full flex flex-row justify-between items-center px-4 text-white font-bold text-base">
-                  <span>LVL {stats.lvl}</span>
-                  <span>{stats.turnover} / {stats.nextLvlTurnover} RUB оборота</span>
-                </div>
-              </div>
-              <div className="w-full max-w-xs mx-auto flex flex-row justify-between mb-2 px-2">
-                <span className="text-gray-400 text-base">Рефералов: <span className="text-white font-bold">{stats.count}</span></span>
-                <span className="text-gray-400 text-base">Заработок: <span className="text-white font-bold">{stats.earned} RUB</span></span>
-              </div>
-              <button className="w-full mt-2 py-2 rounded-xl font-semibold text-sm transition bg-[#23232b] border border-[#23232b] text-[#fd6a32] hover:bg-[#23232b]/80" onClick={handleOpenModal}>
-                Пригласить друга
-              </button>
-              <ReferralModal open={modalOpen} onClose={() => setModalOpen(false)} referralLink={referralLink} />
-            </div>
-          </Disclosure.Panel>
-        </div>
-      )}
-    </Disclosure>
+    <div className="glass-card p-5 mt-2 overflow-hidden relative group">
+      {/* Decorative gradient orb */}
+      <div className="absolute -top-12 -right-12 w-32 h-32 bg-[#A259FF]/20 rounded-full blur-[40px] pointer-events-none group-hover:bg-[#A259FF]/30 transition-colors duration-500"></div>
+
+      <div className="flex items-center gap-3 mb-5 relative z-10">
+         <div className="w-8 h-8 rounded-full bg-[#A259FF]/10 flex items-center justify-center">
+           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A259FF" strokeWidth="2"><path d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" strokeLinecap="round" strokeLinejoin="round"/></svg>
+         </div>
+         <span className="text-white font-bold tracking-wide text-lg">Реферальная программа</span>
+      </div>
+      
+      <div className="grid grid-cols-2 gap-3 mb-5 relative z-10">
+         <div className="bg-white/5 border border-white/5 rounded-2xl p-4 flex flex-col items-center justify-center text-center">
+            <span className="text-gray-400 text-xs font-semibold mb-1 uppercase tracking-wider">Заработано</span>
+            <span className="text-[#A259FF] font-black text-2xl">{stats.earned}₽</span>
+         </div>
+         <div className="bg-white/5 border border-white/5 rounded-2xl p-4 flex flex-col items-center justify-center text-center">
+            <span className="text-gray-400 text-xs font-semibold mb-1 uppercase tracking-wider">Приглашено</span>
+            <span className="text-white font-black text-2xl">{stats.count}</span>
+         </div>
+      </div>
+      
+      <div className="mb-5 relative z-10">
+         <div className="flex justify-between items-end mb-2">
+            <span className="text-white font-bold text-sm">Уровень {stats.lvl}</span>
+            <span className="text-gray-400 text-xs">{stats.turnover} / {stats.nextLvlTurnover} ₽</span>
+         </div>
+         <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+            <div className="h-full bg-gradient-to-r from-[#A259FF] to-[#7C3AED] rounded-full transition-all duration-1000" style={{ width: `${stats.progress}%` }}></div>
+         </div>
+      </div>
+      
+      <button className="w-full py-3.5 rounded-xl btn-glow font-bold text-sm tracking-wide transition relative z-10" onClick={handleOpenModal}>
+        Пригласить друга
+      </button>
+
+      <ReferralModal open={modalOpen} onClose={() => setModalOpen(false)} referralLink={referralLink} />
+    </div>
   );
 }
 
+// --- PROFILE PAGE MAIN ---
 export default function ProfilePage() {
   const { lang } = useLang();
   const [user, setUser] = useUser();
   const [supabaseUser, setSupabaseUser] = useState<any>(null);
-  const [supabaseUserLoading, setSupabaseUserLoading] = useState(false);
-  const [avatarDark, setAvatarDark] = useState(false);
-  const clickCountRef = useRef(0);
-  const lastClickRef = useRef(0);
-  const router = useRouter();
-
-  const handleAvatarClick = () => {
-    setAvatarDark(true);
-    setTimeout(() => setAvatarDark(false), 500);
-    const now = Date.now();
-    if (now - lastClickRef.current > 2000) clickCountRef.current = 0;
-    lastClickRef.current = now;
-    clickCountRef.current++;
-    console.log('[ADMIN DEBUG] Клик по аватару:', {
-      userId: effectiveUser?.id,
-      clickCount: clickCountRef.current,
-      userIdType: typeof effectiveUser?.id,
-      allowed1: 980466532,
-      allowed2: 7245616315,
-      allowed1Type: typeof 980466532,
-      allowed2Type: typeof 7245616315
-    });
-    if (clickCountRef.current === 6) {
-      const allowedIds = ["980466532", "7245616315", "1076484432"];
-      if (allowedIds.includes(String(effectiveUser?.id))) {
-        console.log('[ADMIN DEBUG] ID разрешён, открываю /admin');
-        clickCountRef.current = 0;
-        router.push("/admin");
-      } else {
-        console.log('[ADMIN DEBUG] ID НЕ разрешён:', effectiveUser?.id);
-        clickCountRef.current = 0;
-      }
-    }
-  };
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
     const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
     if (tgUser && tgUser.id) {
-      setSupabaseUserLoading(true);
-      supabase
-        .from('users')
-        .select('*')
-        .eq('id', tgUser.id)
-        .single()
-        .then(({ data }) => {
+      supabase.from('users').select('*').eq('id', tgUser.id).single().then(({ data }) => {
           if (data) {
             setSupabaseUser(data);
             setUser(data);
@@ -305,44 +252,50 @@ export default function ProfilePage() {
             setUser(null);
             localStorage.removeItem('bazaraUser');
           }
-          setSupabaseUserLoading(false);
-        });
+      });
     }
   }, []);
+  
   const effectiveUser = user || supabaseUser;
-  const [refOpen, setRefOpen] = useState(true);
+  
   return (
     <>
       <Header user={effectiveUser} onLogout={() => setUser(null)} />
-      <main className="min-h-screen bg-black flex flex-col items-center pt-[calc(var(--tg-viewport-safe-area-inset-top)+0px)] pb-[calc(var(--tg-viewport-safe-area-inset-bottom)+104px)]">
-        {/* Профиль */}
-        <div className="w-full max-w-2xl mx-auto flex flex-col items-center gap-4 mb-6">
-          <Image
-            src={effectiveUser?.avatar || "/assets/avatar1.png"}
-            alt="avatar"
-            width={96}
-            height={96}
-            className={`rounded-2xl w-24 h-24 object-cover border-4 border-[#232323] ${avatarDark ? 'opacity-60 transition-opacity duration-200' : 'transition-opacity duration-200'}`}
-            onClick={handleAvatarClick}
-          />
-          <div className="text-2xl font-bold text-white">{effectiveUser?.name || effectiveUser?.username || '—'}</div>
-          <div className="text-lg font-semibold text-[#fd6a32] flex items-center gap-2">
-            {typeof effectiveUser?.balance === 'number' ? effectiveUser.balance.toFixed(2) : '—'} <span className="text-gray-400 text-base font-normal">RUB</span>
+      <main className="min-h-screen pt-[100px] pb-32 px-4 flex flex-col items-center">
+        
+        <div className="w-full max-w-xl mx-auto flex flex-col gap-6">
+          
+          {/* Welcome Text */}
+          <div className="mt-2 mb-2 animate-fadeIn">
+            <h1 className="text-[26px] md:text-3xl font-extrabold text-white tracking-tight">
+              Добро пожаловать, {effectiveUser?.name || 'Друг'} 
+              <span className="inline-block ml-2 animate-bounce">👋</span>
+            </h1>
           </div>
+
+          <div className="grid grid-cols-2 gap-4">
+             <a href="/tariffs" className="glass-btn flex flex-col items-center justify-center py-4 px-2 gap-2 text-center group">
+               <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-[#A259FF]/20 transition-colors">
+                  <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="#A259FF" strokeWidth="2"><path d="M13 10V3L4 14h7v7l9-11h-7z" strokeLinecap="round" strokeLinejoin="round"/></svg>
+               </div>
+               <span className="text-white text-sm font-semibold tracking-wide">Продлить</span>
+             </a>
+             <a href="/download" className="glass-btn flex flex-col items-center justify-center py-4 px-2 gap-2 text-center group">
+               <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-[#A259FF]/20 transition-colors">
+                  <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="#A259FF" strokeWidth="2"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" strokeLinecap="round" strokeLinejoin="round"/></svg>
+               </div>
+               <span className="text-white text-sm font-semibold tracking-wide">Скачать VPN</span>
+             </a>
+          </div>
+
+          {/* User Blocks */}
           {effectiveUser?.id && (
-            <a
-              href="/deposit"
-              className="mt-1 px-5 py-2 rounded-xl bg-[#fd6a32] hover:bg-[#e65a1e] text-white font-semibold text-sm transition shadow-md border border-[#fd6a32]"
-              style={{minWidth: 120, textAlign: 'center'}}
-            >
-              Пополнить
-            </a>
+            <>
+              <ReferralBlock userId={effectiveUser.id} />
+              <ProfileHistoryBlock userId={effectiveUser.id} />
+            </>
           )}
-        </div>
-        {/* История и рефералы */}
-        <div className="w-full max-w-2xl mx-auto flex flex-col gap-4 mb-6">
-          {effectiveUser?.id && <ProfileHistoryBlock userId={effectiveUser.id} />}
-          {effectiveUser?.id && <ReferralBlock userId={effectiveUser.id} />}
+
         </div>
       </main>
     </>

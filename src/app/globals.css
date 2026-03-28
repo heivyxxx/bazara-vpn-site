@@ -33,12 +33,13 @@ body {
 }
 
 .btn-glow {
-  background: linear-gradient(135deg, #A259FF 0%, #7C3AED 100%);
+  background: #fe6125;
   color: #fff;
-  box-shadow: 0 4px 20px 0 rgba(162, 89, 255, 0.25);
+  box-shadow: 0 4px 20px 0 rgba(254, 97, 37, 0.25);
   transition: box-shadow 0.22s, background 0.18s, transform 0.18s;
 }
 .btn-glow:hover {
-  box-shadow: 0 6px 28px 0 rgba(162, 89, 255, 0.4);
+  background: #e04c14;
+  box-shadow: 0 6px 28px 0 rgba(254, 97, 37, 0.4);
   transform: scale(1.02);
 }

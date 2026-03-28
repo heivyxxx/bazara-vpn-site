@@ -47,9 +47,9 @@ export const Header = ({ onLogin, user, onLogout }: HeaderProps) => {
 
         {/* Right: Balance Badge */}
         <div className="flex items-center gap-3">
-          <Link href="/deposit" className="flex items-center gap-2 bg-[#1B192A]/60 backdrop-blur-sm border border-[#A259FF]/20 px-3 py-1.5 rounded-full hover:bg-[#1B192A] transition-colors cursor-pointer">
+          <Link href="/deposit" className="flex items-center gap-2 bg-[#1B192A]/60 backdrop-blur-sm border border-[#fe6125]/20 px-3 py-1.5 rounded-full hover:bg-[#1B192A] transition-colors cursor-pointer">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-               <path d="M12 22v-6m0-10V2m0 0a6 6 0 100 12 6 6 0 000-12zm-3 8h6" stroke="#A259FF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+               <path d="M12 22v-6m0-10V2m0 0a6 6 0 100 12 6 6 0 000-12zm-3 8h6" stroke="#fe6125" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
             <span className="text-white font-bold text-sm tracking-wide">
               {typeof user?.balance === 'number' ? user.balance.toFixed(2).replace(/\.00$/, '') : '0'}₽

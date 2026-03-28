@@ -10,14 +10,14 @@ module.exports = {
     extend: {
       colors: {
         orange: {
-          400: '#b275ff', // remapping old orange to new purple globally
-          500: '#A259FF', // remapping old orange to new purple globally
-          600: '#8c42eb',
+          400: '#ff824f',
+          500: '#fe6125',
+          600: '#e04c14',
         },
         purple: {
-          400: '#b275ff',
-          500: '#A259FF',
-          600: '#8c42eb',
+          400: '#ff824f',
+          500: '#fe6125',
+          600: '#e04c14',
         },
         dark: '#0A0A0F',
         card: '#13141C',

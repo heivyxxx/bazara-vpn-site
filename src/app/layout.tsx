@@ -6,10 +6,15 @@ import { LanguageProvider } from '@/lib/LanguageContext';
 import SafeArea from '@/components/SafeArea';
 import BottomNav from '@/components/BottomNav';
 import Script from 'next/script';
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { User } from '@/lib/types';
-import React from 'react';
-import { useEffect } from 'react';
+import { Outfit } from 'next/font/google';
+
+const outfit = Outfit({ 
+  subsets: ['latin', 'cyrillic'],
+  weight: ['400', '500', '600', '700', '800', '900'],
+  display: 'swap',
+});
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   useEffect(() => {
@@ -29,11 +34,13 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <head>
         <Script src="https://telegram.org/js/telegram-web-app.js" strategy="beforeInteractive" />
       </head>
-      <body>
+      <body className={outfit.className}>
         <UserProvider>
           <LanguageProvider>
             <SafeArea>
-              {children}
+              <div className="animate-page-in flex flex-col min-h-screen">
+                {children}
+              </div>
               <BottomNav />
             </SafeArea>
           </LanguageProvider>

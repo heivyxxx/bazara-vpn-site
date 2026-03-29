@@ -48,7 +48,7 @@ const paymentTexts = {
   }
 };
 
-export type TariffType = 'year' | 'month';
+export type TariffType = string;
 
 interface PaymentModalProps {
   isOpen: boolean;
@@ -218,7 +218,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, tar
           </button>
         </div>
         <div className="flex flex-col items-center px-6 pb-6 pt-2 gap-6 overflow-y-auto">
-          <div className="font-extrabold text-xl sm:text-2xl text-white text-center">{tariff === 'year' ? t.year : t.month}</div>
+          <div className="font-extrabold text-xl sm:text-2xl text-white text-center">{tariff === 'year' ? t.year : tariff === 'month' ? t.month : `Тариф — ${tariff}`}</div>
           <div className="w-full flex justify-center my-2">
             <Image
               src={tariff === 'year' ? '/assets/1year.png' : '/assets/1month.png'}

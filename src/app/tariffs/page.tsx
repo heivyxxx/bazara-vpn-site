@@ -1,10 +1,13 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { Header } from '@/components/layout/Header';
 import { useUser } from '@/lib/LanguageContext';
+import { PaymentModal } from './PaymentModal';
 
 export default function TariffsPage() {
   const [user, setUser] = useUser();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedTariff, setSelectedTariff] = useState<any>(null);
 
   const tariffs = [
     { id: '1m', title: '1 месяц', price: '69 ₽', desc: 'Отличный старт', popular: false },
@@ -41,7 +44,7 @@ export default function TariffsPage() {
                 </div>
                 <div className="flex flex-col items-end z-10">
                    <span className="text-[#fe6125] font-black text-xl tracking-tight">{t.price}</span>
-                   <button className="mt-2 bg-white/5 group-hover:bg-[#fe6125] group-hover:text-white text-[#A2A5B8] text-[11px] font-bold uppercase tracking-wide py-1.5 px-3.5 rounded-xl transition-all shadow-sm">
+                   <button onClick={() => { setSelectedTariff(t); setIsModalOpen(true); }} className="mt-2 bg-white/5 group-hover:bg-[#fe6125] group-hover:text-white text-[#A2A5B8] text-[11px] font-bold uppercase tracking-wide py-1.5 px-3.5 rounded-xl transition-all shadow-sm">
                      Выбрать
                    </button>
                 </div>
@@ -51,6 +54,12 @@ export default function TariffsPage() {
 
         </div>
       </main>
+      <PaymentModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+        tariff={selectedTariff?.title || 'month'} 
+        price={selectedTariff?.price || '0 ₽'} 
+      />
     </>
   );
 }

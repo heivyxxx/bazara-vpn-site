@@ -72,19 +72,6 @@ export default function ReferralsPage() {
               <div className="hover:bg-white/[0.04] transition px-4 py-4 rounded-2xl flex items-center justify-between cursor-pointer">
                 <div className="flex items-center gap-4">
                   <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-[#A2A5B8]">
-                    <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                  </div>
-                  <div className="flex flex-col">
-                    <span className="text-white font-bold text-base">На карту</span>
-                    <span className="text-[#6A6D82] text-xs">Вывод на банковскую карту (от 500₽)</span>
-                  </div>
-                </div>
-                <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="#6A6D82" strokeWidth="2"><path d="M9 18l6-6-6-6" strokeLinecap="round" strokeLinejoin="round"/></svg>
-              </div>
-              <div className="h-px bg-white/5 w-[85%] mx-auto"></div>
-              <div className="hover:bg-white/[0.04] transition px-4 py-4 rounded-2xl flex items-center justify-between cursor-pointer">
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-[#A2A5B8]">
                     <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path d="M20 12V8H6a2 2 0 01-2-2c0-1.1.9-2 2-2h12v4M4 10v9a2 2 0 002 2h14v-9H4z" strokeLinecap="round" strokeLinejoin="round"/><circle cx="16" cy="15" r="2"/></svg>
                   </div>
                   <div className="flex flex-col">

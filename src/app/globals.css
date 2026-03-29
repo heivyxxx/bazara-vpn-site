@@ -11,6 +11,20 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
+@keyframes pageIn {
+  from { opacity: 0; transform: translateY(12px) scale(0.99); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.animate-page-in {
+  animation: pageIn 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+/* Make typical interactive elements smoother globally */
+button, a, .glass-card, input, svg {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 /* Premium Animated Background Orbs */
 body::before, body::after {
   content: '';

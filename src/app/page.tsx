@@ -4,10 +4,16 @@ import Link from "next/link";
 import { Header } from '@/components/layout/Header';
 import { useUser } from '@/lib/LanguageContext';
 import { supabase } from '@/lib/supabaseClient';
+import { HowToConnectModal } from '@/components/HowToConnectModal';
+import { DeviceModal } from '@/components/DeviceModal';
+import { PaymentModal } from '@/app/tariffs/PaymentModal';
 
 export default function HomePage() {
   const [user, setUser] = useUser();
   const [supabaseUser, setSupabaseUser] = useState<any>(null);
+  const [isConnectModalOpen, setIsConnectModalOpen] = useState(false);
+  const [isDeviceModalOpen, setIsDeviceModalOpen] = useState(false);
+  const [isRenewModalOpen, setIsRenewModalOpen] = useState(false);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -83,11 +89,12 @@ export default function HomePage() {
             <div className="flex flex-col gap-4">
               
               <div className="glass-card p-4 flex flex-col gap-3 relative z-10 w-full h-fit">
-                <span className="text-white font-bold text-sm ml-1 mb-1">Настройка подключения</span>
-                <div className="bg-white/[0.03] hover:bg-white/[0.06] transition-all duration-300 px-4 py-3.5 rounded-xl flex items-center justify-between cursor-pointer border border-transparent hover:border-white/10 group">
+                <span className="text-white font-bold text-sm ml-1 mb-1">Настройки подключения</span>
+                
+                <div onClick={() => setIsConnectModalOpen(true)} className="bg-white/[0.03] hover:bg-white/[0.06] transition-all duration-300 px-4 py-3.5 rounded-xl flex items-center justify-between cursor-pointer border border-transparent hover:border-white/10 group">
                   <div className="flex items-center gap-4">
                     <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-white/[0.06] to-transparent flex items-center justify-center border border-white/5 group-hover:border-[#fe6125]/30 transition-colors">
-                      <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="#fe6125" strokeWidth="2.5"><path d="M15.5 16l-3.5 3.5m0 0l-3.5-3.5m3.5 3.5V4" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                      <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="#fe6125" strokeWidth="2.5"><path d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" strokeLinecap="round" strokeLinejoin="round"/></svg>
                     </div>
                     <div className="flex flex-col">
                       <span className="text-white font-extrabold text-[14px]">Как подключиться?</span>
@@ -96,18 +103,33 @@ export default function HomePage() {
                   </div>
                   <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="#6A6D82" strokeWidth="2" className="group-hover:translate-x-1 transition-transform"><path d="M9 18l6-6-6-6" strokeLinecap="round" strokeLinejoin="round"/></svg>
                 </div>
-                <div className="bg-white/[0.03] hover:bg-white/[0.06] transition-all duration-300 px-4 py-3.5 rounded-xl flex items-center justify-between cursor-pointer border border-transparent hover:border-white/10 group">
+                
+                <div onClick={() => setIsRenewModalOpen(true)} className="bg-white/[0.03] hover:bg-white/[0.06] transition-all duration-300 px-4 py-3.5 rounded-xl flex items-center justify-between cursor-pointer border border-transparent hover:border-white/10 group">
                   <div className="flex items-center gap-4">
                     <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-white/[0.06] to-transparent flex items-center justify-center border border-white/5 group-hover:border-white/20 transition-colors">
                       <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" strokeLinecap="round" strokeLinejoin="round"/></svg>
                     </div>
                     <div className="flex flex-col">
-                      <span className="text-white font-extrabold text-[14px]">Удалить устройства</span>
-                      <span className="text-[#6A6D82] font-medium text-[11px] mt-0.5">Сбросить доступ всех устройств</span>
+                      <span className="text-white font-extrabold text-[14px]">Продлить</span>
+                      <span className="text-[#6A6D82] font-medium text-[11px] mt-0.5">Добавить дни к подписке</span>
                     </div>
                   </div>
                   <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="#6A6D82" strokeWidth="2" className="group-hover:translate-x-1 transition-transform"><path d="M9 18l6-6-6-6" strokeLinecap="round" strokeLinejoin="round"/></svg>
                 </div>
+
+                <div onClick={() => setIsDeviceModalOpen(true)} className="bg-white/[0.03] hover:bg-white/[0.06] transition-all duration-300 px-4 py-3.5 rounded-xl flex items-center justify-between cursor-pointer border border-transparent hover:border-white/10 group">
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-white/[0.06] to-transparent flex items-center justify-center border border-white/5 group-hover:border-white/20 transition-colors">
+                      <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="text-white font-extrabold text-[14px]">Устройства</span>
+                      <span className="text-[#6A6D82] font-medium text-[11px] mt-0.5">Добавить или удалить</span>
+                    </div>
+                  </div>
+                  <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="#6A6D82" strokeWidth="2" className="group-hover:translate-x-1 transition-transform"><path d="M9 18l6-6-6-6" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                </div>
+
               </div>
 
               {/* Added extra helpful card for right column balancing */}
@@ -128,44 +150,14 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* BOTTOM ROW: Fast Actions */}
-          <div className="flex flex-col gap-3 mt-2 md:mt-4">
-            <span className="text-[#6A6D82] text-xs font-bold uppercase tracking-wider pl-4 md:pl-2">Быстрые действия</span>
-            <div className="bg-white/[0.02] border border-white/5 shadow-inner shadow-white/[0.01] rounded-3xl p-2 flex flex-col md:grid md:grid-cols-2 md:gap-4 md:p-3 md:bg-transparent md:border-none md:shadow-none">
-              
-              <div className="hover:bg-white/[0.04] md:bg-white/[0.03] md:border md:border-white/5 md:hover:border-white/10 md:hover:bg-white/[0.06] transition-all px-4 py-4 md:py-5 rounded-2xl flex items-center justify-between cursor-pointer group">
-                <div className="flex items-center gap-4">
-                  <div className="w-11 h-11 rounded-xl bg-white/5 flex items-center justify-center group-hover:scale-105 transition-transform">
-                    <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                  </div>
-                  <div className="flex flex-col">
-                    <span className="text-white font-bold text-[15px]">Продлить</span>
-                    <span className="text-[#6A6D82] text-[12px] mt-0.5">Добавить дни к подписке</span>
-                  </div>
-                </div>
-                <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="#6A6D82" strokeWidth="2" className="group-hover:translate-x-1 transition-transform"><path d="M9 18l6-6-6-6" strokeLinecap="round" strokeLinejoin="round"/></svg>
-              </div>
-              
-              <div className="h-px bg-white/5 w-[85%] mx-auto md:hidden"></div>
-              
-              <div className="hover:bg-white/[0.04] md:bg-white/[0.03] md:border md:border-white/5 md:hover:border-white/10 md:hover:bg-white/[0.06] transition-all px-4 py-4 md:py-5 rounded-2xl flex items-center justify-between cursor-pointer group">
-                <div className="flex items-center gap-4">
-                  <div className="w-11 h-11 rounded-xl bg-white/5 flex items-center justify-center group-hover:scale-105 transition-transform">
-                    <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                  </div>
-                  <div className="flex flex-col">
-                    <span className="text-white font-bold text-[15px]">Устройства</span>
-                    <span className="text-[#6A6D82] text-[12px] mt-0.5">Подключить больше девайсов</span>
-                  </div>
-                </div>
-                <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="#6A6D82" strokeWidth="2" className="group-hover:translate-x-1 transition-transform"><path d="M9 18l6-6-6-6" strokeLinecap="round" strokeLinejoin="round"/></svg>
-              </div>
 
-            </div>
-          </div>
 
         </div>
       </main>
+      
+      <HowToConnectModal isOpen={isConnectModalOpen} onClose={() => setIsConnectModalOpen(false)} primaryLink={`https://t.me/VPNEnvyBot?start=sub${effectiveUser?.id}`} reserveLink={`https://ru-vpn.envy.com:228/sub/${effectiveUser?.id}`} />
+      <DeviceModal isOpen={isDeviceModalOpen} onClose={() => setIsDeviceModalOpen(false)} currentDevices={2} totalLimit={64} />
+      <PaymentModal isOpen={isRenewModalOpen} onClose={() => setIsRenewModalOpen(false)} tariff="Продление" price="0 ₽" />
     </>
   );
 }

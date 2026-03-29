@@ -42,7 +42,7 @@ export default function HomePage() {
             </h1>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+          <div className="flex flex-col gap-6 items-stretch w-full">
             
             {/* LEFT COLUMN: Subscription Info */}
             <div className="glass-card flex flex-col overflow-hidden relative group">

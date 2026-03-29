@@ -22,45 +22,45 @@ export default function DepositPage() {
             <span className="text-[#6A6D82] text-xs font-bold uppercase tracking-wider pl-1">Доступные способы</span>
             <div className="bg-white/[0.02] border border-white/5 rounded-3xl p-2 flex flex-col">
               
-              <div className="hover:bg-white/[0.04] transition px-4 py-4 rounded-2xl flex items-center justify-between cursor-pointer">
+              <div className="hover:bg-white/[0.04] transition px-4 py-4 rounded-2xl flex items-center justify-between cursor-pointer group">
                 <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-[#A2A5B8]">
-                    <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path d="M4 8h16M4 16h16M8 4v16M16 4v16" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                  <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center text-[#A2A5B8] overflow-hidden group-hover:scale-110 transition-transform duration-300 p-2 border border-white/5">
+                    <img src="https://static.tinkoff.ru/images/new-payments/sbp_logo_140x140.webp" alt="СБП" className="w-full h-full object-contain" onError={(e) => { e.currentTarget.src = 'https://upload.wikimedia.org/wikipedia/commons/a/a2/Logo_of_the_System_of_Fast_Payments.svg' }} />
                   </div>
                   <div className="flex flex-col">
-                    <span className="text-white font-bold text-base">СБП</span>
-                    <span className="text-[#6A6D82] text-xs">Система быстрых платежей</span>
+                    <span className="text-white font-extrabold text-[15px]">СБП</span>
+                    <span className="text-[#6A6D82] font-semibold tracking-wide text-[11px] mt-0.5">Система быстрых платежей</span>
                   </div>
                 </div>
-                <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="#6A6D82" strokeWidth="2"><path d="M9 18l6-6-6-6" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="#6A6D82" strokeWidth="2.5" className="group-hover:translate-x-1.5 transition-transform duration-300"><path d="M9 18l6-6-6-6" strokeLinecap="round" strokeLinejoin="round"/></svg>
               </div>
-              <div className="h-px bg-white/5 w-[85%] mx-auto"></div>
+              <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent w-[90%] mx-auto my-1"></div>
               
-              <div className="hover:bg-white/[0.04] transition px-4 py-4 rounded-2xl flex items-center justify-between cursor-pointer">
+              <div className="hover:bg-white/[0.04] transition px-4 py-4 rounded-2xl flex items-center justify-between cursor-pointer group">
                 <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-[#A2A5B8]">
-                    <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="8" r="4"/><path d="M4 21C4 17 8 15 12 15s8 2 8 6" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                  <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center text-[#A2A5B8] overflow-hidden group-hover:scale-110 transition-transform duration-300 p-2.5 border border-white/5 shadow-[0_0_20px_rgba(33,165,230,0.1)]">
+                    <img src="https://cryptologos.cc/logos/toncoin-ton-logo.webp" alt="CryptoBot" className="w-full h-full object-contain" />
                   </div>
                   <div className="flex flex-col">
-                    <span className="text-white font-bold text-base">CryptoBot</span>
-                    <span className="text-[#6A6D82] text-xs">Криптовалютные платежи</span>
+                    <span className="text-white font-extrabold text-[15px]">CryptoBot</span>
+                    <span className="text-[#6A6D82] font-semibold tracking-wide text-[11px] mt-0.5">Криптовалютные платежи</span>
                   </div>
                 </div>
-                <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="#6A6D82" strokeWidth="2"><path d="M9 18l6-6-6-6" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="#6A6D82" strokeWidth="2.5" className="group-hover:translate-x-1.5 transition-transform duration-300"><path d="M9 18l6-6-6-6" strokeLinecap="round" strokeLinejoin="round"/></svg>
               </div>
-              <div className="h-px bg-white/5 w-[85%] mx-auto"></div>
+              <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent w-[90%] mx-auto my-1"></div>
 
-              <div className="hover:bg-white/[0.04] transition px-4 py-4 rounded-2xl flex items-center justify-between cursor-pointer">
+              <div className="hover:bg-white/[0.04] transition px-4 py-4 rounded-2xl flex items-center justify-between cursor-pointer group">
                 <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-[#A2A5B8]">
-                    <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27z"/></svg>
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-tr from-yellow-500/10 to-orange-500/10 flex items-center justify-center text-yellow-500 overflow-hidden group-hover:scale-110 transition-transform duration-300 p-2 border border-yellow-500/20 shadow-[0_0_20px_rgba(234,179,8,0.15)]">
+                     <img src="https://emoji.discadia.com/emojis/f2df2616-e575-403d-88ca-deddce4d98ed.webp" alt="Telegram Stars" className="w-full h-full object-contain scale-110" onError={(e) => { e.currentTarget.src = 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Telegram_Premium_logo.svg/512px-Telegram_Premium_logo.svg.png' }} />
                   </div>
                   <div className="flex flex-col">
-                    <span className="text-white font-bold text-base">Telegram Stars</span>
-                    <span className="text-[#6A6D82] text-xs">Встроенная платежная система Telegram</span>
+                    <span className="text-white font-extrabold text-[15px]">Telegram Stars</span>
+                    <span className="text-[#6A6D82] font-semibold tracking-wide text-[11px] mt-0.5">Встроенная платежная система Telegram</span>
                   </div>
                 </div>
-                <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="#6A6D82" strokeWidth="2"><path d="M9 18l6-6-6-6" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="#6A6D82" strokeWidth="2.5" className="group-hover:translate-x-1.5 transition-transform duration-300"><path d="M9 18l6-6-6-6" strokeLinecap="round" strokeLinejoin="round"/></svg>
               </div>
 
             </div>

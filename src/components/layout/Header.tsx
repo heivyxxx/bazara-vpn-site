@@ -49,9 +49,12 @@ export const Header = ({ onLogin, user, onLogout }: HeaderProps) => {
         </div>
 
         {/* Right: Balance Badge */}
-        <div className="flex items-center gap-3">
-          <Link href="/deposit" className="flex items-center gap-2 bg-gradient-to-r from-[#fe6125]/10 to-transparent border border-[#fe6125]/20 pl-2 pr-3 py-1.5 rounded-full hover:bg-white/5 transition-all cursor-pointer shadow-[0_0_15px_rgba(254,97,37,0.15)] relative overflow-hidden group">
-            <div className="absolute inset-0 bg-white/5 translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500 skew-x-12"></div>
+        <div className="flex items-center gap-2">
+          <Link href="/deposit" className="bg-[#fe6125] hover:bg-[#e04c14] text-white font-bold text-[12px] px-3 py-1.5 rounded-full shadow-[0_0_15px_rgba(254,97,37,0.3)] transition-all flex items-center gap-1.5 tracking-wide">
+             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+             Пополнить
+          </Link>
+          <div className="flex items-center gap-2 bg-gradient-to-r from-[#fe6125]/10 to-transparent border border-[#fe6125]/20 pl-2 pr-3 py-1.5 rounded-full shadow-[0_0_15px_rgba(254,97,37,0.15)] relative overflow-hidden">
             <div className="w-6 h-6 rounded-full bg-[#fe6125]/20 flex items-center justify-center relative z-10">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                  <path d="M12 22v-6m0-10V2m0 0a6 6 0 100 12 6 6 0 000-12zm-3 8h6" stroke="#fe6125" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
@@ -60,7 +63,7 @@ export const Header = ({ onLogin, user, onLogout }: HeaderProps) => {
             <span className="text-[#fe6125] font-black text-sm tracking-wide relative z-10">
               {typeof user?.balance === 'number' ? user.balance.toFixed(2).replace(/\.00$/, '') : '0'}<span className="text-[12px] opacity-80">₽</span>
             </span>
-          </Link>
+          </div>
         </div>
 
       </div>

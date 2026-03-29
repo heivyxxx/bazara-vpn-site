@@ -48,20 +48,32 @@ export default function SupportPage() {
             </div>
             
             <div className="bg-white/[0.02] border border-white/5 rounded-3xl p-2 flex flex-col">
-              {faqs.map((faq, idx) => (
+              {faqs.map((faq, idx) => {
+                const [isOpen, setIsOpen] = React.useState(false);
+                return (
                 <React.Fragment key={idx}>
-                  <div className="hover:bg-white/[0.04] transition px-4 py-4 rounded-2xl flex items-center justify-between cursor-pointer group">
-                    <div className="flex items-center gap-4">
-                      <div className="w-9 h-9 rounded-xl bg-white/5 flex items-center justify-center text-[#A2A5B8] group-hover:bg-[#fe6125]/10 group-hover:text-[#fe6125] transition-colors">
-                        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path d={faq.icon} strokeLinecap="round" strokeLinejoin="round"/></svg>
+                  <div 
+                    onClick={() => setIsOpen(!isOpen)}
+                    className="hover:bg-white/[0.04] transition px-4 py-4 rounded-2xl flex flex-col cursor-pointer group"
+                  >
+                    <div className="flex items-center justify-between w-full">
+                      <div className="flex items-center gap-4">
+                        <div className="w-9 h-9 rounded-xl bg-white/5 flex items-center justify-center text-[#A2A5B8] group-hover:bg-[#fe6125]/10 group-hover:text-[#fe6125] transition-colors flex-shrink-0">
+                          <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path d={faq.icon} strokeLinecap="round" strokeLinejoin="round"/></svg>
+                        </div>
+                        <span className="text-white text-[13px] font-semibold tracking-wide pr-2">{faq.title}</span>
                       </div>
-                      <span className="text-white text-[13px] font-semibold tracking-wide pr-2">{faq.title}</span>
+                      <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#6A6D82" strokeWidth="2" className={`flex-shrink-0 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}><path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round"/></svg>
                     </div>
-                    <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#6A6D82" strokeWidth="2" className="flex-shrink-0"><path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                    {isOpen && (
+                      <div className="mt-4 pl-[3.25rem] text-[#A2A5B8] text-[13px] leading-relaxed animate-fade-in pr-4 pb-2">
+                        Здесь вы можете найти ответ на свой вопрос. Для подробной консультации, пожалуйста, обратитесь в службу поддержки через кнопку "Открыть чат" выше. Мы всегда рады помочь!
+                      </div>
+                    )}
                   </div>
                   {idx < faqs.length - 1 && <div className="h-px bg-white/5 w-[85%] mx-auto"></div>}
                 </React.Fragment>
-              ))}
+              )})}
             </div>
           </div>
 

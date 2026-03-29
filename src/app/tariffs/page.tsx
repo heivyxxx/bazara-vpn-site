@@ -6,28 +6,48 @@ import { useUser } from '@/lib/LanguageContext';
 export default function TariffsPage() {
   const [user, setUser] = useUser();
 
+  const tariffs = [
+    { id: '1m', title: '1 месяц', price: '69 ₽', desc: 'Отличный старт', popular: false },
+    { id: '3m', title: '3 месяца', price: '190 ₽', desc: 'Выгодно', popular: true },
+    { id: '1y', title: '1 год', price: '690 ₽', desc: 'Максимальная экономия', popular: false },
+    { id: 'custom', title: 'Свои дни', price: 'от 2.3 ₽', desc: '1 день = 2.3 рубля', popular: false }
+  ];
+
   return (
     <>
       <Header user={user} onLogout={() => setUser(null)} />
-      <main className="min-h-screen pt-[120px] pb-[100px] px-4 flex flex-col items-center justify-center relative">
-        <div className="w-full max-w-sm mx-auto flex flex-col items-center justify-center text-center -mt-20">
+      <main className="min-h-screen pt-[100px] pb-[100px] px-4 flex flex-col items-center">
+        <div className="w-full max-w-sm mx-auto flex flex-col items-center justify-center">
           
-          <div className="w-16 h-16 rounded-3xl bg-white/5 border border-white/10 flex items-center justify-center mb-6 shadow-lg shadow-white/5">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="#fe6125"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          </div>
-          
-          <h1 className="text-2xl font-extrabold text-white tracking-tight mb-4">
-            Подписка уже активна
+          <h1 className="text-3xl font-extrabold text-white tracking-tight mb-2">
+            Тарифы
           </h1>
-          
-          <p className="text-[#A2A5B8] text-sm leading-relaxed mb-8 max-w-[280px]">
-            Приобрести новую подписку при наличии активной невозможно. Вы можете продлить текущую подписку на вкладке <span className="font-bold text-white">Главная</span>.
+          <p className="text-[#A2A5B8] text-[13px] leading-relaxed mb-8 text-center">
+            Выберите подходящий тариф для безграничного доступа.
           </p>
 
-          <a href="/" className="bg-[#fe6125] hover:bg-[#e04c14] transition-colors text-white font-bold py-3.5 px-6 rounded-2xl flex items-center justify-center gap-2 w-full shadow-[0_4px_20px_rgba(254,97,37,0.25)]">
-            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" strokeLinecap="round" strokeLinejoin="round"/></svg>
-            На главную
-          </a>
+          <div className="flex flex-col gap-4 w-full">
+            {tariffs.map(t => (
+              <div key={t.id} className="bg-white/[0.03] hover:bg-white/[0.06] transition-all cursor-pointer p-5 rounded-[1.5rem] relative overflow-hidden group border border-white/5 hover:border-[#fe6125]/30 flex justify-between items-center w-full shadow-lg shadow-black/20">
+                <div className="absolute inset-0 bg-gradient-to-br from-[#fe6125]/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                {t.popular && (
+                  <div className="absolute top-0 right-0 bg-gradient-to-r from-[#fe6125] to-[#ff9e5e] text-white text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-bl-2xl z-20 shadow-[0_2px_10px_rgba(254,97,37,0.4)]">
+                    Хит продаж
+                  </div>
+                )}
+                <div className="flex flex-col z-10">
+                   <span className="text-white font-extrabold text-[17px]">{t.title}</span>
+                   <span className="text-[#6A6D82] text-[12px] font-medium mt-1">{t.desc}</span>
+                </div>
+                <div className="flex flex-col items-end z-10">
+                   <span className="text-[#fe6125] font-black text-xl tracking-tight">{t.price}</span>
+                   <button className="mt-2 bg-white/5 group-hover:bg-[#fe6125] group-hover:text-white text-[#A2A5B8] text-[11px] font-bold uppercase tracking-wide py-1.5 px-3.5 rounded-xl transition-all shadow-sm">
+                     Выбрать
+                   </button>
+                </div>
+              </div>
+            ))}
+          </div>
 
         </div>
       </main>

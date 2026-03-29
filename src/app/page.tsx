@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import Link from "next/link";
 import { Header } from '@/components/layout/Header';
 import { useUser } from '@/lib/LanguageContext';
 import { supabase } from '@/lib/supabaseClient';
@@ -110,19 +111,19 @@ export default function HomePage() {
               </div>
 
               {/* Added extra helpful card for right column balancing */}
-              <div className="bg-gradient-to-r from-white/[0.04] to-transparent border border-white/5 rounded-[1.5rem] p-4 flex items-center justify-between cursor-pointer hover:bg-white/[0.06] transition-colors relative overflow-hidden group">
+              <Link href="/referrals" className="bg-gradient-to-r from-white/[0.04] to-transparent border border-white/5 rounded-[1.5rem] p-4 flex items-center justify-between cursor-pointer hover:bg-white/[0.06] transition-colors relative overflow-hidden group block w-full">
                  <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#fe6125]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                 <div className="flex items-center gap-4 relative z-10">
-                   <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-[#fe6125]">
-                     <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><path d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                 <div className="flex items-center gap-4 relative z-10 w-full overflow-hidden">
+                   <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-[#fe6125] flex-shrink-0">
+                     <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8zM23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" strokeLinecap="round" strokeLinejoin="round"/></svg>
                    </div>
-                   <div className="flex flex-col">
-                     <span className="text-white font-extrabold text-[14px]">Скачать приложение</span>
-                     <span className="text-[#6A6D82] font-medium text-[11px] mt-0.5">Доступно для всех платформ</span>
+                   <div className="flex flex-col min-w-0">
+                     <span className="text-white font-extrabold text-[14px] truncate">Реферальная программа</span>
+                     <span className="text-[#6A6D82] font-medium text-[11px] mt-0.5 truncate">Приглашай друзей и получай бонусы</span>
                    </div>
                  </div>
-                 <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="#fe6125" strokeWidth="2" className="relative z-10 group-hover:scale-110 transition-transform"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" strokeLinecap="round" strokeLinejoin="round"/></svg>
-              </div>
+                 <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="#fe6125" strokeWidth="2" className="relative z-10 group-hover:translate-x-1 transition-transform flex-shrink-0 ml-2"><path d="M9 18l6-6-6-6" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              </Link>
 
             </div>
           </div>

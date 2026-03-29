@@ -18,27 +18,6 @@ export default function DepositPage() {
             </h1>
           </div>
 
-          <div className="glass-card flex flex-col p-5">
-             <div className="flex items-center gap-3 mb-5">
-               <svg width="24" height="24" viewBox="0 0 24 24" fill="#A2A5B8"><path d="M2 8a2 2 0 012-2h16a2 2 0 012 2v2v2v2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4v-2v-2V8zm2-2a2 2 0 00-2 2v2a2 2 0 012 2 2 2 0 01-2 2v4a2 2 0 002 2h16a2 2 0 002-2v-4a2 2 0 01-2-2 2 2 0 012-2V8a2 2 0 00-2-2H4z" fillRule="evenodd" clipRule="evenodd"/></svg>
-               <span className="text-white font-bold text-lg">Активировать промокод</span>
-             </div>
-             
-             <div className="bg-white/[0.03] border border-white/5 rounded-2xl p-1.5 flex items-center">
-                <input type="text" placeholder="ВВЕДИТЕ ПРОМОКОД" className="bg-transparent text-[#A2A5B8] text-sm font-semibold w-full outline-none px-4 placeholder-[#6A6D82]" />
-                <button className="bg-white/10 hover:bg-white/20 transition px-5 py-2.5 rounded-xl text-white font-semibold text-sm">
-                  Активировать
-                </button>
-             </div>
-          </div>
-
-          <div className="bg-white/5 rounded-xl p-4 flex items-start gap-3">
-             <div className="w-5 h-5 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-               <span className="text-[#A2A5B8] text-xs font-bold leading-none">i</span>
-             </div>
-             <span className="text-[#A2A5B8] text-[13px] leading-relaxed">Выберите удобный способ оплаты и желаемую сумму. Средства зачисляются мгновенно.</span>
-          </div>
-
           <div className="flex flex-col gap-3 mt-2">
             <span className="text-[#6A6D82] text-xs font-bold uppercase tracking-wider pl-1">Доступные способы</span>
             <div className="bg-white/[0.02] border border-white/5 rounded-3xl p-2 flex flex-col">
@@ -85,6 +64,27 @@ export default function DepositPage() {
               </div>
 
             </div>
+          </div>
+
+          <div className="bg-white/5 rounded-xl p-4 flex items-start gap-3 mt-4 mb-2">
+             <div className="w-5 h-5 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+               <span className="text-[#A2A5B8] text-xs font-bold leading-none">i</span>
+             </div>
+             <span className="text-[#A2A5B8] text-[13px] leading-relaxed">Выберите удобный способ оплаты и желаемую сумму. Средства зачисляются мгновенно.</span>
+          </div>
+
+          <div className="glass-card flex flex-col p-5">
+             <div className="flex items-center gap-3 mb-5">
+               <svg width="24" height="24" viewBox="0 0 24 24" fill="#A2A5B8"><path d="M2 8a2 2 0 012-2h16a2 2 0 012 2v2v2v2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4v-2v-2V8zm2-2a2 2 0 00-2 2v2a2 2 0 012 2 2 2 0 01-2 2v4a2 2 0 002 2h16a2 2 0 002-2v-4a2 2 0 01-2-2 2 2 0 012-2V8a2 2 0 00-2-2H4z" fillRule="evenodd" clipRule="evenodd"/></svg>
+               <span className="text-white font-bold text-lg">Активировать промокод</span>
+             </div>
+             
+             <div className="bg-white/[0.03] border border-white/5 rounded-2xl p-1.5 flex items-center">
+                <input type="text" placeholder="ВВЕДИТЕ ПРОМОКОД" className="bg-transparent text-[#A2A5B8] text-sm font-semibold w-full outline-none px-4 placeholder-[#6A6D82]" />
+                <button className="bg-white/10 hover:bg-white/20 transition px-5 py-2.5 rounded-xl text-white font-semibold text-sm">
+                  Активировать
+                </button>
+             </div>
           </div>
 
         </div>

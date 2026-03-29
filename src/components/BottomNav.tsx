@@ -12,8 +12,6 @@ const navs = [
   { to: '/', label: 'Главная', iconPath: 'M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z' },
   { to: '/tariffs', label: 'Тарифы', iconPath: 'M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z' },
   { to: '/referrals', label: 'Рефералы', iconPath: 'M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8zM23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75' },
-  { to: '/deposit', label: 'Пополнить', iconPath: 'M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6' },
-  { to: '/support', label: 'Поддержка', iconPath: 'M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z' },
 ];
 
 const BottomNav = () => {
@@ -38,7 +36,7 @@ const BottomNav = () => {
               {isActive && (
                 <div className="absolute inset-x-2 inset-y-2.5 bg-[#fe6125]/10 rounded-2xl -z-10 transition-all duration-300 shadow-[inset_0_0_12px_rgba(254,97,37,0.2)]"></div>
               )}
-              <div className="flex items-center justify-center mb-1 relative">
+             <div className="flex items-center justify-center mb-1 relative">
                  <svg 
                    width="22" 
                    height="22" 
@@ -52,9 +50,6 @@ const BottomNav = () => {
                  >
                    <path d={nav.iconPath} />
                  </svg>
-                 {isActive && (
-                   <span className="absolute -bottom-4 w-1 h-1 bg-[#fe6125] rounded-full shadow-[0_0_8px_#fe6125]"></span>
-                 )}
               </div>
               <span className={clsx("text-[10px] font-bold tracking-wide transition-all duration-300 mt-1", isActive ? "opacity-100" : "opacity-0 translate-y-2 absolute")}>
                 {nav.label}

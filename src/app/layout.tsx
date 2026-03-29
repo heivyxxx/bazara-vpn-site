@@ -8,11 +8,10 @@ import BottomNav from '@/components/BottomNav';
 import Script from 'next/script';
 import React, { useState, useEffect } from 'react';
 import { User } from '@/lib/types';
-import { Outfit } from 'next/font/google';
+import { Inter } from 'next/font/google';
 
-const outfit = Outfit({ 
+const inter = Inter({ 
   subsets: ['latin', 'cyrillic'],
-  weight: ['400', '500', '600', '700', '800', '900'],
   display: 'swap',
 });
 
@@ -34,7 +33,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <head>
         <Script src="https://telegram.org/js/telegram-web-app.js" strategy="beforeInteractive" />
       </head>
-      <body className={outfit.className}>
+      <body className={`${inter.className} bg-[#0A0A0F] text-white antialiased`}>
         <UserProvider>
           <LanguageProvider>
             <SafeArea>

@@ -24,8 +24,8 @@ export default function DepositPage() {
               
               <div className="hover:bg-white/[0.04] transition px-4 py-4 rounded-2xl flex items-center justify-between cursor-pointer group">
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center text-[#A2A5B8] overflow-hidden group-hover:scale-110 transition-transform duration-300 p-2 border border-white/5">
-                    <img src="https://static.tinkoff.ru/images/new-payments/sbp_logo_140x140.webp" alt="СБП" className="w-full h-full object-contain" onError={(e) => { e.currentTarget.src = 'https://upload.wikimedia.org/wikipedia/commons/a/a2/Logo_of_the_System_of_Fast_Payments.svg' }} />
+                  <div className="w-[46px] h-[46px] rounded-[14px] bg-white/[0.04] border border-white/[0.08] shadow-[0_2px_10px_rgba(0,0,0,0.1)] flex items-center justify-center overflow-hidden group-hover:scale-110 transition-transform duration-300 p-2.5">
+                    <img src="/assets/sbp.png" alt="СБП" className="w-full h-full object-contain drop-shadow-md" />
                   </div>
                   <div className="flex flex-col">
                     <span className="text-white font-extrabold text-[15px]">СБП</span>
@@ -38,8 +38,8 @@ export default function DepositPage() {
               
               <div className="hover:bg-white/[0.04] transition px-4 py-4 rounded-2xl flex items-center justify-between cursor-pointer group">
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center text-[#A2A5B8] overflow-hidden group-hover:scale-110 transition-transform duration-300 p-2.5 border border-white/5 shadow-[0_0_20px_rgba(33,165,230,0.1)]">
-                    <img src="https://cryptologos.cc/logos/toncoin-ton-logo.webp" alt="CryptoBot" className="w-full h-full object-contain" />
+                  <div className="w-[46px] h-[46px] rounded-[14px] bg-white/[0.04] border border-white/[0.08] shadow-[0_2px_10px_rgba(0,0,0,0.1)] flex items-center justify-center overflow-hidden group-hover:scale-110 transition-transform duration-300 p-2.5">
+                    <img src="/assets/cryptobot.png" alt="CryptoBot" className="w-full h-full object-contain drop-shadow-md" />
                   </div>
                   <div className="flex flex-col">
                     <span className="text-white font-extrabold text-[15px]">CryptoBot</span>
@@ -52,8 +52,8 @@ export default function DepositPage() {
 
               <div className="hover:bg-white/[0.04] transition px-4 py-4 rounded-2xl flex items-center justify-between cursor-pointer group">
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-tr from-yellow-500/10 to-orange-500/10 flex items-center justify-center text-yellow-500 overflow-hidden group-hover:scale-110 transition-transform duration-300 p-2 border border-yellow-500/20 shadow-[0_0_20px_rgba(234,179,8,0.15)]">
-                     <img src="https://emoji.discadia.com/emojis/f2df2616-e575-403d-88ca-deddce4d98ed.webp" alt="Telegram Stars" className="w-full h-full object-contain scale-110" onError={(e) => { e.currentTarget.src = 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Telegram_Premium_logo.svg/512px-Telegram_Premium_logo.svg.png' }} />
+                  <div className="w-[46px] h-[46px] rounded-[14px] bg-white/[0.04] border border-white/[0.08] shadow-[0_2px_10px_rgba(0,0,0,0.1)] flex items-center justify-center overflow-hidden group-hover:scale-110 transition-transform duration-300 p-2.5">
+                     <img src="/assets/stars.png" alt="Telegram Stars" className="w-full h-full object-contain drop-shadow-md" />
                   </div>
                   <div className="flex flex-col">
                     <span className="text-white font-extrabold text-[15px]">Telegram Stars</span>

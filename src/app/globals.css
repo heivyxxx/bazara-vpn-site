@@ -12,8 +12,17 @@ body {
 }
 
 @keyframes pageIn {
-  0% { opacity: 0; filter: blur(5px); transform: scale(0.97) translateY(12px); }
-  100% { opacity: 1; filter: blur(0); transform: scale(1) translateY(0); }
+  0% {
+    opacity: 0;
+    filter: blur(5px);
+    transform: scale(0.97) translateY(12px);
+  }
+
+  100% {
+    opacity: 1;
+    filter: blur(0);
+    transform: scale(1) translateY(0);
+  }
 }
 
 .animate-page-in {
@@ -21,12 +30,17 @@ body {
 }
 
 /* Make typical interactive elements smoother globally */
-button, a, .glass-card, input, svg {
+button,
+a,
+.glass-card,
+input,
+svg {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Premium Animated Background Orbs */
-body::before, body::after {
+body::before,
+body::after {
   content: '';
   position: fixed;
   border-radius: 50%;
@@ -34,33 +48,47 @@ body::before, body::after {
   filter: blur(80px);
   pointer-events: none;
 }
+
 body::before {
-  top: -15%; left: -10%;
-  width: 70vw; height: 70vw;
-  background: radial-gradient(circle, rgba(254, 97, 37, 0.12) 0%, rgba(0,0,0,0) 70%);
+  top: -15%;
+  left: -10%;
+  width: 70vw;
+  height: 70vw;
+  background: radial-gradient(circle, rgba(254, 97, 37, 0.12) 0%, rgba(0, 0, 0, 0) 70%);
   animation: floatOrb 18s ease-in-out infinite alternate;
 }
+
 body::after {
-  bottom: -10%; right: -20%;
-  width: 90vw; height: 90vw;
-  background: radial-gradient(circle, rgba(162, 89, 255, 0.06) 0%, rgba(0,0,0,0) 70%);
+  bottom: -10%;
+  right: -20%;
+  width: 90vw;
+  height: 90vw;
+  background: radial-gradient(circle, rgba(162, 89, 255, 0.06) 0%, rgba(0, 0, 0, 0) 70%);
   animation: floatOrb 25s ease-in-out infinite alternate-reverse;
 }
 
 @keyframes floatOrb {
-  0% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(3%, 5%) scale(1.05); }
-  100% { transform: translate(-2%, 8%) scale(0.95); }
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  50% {
+    transform: translate(3%, 5%) scale(1.05);
+  }
+
+  100% {
+    transform: translate(-2%, 8%) scale(0.95);
+  }
 }
 
 .glass-card {
-  background: linear-gradient(145deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 1.5rem;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 8px 32px rgba(0, 0, 0, 0.4);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 8px 32px rgba(0, 0, 0, 0.4);
 }
 
 .glass-btn {
@@ -70,7 +98,9 @@ body::after {
   border-radius: 1rem;
   transition: all 0.3s cubic-bezier(0.1, 0.7, 0.1, 1);
 }
-.glass-btn:hover, .glass-btn:active {
+
+.glass-btn:hover,
+.glass-btn:active {
   background: rgba(255, 255, 255, 0.08);
   border-color: rgba(254, 97, 37, 0.3);
   transform: translateY(-1px);
@@ -79,28 +109,45 @@ body::after {
 .btn-glow {
   background: linear-gradient(135deg, #fe6125 0%, #ff824f 100%);
   color: #fff;
-  box-shadow: 0 4px 20px 0 rgba(254, 97, 37, 0.3), inset 0 -2px 0 rgba(0,0,0,0.1);
+  box-shadow: 0 4px 20px 0 rgba(254, 97, 37, 0.3), inset 0 -2px 0 rgba(0, 0, 0, 0.1);
   transition: all 0.3s cubic-bezier(0.1, 0.7, 0.1, 1);
 }
-.btn-glow:hover, .btn-glow:active {
+
+.btn-glow:hover,
+.btn-glow:active {
   background: linear-gradient(135deg, #ff824f 0%, #fe6125 100%);
-  box-shadow: 0 6px 28px 0 rgba(254, 97, 37, 0.5), inset 0 -2px 0 rgba(0,0,0,0.1);
+  box-shadow: 0 6px 28px 0 rgba(254, 97, 37, 0.5), inset 0 -2px 0 rgba(0, 0, 0, 0.1);
   transform: scale(1.02);
 }
 
 @keyframes fadeInScale {
-  0% { opacity: 0; transform: scale(0.95); }
-  100% { opacity: 1; transform: scale(1); }
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 @keyframes fadeOutScale {
-  0% { opacity: 1; transform: scale(1); }
-  100% { opacity: 0; transform: scale(0.95); }
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
 }
 
 .animate-fadeInScale {
   animation: fadeInScale 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
+
 .animate-fadeOutScale {
   animation: fadeOutScale 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }

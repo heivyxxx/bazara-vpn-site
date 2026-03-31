@@ -3,11 +3,28 @@ import React, { useState } from "react";
 import { Header } from '@/components/layout/Header';
 import { useUser } from '@/lib/LanguageContext';
 import { PaymentModal } from './PaymentModal';
+import { useRouter } from 'next/navigation';
 
 export default function TariffsPage() {
   const [user, setUser] = useUser();
+  const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedTariff, setSelectedTariff] = useState<any>(null);
+
+  const handleSelectTariff = (t: any) => {
+    if (!user) return; // Wait until user is loaded
+
+    // For custom tariff it says "от 2.3 ₽", we'll just parse digits for now.
+    const numericPrice = Number(String(t.price).replace(/[^\d]/g, ''));
+    const balance = typeof user.balance === 'number' ? user.balance : 0;
+    
+    if (balance < numericPrice) {
+      router.push('/deposit');
+    } else {
+      setSelectedTariff(t);
+      setIsModalOpen(true);
+    }
+  };
 
   const tariffs = [
     { id: '1m', title: '1 месяц', price: '69 ₽', desc: 'Отличный старт', popular: false },
@@ -44,7 +61,7 @@ export default function TariffsPage() {
                 </div>
                 <div className="flex flex-col items-end z-10">
                    <span className="text-[#fe6125] font-black text-xl tracking-tight">{t.price}</span>
-                   <button onClick={() => { setSelectedTariff(t); setIsModalOpen(true); }} className="mt-2 bg-white/5 group-hover:bg-[#fe6125] group-hover:text-white text-[#A2A5B8] text-[11px] font-bold uppercase tracking-wide py-1.5 px-3.5 rounded-xl transition-all shadow-sm">
+                   <button onClick={() => handleSelectTariff(t)} className="mt-2 bg-white/5 group-hover:bg-[#fe6125] group-hover:text-white text-[#A2A5B8] text-[11px] font-bold uppercase tracking-wide py-1.5 px-3.5 rounded-xl transition-all shadow-sm">
                      Выбрать
                    </button>
                 </div>

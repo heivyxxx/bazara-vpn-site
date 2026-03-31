@@ -2,6 +2,9 @@
 import React from "react";
 import { Header } from '@/components/layout/Header';
 import { useUser } from '@/lib/LanguageContext';
+import sbpImg from '../../public/assets/sbp.png';
+import cryptoImg from '../../public/assets/cryptobot.png';
+import starsImg from '../../public/assets/stars.png';
 
 export default function DepositPage() {
   const [user, setUser] = useUser();
@@ -25,7 +28,7 @@ export default function DepositPage() {
               <div className="hover:bg-white/[0.04] transition px-4 py-4 rounded-2xl flex items-center justify-between cursor-pointer group">
                 <div className="flex items-center gap-4">
                   <div className="w-[46px] h-[46px] rounded-[14px] bg-white/[0.04] border border-white/[0.08] shadow-[0_2px_10px_rgba(0,0,0,0.1)] flex items-center justify-center overflow-hidden group-hover:scale-110 transition-transform duration-300 p-2.5">
-                    <img src="/assets/sbp.png" alt="СБП" className="w-full h-full object-contain drop-shadow-md" />
+                    <img src={sbpImg.src} alt="СБП" className="w-full h-full object-contain drop-shadow-md" />
                   </div>
                   <div className="flex flex-col">
                     <span className="text-white font-extrabold text-[15px]">СБП</span>
@@ -39,7 +42,7 @@ export default function DepositPage() {
               <div className="hover:bg-white/[0.04] transition px-4 py-4 rounded-2xl flex items-center justify-between cursor-pointer group">
                 <div className="flex items-center gap-4">
                   <div className="w-[46px] h-[46px] rounded-[14px] bg-white/[0.04] border border-white/[0.08] shadow-[0_2px_10px_rgba(0,0,0,0.1)] flex items-center justify-center overflow-hidden group-hover:scale-110 transition-transform duration-300 p-2.5">
-                    <img src="/assets/cryptobot.png" alt="CryptoBot" className="w-full h-full object-contain drop-shadow-md" />
+                    <img src={cryptoImg.src} alt="CryptoBot" className="w-full h-full object-contain drop-shadow-md" />
                   </div>
                   <div className="flex flex-col">
                     <span className="text-white font-extrabold text-[15px]">CryptoBot</span>
@@ -53,7 +56,7 @@ export default function DepositPage() {
               <div className="hover:bg-white/[0.04] transition px-4 py-4 rounded-2xl flex items-center justify-between cursor-pointer group">
                 <div className="flex items-center gap-4">
                   <div className="w-[46px] h-[46px] rounded-[14px] bg-white/[0.04] border border-white/[0.08] shadow-[0_2px_10px_rgba(0,0,0,0.1)] flex items-center justify-center overflow-hidden group-hover:scale-110 transition-transform duration-300 p-2.5">
-                     <img src="/assets/stars.png" alt="Telegram Stars" className="w-full h-full object-contain drop-shadow-md" />
+                     <img src={starsImg.src} alt="Telegram Stars" className="w-full h-full object-contain drop-shadow-md" />
                   </div>
                   <div className="flex flex-col">
                     <span className="text-white font-extrabold text-[15px]">Telegram Stars</span>

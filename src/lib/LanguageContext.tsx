@@ -58,26 +58,30 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   // Синхронизация с Supabase и Telegram (как в Eclipse)
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
-    if (tgUser && tgUser.id) {
-      supabase
-        .from('users')
-        .select('*')
-        .eq('id', tgUser.id)
-        .single()
-        .then(({ data }) => {
-          if (data) {
-            setUser(data);
-            localStorage.setItem('bazaraUser', JSON.stringify(data));
-          } else {
-            setUser(null);
-            localStorage.removeItem('bazaraUser');
+  useTelegramInit((tgData) => {
+    // 1. Мгновенно заполняем стейт данными из Telegram WebApp, чтобы шапка не показывала "Пользователь"
+    setUser((prev: any) => ({
+      ...(prev || {}),
+      id: String(tgData.id),
+      name: tgData.name,
+      username: tgData.username,
+      avatar: tgData.photo_url,
+      balance: prev?.balance || 0,
+    }));
+
+    // 2. Запрашиваем бекенд (регистрация/авторизация), чтобы подтянуть реальный баланс и базу
+    if (typeof window !== 'undefined') {
+      const tgUserFull = window.Telegram?.WebApp?.initDataUnsafe?.user;
+      if (tgUserFull) {
+        signInOrUpWithTelegram(tgUserFull).then((dbUser) => {
+          if (dbUser) {
+            setUser(dbUser);
+            localStorage.setItem('bazaraUser', JSON.stringify(dbUser));
           }
         });
+      }
     }
-  }, []);
+  });
 
   return (
     <UserContext.Provider value={{ user, setUser }}>

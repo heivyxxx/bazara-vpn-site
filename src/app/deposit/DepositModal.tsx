@@ -46,10 +46,10 @@ export const DepositModal: React.FC<DepositModalProps> = ({ isOpen, onClose, met
     <div className="fixed inset-0 z-[9999] w-full h-full bg-black/80 flex items-center justify-center p-4">
       <div className="absolute inset-0" onClick={handleClose} />
       <div 
-        className={`relative w-full max-w-[420px] bg-[#18181b] rounded-[24px] flex flex-col p-6 animate-fadeInUp shadow-[0_8px_32px_rgba(0,0,0,0.4)] border border-white/5 ${closing ? 'animate-slideOutDown' : 'animate-slideInUp'}`}
+        className={`relative w-full max-w-[380px] bg-[#18181b] rounded-[24px] flex flex-col p-5 animate-fadeInUp shadow-[0_8px_32px_rgba(0,0,0,0.4)] border border-white/5 ${closing ? 'animate-slideOutDown' : 'animate-slideInUp'}`}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex flex-row items-center justify-between mb-6">
+        <div className="flex flex-row items-center justify-between mb-5">
           <h2 className="text-white font-extrabold text-[20px]">
             Пополнение - {method?.name}
           </h2>
@@ -62,7 +62,7 @@ export const DepositModal: React.FC<DepositModalProps> = ({ isOpen, onClose, met
           </button>
         </div>
 
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-5">
           
           <div className="flex flex-col gap-3">
             <span className="text-[#A2A5B8] text-[13px] font-semibold">Быстрый выбор суммы:</span>
@@ -91,12 +91,12 @@ export const DepositModal: React.FC<DepositModalProps> = ({ isOpen, onClose, met
             
             <div className="relative">
               <input
-                type="number"
+                type="text"
+                inputMode="numeric"
+                pattern="[0-9]*"
                 value={amount}
-                onChange={(e) => setAmount(e.target.value)}
+                onChange={(e) => setAmount(e.target.value.replace(/\D/g, ''))}
                 className="w-full bg-black/20 border border-white/5 focus:border-white/20 transition-colors rounded-[14px] py-3.5 pl-4 pr-12 text-white font-bold text-lg outline-none"
-                min="10"
-                max="10000"
               />
               <div className="absolute right-4 top-1/2 -translate-y-1/2 text-[#A2A5B8] font-bold">
                 ₽

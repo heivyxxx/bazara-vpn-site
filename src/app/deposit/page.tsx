@@ -1,13 +1,15 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { Header } from '@/components/layout/Header';
 import { useUser } from '@/lib/LanguageContext';
 import sbpImg from '../../public/assets/sbp.png';
 import cryptoImg from '../../public/assets/cryptobot.png';
 import starsImg from '../../public/assets/stars.png';
+import { DepositModal } from './DepositModal';
 
 export default function DepositPage() {
   const [user, setUser] = useUser();
+  const [selectedMethod, setSelectedMethod] = useState<{ id: string; name: string } | null>(null);
 
   return (
     <>
@@ -25,7 +27,7 @@ export default function DepositPage() {
             <span className="text-[#6A6D82] text-xs font-bold uppercase tracking-wider pl-1">Доступные способы</span>
             <div className="bg-white/[0.02] border border-white/5 rounded-3xl p-2 flex flex-col">
               
-              <div className="hover:bg-white/[0.04] transition px-4 py-4 rounded-2xl flex items-center justify-between cursor-pointer group">
+              <div onClick={() => setSelectedMethod({ id: 'sbp', name: 'СБП' })} className="hover:bg-white/[0.04] transition px-4 py-4 rounded-2xl flex items-center justify-between cursor-pointer group">
                 <div className="flex items-center gap-4">
                   <div className="w-[46px] h-[46px] rounded-[14px] bg-white/[0.04] border border-white/[0.08] shadow-[0_2px_10px_rgba(0,0,0,0.1)] flex items-center justify-center overflow-hidden group-hover:scale-110 transition-transform duration-300 p-2.5">
                     <img src={sbpImg.src} alt="СБП" className="w-full h-full object-contain drop-shadow-md" />
@@ -39,7 +41,7 @@ export default function DepositPage() {
               </div>
               <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent w-[90%] mx-auto my-1"></div>
               
-              <div className="hover:bg-white/[0.04] transition px-4 py-4 rounded-2xl flex items-center justify-between cursor-pointer group">
+              <div onClick={() => setSelectedMethod({ id: 'crypto', name: 'CryptoBot' })} className="hover:bg-white/[0.04] transition px-4 py-4 rounded-2xl flex items-center justify-between cursor-pointer group">
                 <div className="flex items-center gap-4">
                   <div className="w-[46px] h-[46px] rounded-[14px] bg-white/[0.04] border border-white/[0.08] shadow-[0_2px_10px_rgba(0,0,0,0.1)] flex items-center justify-center overflow-hidden group-hover:scale-110 transition-transform duration-300 p-2.5">
                     <img src={cryptoImg.src} alt="CryptoBot" className="w-full h-full object-contain drop-shadow-md" />
@@ -53,7 +55,7 @@ export default function DepositPage() {
               </div>
               <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent w-[90%] mx-auto my-1"></div>
 
-              <div className="hover:bg-white/[0.04] transition px-4 py-4 rounded-2xl flex items-center justify-between cursor-pointer group">
+              <div onClick={() => setSelectedMethod({ id: 'stars', name: 'Telegram Stars' })} className="hover:bg-white/[0.04] transition px-4 py-4 rounded-2xl flex items-center justify-between cursor-pointer group">
                 <div className="flex items-center gap-4">
                   <div className="w-[46px] h-[46px] rounded-[14px] bg-white/[0.04] border border-white/[0.08] shadow-[0_2px_10px_rgba(0,0,0,0.1)] flex items-center justify-center overflow-hidden group-hover:scale-110 transition-transform duration-300 p-2.5">
                      <img src={starsImg.src} alt="Telegram Stars" className="w-full h-full object-contain drop-shadow-md" />
@@ -78,7 +80,7 @@ export default function DepositPage() {
 
           <div className="glass-card flex flex-col p-5">
              <div className="flex items-center gap-3 mb-5">
-               <svg width="24" height="24" viewBox="0 0 24 24" fill="#A2A5B8"><path d="M2 8a2 2 0 012-2h16a2 2 0 012 2v2v2v2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4v-2v-2V8zm2-2a2 2 0 00-2 2v2a2 2 0 012 2 2 2 0 01-2 2v4a2 2 0 002 2h16a2 2 0 002-2v-4a2 2 0 01-2-2 2 2 0 012-2V8a2 2 0 00-2-2H4z" fillRule="evenodd" clipRule="evenodd"/></svg>
+               <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fe6125" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"></path><path d="M13 5v2"></path><path d="M13 17v2"></path><path d="M13 11v2"></path></svg>
                <span className="text-white font-bold text-lg">Активировать промокод</span>
              </div>
              
@@ -92,6 +94,11 @@ export default function DepositPage() {
 
         </div>
       </main>
+      <DepositModal 
+        isOpen={!!selectedMethod} 
+        onClose={() => setSelectedMethod(null)} 
+        method={selectedMethod} 
+      />
     </>
   );
 }

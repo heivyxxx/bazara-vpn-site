@@ -43,16 +43,8 @@ export function useTelegramInit(onUser?: (user: any) => void) {
         tg.expand();
         log('tg.platform:', tg.platform);
         log('tg.initDataUnsafe:', tg.initDataUnsafe);
-        // fullscreen на всех устройствах, кроме ПК (Eclipse-style)
-        const isDesktop = (
-          tg.platform === 'tdesktop' ||
-          tg.platform === 'web' ||
-          tg.platform === 'macos'
-        );
-        if (!isDesktop) {
-          tg.requestFullscreen();
-          window.addEventListener('click', () => tg.requestFullscreen(), { once: true });
-        }
+        // fullscreen на всех устройствах отключен по просьбе
+        // const isDesktop = ...
         // Получаем пользователя из Telegram WebApp
         const tgUser = tg.initDataUnsafe?.user;
         log('tgUser:', tgUser);

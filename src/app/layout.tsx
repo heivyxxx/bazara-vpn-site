@@ -34,7 +34,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <UserProvider>
           <LanguageProvider>
             <SafeArea>
-              <div className="animate-page-in flex flex-col min-h-screen">
+              <div className="flex flex-col min-h-screen">
                 {children}
               </div>
               <BottomNav />

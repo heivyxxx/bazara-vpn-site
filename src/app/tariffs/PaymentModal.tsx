@@ -203,7 +203,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, tar
   };
 
   return (
-    <div className="fixed inset-0 z-[9999] w-full h-full bg-black/80 flex items-end justify-center">
+    <div className="fixed inset-0 z-[9999] w-full h-full bg-black/60 backdrop-blur-md flex items-end justify-center">
       <div className="absolute inset-0" onClick={handleClose} />
       <div className={`relative w-full bg-[#18181b] rounded-t-3xl flex flex-col animate-fadeInUp ${closing ? 'animate-slideOutDown' : 'animate-slideInUp'}`}
         style={{ minHeight: '30vh', maxHeight: '65vh', boxShadow: '0 8px 32px 0 rgba(0,0,0,0.25)' }}

@@ -16,7 +16,7 @@ export const HowToConnectModal: React.FC<HowToConnectModalProps> = ({ isOpen, on
   };
 
   return (
-    <div className="fixed inset-0 z-[9999] w-full h-full bg-black/80 flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-[9999] w-full h-full bg-black/60 backdrop-blur-md flex items-center justify-center p-4">
       <div className="absolute inset-0" onClick={onClose} />
       <div className="relative w-full max-w-lg bg-[#18181b] rounded-3xl flex flex-col animate-page-in shadow-2xl border border-white/5 max-h-[90vh] flex-shrink-0">
         

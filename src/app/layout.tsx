@@ -5,6 +5,7 @@ import { UserProvider } from '@/lib/LanguageContext';
 import { LanguageProvider } from '@/lib/LanguageContext';
 import SafeArea from '@/components/SafeArea';
 import BottomNav from '@/components/BottomNav';
+import { SplashScreen } from '@/components/SplashScreen';
 import Script from 'next/script';
 import React, { useState, useEffect } from 'react';
 import { User } from '@/lib/types';
@@ -29,6 +30,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <Script src="https://telegram.org/js/telegram-web-app.js" strategy="beforeInteractive" />
       </head>
       <body className={`${inter.className} bg-[#0A0A0F] text-white antialiased`}>
+        <SplashScreen />
         <UserProvider>
           <LanguageProvider>
             <SafeArea>

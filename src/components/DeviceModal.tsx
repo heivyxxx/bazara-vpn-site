@@ -17,7 +17,7 @@ export const DeviceModal: React.FC<DeviceModalProps> = ({ isOpen, onClose, curre
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[9999] w-full h-full bg-black/80 flex flex-col justify-end sm:items-center sm:justify-center">
+    <div className="fixed inset-0 z-[9999] w-full h-full bg-black/60 backdrop-blur-md flex flex-col justify-end sm:items-center sm:justify-center">
       <div className="absolute inset-0" onClick={onClose} />
       
       <div className="relative w-full max-w-[360px] bg-[#18181b] rounded-t-[28px] sm:rounded-3xl flex flex-col animate-page-in shadow-[0_8px_32px_rgba(0,0,0,0.4)] border border-white/5 max-h-[90vh] overflow-hidden">

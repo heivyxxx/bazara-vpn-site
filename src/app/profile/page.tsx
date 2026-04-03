@@ -13,7 +13,7 @@ import { useRouter } from "next/navigation";
 function ProfileHistoryModal({ open, onClose, items }: { open: boolean, onClose: () => void, items: any[] }) {
   if (!open) return null;
   return (
-    <div className="fixed inset-0 z-[9999] bg-[#0A0A0F]/90 backdrop-blur-md flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-[9999] bg-[#0A0A0F]/60 backdrop-blur-md flex items-center justify-center p-4">
       <div className="glass-card w-full max-w-md max-h-[80vh] overflow-y-auto relative flex flex-col">
         <div className="flex items-center justify-between px-6 py-5 sticky top-0 z-10 bg-[#13141C]/80 backdrop-blur-md border-b border-white/5 rounded-t-2xl">
           <span className="text-white font-bold text-lg">Вся история</span>
@@ -131,7 +131,7 @@ function ReferralModal({ open, onClose, referralLink }: { open: boolean, onClose
   const [copied, setCopied] = useState(false);
   if (!open) return null;
   return (
-    <div className="fixed inset-0 z-[9999] bg-[#0A0A0F]/90 backdrop-blur-md flex items-end sm:items-center justify-center">
+    <div className="fixed inset-0 z-[9999] bg-[#0A0A0F]/60 backdrop-blur-md flex items-end sm:items-center justify-center">
       <div className="w-full sm:max-w-md glass-card rounded-b-none sm:rounded-2xl flex flex-col border-b-0 sm:border-b p-6 pb-8 animate-slideInUp sm:animate-fadeIn">
         <div className="flex items-center justify-between mb-6">
           <span className="text-white font-bold text-xl">Пригласить друга</span>

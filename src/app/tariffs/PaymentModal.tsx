@@ -244,26 +244,27 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, tar
                  </div>
                  <span className="text-[#A2A5B8] font-bold">дней</span>
                </div>
-               <span className="text-[#fe6125] text-xs font-semibold">1 день = 2.3 ₽</span>
+               <span className="text-[#fe6125] text-sm font-semibold mt-1">1 день = 2.3 ₽</span>
             </div>
           ) : (
-            <div className="w-full flex justify-center my-0">
-              <Image
-                src={tariff === 'year' ? '/assets/1year.png' : '/assets/1month.png'}
-                alt={tariff === 'year' ? 'Годовой тариф' : 'Месячный тариф'}
-                width={160}
-                height={160}
-                className="w-[160px] h-[160px] object-contain drop-shadow-[0_10px_20px_rgba(254,97,37,0.2)]"
-                priority
-              />
+            <div className="w-full flex justify-center my-4 items-center flex-col">
+              <span className="text-[44px] font-black text-transparent bg-clip-text bg-gradient-to-r from-[#fe6125] to-[#f98055] tracking-tight drop-shadow-[0_4px_12px_rgba(254,97,37,0.3)]">
+                 {currentPrice} ₽
+              </span>
             </div>
           )}
 
-          <div className="w-full text-center text-[#A2A5B8] text-sm font-medium bg-white/[0.03] rounded-xl py-3 border border-white/5">
-            Средства будут списаны с вашего баланса{' '}
-            {user && typeof user.balance === 'number' ? (
-               <span className="text-white font-bold ml-1">{user.balance.toFixed(2)}₽</span>
-            ) : null}
+          <div className={`w-full text-center text-sm font-medium bg-white/[0.03] rounded-xl py-3.5 px-4 border ${user && typeof user.balance === 'number' && user.balance < currentPrice ? 'border-red-500/20 text-red-400' : 'border-white/5 text-[#A2A5B8]'}`}>
+            {user && typeof user.balance === 'number' && user.balance < currentPrice ? (
+              <>Недостаточно средств. Баланс: <span className="font-bold ml-1">{user.balance.toFixed(2)}₽</span></>
+            ) : (
+              <>
+                Спишется с баланса: 
+                {user && typeof user.balance === 'number' && (
+                  <span className="text-white font-bold ml-1">{user.balance.toFixed(2)}₽</span>
+                )}
+              </>
+            )}
           </div>
           {error && !success && <div className="text-red-500 text-sm text-center">{error}</div>}
           {success ? (
@@ -309,7 +310,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, tar
                       <span className="flex items-center justify-center w-full">
                         {(!user || (typeof user.balance === 'number' && user.balance < currentPrice)) 
                           ? "Пополнить баланс" 
-                          : <>{t.pay} <span className="ml-1 opacity-90 block">{currentPrice} ₽</span></>}
+                          : t.pay}
                       </span>
                     )}
                   </button>

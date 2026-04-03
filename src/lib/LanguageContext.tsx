@@ -58,7 +58,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   // Синхронизация с Supabase и Telegram (как в Eclipse)
-  useTelegramInit((tgData) => {
+  const handleTgUser = React.useCallback((tgData: any) => {
     // 1. Мгновенно заполняем стейт данными из Telegram WebApp, чтобы шапка не показывала "Пользователь"
     setUser((prev: any) => ({
       ...(prev || {}),
@@ -81,7 +81,9 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         });
       }
     }
-  });
+  }, []);
+
+  useTelegramInit(handleTgUser);
 
   return (
     <UserContext.Provider value={{ user, setUser }}>

@@ -21,11 +21,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       const tg = window.Telegram.WebApp;
       tg.ready();
       tg.expand();
-      const isMobile = tg.platform === 'android' || tg.platform === 'ios' || /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
-      if (isMobile) {
-        tg.requestFullscreen();
-        window.addEventListener('click', () => tg.requestFullscreen(), { once: true });
-      }
     }
   }, []);
   return (

@@ -14,16 +14,8 @@ export default function TariffsPage() {
   const handleSelectTariff = (t: any) => {
     if (!user) return; // Wait until user is loaded
 
-    // For custom tariff it says "от 2.3 ₽", we'll just parse digits for now.
-    const numericPrice = Number(String(t.price).replace(/[^\d]/g, ''));
-    const balance = typeof user.balance === 'number' ? user.balance : 0;
-    
-    if (balance < numericPrice) {
-      router.push('/deposit');
-    } else {
-      setSelectedTariff(t);
-      setIsModalOpen(true);
-    }
+    setSelectedTariff(t);
+    setIsModalOpen(true);
   };
 
   const tariffs = [

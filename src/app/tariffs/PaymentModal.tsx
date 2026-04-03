@@ -77,6 +77,15 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, tar
   const [polling, setPolling] = useState(false);
   let pollingInterval: NodeJS.Timeout | null = null;
 
+  const isCustom = tariff === 'Продление' || tariff === 'Свои дни' || tariff === 'custom';
+  const [customDays, setCustomDays] = useState<number | ''>(30);
+  
+  const currentPrice = isCustom 
+    ? (customDays === '' ? 0 : Math.ceil(customDays * 2.3)) 
+    : Number(String(price).replace(/[^\d]/g, ''));
+
+  const finalPackageDays = isCustom ? (customDays || 30) : (tariff === 'year' ? 365 : 30);
+
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
@@ -134,8 +143,8 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, tar
       setError('Пользователь не найден');
       return;
     }
-    const amount = Number(String(price).replace(/[^\d]/g, ''));
-    const package_days = tariff === 'year' ? 365 : 30;
+    const amount = currentPrice;
+    const package_days = finalPackageDays;
     const order_id = `${payMethod}_${user.id}_${Date.now()}`;
     setLoading(true);
     if (payMethod === 'balance') {
@@ -203,34 +212,54 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, tar
   };
 
   return (
-    <div className="fixed inset-0 z-[9999] w-full h-full bg-black/60 backdrop-blur-md flex items-end justify-center">
+    <div className="fixed inset-0 z-[9999] w-full h-full bg-black/60 backdrop-blur-md flex items-center justify-center p-4">
       <div className="absolute inset-0" onClick={handleClose} />
-      <div className={`relative w-full bg-[#18181b] rounded-t-3xl flex flex-col animate-fadeInUp ${closing ? 'animate-slideOutDown' : 'animate-slideInUp'}`}
-        style={{ minHeight: '30vh', maxHeight: '65vh', boxShadow: '0 8px 32px 0 rgba(0,0,0,0.25)' }}
+      <div className={`relative w-full max-w-[360px] bg-[#18181b] rounded-[28px] flex flex-col shadow-[0_12px_45px_rgba(0,0,0,0.5)] ${closing ? 'animate-modal-out' : 'animate-modal-in'}`}
+        style={{ maxHeight: '85vh' }}
       >
-        <div className="flex flex-row items-center justify-between px-6 pt-6 pb-2 sticky top-0 z-10 bg-[#18181b] rounded-t-3xl">
-          <span className="text-white font-bold text-lg w-full text-center">Оплата</span>
-          <button
-            onClick={handleClose}
-            className="text-zinc-400 text-2xl p-1 rounded-full ml-2 absolute right-6 top-6"
-            aria-label="Закрыть"
-          >
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M6 18L18 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" /></svg>
-          </button>
+        <div className="flex flex-row items-center justify-between px-6 pt-5 pb-2 sticky top-0 z-10 bg-[#18181b] rounded-t-[28px]">
+           <span className="text-white font-bold text-lg">Оплата</span>
+           <button onClick={handleClose} className="text-[#6A6D82] hover:text-white bg-white/5 hover:bg-white/10 transition-colors w-8 h-8 rounded-full flex items-center justify-center">
+             <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6 18L18 6M6 6l12 12" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" /></svg>
+           </button>
         </div>
-        <div className="flex flex-col items-center px-6 pb-6 pt-2 gap-6 overflow-y-auto">
-          <div className="font-extrabold text-xl sm:text-2xl text-white text-center">{tariff === 'year' ? t.year : tariff === 'month' ? t.month : `Тариф — ${tariff}`}</div>
-          <div className="w-full flex justify-center my-2">
-            <Image
-              src={tariff === 'year' ? '/assets/1year.png' : '/assets/1month.png'}
-              alt={tariff === 'year' ? 'Годовой тариф' : 'Месячный тариф'}
-              width={180}
-              height={180}
-              className="w-[180px] h-[180px] object-contain my-2"
-              priority
-            />
+        <div className="flex flex-col items-center px-6 pb-6 pt-1 gap-5 overflow-y-auto w-full">
+          <div className="font-extrabold text-xl text-white text-center w-full">
+            {isCustom ? "Тариф — Свои дни" : (tariff === 'year' ? t.year : tariff === 'month' ? t.month : `Тариф — ${tariff}`)}
           </div>
-          <div className="w-full text-center text-[#A2A5B8] text-sm font-medium">
+          
+          {isCustom ? (
+            <div className="w-full bg-white/[0.03] border border-white/5 rounded-2xl p-4 flex flex-col gap-3 my-1">
+               <span className="text-white font-bold text-sm">Укажите количество дней:</span>
+               <div className="flex items-center gap-3 w-full">
+                 <div className="flex-1 bg-black/40 border border-white/10 rounded-xl h-12 flex items-center px-4 focus-within:border-[#fe6125]/50 transition-colors">
+                   <input 
+                     type="text"
+                     inputMode="numeric"
+                     value={customDays === 0 ? '' : customDays} 
+                     onChange={(e) => setCustomDays(Math.max(0, parseInt(e.target.value.replace(/\D/g, '')) || 0))}
+                     className="bg-transparent text-white w-full outline-none font-bold text-lg"
+                     placeholder="Введите дни..."
+                   />
+                 </div>
+                 <span className="text-[#A2A5B8] font-bold">дней</span>
+               </div>
+               <span className="text-[#fe6125] text-xs font-semibold">1 день = 2.3 ₽</span>
+            </div>
+          ) : (
+            <div className="w-full flex justify-center my-0">
+              <Image
+                src={tariff === 'year' ? '/assets/1year.png' : '/assets/1month.png'}
+                alt={tariff === 'year' ? 'Годовой тариф' : 'Месячный тариф'}
+                width={160}
+                height={160}
+                className="w-[160px] h-[160px] object-contain drop-shadow-[0_10px_20px_rgba(254,97,37,0.2)]"
+                priority
+              />
+            </div>
+          )}
+
+          <div className="w-full text-center text-[#A2A5B8] text-sm font-medium bg-white/[0.03] rounded-xl py-3 border border-white/5">
             Средства будут списаны с вашего баланса{' '}
             {user && typeof user.balance === 'number' ? (
                <span className="text-white font-bold ml-1">{user.balance.toFixed(2)}₽</span>
@@ -267,14 +296,26 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, tar
                   <button
                     type="button"
                     className="flex-1 py-3.5 rounded-xl bg-gradient-to-r from-[#fe6125] to-[#f98055] hover:opacity-90 active:scale-[0.98] text-white font-bold text-[15px] flex justify-center items-center shadow-[0_4px_15px_rgba(254,97,37,0.3)] transition-all disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed"
-                    disabled={loading || !user || typeof user.balance !== 'number' || user.balance < Number(String(price).replace(/[^\d]/g, ''))}
-                    onClick={handlePay}
+                    disabled={loading || currentPrice <= 0}
+                    onClick={() => {
+                       if (user && typeof user.balance === 'number' && user.balance < currentPrice) {
+                         window.location.href = '/deposit';
+                       } else {
+                         handlePay();
+                       }
+                    }}
                   >
-                    {loading ? "Обработка..." : <>{t.pay} <span className="ml-1 opacity-90">{price}</span></>}
+                    {loading ? "Обработка..." : (
+                      <span className="flex items-center justify-center w-full">
+                        {(!user || (typeof user.balance === 'number' && user.balance < currentPrice)) 
+                          ? "Пополнить баланс" 
+                          : <>{t.pay} <span className="ml-1 opacity-90 block">{currentPrice} ₽</span></>}
+                      </span>
+                    )}
                   </button>
                 )}
               </div>
-              <div className="text-[11px] text-white/30 mt-3 text-center">
+              <div className="text-[11px] text-[#A2A5B8] mt-3 text-center">
                 Нажимая кнопку "Оплатить", вы соглашаетесь с условиями <a href="#" className="underline hover:text-white/60 transition">лицензионного соглашения</a>.
               </div>
             </>

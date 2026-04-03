@@ -14,8 +14,8 @@ function ProfileHistoryModal({ open, onClose, items }: { open: boolean, onClose:
   if (!open) return null;
   return (
     <div className="fixed inset-0 z-[9999] bg-[#0A0A0F]/60 backdrop-blur-md flex items-center justify-center p-4">
-      <div className="glass-card w-full max-w-md max-h-[80vh] overflow-y-auto relative flex flex-col">
-        <div className="flex items-center justify-between px-6 py-5 sticky top-0 z-10 bg-[#13141C]/80 backdrop-blur-md border-b border-white/5 rounded-t-2xl">
+      <div className="w-full max-w-[360px] bg-[#13141C] border border-white/10 shadow-[0_12px_45px_rgba(0,0,0,0.5)] rounded-[28px] max-h-[85vh] overflow-y-auto relative flex flex-col animate-modal-in">
+        <div className="flex items-center justify-between px-6 py-5 sticky top-0 z-10 bg-[#13141C] border-b border-white/5 rounded-t-[28px]">
           <span className="text-white font-bold text-lg">Вся история</span>
           <button className="text-gray-400 hover:text-white transition" onClick={onClose} aria-label="Закрыть">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 6l12 12M6 18L18 6" strokeLinecap="round"/></svg>
@@ -131,8 +131,8 @@ function ReferralModal({ open, onClose, referralLink }: { open: boolean, onClose
   const [copied, setCopied] = useState(false);
   if (!open) return null;
   return (
-    <div className="fixed inset-0 z-[9999] bg-[#0A0A0F]/60 backdrop-blur-md flex items-end sm:items-center justify-center">
-      <div className="w-full sm:max-w-md glass-card rounded-b-none sm:rounded-2xl flex flex-col border-b-0 sm:border-b p-6 pb-8 animate-slideInUp sm:animate-fadeIn">
+    <div className="fixed inset-0 z-[9999] bg-[#0A0A0F]/60 backdrop-blur-md flex items-center justify-center p-4">
+      <div className="w-full max-w-[360px] bg-[#13141C] border border-white/10 shadow-[0_12px_45px_rgba(0,0,0,0.5)] rounded-[28px] flex flex-col p-6 pb-8 animate-modal-in">
         <div className="flex items-center justify-between mb-6">
           <span className="text-white font-bold text-xl">Пригласить друга</span>
           <button onClick={onClose} className="text-gray-400 hover:text-white transition p-1 bg-white/5 rounded-full">

@@ -17,10 +17,10 @@ export const DeviceModal: React.FC<DeviceModalProps> = ({ isOpen, onClose, curre
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[9999] w-full h-full bg-black/60 backdrop-blur-md flex flex-col justify-end sm:items-center sm:justify-center">
+    <div className="fixed inset-0 z-[9999] w-full h-full bg-black/60 backdrop-blur-md flex items-center justify-center p-4">
       <div className="absolute inset-0" onClick={onClose} />
       
-      <div className="relative w-full max-w-[360px] bg-[#18181b] rounded-t-[28px] sm:rounded-3xl flex flex-col animate-page-in shadow-[0_8px_32px_rgba(0,0,0,0.4)] border border-white/5 max-h-[90vh] overflow-hidden">
+      <div className="relative w-full max-w-[360px] bg-[#18181b] rounded-[28px] flex flex-col animate-modal-in shadow-[0_12px_45px_rgba(0,0,0,0.5)] border border-white/5 max-h-[85vh] overflow-hidden">
         
         {/* Header with Close */}
         <div className="flex flex-row items-center justify-between px-5 pt-5 pb-3 bg-[#18181b] relative z-20 shadow-sm border-b border-white/5">
@@ -50,7 +50,7 @@ export const DeviceModal: React.FC<DeviceModalProps> = ({ isOpen, onClose, curre
 
         <div className="flex flex-col px-5 py-3 overflow-y-auto">
           {activeTab === 'add' ? (
-            <div className="flex flex-col gap-4 animate-page-in h-full">
+            <div className="flex flex-col gap-4 h-full animate-fadeInScale">
               
               <div className="bg-[#fe6125]/10 border border-[#fe6125]/20 rounded-xl py-2.5 px-4 flex items-center gap-3">
                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fe6125" strokeWidth="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
@@ -109,7 +109,7 @@ export const DeviceModal: React.FC<DeviceModalProps> = ({ isOpen, onClose, curre
 
             </div>
           ) : (
-            <div className="flex flex-col gap-4 animate-page-in h-full pb-3">
+            <div className="flex flex-col gap-4 h-full pb-3 animate-fadeInScale">
               
               <div className="bg-blue-500/10 border border-blue-500/20 rounded-2xl p-4 flex flex-col gap-3">
                  <div className="flex gap-3">

@@ -1,11 +1,8 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
-// ВАЖНО: Использовать только на сервере (API Routes, Server Actions) для обхода RLS 
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
+// Предотвращаем краш фронтенда, если переменные окружения Vercel не применились к сборке
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://dummy-fix-crash.supabase.co';
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'dummy_key';
 
 // Клиентский инстанс
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
-// Серверный инстанс
-export const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);

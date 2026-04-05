@@ -9,6 +9,8 @@ from aiogram.client.session.aiohttp import AiohttpSession
 import os
 from supabase import create_client, Client
 
+from datetime import datetime, timedelta, timezone
+
 # Токен, который выдал BotFather
 API_TOKEN = '7507266824:AAE3EoYfje5rBGw1LYmB0evOZXG03RLiCcg'
 
@@ -71,25 +73,81 @@ async def cmd_start(message: types.Message):
         data = {
             "id": user_id,
             "telegram_id": user_id,
-            "nickname": username,
+            "username": username,
         }
         # upsert по id
         supabase.table("users").upsert(data, on_conflict="id").execute()
     except Exception as e:
         logging.error(f"Supabase error: {e}")
         
+    # Получаем актуальные данные пользователя
+    user_data = {}
+    balance = 0
+    created_at = None
+    try:
+        resp = supabase.table("users").select("*").eq("id", user_id).single().execute()
+        user_data = resp.data if resp.data else {}
+        balance = float(user_data.get("balance") or 0)
+        created_at = user_data.get("created_at")
+    except Exception as e:
+        logging.error(f"Error fetching user: {e}")
+
+    # Считаем дни "Вы с нами"
+    days_with_us = 0
+    if created_at:
+        try:
+            created_date = datetime.fromisoformat(created_at.replace('Z', '+00:00'))
+            days_with_us = (datetime.now(timezone.utc) - created_date).days
+        except Exception:
+            pass
+
+    # Получаем транзакции для подсчета "Потрачено"
+    spent = 0
+    try:
+        tx_resp = supabase.table("transactions").select("*").eq("user_id", user_id).execute()
+        if tx_resp.data:
+            for tx in tx_resp.data:
+                # Считаем расходы (все, что не deposit)
+                if tx.get("type") != "deposit":
+                    spent += float(tx.get("amount", 0))
+    except Exception as e:
+        logging.error(f"Error fetching txs: {e}")
+
+    # Получаем статус подписки (последняя ссылка)
+    is_active = False
+    sub_end_str = "Нет"
+    status_icon = "🔴 Неактивна"
+    try:
+        links_resp = supabase.table("links").select("*").eq("user_id", user_id).order("created_at", desc=True).limit(1).execute()
+        if links_resp.data:
+            last_link = links_resp.data[0]
+            link_created = last_link.get("created_at")
+            package_days = last_link.get("package_days", 0)
+            
+            if link_created and package_days:
+                start_date = datetime.fromisoformat(link_created.replace('Z', '+00:00'))
+                end_date = start_date + timedelta(days=package_days)
+                if datetime.now(timezone.utc) <= end_date:
+                    is_active = True
+                    status_icon = "🟢 Активна"
+                    sub_end_str = f"Действует до {end_date.strftime('%d.%m.%Y (%H:%M)')}"
+                else:
+                    sub_end_str = f"Истекла {end_date.strftime('%d.%m.%Y')}"
+    except Exception as e:
+        logging.error(f"Error fetching links: {e}")
+
     # Обновленный дизайн текста сообщения
     text = (
         f"👋 <b>Добро пожаловать в BazaraVPN!</b>\n"
         f"🔑 Ваш ID: <code>{user_id}</code>\n\n"
         f"<blockquote>"
         f"<b>📊 Состояние счета</b>\n"
-        f"💳 <b>Текущий баланс:</b> <code>2.30 ₽</code>\n"
-        f"💰 <b>Потрачено:</b> <code>606.7 ₽</code>\n"
-        f"⏳ <b>Вы с нами:</b> <code>206 дней</code>"
+        f"💳 <b>Текущий баланс:</b> <code>{balance:.2f} ₽</code>\n"
+        f"💰 <b>Потрачено:</b> <code>{spent:.2f} ₽</code>\n"
+        f"⏳ <b>Вы с нами:</b> <code>{days_with_us} дней</code>"
         f"</blockquote>\n"
-        f"⚡️ <b>Статус подписки:</b> 🟢 Активна\n"
-        f"<i>└ Действует до 16 апреля 2026 (10:43)</i>\n\n"
+        f"⚡️ <b>Статус подписки:</b> {status_icon}\n"
+        f"<i>└ {sub_end_str}</i>\n\n"
         f"📖 <a href=\"https://telegra.ph/\">Пользовательское соглашение</a>\n\n"
         f"<blockquote>🌐 <i>Единая подписка на все устройства:\n"
         f"iOS • Android • macOS • Windows • Linux</i></blockquote>"

@@ -6,6 +6,8 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 from aiogram.enums import ParseMode
 from aiogram.client.default import DefaultBotProperties
 from aiogram.client.session.aiohttp import AiohttpSession
+import os
+from supabase import create_client, Client
 
 # Токен, который выдал BotFather
 API_TOKEN = '7507266824:AAE3EoYfje5rBGw1LYmB0evOZXG03RLiCcg'
@@ -18,6 +20,11 @@ session = AiohttpSession(proxy="http://127.0.0.1:10801")
 bot = Bot(token=API_TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML), session=session)
 # Диспетчер
 dp = Dispatcher()
+
+# Supabase
+SUPABASE_URL = os.environ.get("SUPABASE_URL", "")
+SUPABASE_KEY = os.environ.get("SUPABASE_SERVICE_ROLE_KEY", "")
+supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 def get_main_keyboard():
     builder = InlineKeyboardBuilder()
@@ -57,7 +64,19 @@ def get_fallback_keyboard():
 @dp.message(Command("start"))
 async def cmd_start(message: types.Message):
     user_id = message.from_user.id
+    username = message.from_user.username or message.from_user.first_name
     
+    # Сохраняем/обновляем юзера в Supabase
+    try:
+        data = {
+            "telegram_id": user_id,
+            "nickname": username,
+        }
+        # upsert по telegram_id (нужно будет сделать telegram_id UNIQUE)
+        supabase.table("users").upsert(data, on_conflict="telegram_id").execute()
+    except Exception as e:
+        logging.error(f"Supabase error: {e}")
+        
     # Обновленный дизайн текста сообщения
     text = (
         f"👋 <b>Добро пожаловать в BazaraVPN!</b>\n"

@@ -69,11 +69,12 @@ async def cmd_start(message: types.Message):
     # Сохраняем/обновляем юзера в Supabase
     try:
         data = {
+            "id": user_id,
             "telegram_id": user_id,
             "nickname": username,
         }
-        # upsert по telegram_id (нужно будет сделать telegram_id UNIQUE)
-        supabase.table("users").upsert(data, on_conflict="telegram_id").execute()
+        # upsert по id
+        supabase.table("users").upsert(data, on_conflict="id").execute()
     except Exception as e:
         logging.error(f"Supabase error: {e}")
         

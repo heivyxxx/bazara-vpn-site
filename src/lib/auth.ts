@@ -33,19 +33,23 @@ export async function signInOrUpWithTelegram(telegramUser: any) {
 }
 
 // Вызов /api/auth/telegram, установка сессии Supabase
-export async function loginViaTelegram(telegramUser: any) {
+export async function loginViaTelegram(telegramUser: any, initDataRaw?: string) {
+  const initData = initDataRaw || (typeof window !== 'undefined' && window.Telegram?.WebApp ? window.Telegram.WebApp.initData : '');
+  
   const res = await fetch('/api/auth/telegram', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      id: telegramUser.id,
+      telegram_id: telegramUser.id,
       first_name: telegramUser.first_name,
       username: telegramUser.username,
+      last_name: telegramUser.last_name,
       photo_url: telegramUser.photo_url,
-      auth_date: Math.floor(Date.now() / 1000),
-      hash: telegramUser.hash || '', // если есть
+      language_code: telegramUser.language_code,
+      initData: initData,
     }),
   });
+  
   const data = await res.json();
   if (data.access_token && data.refresh_token) {
     await supabase.auth.setSession({

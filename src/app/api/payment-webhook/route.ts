@@ -11,11 +11,11 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    // console.log('WATA WEBHOOK BODY:', body);
+
     const { transactionStatus, orderId, amount, transactionType, paymentTime, email } = body;
     // TODO: Проверка подписи X-Signature
     if (transactionStatus !== 'Paid') {
-      // console.log('WATA WEBHOOK: not paid, skipping');
+
       return NextResponse.json({ success: true }); // Не оплачено — ничего не делаем
     }
     // Проверяем, есть ли уже ссылка для этого orderId
@@ -59,12 +59,12 @@ export async function POST(request: Request) {
       } catch (e) {
         console.error('DEPOSIT: transaction insert error', e);
       }
-      // console.log('DEPOSIT: balance updated for user', user_id, 'new balance:', newBalance);
+
       return NextResponse.json({ success: true, balance: newBalance });
     }
     // --- Конец блока депозита ---
     if (existing && existing.link) {
-      // console.log('WATA WEBHOOK: link already exists', existing.link);
+
       return NextResponse.json({ success: true, link: existing.link });
     }
     // Генерируем ссылку (вызываем /api/pay или напрямую)
@@ -88,7 +88,7 @@ export async function POST(request: Request) {
         })
       });
       payData = await payResp.json();
-      // console.log('WATA WEBHOOK payData:', payData);
+
     } catch (e) {
       console.error('WATA WEBHOOK: fetch /api/pay error:', e);
       return NextResponse.json({ success: false, error: 'fetch /api/pay error', details: e }, { status: 500 });
@@ -99,7 +99,7 @@ export async function POST(request: Request) {
         if (insertRes.error) {
           console.error('SUPABASE insert error:', insertRes.error);
         }
-        // console.log('WATA WEBHOOK: link inserted', payData.link);
+
       } catch (e) {
         console.error('SUPABASE insert exception:', e);
       }

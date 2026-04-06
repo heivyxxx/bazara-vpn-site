@@ -45,13 +45,13 @@ export async function POST(request: Request) {
     return NextResponse.json({ success: false, error: 'Invalid JSON', details: e }, { status: 400 });
   }
   try {
-    // console.log('PAY API BODY:', body);
+
     // --- Депозит (только amount, order_id, description, method) ---
     if (body.description === 'Пополнение баланса' && body.amount && body.order_id && body.method) {
       // Здесь можно добавить интеграцию с платёжкой для депозита, если нужно
       // Для MVP — просто возвращаем тестовую ссылку
       const url = `https://pay.bazara.app/deposit?order_id=${body.order_id}&amount=${body.amount}`;
-      // console.log('DEPOSIT PAY URL:', url);
+
       return NextResponse.json({ url });
     }
     const { user_id, telegram_id, package_days, order_id, method, is_trial, is_admin, amount } = body;

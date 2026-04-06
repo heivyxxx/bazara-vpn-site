@@ -9,7 +9,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ success: false, error: 'Invalid JSON', details: e }, { status: 400 });
   }
   try {
-    // console.log('CREATE-ORDER BODY:', body);
+
     const { user_id, package_days, order_id, method, amount, description } = body;
     const isDeposit = (description && description.includes('Пополнение баланса')) || (order_id && order_id.startsWith('deposit_'));
     if (!user_id || !order_id || !method || !amount || (!isDeposit && !package_days)) {
@@ -51,11 +51,11 @@ export async function POST(request: Request) {
       body: JSON.stringify(paymentBody)
     });
     // Расширенное логирование
-    // console.log('WATA request body:', paymentBody);
-    // console.log('WATA status:', resp.status, resp.statusText);
-    // console.log('WATA headers:', JSON.stringify(Array.from(resp.headers.entries())));
+
+
+
     const rawText = await resp.text();
-    // console.log('WATA rawText:', rawText);
+
     let data;
     const contentType = resp.headers.get('content-type') || '';
     if (!rawText || !contentType.includes('application/json')) {
@@ -70,12 +70,12 @@ export async function POST(request: Request) {
     }
     if (isDeposit && data && (data.url || data.paymentUrl)) {
       const url = data.url || data.paymentUrl;
-      // console.log('DEPOSIT paymentUrl:', url);
+
       return NextResponse.json({ success: true, paymentUrl: url });
     }
     if (data && (data.url || data.paymentUrl)) {
       const url = data.url || data.paymentUrl;
-      // console.log('WATA url:', url);
+
       return NextResponse.json({ success: true, paymentUrl: url });
     } else {
       console.error('Ошибка WATA:', data);

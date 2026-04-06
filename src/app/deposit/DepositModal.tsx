@@ -38,7 +38,7 @@ export const DepositModal: React.FC<DepositModalProps> = ({ isOpen, onClose, met
     if (!method || isInvalid || numAmount <= 0) return;
     
     // В будущем здесь будет логика оплаты, пока просто закрываем
-    // console.log(`Пополнение через ${method.id} на сумму ${numAmount}`);
+
     handleClose();
   };
 

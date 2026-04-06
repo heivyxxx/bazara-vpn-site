@@ -10,7 +10,7 @@ function logDebug(msg: string, obj?: any) {
   if (typeof window !== 'undefined') {
     (window as any).DEBUG_LOG = (window as any).DEBUG_LOG || [];
     (window as any).DEBUG_LOG.push(msg + (obj ? ' ' + JSON.stringify(obj) : ''));
-    // console.log(msg, obj);
+
   }
 }
 

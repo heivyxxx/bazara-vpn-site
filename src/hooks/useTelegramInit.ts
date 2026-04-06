@@ -13,7 +13,7 @@ import { useEffect } from 'react';
 export function useTelegramInit(onUser?: (user: any) => void) {
   useEffect(() => {
     function log(...args: any[]) {
-      // console.log('[useTelegramInit]', ...args);
+
       if (typeof window !== 'undefined') {
         window.DEBUG_LOG = window.DEBUG_LOG || [];
         window.DEBUG_LOG.push(args.map(a => (typeof a === 'object' ? JSON.stringify(a) : String(a))).join(' '));

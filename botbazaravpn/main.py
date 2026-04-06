@@ -8,6 +8,13 @@ from aiogram.client.default import DefaultBotProperties
 from aiogram.client.session.aiohttp import AiohttpSession
 import os
 from supabase import create_client, Client
+from dotenv import load_dotenv
+
+# Загружаем переменные окружения сначала из .env, а если нет - из .env.local на уровень выше
+load_dotenv()
+env_local_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), '.env.local')
+if os.path.exists(env_local_path):
+    load_dotenv(env_local_path)
 
 from datetime import datetime, timedelta, timezone
 
@@ -24,9 +31,13 @@ bot = Bot(token=API_TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTM
 dp = Dispatcher()
 
 # Supabase
-SUPABASE_URL = os.environ.get("SUPABASE_URL", "")
+SUPABASE_URL = os.environ.get("SUPABASE_URL", os.environ.get("NEXT_PUBLIC_SUPABASE_URL", ""))
 SUPABASE_KEY = os.environ.get("SUPABASE_SERVICE_ROLE_KEY", "")
-supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+if SUPABASE_URL and SUPABASE_KEY:
+    supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+else:
+    logging.warning("Supabase URL or Key is missing. Database integration will be disabled.")
+    supabase = None
 
 def get_main_keyboard():
     builder = InlineKeyboardBuilder()
@@ -76,7 +87,8 @@ async def cmd_start(message: types.Message):
             "username": username,
         }
         # upsert по id
-        supabase.table("users").upsert(data, on_conflict="id").execute()
+        if supabase:
+            supabase.table("users").upsert(data, on_conflict="id").execute()
     except Exception as e:
         logging.error(f"Supabase error: {e}")
         
@@ -85,10 +97,11 @@ async def cmd_start(message: types.Message):
     balance = 0
     created_at = None
     try:
-        resp = supabase.table("users").select("*").eq("id", user_id).single().execute()
-        user_data = resp.data if resp.data else {}
-        balance = float(user_data.get("balance") or 0)
-        created_at = user_data.get("created_at")
+        if supabase:
+            resp = supabase.table("users").select("*").eq("id", user_id).single().execute()
+            user_data = resp.data if resp.data else {}
+            balance = float(user_data.get("balance") or 0)
+            created_at = user_data.get("created_at")
     except Exception as e:
         logging.error(f"Error fetching user: {e}")
 
@@ -104,12 +117,13 @@ async def cmd_start(message: types.Message):
     # Получаем транзакции для подсчета "Потрачено"
     spent = 0
     try:
-        tx_resp = supabase.table("transactions").select("*").eq("user_id", user_id).execute()
-        if tx_resp.data:
-            for tx in tx_resp.data:
-                # Считаем расходы (все, что не deposit)
-                if tx.get("type") != "deposit":
-                    spent += float(tx.get("amount", 0))
+        if supabase:
+            tx_resp = supabase.table("transactions").select("*").eq("user_id", user_id).execute()
+            if tx_resp.data:
+                for tx in tx_resp.data:
+                    # Считаем расходы (все, что не deposit)
+                    if tx.get("type") != "deposit":
+                        spent += float(tx.get("amount", 0))
     except Exception as e:
         logging.error(f"Error fetching txs: {e}")
 
@@ -118,21 +132,22 @@ async def cmd_start(message: types.Message):
     sub_end_str = "Нет"
     status_icon = "🔴 Неактивна"
     try:
-        links_resp = supabase.table("links").select("*").eq("user_id", user_id).order("created_at", desc=True).limit(1).execute()
-        if links_resp.data:
-            last_link = links_resp.data[0]
-            link_created = last_link.get("created_at")
-            package_days = last_link.get("package_days", 0)
-            
-            if link_created and package_days:
-                start_date = datetime.fromisoformat(link_created.replace('Z', '+00:00'))
-                end_date = start_date + timedelta(days=package_days)
-                if datetime.now(timezone.utc) <= end_date:
-                    is_active = True
-                    status_icon = "🟢 Активна"
-                    sub_end_str = f"Действует до {end_date.strftime('%d.%m.%Y (%H:%M)')}"
-                else:
-                    sub_end_str = f"Истекла {end_date.strftime('%d.%m.%Y')}"
+        if supabase:
+            links_resp = supabase.table("links").select("*").eq("user_id", user_id).order("created_at", desc=True).limit(1).execute()
+            if links_resp.data:
+                last_link = links_resp.data[0]
+                link_created = last_link.get("created_at")
+                package_days = last_link.get("package_days", 0)
+                
+                if link_created and package_days:
+                    start_date = datetime.fromisoformat(link_created.replace('Z', '+00:00'))
+                    end_date = start_date + timedelta(days=package_days)
+                    if datetime.now(timezone.utc) <= end_date:
+                        is_active = True
+                        status_icon = "🟢 Активна"
+                        sub_end_str = f"Действует до {end_date.strftime('%d.%m.%Y (%H:%M)')}"
+                    else:
+                        sub_end_str = f"Истекла {end_date.strftime('%d.%m.%Y')}"
     except Exception as e:
         logging.error(f"Error fetching links: {e}")
 

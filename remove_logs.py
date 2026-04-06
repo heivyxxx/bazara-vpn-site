@@ -7,7 +7,7 @@ def process_file(filepath):
             content = f.read()
         
         # Replace console.log(...) with // console.log(...)
-        new_content, count = re.subn(r'^(.*\s)console\.log\(', r'\1// console.log(', content, flags=re.MULTILINE)
+        new_content, count = re.subn(r'(?<!// )(?<!//)console\.log\(', r'// console.log(', content)
         
         if count > 0:
             with open(filepath, 'w', encoding='utf-8') as f:

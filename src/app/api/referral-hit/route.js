@@ -25,35 +25,35 @@ export async function POST(req) {
   try {
     const body = await req.json();
     const { ref, userId, type = 'user' } = body;
-    console.log('[API REFERRAL-HIT][POST] body:', body);
+    // console.log('[API REFERRAL-HIT][POST] body:', body);
     if (!ref || (type === 'user' && !userId)) {
-      console.log('[API REFERRAL-HIT][POST] Missing params:', { ref, userId, type });
+      // console.log('[API REFERRAL-HIT][POST] Missing params:', { ref, userId, type });
       return NextResponse.json({ error: 'Missing params' }, { status: 400 });
     }
     // Ищем реферальную ссылку по name и type
     const { data: refs, error } = await supabase.from('referrals').select('*').eq('name', ref).eq('type', type);
-    console.log('[API REFERRAL-HIT][POST] refs:', refs, 'error:', error);
+    // console.log('[API REFERRAL-HIT][POST] refs:', refs, 'error:', error);
     if (error || !refs || refs.length === 0) {
-      console.log('[API REFERRAL-HIT][POST] Ref not found:', { ref, refs, error });
+      // console.log('[API REFERRAL-HIT][POST] Ref not found:', { ref, refs, error });
       return NextResponse.json({ error: 'Ref not found' }, { status: 404 });
     }
     const referral = refs[0];
     const users = referral.users || [];
     if (users.includes(userId)) {
-      console.log('[API REFERRAL-HIT][POST] userId уже учтён:', userId);
+      // console.log('[API REFERRAL-HIT][POST] userId уже учтён:', userId);
       return NextResponse.json({ status: 'already counted' });
     }
     // Добавляем userId в users и увеличиваем count
     const newUsers = [...users, userId];
     const { error: updateError } = await supabase.from('referrals').update({ users: newUsers, count: referral.count + 1 }).eq('id', referral.id);
     if (updateError) {
-      console.log('[API REFERRAL-HIT][POST] Ошибка обновления:', updateError);
+      // console.log('[API REFERRAL-HIT][POST] Ошибка обновления:', updateError);
       return NextResponse.json({ error: updateError.message }, { status: 500 });
     }
-    console.log('[API REFERRAL-HIT][POST] Успешно обновлено:', { newUsers, count: referral.count + 1 });
+    // console.log('[API REFERRAL-HIT][POST] Успешно обновлено:', { newUsers, count: referral.count + 1 });
     return NextResponse.json({ status: 'ok' });
   } catch (e) {
-    console.log('[API REFERRAL-HIT][POST] Исключение:', e);
+    // console.log('[API REFERRAL-HIT][POST] Исключение:', e);
     return NextResponse.json({ error: e.message }, { status: 500 });
   }
 }
@@ -62,22 +62,22 @@ export async function PUT(req) {
   try {
     const body = await req.json();
     const { userId, name, type = 'user' } = body;
-    console.log('[API REFERRAL-HIT][PUT] body:', body);
+    // console.log('[API REFERRAL-HIT][PUT] body:', body);
     if (!name || (type === 'user' && !userId)) {
-      console.log('[API REFERRAL-HIT][PUT] Missing params:', { userId, name, type });
+      // console.log('[API REFERRAL-HIT][PUT] Missing params:', { userId, name, type });
       return NextResponse.json({ error: 'Missing params' }, { status: 400 });
     }
     // Проверяем, есть ли уже такая запись
     let query = supabase.from('referrals').select('*').eq('name', name).eq('type', type);
     if (type === 'user') query = query.eq('user_id', userId);
     const { data: refs, error } = await query;
-    console.log('[API REFERRAL-HIT][PUT] refs:', refs, 'error:', error);
+    // console.log('[API REFERRAL-HIT][PUT] refs:', refs, 'error:', error);
     if (error) {
-      console.log('[API REFERRAL-HIT][PUT] Ошибка выборки:', error);
+      // console.log('[API REFERRAL-HIT][PUT] Ошибка выборки:', error);
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
     if (refs && refs.length > 0) {
-      console.log('[API REFERRAL-HIT][PUT] Уже существует:', refs);
+      // console.log('[API REFERRAL-HIT][PUT] Уже существует:', refs);
       return NextResponse.json({ status: 'already exists' });
     }
     // Создаём новую запись
@@ -92,13 +92,13 @@ export async function PUT(req) {
     };
     const { error: insertError } = await supabase.from('referrals').insert(insertData);
     if (insertError) {
-      console.log('[API REFERRAL-HIT][PUT] Ошибка вставки:', insertError);
+      // console.log('[API REFERRAL-HIT][PUT] Ошибка вставки:', insertError);
       return NextResponse.json({ error: insertError.message }, { status: 500 });
     }
-    console.log('[API REFERRAL-HIT][PUT] Успешно создано:', insertData);
+    // console.log('[API REFERRAL-HIT][PUT] Успешно создано:', insertData);
     return NextResponse.json({ status: 'created' });
   } catch (e) {
-    console.log('[API REFERRAL-HIT][PUT] Исключение:', e);
+    // console.log('[API REFERRAL-HIT][PUT] Исключение:', e);
     return NextResponse.json({ error: e.message }, { status: 500 });
   }
 }

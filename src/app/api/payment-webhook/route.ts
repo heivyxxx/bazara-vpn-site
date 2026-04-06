@@ -20,9 +20,6 @@ export async function POST(request: Request) {
     }
     // Проверяем, есть ли уже ссылка для этого orderId
     const { data: existing, error: getError } = await supabase.from('links').select('link').eq('order_id', orderId).single();
-    if (getError) {
-      console.error('SUPABASE getError:', getError);
-    }
     // --- Депозит ---
     if (orderId.startsWith('deposit_') || (body.orderDescription && body.orderDescription.includes('Пополнение баланса'))) {
       // Найти пользователя по email или другим данным (если есть)
@@ -33,19 +30,16 @@ export async function POST(request: Request) {
       const parts = orderId.split('_');
       let user_id = parts.length >= 3 ? parts[1] : null;
       if (!user_id) {
-        console.error('DEPOSIT: user_id not found in orderId', orderId);
         return NextResponse.json({ success: false, error: 'user_id not found in orderId' }, { status: 400 });
       }
       // Получаем текущий баланс
       const { data: user, error: userError } = await supabase.from('users').select('balance').eq('id', user_id).single();
       if (userError || !user) {
-        console.error('DEPOSIT: user not found', userError);
         return NextResponse.json({ success: false, error: 'User not found' }, { status: 400 });
       }
       const newBalance = (user.balance || 0) + Number(amount);
       const { error: updateError } = await supabase.from('users').update({ balance: newBalance }).eq('id', user_id);
       if (updateError) {
-        console.error('DEPOSIT: balance update error', updateError);
         return NextResponse.json({ success: false, error: 'Balance update error' }, { status: 500 });
       }
       // Записываем транзакцию (если есть таблица transactions)
@@ -57,7 +51,6 @@ export async function POST(request: Request) {
           meta: { orderId, paymentTime, method: 'deposit' },
         });
       } catch (e) {
-        console.error('DEPOSIT: transaction insert error', e);
       }
 
       return NextResponse.json({ success: true, balance: newBalance });
@@ -90,26 +83,18 @@ export async function POST(request: Request) {
       payData = await payResp.json();
 
     } catch (e) {
-      console.error('WATA WEBHOOK: fetch /api/pay error:', e);
       return NextResponse.json({ success: false, error: 'fetch /api/pay error', details: e }, { status: 500 });
     }
     if (payData && payData.success && payData.link) {
       try {
-        const insertRes = await supabase.from('links').insert({ order_id: orderId, user_id, link: payData.link, type, package_days, amount, telegram_id: email });
-        if (insertRes.error) {
-          console.error('SUPABASE insert error:', insertRes.error);
-        }
-
+        await supabase.from('links').insert({ order_id: orderId, user_id, link: payData.link, type, package_days, amount, telegram_id: email });
       } catch (e) {
-        console.error('SUPABASE insert exception:', e);
       }
       return NextResponse.json({ success: true, link: payData.link });
     } else {
-      console.error('WATA WEBHOOK: payData error', payData);
       return NextResponse.json({ success: false, error: payData?.error || 'Ошибка генерации ссылки', details: payData }, { status: 500 });
     }
   } catch (e: any) {
-    console.error('WEBHOOK FATAL ERROR:', e);
     return NextResponse.json({ success: false, error: e.message || 'Server error', details: e }, { status: 500 });
   }
 } 

@@ -25,7 +25,6 @@ async function sendTelegramLink(telegramId: string, link: string, package_days?:
       })
     });
   } catch (e) {
-    console.error('Ошибка отправки в Telegram:', e);
   }
 }
 
@@ -41,7 +40,6 @@ export async function POST(request: Request) {
   try {
     body = await request.json();
   } catch (e) {
-    console.error('Ошибка парсинга JSON в pay:', e);
     return NextResponse.json({ success: false, error: 'Invalid JSON', details: e }, { status: 400 });
   }
   try {
@@ -70,7 +68,7 @@ export async function POST(request: Request) {
         body: JSON.stringify({ task_id, package_days: 3, creator: 'trial' })
       });
       let backendData;
-      try { backendData = await backendResp.json(); } catch (e) { backendData = {}; console.error('Ошибка парсинга backendData (trial):', e); }
+      try { backendData = await backendResp.json(); } catch (e) { backendData = {}; }
       if (backendData && backendData.status === 'ok') {
         const link = `https://vpn.bazara.app/vless/${task_id}`;
         await sendTelegramLink(id, link, 3);
@@ -84,7 +82,6 @@ export async function POST(request: Request) {
         });
         return NextResponse.json({ success: true, link });
       } else {
-        console.error('Ошибка генерации trial-ссылки:', backendData);
         return NextResponse.json({ success: false, error: backendData.error || 'Ошибка генерации trial-ссылки', details: backendData }, { status: 500 });
       }
     }
@@ -98,7 +95,7 @@ export async function POST(request: Request) {
         body: JSON.stringify({ task_id, package_days, creator: 'admin' })
       });
       let backendData;
-      try { backendData = await backendResp.json(); } catch (e) { backendData = {}; console.error('Ошибка парсинга backendData (admin):', e); }
+      try { backendData = await backendResp.json(); } catch (e) { backendData = {}; }
       if (backendData && backendData.status === 'ok') {
         const link = `https://vpn.bazara.app/vless/${task_id}`;
         await sendTelegramLink('980466532', link, package_days);
@@ -112,13 +109,11 @@ export async function POST(request: Request) {
         });
         return NextResponse.json({ success: true, link });
       } else {
-        console.error('Ошибка генерации admin-ссылки:', backendData);
         return NextResponse.json({ success: false, error: backendData.error || 'Ошибка генерации admin-ссылки', details: backendData }, { status: 500 });
       }
     }
     // 3. Обычная покупка (balance, sbp, card, crypto): 30 или 365 дней
     if (!user_id || !package_days || !method) {
-      console.error('Missing params:', { user_id, package_days, method });
       return NextResponse.json({ success: false, error: 'Missing params', details: { user_id, package_days, method } }, { status: 400 });
     }
     if (method === 'balance') {
@@ -139,17 +134,15 @@ export async function POST(request: Request) {
       body: JSON.stringify({ task_id, package_days, creator: user_id })
     });
     let backendData;
-    try { backendData = await backendResp.json(); } catch (e) { backendData = {}; console.error('Ошибка парсинга backendData (pay):', e); }
+    try { backendData = await backendResp.json(); } catch (e) { backendData = {}; }
     if (backendData && backendData.status === 'ok') {
       const link = `https://vpn.bazara.app/vless/${task_id}`;
       await sendTelegramLink(telegram_id || user_id, link, package_days);
       return NextResponse.json({ success: true, link });
     } else {
-      console.error('Ошибка генерации ссылки:', backendData);
       return NextResponse.json({ success: false, error: backendData.error || 'Ошибка генерации ссылки', details: backendData }, { status: 500 });
     }
   } catch (e: any) {
-    console.error('FATAL ERROR /api/pay:', e);
     return NextResponse.json({ success: false, error: e.message || 'Server error', details: e }, { status: 500 });
   }
 }

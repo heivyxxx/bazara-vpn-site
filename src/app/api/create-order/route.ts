@@ -5,7 +5,6 @@ export async function POST(request: Request) {
   try {
     body = await request.json();
   } catch (e) {
-    console.error('Ошибка парсинга JSON в create-order:', e);
     return NextResponse.json({ success: false, error: 'Invalid JSON', details: e }, { status: 400 });
   }
   try {
@@ -13,11 +12,9 @@ export async function POST(request: Request) {
     const { user_id, package_days, order_id, method, amount, description } = body;
     const isDeposit = (description && description.includes('Пополнение баланса')) || (order_id && order_id.startsWith('deposit_'));
     if (!user_id || !order_id || !method || !amount || (!isDeposit && !package_days)) {
-      console.error('Missing params:', { user_id, package_days, order_id, method, amount });
       return NextResponse.json({ success: false, error: 'Missing params', details: { user_id, package_days, order_id, method, amount } }, { status: 400 });
     }
     if (method !== 'sbp' && method !== 'card') {
-      console.error('Unsupported method:', method);
       return NextResponse.json({ success: false, error: 'Unsupported method' }, { status: 400 });
     }
     // Выбор токена и терминала по методу оплаты
@@ -59,13 +56,11 @@ export async function POST(request: Request) {
     let data;
     const contentType = resp.headers.get('content-type') || '';
     if (!rawText || !contentType.includes('application/json')) {
-      console.error('WATA вернула пустой или не-JSON ответ:', rawText);
       return NextResponse.json({ success: false, error: 'WATA returned empty or non-JSON response', details: rawText }, { status: 500 });
     }
     try {
       data = JSON.parse(rawText);
     } catch (jsonErr) {
-      console.error('Ошибка парсинга JSON от WATA:', jsonErr, 'Ответ:', rawText);
       return NextResponse.json({ success: false, error: 'WATA returned invalid JSON', details: rawText }, { status: 500 });
     }
     if (isDeposit && data && (data.url || data.paymentUrl)) {
@@ -78,11 +73,9 @@ export async function POST(request: Request) {
 
       return NextResponse.json({ success: true, paymentUrl: url });
     } else {
-      console.error('Ошибка WATA:', data);
       return NextResponse.json({ success: false, error: data?.error || 'Ошибка создания ссылки на оплату', details: data }, { status: 500 });
     }
   } catch (e: any) {
-    console.error('FATAL ERROR /api/create-order:', e);
     return NextResponse.json({ success: false, error: e.message || 'Server error', details: e }, { status: 500 });
   }
 } 

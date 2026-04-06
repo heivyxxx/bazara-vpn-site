@@ -10,7 +10,6 @@ const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 if (!SUPABASE_URL || !SUPABASE_KEY) {
-  console.error("❌ Ошибка: Не найдены ключи Supabase в .env.local");
   process.exit(1);
 }
 
@@ -103,7 +102,6 @@ bot.start(async (ctx) => {
     const text = await getUserStatsText(ctx);
     await ctx.replyWithMarkdown(text, getAppKeyboard());
   } catch (e) {
-    console.error(e);
     ctx.reply("Произошла ошибка загрузки профиля.");
   }
 });
@@ -147,7 +145,6 @@ bot.action("test_sub", handleStub);
 
 // ЗАПУСК БОТА
 bot.launch().then(() => {
-  console.log("🚀 Telegram бот успешно запущен!");
 });
 
 // Плавная остановка

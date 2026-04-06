@@ -11,7 +11,6 @@ export async function GET() {
     if (error) throw error;
     return NextResponse.json({ success: true, reviews: data });
   } catch (error) {
-    console.error('Error fetching reviews:', error);
     return NextResponse.json({ 
       success: false, 
       error: 'Internal server error' 
@@ -43,7 +42,6 @@ export async function POST(request: Request) {
     if (error) throw error;
     return NextResponse.json({ success: true, id: inserted.id });
   } catch (error) {
-    console.error('Error creating review:', error);
     return NextResponse.json({ 
       success: false, 
       error: 'Internal server error' 

@@ -141,6 +141,34 @@ async function createSubscription(input: { userId: string; packageDays: number; 
   return { ok: false as const, error: remnawaveRes.error, remnawave: remnawaveRes };
 }
 
+async function insertOrderRecord(input: {
+  orderId: string;
+  userId: string;
+  amount: number;
+  packageDays: number;
+  method: string;
+  status: 'completed' | 'failed';
+  link?: string;
+  error?: string;
+}) {
+  const payload: any = {
+    order_id: input.orderId,
+    user_id: input.userId,
+    amount: Number(input.amount || 0),
+    package_days: Number(input.packageDays || 0),
+    method: input.method,
+    status: input.status,
+    link: input.link || null,
+    error_message: input.error || null,
+    created_at: new Date().toISOString(),
+  };
+  try {
+    await supabase.from('orders').insert(payload);
+  } catch {
+    // Не блокируем выдачу подписки, если таблица orders ещё не создана.
+  }
+}
+
 export async function POST(request: Request) {
   let body;
   try {
@@ -183,6 +211,15 @@ export async function POST(request: Request) {
         });
         return NextResponse.json({ success: true, link });
       } else {
+        await insertOrderRecord({
+          orderId: order_id || `trial_${id}_${Date.now()}`,
+          userId: String(id),
+          amount: 0,
+          packageDays: 3,
+          method: 'trial',
+          status: 'failed',
+          error: created.error || 'trial_failed',
+        });
         return NextResponse.json({ success: false, error: created.error || 'Ошибка генерации trial-ссылки', details: created }, { status: 500 });
       }
     }
@@ -203,8 +240,26 @@ export async function POST(request: Request) {
           source: 'admin',
           created_at: new Date().toISOString()
         });
+        await insertOrderRecord({
+          orderId: order_id || `admin_${user_id}_${Date.now()}`,
+          userId: String(user_id),
+          amount: 0,
+          packageDays: Number(package_days),
+          method: 'admin',
+          status: 'completed',
+          link,
+        });
         return NextResponse.json({ success: true, link });
       } else {
+        await insertOrderRecord({
+          orderId: order_id || `admin_${user_id}_${Date.now()}`,
+          userId: String(user_id),
+          amount: 0,
+          packageDays: Number(package_days),
+          method: 'admin',
+          status: 'failed',
+          error: created.error || 'admin_failed',
+        });
         return NextResponse.json({ success: false, error: created.error || 'Ошибка генерации admin-ссылки', details: created }, { status: 500 });
       }
     }
@@ -266,6 +321,15 @@ export async function POST(request: Request) {
           meta: { package_days, method, order_id: order_id || null, link }
         });
       }
+      await insertOrderRecord({
+        orderId: order_id || `order_${user_id}_${Date.now()}`,
+        userId: String(user_id),
+        amount: Number(amount || 0),
+        packageDays: Number(package_days),
+        method: String(method),
+        status: 'completed',
+        link,
+      });
       await sendTelegramLink(telegram_id || user_id, link, package_days);
       if (method === 'balance') {
         const { data: userAfter } = await supabase.from('users').select('balance').eq('id', user_id).single();
@@ -283,6 +347,15 @@ export async function POST(request: Request) {
       }
       return NextResponse.json({ success: true, link });
     } else {
+      await insertOrderRecord({
+        orderId: order_id || `order_${user_id}_${Date.now()}`,
+        userId: String(user_id),
+        amount: Number(amount || 0),
+        packageDays: Number(package_days),
+        method: String(method),
+        status: 'failed',
+        error: created.error || 'create_failed',
+      });
       return NextResponse.json({ success: false, error: created.error || 'Ошибка генерации ссылки', details: created }, { status: 500 });
     }
   } catch (e: any) {

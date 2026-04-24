@@ -40,10 +40,14 @@ export default function Header() {
     >
       <div className="max-w-6xl mx-auto flex items-center justify-between py-4 px-4 md:px-8 text-lg gap-8">
         <div className="flex items-center gap-3 logo-home cursor-pointer flex-shrink-0">
-          <Link href="/" className="flex items-center gap-3">
-            <img src="/assets/logo-bazara.png" alt="BazaraVPN Logo" className="h-10 w-10" />
-            <span className="text-3xl font-bold text-orange-500">Bazara<span className="text-white">VPN</span></span>
-          </Link>
+          <a
+            href="https://t.me/bazara_app_bot?startapp"
+            className="flex items-center"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <img src="/assets/logo-bazara.png" alt="BazaraVPN Logo" className="h-10 w-auto object-contain" />
+          </a>
         </div>
         <div className="hidden md:flex flex-1 justify-center">
           <ul className="flex items-center gap-8 font-semibold">

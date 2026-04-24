@@ -19,6 +19,19 @@ interface AdminUserSearchItem {
   balance?: number | null;
 }
 
+interface AdminOrderItem {
+  id: string;
+  order_id: string;
+  user_id: string;
+  amount: number;
+  package_days: number;
+  method: string;
+  status: string;
+  link?: string | null;
+  created_at: string;
+  error_message?: string | null;
+}
+
 const TABS: TabDef[] = [
   { id: 'orders', title: 'Заказы', desc: 'Управление заказами' },
   { id: 'chats', title: 'Чаты', desc: 'Чат с пользователями' },
@@ -36,6 +49,28 @@ export default function AdminPage() {
   const [amount, setAmount] = useState("");
   const [adjusting, setAdjusting] = useState(false);
   const [message, setMessage] = useState("");
+  const [orders, setOrders] = useState<AdminOrderItem[]>([]);
+  const [ordersLoading, setOrdersLoading] = useState(false);
+
+  useEffect(() => {
+    if (activeTab !== 'orders') return;
+    const timeout = setTimeout(async () => {
+      setOrdersLoading(true);
+      try {
+        const url = search.trim()
+          ? `/api/admin-orders?q=${encodeURIComponent(search.trim())}`
+          : '/api/admin-orders';
+        const res = await fetch(url);
+        const data = await res.json();
+        setOrders(Array.isArray(data?.orders) ? data.orders : []);
+      } catch {
+        setOrders([]);
+      } finally {
+        setOrdersLoading(false);
+      }
+    }, 180);
+    return () => clearTimeout(timeout);
+  }, [activeTab, search]);
 
   useEffect(() => {
     if (activeTab !== 'balances') return;
@@ -106,7 +141,7 @@ export default function AdminPage() {
               <svg className="w-5 h-5 text-gray-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
               <input 
                 type="text" 
-                placeholder="Поиск по названию" 
+                placeholder="Поиск по order_id / user_id / методу / статусу" 
                 className="bg-transparent border-none outline-none text-white w-full placeholder:text-gray-500"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
@@ -115,40 +150,41 @@ export default function AdminPage() {
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
               </button>
             </div>
-            
-            {/* Example Orders Grid */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
-              {[1, 2, 3, 4].map(idx => (
-                <div key={idx} className="bg-[#151515] rounded-xl flex flex-col overflow-hidden border border-white/5 relative group cursor-pointer hover:border-white/10 transition-colors">
-                  <div className="p-3">
-                    <div className="flex items-center gap-2 mb-2">
-                       <div className="w-5 h-5 bg-blue-500 rounded flex items-center justify-center text-[10px] font-bold">T</div>
-                       <div className="text-xs font-bold truncate">telegram <span className="font-normal text-gray-400">звезды</span></div>
-                    </div>
-                    <div className="bg-[#2a2a2a] h-20 rounded-lg flex items-center justify-center mb-2">
-                      <span className="font-black text-2xl italic tracking-tighter shadow-sm text-white">50 STARS</span>
-                    </div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-purple-400 font-bold text-sm">73 ₽</span>
-                      <span className="text-gray-500 text-xs line-through">164 ₽</span>
-                    </div>
-                    <div className="text-[10px] font-bold leading-tight mb-2 uppercase">★ 50 STARS | АВТО-ВЫДАЧА | ПО</div>
-                    <div className="flex items-center justify-between mt-auto pt-2 border-t border-white/5">
-                      <div className="flex items-center gap-1.5">
-                        <div className="w-5 h-5 rounded-full bg-indigo-500 flex items-center justify-center text-[10px] text-white">S</div>
-                        <div className="flex flex-col">
-                          <span className="text-[9px] text-green-500 font-bold">Завершён</span>
-                          <span className="text-[9px] text-gray-400 truncate w-12">User</span>
-                        </div>
+            {ordersLoading ? (
+              <div className="text-sm text-gray-400 px-1">Загрузка заказов...</div>
+            ) : orders.length === 0 ? (
+              <div className="text-sm text-gray-500 px-1">Заказов пока нет</div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-1">
+                {orders.map((o) => (
+                  <div key={o.id} className="bg-[#151515] rounded-xl border border-white/5 p-4">
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="min-w-0">
+                        <div className="text-white font-bold text-sm truncate">{o.order_id}</div>
+                        <div className="text-gray-500 text-xs mt-0.5">user_id: {o.user_id}</div>
                       </div>
+                      <span className={`text-[11px] font-bold px-2 py-1 rounded-lg whitespace-nowrap ${o.status === 'completed' ? 'bg-green-500/10 text-green-400' : o.status === 'failed' ? 'bg-red-500/10 text-red-400' : 'bg-white/10 text-gray-300'}`}>
+                        {o.status}
+                      </span>
                     </div>
+                    <div className="grid grid-cols-2 gap-2 mt-3 text-sm">
+                      <div className="text-gray-400">Сумма: <span className="text-white font-semibold">{Number(o.amount || 0).toFixed(2)} ₽</span></div>
+                      <div className="text-gray-400">Дней: <span className="text-white font-semibold">{o.package_days || 0}</span></div>
+                      <div className="text-gray-400">Метод: <span className="text-white font-semibold">{o.method || '—'}</span></div>
+                      <div className="text-gray-400">Дата: <span className="text-white font-semibold">{new Date(o.created_at).toLocaleDateString('ru-RU')}</span></div>
+                    </div>
+                    {o.error_message ? (
+                      <div className="mt-2 text-xs text-red-400 line-clamp-2">{o.error_message}</div>
+                    ) : null}
+                    {o.link ? (
+                      <a href={o.link} target="_blank" rel="noreferrer" className="mt-3 inline-block text-xs text-[#fe6125] hover:underline">
+                        Открыть ссылку подписки
+                      </a>
+                    ) : null}
                   </div>
-                  <button className="w-full bg-[#1e1e1e] hover:bg-[#252525] py-2.5 text-xs font-bold border-t border-white/5 transition-colors">
-                    Чат сделки
-                  </button>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         );
       case 'balances':

@@ -45,7 +45,7 @@ export function AdminPinModal({ isOpen, onClose }: AdminPinModalProps) {
   };
 
   return (
-    <div className="fixed inset-0 z-[100] bg-black bg-opacity-95 flex flex-col items-center justify-center animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-[100] bg-black/85 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-200">
       <div className="relative w-full max-w-sm px-6 py-8 flex flex-col items-center">
         {/* Close Button */}
         <button 

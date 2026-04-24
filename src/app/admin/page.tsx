@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 
-type TabId = 'orders' | 'moderation' | 'invoices' | 'maintenance' | 'keyboard' | 'products' | 'chats' | 'blocks' | 'balances' | 'vibrations' | 'users';
+type TabId = 'orders' | 'chats' | 'blocks' | 'balances';
 
 interface TabDef {
   id: TabId;
@@ -14,15 +14,8 @@ interface TabDef {
 const TABS: TabDef[] = [
   { id: 'orders', title: 'Заказы', desc: 'Управление заказами' },
   { id: 'chats', title: 'Чаты', desc: 'Чат с пользователями' },
-  { id: 'moderation', title: 'Модерация', desc: 'Модерация товаров' },
   { id: 'blocks', title: 'Блокировка', desc: 'Поиск и бан пользователей' },
-  { id: 'invoices', title: 'Инвойсы', desc: 'Управление инвойсами' },
   { id: 'balances', title: 'Балансы', desc: 'Управление балансами' },
-  { id: 'maintenance', title: 'Техработы', desc: 'Экран отключения' },
-  { id: 'vibrations', title: 'Вибрации', desc: 'Тест типов вибрации' },
-  { id: 'keyboard', title: 'Клавиатура', desc: 'Тест поведения на iPhone' },
-  { id: 'users', title: 'Кастом пользователей', desc: 'Модерация, комиссия, сделки' },
-  { id: 'products', title: 'Товары', desc: 'Поиск и удаление' },
 ];
 
 export default function AdminPage() {
@@ -94,17 +87,9 @@ export default function AdminPage() {
 
   return (
     <div className="flex flex-col min-h-screen bg-[#0A0A0F] pt-[env(safe-area-inset-top,0px)] pb-16">
-      {/* Admin Header */}
       <div className="flex items-center px-4 py-4 border-b border-white/5 bg-[#0A0A0F] sticky top-0 z-40">
-        <Link href="/" className="mr-4 text-gray-400 hover:text-white transition-colors">
+        <Link href="/" className="text-gray-400 hover:text-white transition-colors">
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
-        </Link>
-        <h1 className="text-xl font-bold text-white flex-1">Bazara Admin</h1>
-        <button className="text-gray-400 hover:text-white mr-4">
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"/></svg>
-        </button>
-        <Link href="/" className="text-gray-400 hover:text-white">
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"/></svg>
         </Link>
       </div>
 

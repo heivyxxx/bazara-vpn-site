@@ -25,9 +25,6 @@ export default function SupportPage() {
             <h1 className="text-2xl font-extrabold text-white tracking-tight mb-2">
               Служба поддержки
             </h1>
-            <div className="w-24 h-1 bg-white/10 rounded-full mt-1">
-              <div className="w-12 h-full bg-[#A2A5B8] rounded-full"></div>
-            </div>
           </div>
 
           <div className="glass-card flex flex-col items-center p-8 text-center rounded-3xl mt-2">
@@ -43,7 +40,6 @@ export default function SupportPage() {
 
           <div className="flex flex-col gap-3 mt-4">
             <div className="flex items-center gap-2 pl-1 mb-2">
-               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6A6D82" strokeWidth="2"><path d="M4 6h16M4 12h16m-7 6h7" strokeLinecap="round" strokeLinejoin="round"/></svg>
                <span className="text-[#6A6D82] text-xs font-bold uppercase tracking-wider">Часто задаваемые вопросы</span>
             </div>
             

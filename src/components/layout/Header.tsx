@@ -2,7 +2,8 @@
 
 import Link from 'next/link';
 import { useLang } from '@/lib/LanguageContext';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { getTelegramUser, signInOrUpWithTelegram, upsertUserProfile } from '@/lib/auth';
 import { User } from '@/lib/types';
 import { PaymentModal } from '@/app/tariffs/PaymentModal';
@@ -19,6 +20,11 @@ export const Header = ({ onLogin, user, onLogout }: HeaderProps) => {
   const [loading, setLoading] = useState(false);
   const [depositOpen, setDepositOpen] = useState(false);
   const [adminModalOpen, setAdminModalOpen] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-[#0A0A0F]/60 backdrop-blur-xl border-b border-white/[0.03] pt-[env(safe-area-inset-top,0px)]">
@@ -59,25 +65,28 @@ export const Header = ({ onLogin, user, onLogout }: HeaderProps) => {
 
         {/* Right: Balance Badge */}
         <div className="flex items-center gap-2 flex-shrink-0">
-          <Link href="/deposit" className="bg-[#fe6125] hover:bg-[#e04c14] text-white font-bold text-[12px] shadow-[0_0_15px_rgba(254,97,37,0.3)] transition-all flex items-center justify-center tracking-wide w-8 h-8 rounded-full sm:w-auto sm:h-auto sm:px-3 sm:py-1.5 sm:rounded-full flex-shrink-0 group">
-             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="w-[14px] h-[14px] sm:w-[12px] sm:h-[12px] sm:mr-1.5 transition-transform group-active:scale-95"><path d="M12 5v14M5 12h14"/></svg>
-             <span className="hidden sm:inline transition-opacity">Пополнить</span>
-          </Link>
-          <div className="flex items-center gap-2 bg-gradient-to-r from-[#fe6125]/10 to-transparent border border-[#fe6125]/20 pl-2 pr-3 py-1.5 rounded-full shadow-[0_0_15px_rgba(254,97,37,0.15)] relative overflow-hidden flex-shrink-0">
+          <Link href="/deposit" className="flex items-center gap-2 bg-gradient-to-r from-[#fe6125]/10 to-transparent border border-[#fe6125]/20 pl-2 pr-3 py-1.5 rounded-full shadow-[0_0_15px_rgba(254,97,37,0.15)] relative overflow-hidden flex-shrink-0">
             <div className="w-6 h-6 rounded-full bg-[#fe6125]/20 flex items-center justify-center relative z-10 flex-shrink-0">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                 <path d="M12 22v-6m0-10V2m0 0a6 6 0 100 12 6 6 0 000-12zm-3 8h6" stroke="#fe6125" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fe6125" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M3 7.5A2.5 2.5 0 0 1 5.5 5h13A2.5 2.5 0 0 1 21 7.5v9a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 3 16.5v-9z"/>
+                <path d="M16 12a1.2 1.2 0 1 0 0 .01"/>
+                <path d="M3 9h14"/>
               </svg>
             </div>
             <span className="text-[#fe6125] font-black text-sm tracking-wide relative z-10 whitespace-nowrap">
               {typeof user?.balance === 'number' ? user.balance.toFixed(2).replace(/\.00$/, '') : '0'}<span className="text-[12px] opacity-80">₽</span>
             </span>
-          </div>
+          </Link>
         </div>
 
       </div>
       <PaymentModal isOpen={depositOpen} onClose={() => setDepositOpen(false)} tariff={"month"} price={""} />
-      <AdminPinModal isOpen={adminModalOpen} onClose={() => setAdminModalOpen(false)} />
+      {isMounted
+        ? createPortal(
+            <AdminPinModal isOpen={adminModalOpen} onClose={() => setAdminModalOpen(false)} />,
+            document.body
+          )
+        : null}
     </header>
   );
 }; 

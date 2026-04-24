@@ -11,6 +11,7 @@ import { PaymentModal } from '@/app/tariffs/PaymentModal';
 export default function HomePage() {
   const [user, setUser] = useUser();
   const [supabaseUser, setSupabaseUser] = useState<any>(null);
+  const [subscription, setSubscription] = useState<any>(null);
   const [isConnectModalOpen, setIsConnectModalOpen] = useState(false);
   const [isDeviceModalOpen, setIsDeviceModalOpen] = useState(false);
   const [isRenewModalOpen, setIsRenewModalOpen] = useState(false);
@@ -25,10 +26,34 @@ export default function HomePage() {
             setUser(data);
           }
       });
+      supabase
+        .from('subscriptions')
+        .select('*')
+        .eq('user_id', String(tgUser.id))
+        .eq('status', 'active')
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle()
+        .then(({ data }) => {
+          setSubscription(data || null);
+        });
     }
   }, []);
   
   const effectiveUser = user || supabaseUser;
+  const expiresAt = subscription?.expires_at ? new Date(subscription.expires_at) : null;
+  const now = new Date();
+  const daysLeft = expiresAt ? Math.max(0, Math.ceil((expiresAt.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))) : 0;
+  const formattedExpiresAt = expiresAt
+    ? expiresAt.toLocaleString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })
+    : 'Не активна';
+  const trafficText =
+    subscription?.traffic_total_gb == null
+      ? 'Без ограничений'
+      : `${Number(subscription.traffic_used_gb || 0).toFixed(1)} / ${Number(subscription.traffic_total_gb).toFixed(1)} ГБ`;
+  const devicesPerLocation = Number(subscription?.device_limit ?? 2);
+  const totalDevices = Number(subscription?.total_device_limit ?? devicesPerLocation * 32);
+  const isAutoRenewEnabled = Boolean(subscription?.auto_renew);
 
   return (
     <>
@@ -58,26 +83,29 @@ export default function HomePage() {
                 <div className="flex flex-col gap-3.5">
                   <div className="flex justify-between items-center">
                     <span className="flex items-center gap-2 text-[#6A6D82] font-semibold text-[13px]"><svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zM5 8V6h14v2H5z"/></svg> Действительна до</span>
-                    <span className="text-white font-bold text-[13px]">16 апреля 2026 10:43</span>
+                    <span className="text-white font-bold text-[13px]">{formattedExpiresAt}</span>
                   </div>
                   <div className="flex justify-between items-center bg-white/[0.03] -mx-2 px-2 py-1.5 rounded-lg">
                     <span className="flex items-center gap-2 text-[#6A6D82] font-semibold text-[13px]"><svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 14.5h-2V11h2v5.5zm0-7.5h-2V7h2v2z"/></svg> Дней осталось</span>
-                    <span className="text-[#fe6125] font-black text-[13px]">19 дней</span>
+                    <span className="text-[#fe6125] font-black text-[13px]">{daysLeft} {daysLeft === 1 ? 'день' : 'дней'}</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="flex items-center gap-2 text-[#6A6D82] font-semibold text-[13px]"><svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24"><path d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H3V5h18v14z"/><path d="M12 11c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg> Трафик всего</span>
-                    <span className="text-white font-bold text-[13px] flex items-center gap-1"><span className="text-base text-[#fe6125]">∞</span> Без ограничений</span>
+                    <span className="text-white font-bold text-[13px] flex items-center gap-1">
+                      {subscription?.traffic_total_gb == null && <span className="text-base text-[#fe6125]">∞</span>}
+                      {trafficText}
+                    </span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="flex items-center gap-2 text-[#6A6D82] font-semibold text-[13px]"><svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24"><path d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z"/></svg> Устройств</span>
-                    <span className="text-white font-bold text-[13px]">64 <span className="text-[#6A6D82] font-semibold text-[11px]">(2 на локацию)</span></span>
+                    <span className="text-white font-bold text-[13px]">{totalDevices} <span className="text-[#6A6D82] font-semibold text-[11px]">({devicesPerLocation} на локацию)</span></span>
                   </div>
                   <div className="flex justify-between items-center mt-1">
                     <span className="flex items-center gap-2 text-[#6A6D82] font-semibold text-[13px]"><svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/></svg> Автопродление</span>
                     <div className="flex items-center gap-2">
-                      <span className="text-[#6A6D82] font-bold text-[12px] uppercase">Выкл</span>
+                      <span className="text-[#6A6D82] font-bold text-[12px] uppercase">{isAutoRenewEnabled ? 'Вкл' : 'Выкл'}</span>
                       <div className="w-10 h-[22px] bg-white/[0.08] hover:bg-white/[0.12] transition-colors rounded-full p-[3px] cursor-pointer flex items-center relative border border-white/5 shadow-inner">
-                        <div className="w-[14px] h-[14px] bg-[#6A6D82] rounded-full absolute left-[3px] shadow-sm transition-transform"></div>
+                        <div className={`w-[14px] h-[14px] rounded-full absolute left-[3px] shadow-sm transition-transform ${isAutoRenewEnabled ? 'bg-[#fe6125] translate-x-[18px]' : 'bg-[#6A6D82]'}`}></div>
                       </div>
                     </div>
                   </div>
@@ -156,7 +184,7 @@ export default function HomePage() {
       </main>
       
       <HowToConnectModal isOpen={isConnectModalOpen} onClose={() => setIsConnectModalOpen(false)} primaryLink={`https://t.me/VPNEnvyBot?start=sub${effectiveUser?.id}`} reserveLink={`https://ru-vpn.envy.com:228/sub/${effectiveUser?.id}`} />
-      <DeviceModal isOpen={isDeviceModalOpen} onClose={() => setIsDeviceModalOpen(false)} currentDevices={2} totalLimit={64} />
+      <DeviceModal isOpen={isDeviceModalOpen} onClose={() => setIsDeviceModalOpen(false)} currentDevices={devicesPerLocation} totalLimit={totalDevices} />
       <PaymentModal isOpen={isRenewModalOpen} onClose={() => setIsRenewModalOpen(false)} tariff="Продление" price="0 ₽" />
     </>
   );

@@ -166,7 +166,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, tar
         if (data && data.success && data.link) {
           setLink(data.link);
           setSuccess(true);
-          setUser({ ...user, balance: user.balance - amount });
+          setUser({ ...user, balance: typeof data.balance === 'number' ? data.balance : user.balance - amount });
         } else {
           setError(data.error || 'Ошибка оплаты');
         }

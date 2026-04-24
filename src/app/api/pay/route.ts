@@ -5,8 +5,11 @@ const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
-const BACKEND_URL = 'https://vpn.bazara.app/generate';
 const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN!;
+const REMNAWAVE_API_BASE_URL = process.env.REMNAWAVE_API_BASE_URL;
+const REMNAWAVE_API_TOKEN = process.env.REMNAWAVE_API_TOKEN;
+const REMNAWAVE_CREATE_PATH = process.env.REMNAWAVE_CREATE_SUB_PATH || '/api/subscriptions';
+const REMNAWAVE_TIMEOUT_MS = Number(process.env.REMNAWAVE_TIMEOUT_MS || 15000);
 
 async function sendTelegramLink(telegramId: string, link: string, package_days?: number) {
   if (!BOT_TOKEN || !telegramId) return;
@@ -33,6 +36,109 @@ function randomId(prefix: string) {
   let out = prefix;
   for (let i = 0; i < 8; ++i) out += chars[Math.floor(Math.random() * chars.length)];
   return out;
+}
+
+function addDays(base: Date, days: number) {
+  const d = new Date(base);
+  d.setDate(d.getDate() + days);
+  return d;
+}
+
+function withTimeout<T>(promise: Promise<T>, timeoutMs: number): Promise<T> {
+  return new Promise((resolve, reject) => {
+    const id = setTimeout(() => reject(new Error('Request timeout')), timeoutMs);
+    promise
+      .then((res) => {
+        clearTimeout(id);
+        resolve(res);
+      })
+      .catch((err) => {
+        clearTimeout(id);
+        reject(err);
+      });
+  });
+}
+
+function parseSubscriptionLink(payload: any): string | null {
+  if (!payload || typeof payload !== 'object') return null;
+  const directCandidates = [
+    payload.link,
+    payload.url,
+    payload.subscription_url,
+    payload.subscriptionUrl,
+    payload.access_url,
+    payload.accessUrl,
+  ];
+  for (const candidate of directCandidates) {
+    if (typeof candidate === 'string' && candidate.trim()) return candidate;
+  }
+  const nestedCandidates = [
+    payload.data?.link,
+    payload.data?.url,
+    payload.data?.subscription_url,
+    payload.data?.subscriptionUrl,
+    payload.result?.link,
+    payload.result?.url,
+    payload.user?.subscription_url,
+    payload.user?.subscriptionUrl,
+  ];
+  for (const candidate of nestedCandidates) {
+    if (typeof candidate === 'string' && candidate.trim()) return candidate;
+  }
+  return null;
+}
+
+async function createInRemnawave(input: { userId: string; packageDays: number; creator: string; taskId: string }) {
+  if (!REMNAWAVE_API_BASE_URL || !REMNAWAVE_API_TOKEN) {
+    return { ok: false as const, error: 'missing_remnawave_env' };
+  }
+  const base = REMNAWAVE_API_BASE_URL.replace(/\/$/, '');
+  const path = REMNAWAVE_CREATE_PATH.startsWith('/') ? REMNAWAVE_CREATE_PATH : `/${REMNAWAVE_CREATE_PATH}`;
+  const endpoint = `${base}${path}`;
+  const body = {
+    user_id: input.userId,
+    telegram_id: input.userId,
+    package_days: input.packageDays,
+    duration_days: input.packageDays,
+    creator: input.creator,
+    task_id: input.taskId,
+  };
+  try {
+    const res = await withTimeout(
+      fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${REMNAWAVE_API_TOKEN}`,
+        },
+        body: JSON.stringify(body),
+      }),
+      REMNAWAVE_TIMEOUT_MS
+    );
+    const raw = await res.text();
+    let data: any = {};
+    try {
+      data = raw ? JSON.parse(raw) : {};
+    } catch {
+      data = { raw };
+    }
+    if (!res.ok) {
+      return { ok: false as const, error: data?.error || `remnawave_http_${res.status}`, details: data };
+    }
+    const link = parseSubscriptionLink(data);
+    if (!link) {
+      return { ok: false as const, error: 'remnawave_link_not_found', details: data };
+    }
+    return { ok: true as const, link, details: data };
+  } catch (e: any) {
+    return { ok: false as const, error: e?.message || 'remnawave_request_failed' };
+  }
+}
+
+async function createSubscription(input: { userId: string; packageDays: number; creator: string; taskId: string }) {
+  const remnawaveRes = await createInRemnawave(input);
+  if (remnawaveRes.ok) return remnawaveRes;
+  return { ok: false as const, error: remnawaveRes.error, remnawave: remnawaveRes };
 }
 
 export async function POST(request: Request) {
@@ -62,85 +168,122 @@ export async function POST(request: Request) {
       if (user.trial) return NextResponse.json({ success: false, error: 'already_used' }, { status: 400 });
       await supabase.from('users').update({ trial: true }).eq('id', id);
       const task_id = randomId('T');
-      const backendResp = await fetch(BACKEND_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ task_id, package_days: 3, creator: 'trial' })
-      });
-      let backendData;
-      try { backendData = await backendResp.json(); } catch (e) { backendData = {}; }
-      if (backendData && backendData.status === 'ok') {
-        const link = `https://vpn.bazara.app/vless/${task_id}`;
+      const created = await createSubscription({ userId: String(id), packageDays: 3, creator: 'trial', taskId: task_id });
+      if (created.ok) {
+        const link = created.link;
         await sendTelegramLink(id, link, 3);
-        // --- Запись в таблицу links ---
-        await supabase.from('links').insert({
+        await supabase.from('subscriptions').insert({
           user_id: id,
           link,
-          type: 'trial',
-          package_days: 3,
+          status: 'active',
+          expires_at: addDays(new Date(), 3).toISOString(),
+          device_limit: 2,
+          source: 'trial',
           created_at: new Date().toISOString()
         });
         return NextResponse.json({ success: true, link });
       } else {
-        return NextResponse.json({ success: false, error: backendData.error || 'Ошибка генерации trial-ссылки', details: backendData }, { status: 500 });
+        return NextResponse.json({ success: false, error: created.error || 'Ошибка генерации trial-ссылки', details: created }, { status: 500 });
       }
     }
     // 2. ADMIN: любое число дней, без оплаты
     if (is_admin) {
       if (!user_id || !package_days) return NextResponse.json({ success: false, error: 'Missing params' }, { status: 400 });
       const task_id = randomId('A');
-      const backendResp = await fetch(BACKEND_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ task_id, package_days, creator: 'admin' })
-      });
-      let backendData;
-      try { backendData = await backendResp.json(); } catch (e) { backendData = {}; }
-      if (backendData && backendData.status === 'ok') {
-        const link = `https://vpn.bazara.app/vless/${task_id}`;
+      const created = await createSubscription({ userId: String(user_id), packageDays: Number(package_days), creator: 'admin', taskId: task_id });
+      if (created.ok) {
+        const link = created.link;
         await sendTelegramLink('980466532', link, package_days);
-        // --- Запись в таблицу links ---
-        await supabase.from('links').insert({
+        await supabase.from('subscriptions').insert({
           user_id,
           link,
-          type: 'admin',
-          package_days,
+          status: 'active',
+          expires_at: addDays(new Date(), Number(package_days)).toISOString(),
+          device_limit: 2,
+          source: 'admin',
           created_at: new Date().toISOString()
         });
         return NextResponse.json({ success: true, link });
       } else {
-        return NextResponse.json({ success: false, error: backendData.error || 'Ошибка генерации admin-ссылки', details: backendData }, { status: 500 });
+        return NextResponse.json({ success: false, error: created.error || 'Ошибка генерации admin-ссылки', details: created }, { status: 500 });
       }
     }
-    // 3. Обычная покупка (balance, sbp, card, crypto): 30 или 365 дней
+    // 3. Обычная покупка (balance, sbp, card, crypto)
     if (!user_id || !package_days || !method) {
       return NextResponse.json({ success: false, error: 'Missing params', details: { user_id, package_days, method } }, { status: 400 });
     }
+    const nowIso = new Date().toISOString();
+    let balanceBefore: number | null = null;
     if (method === 'balance') {
       if (typeof amount !== 'number') return NextResponse.json({ success: false, error: 'No amount' }, { status: 400 });
       const { data: user, error } = await supabase.from('users').select('balance').eq('id', user_id).single();
       if (error || !user) return NextResponse.json({ success: false, error: 'User not found' }, { status: 400 });
       if (user.balance < amount) return NextResponse.json({ success: false, error: 'Недостаточно средств на балансе' }, { status: 400 });
-      await supabase.from('users').update({ balance: user.balance - amount }).eq('id', user_id);
+      balanceBefore = Number(user.balance);
     }
     let prefix = 'B';
     if (method === 'sbp') prefix = 'S';
     else if (method === 'card') prefix = 'K';
     else if (method === 'crypto') prefix = 'C';
     const task_id = randomId(prefix);
-    const backendResp = await fetch(BACKEND_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ task_id, package_days, creator: user_id })
-    });
-    let backendData;
-    try { backendData = await backendResp.json(); } catch (e) { backendData = {}; }
-    if (backendData && backendData.status === 'ok') {
-      const link = `https://vpn.bazara.app/vless/${task_id}`;
+    const created = await createSubscription({ userId: String(user_id), packageDays: Number(package_days), creator: String(user_id), taskId: task_id });
+    if (created.ok) {
+      const link = created.link;
+      // Снимаем старую активную подписку и создаём новую актуальную запись.
+      await supabase.from('subscriptions').update({ status: 'archived' }).eq('user_id', user_id).eq('status', 'active');
+      const { data: latestSub } = await supabase
+        .from('subscriptions')
+        .select('expires_at, device_limit, traffic_total_gb, traffic_used_gb')
+        .eq('user_id', user_id)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      const nowDate = new Date();
+      const baseDate = latestSub?.expires_at && new Date(latestSub.expires_at) > nowDate
+        ? new Date(latestSub.expires_at)
+        : nowDate;
+      const expiresAt = addDays(baseDate, Number(package_days));
+      await supabase.from('subscriptions').insert({
+        user_id,
+        link,
+        status: 'active',
+        expires_at: expiresAt.toISOString(),
+        device_limit: latestSub?.device_limit ?? 2,
+        traffic_total_gb: latestSub?.traffic_total_gb ?? null,
+        traffic_used_gb: latestSub?.traffic_used_gb ?? 0,
+        source: method,
+        created_at: nowIso
+      });
+      if (method === 'balance' && balanceBefore !== null) {
+        const newBalance = balanceBefore - Number(amount);
+        await supabase.from('users').update({ balance: newBalance }).eq('id', user_id);
+        await supabase.from('transactions').insert({
+          user_id,
+          amount: Number(amount),
+          type: 'subscription_purchase',
+          status: 'completed',
+          created_at: nowIso,
+          meta: { package_days, method, order_id: order_id || null, link }
+        });
+      }
       await sendTelegramLink(telegram_id || user_id, link, package_days);
+      if (method === 'balance') {
+        const { data: userAfter } = await supabase.from('users').select('balance').eq('id', user_id).single();
+        return NextResponse.json({
+          success: true,
+          link,
+          balance: Number(userAfter?.balance || 0),
+          subscription: {
+            expires_at: expiresAt.toISOString(),
+            device_limit: latestSub?.device_limit ?? 2,
+            traffic_total_gb: latestSub?.traffic_total_gb ?? null,
+            traffic_used_gb: latestSub?.traffic_used_gb ?? 0
+          }
+        });
+      }
       return NextResponse.json({ success: true, link });
     } else {
-      return NextResponse.json({ success: false, error: backendData.error || 'Ошибка генерации ссылки', details: backendData }, { status: 500 });
+      return NextResponse.json({ success: false, error: created.error || 'Ошибка генерации ссылки', details: created }, { status: 500 });
     }
   } catch (e: any) {
     return NextResponse.json({ success: false, error: e.message || 'Server error', details: e }, { status: 500 });
@@ -151,9 +294,15 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const orderId = searchParams.get('orderId');
   if (!orderId) return NextResponse.json({ success: false, error: 'No orderId' }, { status: 400 });
-  const { data, error } = await supabase.from('links').select('link').eq('order_id', orderId).single();
-  if (data && data.link) {
-    return NextResponse.json({ success: true, link: data.link });
+  const { data, error } = await supabase
+    .from('transactions')
+    .select('meta')
+    .contains('meta', { order_id: orderId })
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  if (data?.meta?.link) {
+    return NextResponse.json({ success: true, link: data.meta.link });
   } else {
     return NextResponse.json({ success: false, error: 'Not ready' }, { status: 404 });
   }

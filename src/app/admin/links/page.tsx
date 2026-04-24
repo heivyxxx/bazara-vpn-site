@@ -12,7 +12,7 @@ export default function AdminLinks() {
       setLoading(true);
       setError("");
       const { data, error } = await supabase
-        .from('links')
+        .from('subscriptions')
         .select('*')
         .order('created_at', { ascending: false });
       if (error) setError(error.message);
@@ -27,13 +27,13 @@ export default function AdminLinks() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-black py-12">
-      <div className="text-3xl text-white font-bold mb-8">Все ссылки</div>
+      <div className="text-3xl text-white font-bold mb-8">Подписки</div>
       {loading ? (
         <div className="text-white">Загрузка...</div>
       ) : error ? (
         <div className="text-red-500">Ошибка: {error}</div>
       ) : links.length === 0 ? (
-        <div className="text-gray-400">Нет ссылок</div>
+        <div className="text-gray-400">Нет подписок</div>
       ) : (
         <div className="overflow-x-auto w-full max-w-5xl">
           <table className="w-full text-white border border-[#23232b] rounded-2xl overflow-hidden">

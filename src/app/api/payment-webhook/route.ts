@@ -12,14 +12,12 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
 
-    const { transactionStatus, orderId, amount, transactionType, paymentTime, email } = body;
+    const { transactionStatus, orderId, amount, paymentTime } = body;
     // TODO: Проверка подписи X-Signature
     if (transactionStatus !== 'Paid') {
 
       return NextResponse.json({ success: true }); // Не оплачено — ничего не делаем
     }
-    // Проверяем, есть ли уже ссылка для этого orderId
-    const { data: existing, error: getError } = await supabase.from('links').select('link').eq('order_id', orderId).single();
     // --- Депозит ---
     if (orderId.startsWith('deposit_') || (body.orderDescription && body.orderDescription.includes('Пополнение баланса'))) {
       // Найти пользователя по email или другим данным (если есть)
@@ -48,6 +46,7 @@ export async function POST(request: Request) {
           user_id,
           amount: Number(amount),
           type: 'deposit',
+          status: 'completed',
           meta: { orderId, paymentTime, method: 'deposit' },
         });
       } catch (e) {
@@ -55,45 +54,8 @@ export async function POST(request: Request) {
 
       return NextResponse.json({ success: true, balance: newBalance });
     }
-    // --- Конец блока депозита ---
-    if (existing && existing.link) {
-
-      return NextResponse.json({ success: true, link: existing.link });
-    }
-    // Генерируем ссылку (вызываем /api/pay или напрямую)
-    const parts = orderId.split('_');
-    const method = parts[0];
-    const user_id = parts[1];
-    const type = method === 'sbp' ? 'sbp' : (method === 'card' ? 'card' : 'other');
-    const package_days = 30; // или 365, если нужно (можно хранить в orderId или в БД)
-    // Генерируем ссылку через /api/pay
-    let payResp, payData;
-    try {
-      payResp = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/pay`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          user_id,
-          package_days,
-          order_id: orderId,
-          method,
-          amount
-        })
-      });
-      payData = await payResp.json();
-
-    } catch (e) {
-      return NextResponse.json({ success: false, error: 'fetch /api/pay error', details: e }, { status: 500 });
-    }
-    if (payData && payData.success && payData.link) {
-      try {
-        await supabase.from('links').insert({ order_id: orderId, user_id, link: payData.link, type, package_days, amount, telegram_id: email });
-      } catch (e) {
-      }
-      return NextResponse.json({ success: true, link: payData.link });
-    } else {
-      return NextResponse.json({ success: false, error: payData?.error || 'Ошибка генерации ссылки', details: payData }, { status: 500 });
-    }
+    // Для текущего режима (оплата балансом) внешние paid-webhook для подписок не используются.
+    return NextResponse.json({ success: true, message: 'ignored for non-deposit flow' });
   } catch (e: any) {
     return NextResponse.json({ success: false, error: e.message || 'Server error', details: e }, { status: 500 });
   }

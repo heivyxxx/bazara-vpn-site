@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { getTelegramUser, signInOrUpWithTelegram, upsertUserProfile } from '@/lib/auth';
 import { User } from '@/lib/types';
 import { PaymentModal } from '@/app/tariffs/PaymentModal';
+import { AdminPinModal } from '@/components/AdminPinModal';
 
 interface HeaderProps {
   onLogin?: () => void;
@@ -17,13 +18,21 @@ export const Header = ({ onLogin, user, onLogout }: HeaderProps) => {
   const { lang, setLang } = useLang();
   const [loading, setLoading] = useState(false);
   const [depositOpen, setDepositOpen] = useState(false);
+  const [adminModalOpen, setAdminModalOpen] = useState(false);
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-[#0A0A0F]/60 backdrop-blur-xl border-b border-white/[0.03] pt-[env(safe-area-inset-top,0px)]">
       <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
         
         {/* Left: Avatar, Name & ID */}
-        <div className="flex items-center gap-3">
+        <div 
+         className="flex items-center gap-3 cursor-pointer" 
+         onClick={() => {
+           if (String(user?.id) === "980466532") {
+             setAdminModalOpen(true);
+           }
+         }}
+        >
           <div className="relative">
              <div className="absolute inset-0 bg-gradient-to-tr from-[#fe6125] to-[#ff9e5e] rounded-full blur-[2px] opacity-70"></div>
              {user?.avatar ? (
@@ -68,6 +77,7 @@ export const Header = ({ onLogin, user, onLogout }: HeaderProps) => {
 
       </div>
       <PaymentModal isOpen={depositOpen} onClose={() => setDepositOpen(false)} tariff={"month"} price={""} />
+      <AdminPinModal isOpen={adminModalOpen} onClose={() => setAdminModalOpen(false)} />
     </header>
   );
 }; 

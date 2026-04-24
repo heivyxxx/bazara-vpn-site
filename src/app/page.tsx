@@ -12,6 +12,7 @@ export default function HomePage() {
   const [user, setUser] = useUser();
   const [supabaseUser, setSupabaseUser] = useState<any>(null);
   const [subscription, setSubscription] = useState<any>(null);
+  const [autoRenewUpdating, setAutoRenewUpdating] = useState(false);
   const [isConnectModalOpen, setIsConnectModalOpen] = useState(false);
   const [isDeviceModalOpen, setIsDeviceModalOpen] = useState(false);
   const [isRenewModalOpen, setIsRenewModalOpen] = useState(false);
@@ -54,6 +55,31 @@ export default function HomePage() {
   const devicesPerLocation = Number(subscription?.device_limit ?? 2);
   const totalDevices = Number(subscription?.total_device_limit ?? devicesPerLocation * 32);
   const isAutoRenewEnabled = Boolean(subscription?.auto_renew);
+
+  const handleToggleAutoRenew = async () => {
+    if (!effectiveUser?.id || !subscription?.id || autoRenewUpdating) return;
+    const next = !isAutoRenewEnabled;
+    setAutoRenewUpdating(true);
+    setSubscription((prev: any) => prev ? { ...prev, auto_renew: next } : prev);
+    try {
+      const res = await fetch('/api/subscription/auto-renew', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          user_id: effectiveUser.id,
+          enabled: next,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data?.success) {
+        setSubscription((prev: any) => prev ? { ...prev, auto_renew: !next } : prev);
+      }
+    } catch {
+      setSubscription((prev: any) => prev ? { ...prev, auto_renew: !next } : prev);
+    } finally {
+      setAutoRenewUpdating(false);
+    }
+  };
 
   return (
     <>
@@ -104,7 +130,10 @@ export default function HomePage() {
                     <span className="flex items-center gap-2 text-[#6A6D82] font-semibold text-[13px]"><svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/></svg> Автопродление</span>
                     <div className="flex items-center gap-2">
                       <span className="text-[#6A6D82] font-bold text-[12px] uppercase">{isAutoRenewEnabled ? 'Вкл' : 'Выкл'}</span>
-                      <div className="w-10 h-[22px] bg-white/[0.08] hover:bg-white/[0.12] transition-colors rounded-full p-[3px] cursor-pointer flex items-center relative border border-white/5 shadow-inner">
+                      <div
+                        onClick={handleToggleAutoRenew}
+                        className={`w-10 h-[22px] transition-colors rounded-full p-[3px] flex items-center relative border border-white/5 shadow-inner ${subscription?.id ? 'cursor-pointer' : 'cursor-not-allowed opacity-60'} ${autoRenewUpdating ? 'opacity-70' : ''} bg-white/[0.08] hover:bg-white/[0.12]`}
+                      >
                         <div className={`w-[14px] h-[14px] rounded-full absolute left-[3px] shadow-sm transition-transform ${isAutoRenewEnabled ? 'bg-[#fe6125] translate-x-[18px]' : 'bg-[#6A6D82]'}`}></div>
                       </div>
                     </div>

@@ -141,6 +141,38 @@ async function createSubscription(input: { userId: string; packageDays: number; 
   return { ok: false as const, error: remnawaveRes.error, remnawave: remnawaveRes };
 }
 
+function asNumericId(value: string): number | null {
+  const trimmed = String(value || '').trim();
+  if (!/^\d+$/.test(trimmed)) return null;
+  const n = Number(trimmed);
+  return Number.isFinite(n) ? n : null;
+}
+
+async function resolveUserByAnyId(userIdRaw: string) {
+  const numericId = asNumericId(userIdRaw);
+  if (numericId !== null) {
+    const byId = await supabase
+      .from('users')
+      .select('id, telegram_id, balance')
+      .eq('id', numericId)
+      .maybeSingle();
+    if (byId.data) return byId;
+    const byTelegramId = await supabase
+      .from('users')
+      .select('id, telegram_id, balance')
+      .eq('telegram_id', numericId)
+      .maybeSingle();
+    if (byTelegramId.data) return byTelegramId;
+  }
+  // Фолбэк для старых схем, где id/telegram_id могли быть text.
+  const byTextTelegram = await supabase
+    .from('users')
+    .select('id, telegram_id, balance')
+    .eq('telegram_id', userIdRaw)
+    .maybeSingle();
+  return byTextTelegram;
+}
+
 async function insertOrderRecord(input: {
   orderId: string;
   userId: string;
@@ -191,10 +223,17 @@ export async function POST(request: Request) {
     if (method === 'trial' || is_trial) {
       const id = telegram_id || user_id;
       if (!id) return NextResponse.json({ success: false, error: 'No user id' }, { status: 400 });
-      const { data: user, error } = await supabase.from('users').select('trial').eq('id', id).single();
+      const numericId = asNumericId(String(id));
+      let userLookup;
+      if (numericId !== null) {
+        userLookup = await supabase.from('users').select('id, trial').eq('id', numericId).maybeSingle();
+      } else {
+        userLookup = await supabase.from('users').select('id, trial').eq('telegram_id', String(id)).maybeSingle();
+      }
+      const { data: user, error } = userLookup;
       if (error || !user) return NextResponse.json({ success: false, error: 'User not found' }, { status: 400 });
       if (user.trial) return NextResponse.json({ success: false, error: 'already_used' }, { status: 400 });
-      await supabase.from('users').update({ trial: true }).eq('id', id);
+      await supabase.from('users').update({ trial: true }).eq('id', user.id);
       const task_id = randomId('T');
       const created = await createSubscription({ userId: String(id), packageDays: 3, creator: 'trial', taskId: task_id });
       if (created.ok) {
@@ -271,7 +310,7 @@ export async function POST(request: Request) {
     let balanceBefore: number | null = null;
     if (method === 'balance') {
       if (typeof amount !== 'number') return NextResponse.json({ success: false, error: 'No amount' }, { status: 400 });
-      const { data: user, error } = await supabase.from('users').select('balance').eq('id', user_id).single();
+      const { data: user, error } = await resolveUserByAnyId(String(user_id));
       if (error || !user) return NextResponse.json({ success: false, error: 'User not found' }, { status: 400 });
       if (user.balance < amount) return NextResponse.json({ success: false, error: 'Недостаточно средств на балансе' }, { status: 400 });
       balanceBefore = Number(user.balance);
@@ -311,9 +350,13 @@ export async function POST(request: Request) {
       });
       if (method === 'balance' && balanceBefore !== null) {
         const newBalance = balanceBefore - Number(amount);
-        await supabase.from('users').update({ balance: newBalance }).eq('id', user_id);
+        const resolved = await resolveUserByAnyId(String(user_id));
+        if (!resolved.data) {
+          return NextResponse.json({ success: false, error: 'User not found while updating balance' }, { status: 400 });
+        }
+        await supabase.from('users').update({ balance: newBalance }).eq('id', resolved.data.id);
         await supabase.from('transactions').insert({
-          user_id,
+          user_id: resolved.data.id,
           amount: Number(amount),
           type: 'subscription_purchase',
           status: 'completed',
@@ -332,7 +375,8 @@ export async function POST(request: Request) {
       });
       await sendTelegramLink(telegram_id || user_id, link, package_days);
       if (method === 'balance') {
-        const { data: userAfter } = await supabase.from('users').select('balance').eq('id', user_id).single();
+        const resolved = await resolveUserByAnyId(String(user_id));
+        const userAfter = resolved.data;
         return NextResponse.json({
           success: true,
           link,

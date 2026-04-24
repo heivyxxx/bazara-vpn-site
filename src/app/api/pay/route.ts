@@ -9,6 +9,7 @@ const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN!;
 const REMNAWAVE_API_BASE_URL = process.env.REMNAWAVE_API_BASE_URL;
 const REMNAWAVE_API_TOKEN = process.env.REMNAWAVE_API_TOKEN;
 const REMNAWAVE_CREATE_PATH = process.env.REMNAWAVE_CREATE_SUB_PATH || '/api/subscriptions';
+const REMNAWAVE_USER_UPSERT_PATH = process.env.REMNAWAVE_UPSERT_USER_PATH || '';
 const REMNAWAVE_TIMEOUT_MS = Number(process.env.REMNAWAVE_TIMEOUT_MS || 15000);
 
 async function sendTelegramLink(telegramId: string, link: string, package_days?: number) {
@@ -88,21 +89,18 @@ function parseSubscriptionLink(payload: any): string | null {
   return null;
 }
 
-async function createInRemnawave(input: { userId: string; packageDays: number; creator: string; taskId: string }) {
+function isUserNotFoundError(err: any) {
+  const text = String(err || '').toLowerCase();
+  return text.includes('user not found') || text.includes('пользователь не найден') || text.includes('not found');
+}
+
+async function remnawaveRequest(path: string, body: any): Promise<any> {
   if (!REMNAWAVE_API_BASE_URL || !REMNAWAVE_API_TOKEN) {
     return { ok: false as const, error: 'missing_remnawave_env' };
   }
   const base = REMNAWAVE_API_BASE_URL.replace(/\/$/, '');
-  const path = REMNAWAVE_CREATE_PATH.startsWith('/') ? REMNAWAVE_CREATE_PATH : `/${REMNAWAVE_CREATE_PATH}`;
-  const endpoint = `${base}${path}`;
-  const body = {
-    user_id: input.userId,
-    telegram_id: input.userId,
-    package_days: input.packageDays,
-    duration_days: input.packageDays,
-    creator: input.creator,
-    task_id: input.taskId,
-  };
+  const normalizedPath = path.startsWith('/') ? path : `/${path}`;
+  const endpoint = `${base}${normalizedPath}`;
   try {
     const res = await withTimeout(
       fetch(endpoint, {
@@ -125,17 +123,66 @@ async function createInRemnawave(input: { userId: string; packageDays: number; c
     if (!res.ok) {
       return { ok: false as const, error: data?.error || `remnawave_http_${res.status}`, details: data };
     }
-    const link = parseSubscriptionLink(data);
-    if (!link) {
-      return { ok: false as const, error: 'remnawave_link_not_found', details: data };
-    }
-    return { ok: true as const, link, details: data };
+    return { ok: true as const, data };
   } catch (e: any) {
     return { ok: false as const, error: e?.message || 'remnawave_request_failed' };
   }
 }
 
-async function createSubscription(input: { userId: string; packageDays: number; creator: string; taskId: string }) {
+async function upsertRemnawaveUser(input: { userId: string; username?: string | null; name?: string | null }): Promise<any> {
+  if (!REMNAWAVE_USER_UPSERT_PATH) {
+    return { ok: false as const, error: 'upsert_path_not_set' };
+  }
+  const numericId = asNumericId(input.userId);
+  const payload = {
+    id: numericId ?? input.userId,
+    user_id: numericId ?? input.userId,
+    telegram_id: numericId ?? input.userId,
+    external_id: input.userId,
+    username: input.username || undefined,
+    name: input.name || undefined,
+  };
+  return remnawaveRequest(REMNAWAVE_USER_UPSERT_PATH, payload);
+}
+
+async function createInRemnawave(input: { userId: string; packageDays: number; creator: string; taskId: string; username?: string | null; name?: string | null }): Promise<any> {
+  if (!REMNAWAVE_API_BASE_URL || !REMNAWAVE_API_TOKEN) {
+    return { ok: false as const, error: 'missing_remnawave_env' };
+  }
+  const numericId = asNumericId(input.userId);
+  const body = {
+    user_id: numericId ?? input.userId,
+    telegram_id: numericId ?? input.userId,
+    external_user_id: input.userId,
+    package_days: input.packageDays,
+    duration_days: input.packageDays,
+    creator: input.creator,
+    task_id: input.taskId,
+    create_if_not_exists: true,
+    upsert_user: true,
+    username: input.username || undefined,
+    name: input.name || undefined,
+  };
+  const firstTry = await remnawaveRequest(REMNAWAVE_CREATE_PATH, body);
+  if (firstTry.ok) {
+    const link = parseSubscriptionLink(firstTry.data);
+    if (!link) return { ok: false as const, error: 'remnawave_link_not_found', details: firstTry.data };
+    return { ok: true as const, link, details: firstTry.data };
+  }
+  if (isUserNotFoundError(firstTry.error)) {
+    await upsertRemnawaveUser({ userId: input.userId, username: input.username, name: input.name });
+    const secondTry = await remnawaveRequest(REMNAWAVE_CREATE_PATH, body);
+    if (secondTry.ok) {
+      const link = parseSubscriptionLink(secondTry.data);
+      if (!link) return { ok: false as const, error: 'remnawave_link_not_found', details: secondTry.data };
+      return { ok: true as const, link, details: secondTry.data };
+    }
+    return { ok: false as const, error: secondTry.error, details: secondTry };
+  }
+  return firstTry;
+}
+
+async function createSubscription(input: { userId: string; packageDays: number; creator: string; taskId: string; username?: string | null; name?: string | null }): Promise<any> {
   const remnawaveRes = await createInRemnawave(input);
   if (remnawaveRes.ok) return remnawaveRes;
   return { ok: false as const, error: remnawaveRes.error, remnawave: remnawaveRes };
@@ -170,6 +217,18 @@ async function resolveUserByAnyId(userIdRaw: string) {
     .select('id, telegram_id, balance')
     .eq('telegram_id', userIdRaw)
     .maybeSingle();
+  return byTextTelegram;
+}
+
+async function getUserProfileByAnyId(userIdRaw: string) {
+  const numericId = asNumericId(userIdRaw);
+  if (numericId !== null) {
+    const byId = await supabase.from('users').select('id, telegram_id, username, name, balance, trial').eq('id', numericId).maybeSingle();
+    if (byId.data) return byId;
+    const byTelegramId = await supabase.from('users').select('id, telegram_id, username, name, balance, trial').eq('telegram_id', numericId).maybeSingle();
+    if (byTelegramId.data) return byTelegramId;
+  }
+  const byTextTelegram = await supabase.from('users').select('id, telegram_id, username, name, balance, trial').eq('telegram_id', userIdRaw).maybeSingle();
   return byTextTelegram;
 }
 
@@ -223,19 +282,20 @@ export async function POST(request: Request) {
     if (method === 'trial' || is_trial) {
       const id = telegram_id || user_id;
       if (!id) return NextResponse.json({ success: false, error: 'No user id' }, { status: 400 });
-      const numericId = asNumericId(String(id));
-      let userLookup;
-      if (numericId !== null) {
-        userLookup = await supabase.from('users').select('id, trial').eq('id', numericId).maybeSingle();
-      } else {
-        userLookup = await supabase.from('users').select('id, trial').eq('telegram_id', String(id)).maybeSingle();
-      }
+      const userLookup = await getUserProfileByAnyId(String(id));
       const { data: user, error } = userLookup;
       if (error || !user) return NextResponse.json({ success: false, error: 'User not found' }, { status: 400 });
       if (user.trial) return NextResponse.json({ success: false, error: 'already_used' }, { status: 400 });
       await supabase.from('users').update({ trial: true }).eq('id', user.id);
       const task_id = randomId('T');
-      const created = await createSubscription({ userId: String(id), packageDays: 3, creator: 'trial', taskId: task_id });
+      const created = await createSubscription({
+        userId: String(user.id),
+        packageDays: 3,
+        creator: 'trial',
+        taskId: task_id,
+        username: user.username,
+        name: user.name,
+      });
       if (created.ok) {
         const link = created.link;
         await sendTelegramLink(id, link, 3);
@@ -266,7 +326,16 @@ export async function POST(request: Request) {
     if (is_admin) {
       if (!user_id || !package_days) return NextResponse.json({ success: false, error: 'Missing params' }, { status: 400 });
       const task_id = randomId('A');
-      const created = await createSubscription({ userId: String(user_id), packageDays: Number(package_days), creator: 'admin', taskId: task_id });
+      const profile = await getUserProfileByAnyId(String(user_id));
+      const resolvedId = String(profile.data?.id || user_id);
+      const created = await createSubscription({
+        userId: resolvedId,
+        packageDays: Number(package_days),
+        creator: 'admin',
+        taskId: task_id,
+        username: profile.data?.username,
+        name: profile.data?.name,
+      });
       if (created.ok) {
         const link = created.link;
         await sendTelegramLink('980466532', link, package_days);
@@ -320,7 +389,18 @@ export async function POST(request: Request) {
     else if (method === 'card') prefix = 'K';
     else if (method === 'crypto') prefix = 'C';
     const task_id = randomId(prefix);
-    const created = await createSubscription({ userId: String(user_id), packageDays: Number(package_days), creator: String(user_id), taskId: task_id });
+    const profile = await getUserProfileByAnyId(String(user_id));
+    if (!profile.data) {
+      return NextResponse.json({ success: false, error: 'User not found' }, { status: 400 });
+    }
+    const created = await createSubscription({
+      userId: String(profile.data.id),
+      packageDays: Number(package_days),
+      creator: String(profile.data.id),
+      taskId: task_id,
+      username: profile.data.username,
+      name: profile.data.name,
+    });
     if (created.ok) {
       const link = created.link;
       // Снимаем старую активную подписку и создаём новую актуальную запись.

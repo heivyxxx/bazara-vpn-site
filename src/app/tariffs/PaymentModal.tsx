@@ -67,6 +67,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, tar
   // const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [errorDebug, setErrorDebug] = useState<string>('');
   const [success, setSuccess] = useState(false);
   const [link, setLink] = useState('');
   const [copied, setCopied] = useState(false);
@@ -135,6 +136,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, tar
   // 2. handlePay теперь для sbp/card только создаёт заказ и paymentUrl, а не вызывает /api/pay
   const handlePay = async () => {
     setError('');
+    setErrorDebug('');
     if (!payMethod) {
       setError(t.error);
       return;
@@ -169,10 +171,31 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, tar
           setUser({ ...user, balance: typeof data.balance === 'number' ? data.balance : user.balance - amount });
         } else {
           setError(data.error || 'Ошибка оплаты');
+          setErrorDebug(JSON.stringify({
+            http_status: resp.status,
+            response: data,
+            request: {
+              user_id: user.id,
+              package_days,
+              order_id,
+              method: payMethod,
+              amount
+            }
+          }, null, 2));
         }
       } catch (e: any) {
         setLoading(false);
         setError(e.message || 'Ошибка соединения');
+        setErrorDebug(JSON.stringify({
+          network_error: e?.message || 'unknown_error',
+          request: {
+            user_id: user.id,
+            package_days,
+            order_id,
+            method: payMethod,
+            amount
+          }
+        }, null, 2));
       }
       return;
     }
@@ -196,10 +219,17 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, tar
         return;
       } else {
         setError(data.error || 'Ошибка создания заказа');
+        setErrorDebug(JSON.stringify({
+          http_status: resp.status,
+          response: data
+        }, null, 2));
       }
     } catch (e: any) {
       setLoading(false);
       setError(e.message || 'Ошибка соединения');
+      setErrorDebug(JSON.stringify({
+        network_error: e?.message || 'unknown_error'
+      }, null, 2));
     }
   };
 
@@ -266,7 +296,16 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, tar
               </>
             )}
           </div>
-          {error && !success && <div className="text-red-500 text-sm text-center">{error}</div>}
+          {error && !success && (
+            <div className="w-full flex flex-col gap-2">
+              <div className="text-red-500 text-sm text-center">{error}</div>
+              {errorDebug && (
+                <pre className="w-full max-h-40 overflow-auto text-[10px] leading-relaxed text-red-300 bg-red-500/10 border border-red-500/20 rounded-xl p-3 whitespace-pre-wrap break-all">
+                  {errorDebug}
+                </pre>
+              )}
+            </div>
+          )}
           {success ? (
              <div className="flex flex-col w-full items-center gap-4 animate-fadeIn">
                 <div className="text-green-500 font-bold text-center text-[15px]">{t.success}</div>

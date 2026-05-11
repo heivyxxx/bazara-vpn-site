@@ -1,1 +1,25 @@
-{}
+{
+  "hooks\\useTelegramInit.ts -> @telegram-apps/sdk": {
+    "id": 8814,
+    "files": [
+      "static/chunks/2fee9890.78ff2a66c003f86a.js",
+      "static/chunks/814.3cfed9999c93db0e.js"
+    ]
+  },
+  "node_modules\\@supabase\\auth-js\\dist\\module\\lib\\helpers.js -> @supabase/node-fetch": {
+    "id": 4307,
+    "files": []
+  },
+  "node_modules\\@supabase\\functions-js\\dist\\module\\helper.js -> @supabase/node-fetch": {
+    "id": 4307,
+    "files": []
+  },
+  "node_modules\\@supabase\\realtime-js\\dist\\module\\RealtimeClient.js -> @supabase/node-fetch": {
+    "id": 4307,
+    "files": []
+  },
+  "node_modules\\@supabase\\storage-js\\dist\\module\\lib\\helpers.js -> @supabase/node-fetch": {
+    "id": 4307,
+    "files": []
+  }
+}

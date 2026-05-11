@@ -141,13 +141,19 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, tar
       setError(t.error);
       return;
     }
-    if (!user || typeof user.id !== 'string') {
+    const normalizedUserId = user?.id != null ? String(user.id) : '';
+    if (!user || !normalizedUserId) {
       setError('Пользователь не найден');
+      setErrorDebug(JSON.stringify({
+        stage: 'client_precheck',
+        reason: 'user_id_missing',
+        user_snapshot: user || null
+      }, null, 2));
       return;
     }
     const amount = currentPrice;
     const package_days = finalPackageDays;
-    const order_id = `${payMethod}_${user.id}_${Date.now()}`;
+    const order_id = `${payMethod}_${normalizedUserId}_${Date.now()}`;
     setLoading(true);
     if (payMethod === 'balance') {
       // Баланс — всё как было
@@ -156,7 +162,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, tar
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            user_id: user.id,
+            user_id: normalizedUserId,
             package_days,
             order_id,
             method: payMethod,
@@ -168,14 +174,20 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, tar
         if (data && data.success && data.link) {
           setLink(data.link);
           setSuccess(true);
-          setUser({ ...user, balance: typeof data.balance === 'number' ? data.balance : user.balance - amount });
+          setUser({
+            ...user,
+            balance:
+              typeof data.balance === "number"
+                ? data.balance
+                : (user.balance ?? 0) - amount
+          });
         } else {
           setError(data.error || 'Ошибка оплаты');
           setErrorDebug(JSON.stringify({
             http_status: resp.status,
             response: data,
             request: {
-              user_id: user.id,
+              user_id: normalizedUserId,
               package_days,
               order_id,
               method: payMethod,
@@ -189,7 +201,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, tar
         setErrorDebug(JSON.stringify({
           network_error: e?.message || 'unknown_error',
           request: {
-            user_id: user.id,
+            user_id: normalizedUserId,
             package_days,
             order_id,
             method: payMethod,
@@ -205,7 +217,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, tar
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          user_id: user.id,
+          user_id: normalizedUserId,
           package_days,
           order_id,
           method: payMethod,

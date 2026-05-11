@@ -67,7 +67,7 @@ const texts = {
 
 export default function DownloadPage() {
   const [lang] = useLang();
-  const t = texts[lang];
+  const t = lang === "en" ? texts.en : texts.ru;
   const [user, setUser] = useUser();
   const [modal, setModal] = useState<null | 'windows' | 'macos' | 'linux' | 'android' | 'ios'>(null);
   // Определяем количество колонок: если 4 или 5 платформ — 2 колонки, иначе 3

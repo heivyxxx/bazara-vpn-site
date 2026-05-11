@@ -24,5 +24,5 @@
     "typeRoots": ["./node_modules/@types"]
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules", "backup", "backup/**", "src/node_modules", "eclipse2", "eclipse2/**"]
+  "exclude": ["node_modules", "backup", "backup/**", "src/node_modules", "eclipse2", "eclipse2/**", "Bazara", "Bazara/**", "bazara", "bazara/**"]
 } 

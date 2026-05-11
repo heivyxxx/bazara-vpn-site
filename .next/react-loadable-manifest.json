@@ -1,4 +1,11 @@
 {
+  "hooks\\useTelegramInit.ts -> @telegram-apps/sdk": {
+    "id": 7497,
+    "files": [
+      "static/chunks/a8a31495.c15d142d7487e019.js",
+      "static/chunks/497.5e74b4cb983c39d4.js"
+    ]
+  },
   "node_modules\\@supabase\\auth-js\\dist\\module\\lib\\helpers.js -> @supabase/node-fetch": {
     "id": 8603,
     "files": []

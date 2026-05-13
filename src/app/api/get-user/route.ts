@@ -1,31 +1,10 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { findUserRow } from '@/lib/dbUserLookup';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 const supabase = createClient(supabaseUrl, supabaseServiceKey);
-
-function asNumericId(value: string): number | null {
-  const trimmed = String(value || '').trim();
-  if (!/^\d+$/.test(trimmed)) return null;
-  const n = Number(trimmed);
-  return Number.isFinite(n) ? n : null;
-}
-
-/** Совпадает с логикой /api/pay: id может быть bigint, а Telegram — в колонке telegram_id */
-async function findUserByTelegramOrId(telegramIdRaw: string) {
-  const raw = String(telegramIdRaw || '').trim();
-  if (!raw) return { data: null as any, error: null as any };
-  const numeric = asNumericId(raw);
-  if (numeric !== null) {
-    const byId = await supabase.from('users').select('*').eq('id', numeric).maybeSingle();
-    if (byId.data) return byId;
-    const byTg = await supabase.from('users').select('*').eq('telegram_id', numeric).maybeSingle();
-    if (byTg.data) return byTg;
-  }
-  const byTgText = await supabase.from('users').select('*').eq('telegram_id', raw).maybeSingle();
-  return byTgText;
-}
 
 export async function POST(request: Request) {
   try {
@@ -33,8 +12,8 @@ export async function POST(request: Request) {
     const telegram_id = body.telegram_id;
     // Если есть telegram_id — ищем по id ИЛИ telegram_id (не только id === tg)
     if (telegram_id) {
-      const { data, error } = await findUserByTelegramOrId(String(telegram_id));
-      if (error || !data) {
+      const { data } = await findUserRow(supabase, String(telegram_id), '*');
+      if (!data) {
         return NextResponse.json({ error: 'User not found' }, { status: 404 });
       }
       return NextResponse.json({ user: { ...data, auth_id: data.auth_id } });

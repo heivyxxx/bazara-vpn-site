@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { findUserRow, safeNumberFromDigits } from '@/lib/dbUserLookup';
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY!;
@@ -195,41 +196,40 @@ function asNumericId(value: string): number | null {
   return Number.isFinite(n) ? n : null;
 }
 
-async function resolveUserByAnyId(userIdRaw: string) {
-  const numericId = asNumericId(userIdRaw);
-  if (numericId !== null) {
-    const byId = await supabase
-      .from('users')
-      .select('id, telegram_id, balance')
-      .eq('id', numericId)
-      .maybeSingle();
-    if (byId.data) return byId;
-    const byTelegramId = await supabase
-      .from('users')
-      .select('id, telegram_id, balance')
-      .eq('telegram_id', numericId)
-      .maybeSingle();
-    if (byTelegramId.data) return byTelegramId;
-  }
-  // Фолбэк для старых схем, где id/telegram_id могли быть text.
-  const byTextTelegram = await supabase
-    .from('users')
-    .select('id, telegram_id, balance')
-    .eq('telegram_id', userIdRaw)
-    .maybeSingle();
-  return byTextTelegram;
+async function getUserProfileByAnyId(userIdRaw: string) {
+  return findUserRow(supabase, userIdRaw, 'id, telegram_id, username, name, balance, trial');
 }
 
-async function getUserProfileByAnyId(userIdRaw: string) {
-  const numericId = asNumericId(userIdRaw);
-  if (numericId !== null) {
-    const byId = await supabase.from('users').select('id, telegram_id, username, name, balance, trial').eq('id', numericId).maybeSingle();
-    if (byId.data) return byId;
-    const byTelegramId = await supabase.from('users').select('id, telegram_id, username, name, balance, trial').eq('telegram_id', numericId).maybeSingle();
-    if (byTelegramId.data) return byTelegramId;
+function isDuplicateUserInsertError(err: any): boolean {
+  const m = String(err?.message || err?.details || '').toLowerCase();
+  const c = String(err?.code || '');
+  return c === '23505' || m.includes('duplicate') || m.includes('unique');
+}
+
+/** Если пользователь только в TG/localStorage, а строки в public.users нет — создаём заготовку (как при первом входе). */
+async function tryCreateUserStubForTelegramPay(userIdRaw: string): Promise<boolean> {
+  const raw = String(userIdRaw || '').trim();
+  if (!/^\d+$/.test(raw)) return false;
+  const n = safeNumberFromDigits(raw);
+  const updated_at = new Date().toISOString();
+  const base: Record<string, unknown> = {
+    telegram_id: n !== null ? n : raw,
+    username: '',
+    name: '',
+    balance: 0,
+    trial: false,
+    lang: 'ru',
+    updated_at,
+  };
+  if (n !== null) {
+    const { error } = await supabase.from('users').insert({ ...base, id: n } as any);
+    if (!error) return true;
+    if (isDuplicateUserInsertError(error)) return true;
   }
-  const byTextTelegram = await supabase.from('users').select('id, telegram_id, username, name, balance, trial').eq('telegram_id', userIdRaw).maybeSingle();
-  return byTextTelegram;
+  const { error: e2 } = await supabase.from('users').insert(base as any);
+  if (!e2) return true;
+  if (isDuplicateUserInsertError(e2)) return true;
+  return false;
 }
 
 async function insertOrderRecord(input: {
@@ -381,28 +381,42 @@ export async function POST(request: Request) {
     }
     const nowIso = new Date().toISOString();
     let balanceBefore: number | null = null;
-    if (method === 'balance') {
-      if (typeof amount !== 'number') return NextResponse.json({ success: false, error: 'No amount' }, { status: 400 });
-      const { data: user, error } = await resolveUserByAnyId(String(user_id));
-      if (error || !user) return NextResponse.json({ success: false, error: 'User not found' }, { status: 400 });
-      if (user.balance < amount) return NextResponse.json({ success: false, error: 'Недостаточно средств на балансе' }, { status: 400 });
-      balanceBefore = Number(user.balance);
-    }
-    let prefix = 'B';
-    if (method === 'sbp') prefix = 'S';
-    else if (method === 'card') prefix = 'K';
-    else if (method === 'crypto') prefix = 'C';
-    const task_id = randomId(prefix);
-    const profile = await getUserProfileByAnyId(String(user_id));
+
+    let profile = await getUserProfileByAnyId(String(user_id));
     if (!profile.data) {
-      return NextResponse.json({ success: false, error: 'User not found' }, { status: 400 });
+      await tryCreateUserStubForTelegramPay(String(user_id));
+      profile = await getUserProfileByAnyId(String(user_id));
     }
+    if (!profile.data) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'User not found',
+          hint:
+            'В Supabase нет строки users для этого аккаунта (или не совпадают id / telegram_id). Откройте приложение из бота ещё раз или проверьте таблицу.',
+        },
+        { status: 400 }
+      );
+    }
+
     const dbUserId = String(profile.data.id);
     const notifyTelegramId = String(
       profile.data.telegram_id != null && profile.data.telegram_id !== ''
         ? profile.data.telegram_id
         : profile.data.id
     );
+
+    if (method === 'balance') {
+      if (typeof amount !== 'number') return NextResponse.json({ success: false, error: 'No amount' }, { status: 400 });
+      const bal = Number(profile.data.balance ?? 0);
+      if (bal < amount) return NextResponse.json({ success: false, error: 'Недостаточно средств на балансе' }, { status: 400 });
+      balanceBefore = bal;
+    }
+    let prefix = 'B';
+    if (method === 'sbp') prefix = 'S';
+    else if (method === 'card') prefix = 'K';
+    else if (method === 'crypto') prefix = 'C';
+    const task_id = randomId(prefix);
     const created = await createSubscription({
       userId: dbUserId,
       packageDays: Number(package_days),
@@ -440,13 +454,9 @@ export async function POST(request: Request) {
       });
       if (method === 'balance' && balanceBefore !== null) {
         const newBalance = balanceBefore - Number(amount);
-        const resolved = await resolveUserByAnyId(String(user_id));
-        if (!resolved.data) {
-          return NextResponse.json({ success: false, error: 'User not found while updating balance' }, { status: 400 });
-        }
-        await supabase.from('users').update({ balance: newBalance }).eq('id', resolved.data.id);
+        await supabase.from('users').update({ balance: newBalance }).eq('id', dbUserId);
         await supabase.from('transactions').insert({
-          user_id: resolved.data.id,
+          user_id: dbUserId,
           amount: Number(amount),
           type: 'subscription_purchase',
           status: 'completed',
@@ -465,12 +475,11 @@ export async function POST(request: Request) {
       });
       await sendTelegramLink(notifyTelegramId, link, package_days);
       if (method === 'balance') {
-        const resolved = await resolveUserByAnyId(String(user_id));
-        const userAfter = resolved.data;
+        const newBal = balanceBefore !== null ? balanceBefore - Number(amount) : null;
         return NextResponse.json({
           success: true,
           link,
-          balance: Number(userAfter?.balance || 0),
+          balance: newBal != null ? Number(newBal) : Number(profile.data.balance ?? 0),
           subscription: {
             expires_at: expiresAt.toISOString(),
             device_limit: latestSub?.device_limit ?? 2,

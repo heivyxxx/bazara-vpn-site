@@ -69,10 +69,20 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: upsertRes.error.message, details: upsertRes.error }, { status: 500 });
     }
 
+    const { data: profile } = await supabaseAdmin
+      .from('users')
+      .select('*')
+      .eq('telegram_id', telegram_id)
+      .maybeSingle();
+    const profileRow =
+      profile ||
+      (await supabaseAdmin.from('users').select('*').eq('id', telegram_id).maybeSingle()).data;
+
     return NextResponse.json({
       access_token: tokenData.session?.access_token,
       refresh_token: tokenData.session?.refresh_token,
       user: tokenData.user,
+      profile: profileRow || null,
     });
     
   } catch (error: any) {

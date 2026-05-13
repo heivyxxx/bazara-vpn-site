@@ -338,7 +338,11 @@ export async function POST(request: Request) {
       });
       if (created.ok) {
         const link = created.link;
-        await sendTelegramLink('980466532', link, package_days);
+        const notifyTg =
+          profile.data?.telegram_id != null
+            ? String(profile.data.telegram_id)
+            : String(profile.data?.id ?? user_id);
+        await sendTelegramLink(notifyTg, link, package_days);
         await supabase.from('subscriptions').insert({
           user_id,
           link,
@@ -393,8 +397,14 @@ export async function POST(request: Request) {
     if (!profile.data) {
       return NextResponse.json({ success: false, error: 'User not found' }, { status: 400 });
     }
+    const dbUserId = String(profile.data.id);
+    const notifyTelegramId = String(
+      profile.data.telegram_id != null && profile.data.telegram_id !== ''
+        ? profile.data.telegram_id
+        : profile.data.id
+    );
     const created = await createSubscription({
-      userId: String(profile.data.id),
+      userId: dbUserId,
       packageDays: Number(package_days),
       creator: String(profile.data.id),
       taskId: task_id,
@@ -404,11 +414,11 @@ export async function POST(request: Request) {
     if (created.ok) {
       const link = created.link;
       // Снимаем старую активную подписку и создаём новую актуальную запись.
-      await supabase.from('subscriptions').update({ status: 'archived' }).eq('user_id', user_id).eq('status', 'active');
+      await supabase.from('subscriptions').update({ status: 'archived' }).eq('user_id', dbUserId).eq('status', 'active');
       const { data: latestSub } = await supabase
         .from('subscriptions')
         .select('expires_at, device_limit, traffic_total_gb, traffic_used_gb')
-        .eq('user_id', user_id)
+        .eq('user_id', dbUserId)
         .order('created_at', { ascending: false })
         .limit(1)
         .maybeSingle();
@@ -418,7 +428,7 @@ export async function POST(request: Request) {
         : nowDate;
       const expiresAt = addDays(baseDate, Number(package_days));
       await supabase.from('subscriptions').insert({
-        user_id,
+        user_id: dbUserId,
         link,
         status: 'active',
         expires_at: expiresAt.toISOString(),
@@ -446,14 +456,14 @@ export async function POST(request: Request) {
       }
       await insertOrderRecord({
         orderId: order_id || `order_${user_id}_${Date.now()}`,
-        userId: String(user_id),
+        userId: dbUserId,
         amount: Number(amount || 0),
         packageDays: Number(package_days),
         method: String(method),
         status: 'completed',
         link,
       });
-      await sendTelegramLink(telegram_id || user_id, link, package_days);
+      await sendTelegramLink(notifyTelegramId, link, package_days);
       if (method === 'balance') {
         const resolved = await resolveUserByAnyId(String(user_id));
         const userAfter = resolved.data;
@@ -473,7 +483,7 @@ export async function POST(request: Request) {
     } else {
       await insertOrderRecord({
         orderId: order_id || `order_${user_id}_${Date.now()}`,
-        userId: String(user_id),
+        userId: dbUserId,
         amount: Number(amount || 0),
         packageDays: Number(package_days),
         method: String(method),

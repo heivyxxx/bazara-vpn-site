@@ -79,7 +79,8 @@ export async function loginViaTelegram(telegramUser: any, initDataRaw?: string) 
       });
       logDebug('Supabase session set successfully');
     }
-    return data.user || null;
+    // В ответе /api/auth/telegram — строка public.users в profile; user — это Supabase Auth (uuid), не подставлять в оплату
+    return data.profile || data.user || null;
   } catch (e) {
     logDebug('Fetch error /api/auth/telegram:', e);
     return null;

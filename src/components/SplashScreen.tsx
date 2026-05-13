@@ -36,10 +36,6 @@ async function loadJson(path: string): Promise<any | null> {
   }
 }
 
-const isBrowser =
-  typeof window !== "undefined" &&
-  !(window as any)?.Telegram?.WebApp?.initDataUnsafe?.user;
-
 type SplashProps = {
   show: boolean;
   onComplete?: () => void;
@@ -54,11 +50,20 @@ function Splash({
   forceBan,
   progress,
 }: SplashProps) {
+  /** Нельзя вычислять «браузер» на уровне модуля: в Mini App user/initData часто появляются после первого тика. */
+  const [inMiniApp, setInMiniApp] = React.useState<boolean | null>(null);
+  React.useEffect(() => {
+    try {
+      (window as any).Telegram?.WebApp?.ready?.();
+    } catch {}
+    setInMiniApp(!!(window as any).Telegram?.WebApp);
+  }, []);
+  const showRocketUi = inMiniApp !== false;
+
   const [internalProgress, setInternalProgress] = React.useState(0);
   const prog = typeof progress === "number" ? progress : internalProgress;
   const [anim, setAnim] = React.useState<any>(null);
   const [barAnim, setBarAnim] = React.useState<any>(null);
-  const ready = !!anim && !!barAnim;
   const [fade, setFade] = React.useState(1);
   const [rocketEnter, setRocketEnter] = React.useState(false);
   const mountedAtRef = React.useRef<number | null>(null);
@@ -140,7 +145,6 @@ function Splash({
   }, [prog, barAnim]);
 
   React.useEffect(() => {
-    if (isBrowser) return;
     (async () => {
       const data = await loadTgs("/assets/rocket.tgs");
       if (data) setAnim(data);
@@ -148,7 +152,7 @@ function Splash({
   }, []);
 
   React.useEffect(() => {
-    if (isBrowser || !anim) return;
+    if (!showRocketUi || !anim) return;
     if (!mountedAtRef.current) mountedAtRef.current = performance.now();
     const MIN_DELAY = 300;
     const elapsed = performance.now() - (mountedAtRef.current || 0);
@@ -158,7 +162,7 @@ function Splash({
       const t = setTimeout(() => setRocketEnter(true), MIN_DELAY - elapsed);
       return () => clearTimeout(t);
     }
-  }, [anim]);
+  }, [anim, showRocketUi]);
 
   React.useEffect(() => {
     (async () => {
@@ -193,7 +197,7 @@ function Splash({
         </div>
       ) : (
         <>
-          {!isBrowser && (
+          {showRocketUi && (
             <div
               className="w-28 h-28 mb-6 select-none flex items-center justify-center"
               style={{

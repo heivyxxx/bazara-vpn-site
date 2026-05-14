@@ -29,8 +29,8 @@ export default function TariffsPage() {
   return (
     <>
       <Header user={user} onLogout={() => setUser(null)} />
-      <AppMainShell innerClassName="items-center">
-        <div className="w-full max-w-sm mx-auto flex flex-col items-center justify-center">
+      <AppMainShell innerClassName="items-stretch">
+        <div className="w-full flex flex-col items-stretch justify-center">
           
           <h1 className="text-2xl font-bold text-white tracking-tight mb-1">
             Тарифы

@@ -9,42 +9,43 @@ import QRCode from 'react-qr-code';
 import { Disclosure } from '@headlessui/react';
 import { useRouter } from "next/navigation";
 import { AppMainShell } from '@/components/AppMainShell';
+import { ResponsiveDialog } from '@/components/modal/ResponsiveDialog';
 
 // --- HISTORY MODAL ---
-function ProfileHistoryModal({ open, onClose, items }: { open: boolean, onClose: () => void, items: any[] }) {
-  if (!open) return null;
+function ProfileHistoryModal({ open, onClose, items }: { open: boolean; onClose: () => void; items: any[] }) {
   return (
-    <div className="fixed inset-0 z-[9999] bg-[#0A0A0F]/60 backdrop-blur-md flex items-center justify-center p-4">
-      <div className="w-full max-w-[360px] bg-[#13141C] border border-white/10 shadow-[0_12px_45px_rgba(0,0,0,0.5)] rounded-[28px] max-h-[85vh] overflow-y-auto relative flex flex-col animate-modal-in">
-        <div className="flex items-center justify-between px-6 py-5 sticky top-0 z-10 bg-[#13141C] border-b border-white/5 rounded-t-[28px]">
-          <span className="text-white font-bold text-lg">Вся история</span>
-          <button className="text-gray-400 hover:text-white transition" onClick={onClose} aria-label="Закрыть">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 6l12 12M6 18L18 6" strokeLinecap="round"/></svg>
-          </button>
-        </div>
-        <div className="flex flex-col gap-1 p-4">
-          {items.length === 0 && <div className="text-gray-500 text-center py-6">Нет операций</div>}
-          {items.map((item, idx) => (
-            <div key={item.id || idx} className="flex flex-col gap-1 py-3 px-4 rounded-xl hover:bg-white/5 transition border border-transparent hover:border-white/5">
-               <div className="flex justify-between items-center">
-                 <span className={item.type === 'buy' ? 'text-[#A259FF] font-medium text-sm' : 'text-green-400 font-medium text-sm'}>
-                   {item.type === 'buy' ? 'Пополнение' : 'Списание'}
-                 </span>
-                 <span className="text-gray-500 text-xs">{item.date}</span>
-               </div>
-               <div className="flex justify-between items-end">
-                 <span className="text-white text-base font-semibold truncate flex-1 pr-2">
-                   {item.groupName ? <>{item.groupName} <span className="text-gray-500 text-sm">#{item.number}</span></> : '—'}
-                 </span>
-                 <span className="text-white font-bold text-lg whitespace-nowrap">
-                   {item.price} <span className="text-gray-500 text-sm font-normal">₽</span>
-                 </span>
-               </div>
+    <ResponsiveDialog open={open} onClose={onClose} title="Вся история" sheetBg="#13141C" desktopMaxWidthClass="max-w-md">
+      <div className="flex flex-col gap-1">
+        {items.length === 0 && <div className="py-6 text-center text-gray-500">Нет операций</div>}
+        {items.map((item, idx) => (
+          <div
+            key={item.id || idx}
+            className="flex flex-col gap-1 rounded-xl border border-transparent px-4 py-3 transition hover:border-white/5 hover:bg-white/5"
+          >
+            <div className="flex items-center justify-between">
+              <span className={item.type === 'buy' ? 'text-sm font-medium text-[#A259FF]' : 'text-sm font-medium text-green-400'}>
+                {item.type === 'buy' ? 'Пополнение' : 'Списание'}
+              </span>
+              <span className="text-xs text-gray-500">{item.date}</span>
             </div>
-          ))}
-        </div>
+            <div className="flex items-end justify-between">
+              <span className="flex-1 truncate pr-2 text-base font-semibold text-white">
+                {item.groupName ? (
+                  <>
+                    {item.groupName} <span className="text-sm text-gray-500">#{item.number}</span>
+                  </>
+                ) : (
+                  '—'
+                )}
+              </span>
+              <span className="whitespace-nowrap text-lg font-bold text-white">
+                {item.price} <span className="text-sm font-normal text-gray-500">₽</span>
+              </span>
+            </div>
+          </div>
+        ))}
       </div>
-    </div>
+    </ResponsiveDialog>
   );
 }
 
@@ -128,35 +129,39 @@ function ProfileHistoryBlock({ userId }: { userId: string }) {
 }
 
 // --- REFERRAL MODAL ---
-function ReferralModal({ open, onClose, referralLink }: { open: boolean, onClose: () => void, referralLink: string }) {
+function ReferralModal({ open, onClose, referralLink }: { open: boolean; onClose: () => void; referralLink: string }) {
   const [copied, setCopied] = useState(false);
-  if (!open) return null;
   return (
-    <div className="fixed inset-0 z-[9999] bg-[#0A0A0F]/60 backdrop-blur-md flex items-center justify-center p-4">
-      <div className="w-full max-w-[360px] bg-[#13141C] border border-white/10 shadow-[0_12px_45px_rgba(0,0,0,0.5)] rounded-[28px] flex flex-col p-6 pb-8 animate-modal-in">
-        <div className="flex items-center justify-between mb-6">
-          <span className="text-white font-bold text-xl">Пригласить друга</span>
-          <button onClick={onClose} className="text-gray-400 hover:text-white transition p-1 bg-white/5 rounded-full">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 6l12 12M6 18L18 6" strokeLinecap="round"/></svg>
-          </button>
+    <ResponsiveDialog
+      open={open}
+      onClose={onClose}
+      title="Пригласить друга"
+      sheetBg="#13141C"
+      desktopMaxWidthClass="max-w-md"
+      footer={
+        <button
+          type="button"
+          className="group relative w-full overflow-hidden rounded-xl py-3.5 text-base font-bold transition btn-glow"
+          onClick={() => {
+            navigator.clipboard.writeText(referralLink);
+            setCopied(true);
+            setTimeout(() => setCopied(false), 1200);
+          }}
+        >
+          {copied ? 'Скопировано!' : 'Скопировать ссылку'}
+          <div className="absolute inset-0 translate-y-full bg-white/20 transition-transform duration-300 group-hover:translate-y-0" />
+        </button>
+      }
+    >
+      <div className="flex flex-col items-center gap-6">
+        <div className="flex items-center justify-center rounded-3xl bg-white p-4 shadow-[0_0_40px_rgba(162,89,255,0.15)]">
+          <QRCode value={referralLink} bgColor="#fff" fgColor="#13141C" size={180} />
         </div>
-        <div className="flex flex-col items-center gap-6">
-          <div className="bg-white p-4 rounded-3xl shadow-[0_0_40px_rgba(162,89,255,0.15)] flex items-center justify-center">
-            <QRCode value={referralLink} bgColor="#fff" fgColor="#13141C" size={180} />
-          </div>
-          <div className="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-center text-gray-300 text-sm break-all font-mono">
-            {referralLink}
-          </div>
-          <button
-            className="w-full py-3.5 rounded-xl btn-glow font-bold text-base transition relative overflow-hidden group"
-            onClick={() => { navigator.clipboard.writeText(referralLink); setCopied(true); setTimeout(() => setCopied(false), 1200); }}
-          >
-            {copied ? 'Скопировано!' : 'Скопировать ссылку'}
-            <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
-          </button>
+        <div className="w-full break-all rounded-xl border border-white/10 bg-white/5 p-3 text-center font-mono text-sm text-gray-300">
+          {referralLink}
         </div>
       </div>
-    </div>
+    </ResponsiveDialog>
   );
 }
 

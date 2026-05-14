@@ -10,6 +10,7 @@ import { Header } from '@/components/layout/Header';
 import { LanguageProvider } from '@/lib/LanguageContext';
 import { supabase } from '@/lib/supabaseClient';
 import { AppMainShell } from '@/components/AppMainShell';
+import { ResponsiveDialog } from '@/components/modal/ResponsiveDialog';
 
 const reviewsTexts = {
   ru: {
@@ -113,57 +114,62 @@ const FilterModal = ({ open, onClose, sort, setSort, resetAllFilters }: {
   resetAllFilters: () => void;
 }) => {
   const [openSection, setOpenSection] = useState<'sort' | null>('sort');
-  const [closing, setClosing] = useState(false);
 
-  // Анимация закрытия вниз
-  const handleClose = () => {
-    setClosing(true);
-    setTimeout(() => {
-      setClosing(false);
-      onClose();
-    }, 250);
-  };
-
-  if (!open && !closing) return null;
   return (
-    <div className="fixed inset-0 z-[9999] w-full h-full bg-black/80 flex items-end justify-center">
-      <div className="absolute inset-0" onClick={handleClose} />
-      <div className={`relative w-full bg-[#18181b] rounded-t-3xl flex flex-col animate-fadeInUp ${closing ? 'animate-slideOutDown' : 'animate-slideInUp'}`}
-        style={{ minHeight: '30vh', maxHeight: '50vh', boxShadow: '0 8px 32px 0 rgba(0,0,0,0.25)' }}
-      >
-        {/* Заголовок и крестик */}
-        <div className="flex flex-row items-center justify-between px-6 pt-6 pb-2 sticky top-0 z-10 bg-[#18181b] rounded-t-3xl">
-          <span className="text-white font-bold text-lg">Фильтры</span>
-          <button className="text-zinc-400 text-2xl p-1 rounded-full ml-2" onClick={handleClose} aria-label="Закрыть">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M6 18L18 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
+    <ResponsiveDialog
+      open={open}
+      onClose={onClose}
+      title="Фильтры"
+      sheetBg="#18181b"
+      compact
+      footer={
+        <>
+          <button
+            type="button"
+            className="flex-1 rounded-xl bg-transparent py-3 text-base font-semibold text-white transition hover:bg-zinc-800"
+            onClick={() => {
+              resetAllFilters();
+              onClose();
+            }}
+          >
+            Сбросить
           </button>
-        </div>
-        <div className="flex-1 overflow-y-auto pb-8 px-6 pt-2">
-          {/* Сортировка */}
-          <div className="bg-[#23232b] rounded-2xl mb-4 p-0">
-            <button className="w-full flex items-center justify-between px-6 py-4 bg-transparent text-white font-semibold text-base rounded-2xl" onClick={() => setOpenSection(openSection === 'sort' ? null : 'sort')}>
-              Сортировать по
-              <span className={`transition-transform ${openSection === 'sort' ? 'rotate-180' : ''}`}>▼</span>
-            </button>
-            {openSection === 'sort' && (
-              <div className="px-6 pb-4 pt-2 flex flex-col gap-2 bg-transparent">
-                {SORT_OPTIONS.map(opt => (
-                  <label key={opt.value} className="flex items-center gap-2 py-1 cursor-pointer">
-                    <input type="radio" name="sortBy" value={opt.value} checked={sort === opt.value} onChange={() => setSort(opt.value)} className="accent-[#fd6a32]" />
-                    <span className="text-white text-base">{opt.label}</span>
-                  </label>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-        {/* Кнопки закреплены внизу */}
-        <div className="sticky bottom-0 left-0 w-full flex justify-between gap-4 px-6 pb-6 pt-4 bg-[#18181b] rounded-b-3xl z-20">
-          <button className="flex-1 py-3 rounded-xl text-white font-semibold text-base bg-transparent hover:bg-zinc-800 transition" onClick={() => { resetAllFilters(); handleClose(); }}>Сбросить</button>
-          <button className="flex-1 py-3 rounded-xl bg-[#fd6a32] text-white font-semibold text-base" onClick={handleClose}>Поиск</button>
+          <button type="button" className="flex-1 rounded-xl bg-[#fd6a32] py-3 text-base font-semibold text-white" onClick={onClose}>
+            Поиск
+          </button>
+        </>
+      }
+    >
+      <div className="pb-2">
+        <div className="mb-4 rounded-2xl bg-[#23232b] p-0">
+          <button
+            type="button"
+            className="flex w-full items-center justify-between rounded-2xl bg-transparent px-6 py-4 text-base font-semibold text-white"
+            onClick={() => setOpenSection(openSection === 'sort' ? null : 'sort')}
+          >
+            Сортировать по
+            <span className={`transition-transform ${openSection === 'sort' ? 'rotate-180' : ''}`}>▼</span>
+          </button>
+          {openSection === 'sort' && (
+            <div className="flex flex-col gap-2 bg-transparent px-6 pb-4 pt-2">
+              {SORT_OPTIONS.map((opt) => (
+                <label key={opt.value} className="flex cursor-pointer items-center gap-2 py-1">
+                  <input
+                    type="radio"
+                    name="sortBy"
+                    value={opt.value}
+                    checked={sort === opt.value}
+                    onChange={() => setSort(opt.value)}
+                    className="accent-[#fd6a32]"
+                  />
+                  <span className="text-base text-white">{opt.label}</span>
+                </label>
+              ))}
+            </div>
+          )}
         </div>
       </div>
-    </div>
+    </ResponsiveDialog>
   );
 };
 

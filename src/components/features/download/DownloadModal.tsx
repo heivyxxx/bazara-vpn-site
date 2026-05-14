@@ -1,6 +1,8 @@
+"use client";
 import React from "react";
 import Image from "next/image";
 import { useLang } from '@/lib/LanguageContext';
+import { ResponsiveDialog } from '@/components/modal/ResponsiveDialog';
 
 const texts = {
   windows: {
@@ -256,65 +258,50 @@ interface DownloadModalProps {
 export const DownloadModal: React.FC<DownloadModalProps> = ({ isOpen, onClose, platform }) => {
   const { lang } = useLang();
   const t = texts[platform][lang];
-  const [closing, setClosing] = React.useState(false);
-  const handleClose = () => {
-    setClosing(true);
-    setTimeout(() => {
-      setClosing(false);
-      onClose();
-    }, 250);
-  };
-  if (!isOpen && !closing) return null;
   return (
-    <div className="fixed inset-0 z-[9999] w-full h-full bg-black/80 flex items-end justify-center">
-      <div className="absolute inset-0" onClick={handleClose} />
-      <div className={`relative w-full bg-[#18181b] rounded-t-3xl flex flex-col animate-fadeInUp ${closing ? 'animate-slideOutDown' : 'animate-slideInUp'}`}
-        style={{ minHeight: '30vh', maxHeight: '65vh', boxShadow: '0 8px 32px 0 rgba(0,0,0,0.25)' }}
-      >
-        <div className="flex flex-row items-center justify-between px-6 pt-6 pb-2 sticky top-0 z-10 bg-[#18181b] rounded-t-3xl">
-          <span className="text-white font-bold text-lg w-full text-center">{t.title1} {t.title2}</span>
-          <button
-            onClick={handleClose}
-            className="text-zinc-400 text-2xl p-1 rounded-full ml-2 absolute right-6 top-6"
-            aria-label="Закрыть"
-          >
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M6 18L18 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
-          </button>
-        </div>
-        <div className="flex flex-col items-center px-6 pb-6 pt-2 gap-4 overflow-y-auto">
-          <Image src={t.img} alt={t.title2} width={90} height={90} className="mb-2 mx-auto" />
-          <div className="text-base md:text-xl text-white text-center font-semibold mb-2">{t.subtitle}</div>
-          <div className="text-sm text-gray-400 text-center max-w-xl" dangerouslySetInnerHTML={{ __html: t.desc }} />
-          <ol className="w-full flex flex-col gap-4 mt-2 mb-2">
-            {t.steps.map((step, i) => (
-              <li key={i} className="flex items-start gap-3">
-                <span className="flex-shrink-0 w-7 h-7 flex items-center justify-center rounded-full border-2 border-[#fd6a32] bg-[#232323] mt-1">
-                  <span className="w-3 h-3 rounded-full bg-[#fd6a32] block" />
-                </span>
-                <span className="text-base" dangerouslySetInnerHTML={{ __html: step }} />
-              </li>
+    <ResponsiveDialog
+      open={isOpen}
+      onClose={onClose}
+      title={`${t.title1} ${t.title2}`}
+      sheetBg="#18181b"
+      desktopMaxWidthClass="max-w-2xl"
+      footer={
+        <a
+          href={t.downloadUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-[#fd6a32] py-3 text-center text-base font-bold text-white shadow-xl transition hover:bg-[#e65a1e]"
+        >
+          <svg className="inline-block h-7 w-7 align-middle" fill="#fff" viewBox="0 0 24 24">
+            <rect x="3" y="6" width="18" height="12" rx="2" />
+          </svg>
+          {t.downloadBtn}
+        </a>
+      }
+    >
+      <div className="flex flex-col items-center gap-4">
+        <Image src={t.img} alt={t.title2} width={90} height={90} className="mx-auto mb-2" />
+        <div className="mb-2 text-center text-base font-semibold text-white md:text-xl">{t.subtitle}</div>
+        <div className="max-w-xl text-center text-sm text-gray-400" dangerouslySetInnerHTML={{ __html: t.desc }} />
+        <ol className="mt-2 mb-2 flex w-full flex-col gap-4">
+          {t.steps.map((step, i) => (
+            <li key={i} className="flex items-start gap-3">
+              <span className="mt-1 flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full border-2 border-[#fd6a32] bg-[#232323]">
+                <span className="block h-3 w-3 rounded-full bg-[#fd6a32]" />
+              </span>
+              <span className="text-base" dangerouslySetInnerHTML={{ __html: step }} />
+            </li>
+          ))}
+        </ol>
+        <div className="flex w-full flex-col gap-2 rounded-2xl bg-[#232323] p-5 text-base text-gray-200">
+          <div className="mb-1 font-bold text-[#fd6a32]">{t.helpTitle}</div>
+          <ul className="list-inside list-disc space-y-1">
+            {t.help.map((h, i) => (
+              <li key={i} dangerouslySetInnerHTML={{ __html: h }} />
             ))}
-          </ol>
-          <div className="w-full bg-[#232323] rounded-2xl p-5 text-base text-gray-200 flex flex-col gap-2">
-            <div className="font-bold text-[#fd6a32] mb-1">{t.helpTitle}</div>
-            <ul className="list-disc list-inside space-y-1">
-              {t.help.map((h, i) => (
-                <li key={i} dangerouslySetInnerHTML={{ __html: h }} />
-              ))}
-            </ul>
-          </div>
-        </div>
-        <div className="sticky bottom-0 left-0 w-full flex justify-center gap-4 px-6 pb-6 pt-2 bg-[#18181b] rounded-b-3xl z-20 mt-auto">
-          <a
-            href={t.downloadUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex-1 py-3 rounded-xl bg-[#fd6a32] hover:bg-[#e65a1e] text-white font-bold text-base text-center transition shadow-xl"
-          >
-            <svg className="inline-block w-7 h-7 mr-2 align-middle" fill="#fff" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/></svg>{t.downloadBtn}
-          </a>
+          </ul>
         </div>
       </div>
-    </div>
+    </ResponsiveDialog>
   );
 }; 

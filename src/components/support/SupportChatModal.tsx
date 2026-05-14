@@ -4,6 +4,7 @@ import { supabase } from '@/lib/supabaseClient';
 import { useLang } from '@/lib/LanguageContext';
 import Image from 'next/image';
 import { v4 as uuidv4 } from 'uuid';
+import { ResponsiveDialog } from '@/components/modal/ResponsiveDialog';
 
 const chatTexts = {
   ru: {
@@ -43,17 +44,9 @@ export const SupportChatModal = ({ isOpen, onClose }: { isOpen: boolean; onClose
   const [sending, setSending] = useState(false);
   const chatId = getOrCreateChatId();
   const bottomRef = useRef<HTMLDivElement>(null);
-  const [closing, setClosing] = React.useState(false);
-  const handleClose = () => {
-    setClosing(true);
-    setTimeout(() => {
-      setClosing(false);
-      onClose();
-    }, 250);
-  };
-  if (!isOpen && !closing) return null;
 
   useEffect(() => {
+    if (!isOpen) return;
     let sub: any = null;
     let mounted = true;
     async function initChat() {
@@ -76,8 +69,11 @@ export const SupportChatModal = ({ isOpen, onClose }: { isOpen: boolean; onClose
         .subscribe();
     }
     if (chatId) initChat();
-    return () => { mounted = false; if (sub) supabase.removeChannel(sub); };
-  }, [chatId]);
+    return () => {
+      mounted = false;
+      if (sub) supabase.removeChannel(sub);
+    };
+  }, [chatId, isOpen]);
 
   const sendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -96,63 +92,64 @@ export const SupportChatModal = ({ isOpen, onClose }: { isOpen: boolean; onClose
   };
 
   return (
-    <div className="fixed inset-0 z-[9999] w-full h-full bg-black/80 flex items-end justify-center">
-      <div className="absolute inset-0" onClick={handleClose} />
-      <div className={`relative w-full bg-[#18181b] rounded-t-3xl flex flex-col animate-fadeInUp ${closing ? 'animate-slideOutDown' : 'animate-slideInUp'}`}
-        style={{ minHeight: '30vh', maxHeight: '65vh', boxShadow: '0 8px 32px 0 rgba(0,0,0,0.25)' }}
-      >
-        <div className="flex flex-row items-center justify-between px-6 pt-6 pb-2 sticky top-0 z-10 bg-[#18181b] rounded-t-3xl">
-          <span className="text-white font-bold text-lg w-full text-center">{t.title}</span>
-          <button
-            onClick={handleClose}
-            className="text-zinc-400 text-2xl p-1 rounded-full ml-2 absolute right-6 top-6"
-            aria-label="Закрыть"
-          >
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M6 18L18 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
-          </button>
+    <ResponsiveDialog open={isOpen} onClose={onClose} title={t.title} sheetBg="#18181b" desktopMaxWidthClass="max-w-lg" footer={
+      <form onSubmit={sendMessage} className="flex w-full gap-3">
+        <input
+          type="text"
+          className="flex-1 rounded-xl border border-gray-700 bg-[#232323] p-4 text-lg text-white"
+          placeholder={t.placeholder}
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          autoComplete="off"
+          required
+          disabled={sending}
+        />
+        <button
+          type="submit"
+          className="rounded-xl bg-[#fd6a32] px-8 py-3 text-lg font-bold text-white transition-all hover:bg-[#e65a1e] disabled:opacity-50"
+          disabled={sending || !input.trim()}
+        >
+          {t.send}
+        </button>
+      </form>
+    }>
+      <div className="flex flex-col gap-4 pb-2">
+        <div className="flex items-center gap-3 pb-2">
+          <Image src="/assets/trader.gif" alt="Support" width={48} height={48} className="h-12 w-12 rounded-full" />
+          <span className="ml-auto text-base font-semibold text-gray-400">{t.online}</span>
         </div>
-        <div className="flex flex-col flex-1 px-6 pb-6 pt-2 gap-4 overflow-y-auto">
-          <div className="flex items-center gap-3 pb-2">
-            <Image src="/assets/trader.gif" alt="Support" width={48} height={48} className="w-12 h-12 rounded-full" />
-            <span className="text-xl md:text-2xl font-extrabold text-[#FE6125]">{t.title}</span>
-            <span className="ml-auto text-base text-gray-400 font-semibold">{t.online}</span>
-          </div>
-          <div className="flex-1 overflow-y-auto py-2 space-y-4 bg-[#18181b] flex flex-col" style={{minHeight:0}}>
-            <div className="flex items-start gap-3">
-              <div className="bg-gradient-to-br from-[#FE6125] to-purple-700 rounded-full w-12 h-12 flex items-center justify-center text-white font-bold text-lg shadow-lg">S</div>
-              <div className="bg-[#18181b] rounded-2xl px-5 py-3 text-white max-w-[70%] shadow border border-[#FE6125] text-base">{t.greeting}</div>
+        <div className="flex min-h-0 flex-1 flex-col space-y-4 overflow-y-auto bg-[#18181b] py-2" style={{ minHeight: 0 }}>
+          <div className="flex items-start gap-3">
+            <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#FE6125] to-purple-700 text-lg font-bold text-white shadow-lg">
+              S
             </div>
-            {loading ? <div className="text-gray-400 text-center py-8">{t.init}</div> : null}
-            {messages.map((msg, i) => (
-              <div key={i} className={`flex ${msg.author === 'user' ? 'justify-end' : 'justify-start'} items-start gap-3`}>
-                {msg.author === 'user' ? null : <div className="bg-gradient-to-br from-[#FE6125] to-purple-700 rounded-full w-10 h-10 flex items-center justify-center text-white font-bold text-lg shadow-lg">S</div>}
-                <div className={`rounded-2xl px-5 py-3 text-base shadow border ${msg.author === 'user' ? 'bg-[#18181b] text-white border-orange-700' : 'bg-[#18181b] text-white border-[#FE6125]'}`}>{msg.message}</div>
-                {msg.author === 'user' ? <div className="bg-[#a259ff] rounded-full w-10 h-10 flex items-center justify-center text-white font-bold text-lg shadow-lg">U</div> : null}
-              </div>
-            ))}
-            <div ref={bottomRef} />
+            <div className="max-w-[70%] rounded-2xl border border-[#FE6125] bg-[#18181b] px-5 py-3 text-base text-white shadow">
+              {t.greeting}
+            </div>
           </div>
+          {loading ? <div className="py-8 text-center text-gray-400">{t.init}</div> : null}
+          {messages.map((msg, i) => (
+            <div key={i} className={`flex items-start gap-3 ${msg.author === 'user' ? 'justify-end' : 'justify-start'}`}>
+              {msg.author === 'user' ? null : (
+                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#FE6125] to-purple-700 text-lg font-bold text-white shadow-lg">
+                  S
+                </div>
+              )}
+              <div
+                className={`rounded-2xl border px-5 py-3 text-base shadow ${msg.author === 'user' ? 'border-orange-700 bg-[#18181b] text-white' : 'border-[#FE6125] bg-[#18181b] text-white'}`}
+              >
+                {msg.message}
+              </div>
+              {msg.author === 'user' ? (
+                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-[#a259ff] text-lg font-bold text-white shadow-lg">
+                  U
+                </div>
+              ) : null}
+            </div>
+          ))}
+          <div ref={bottomRef} />
         </div>
-        <form onSubmit={sendMessage} className="sticky bottom-0 left-0 w-full flex gap-3 px-6 pt-2 pb-6 bg-[#18181b] rounded-b-3xl z-20 mt-auto">
-          <input
-            type="text"
-            className="flex-1 bg-[#232323] border border-gray-700 rounded-xl p-4 text-white text-lg"
-            placeholder={t.placeholder}
-            value={input}
-            onChange={e => setInput(e.target.value)}
-            autoComplete="off"
-            required
-            disabled={sending}
-          />
-          <button
-            type="submit"
-            className="bg-[#fd6a32] hover:bg-[#e65a1e] text-white font-bold py-3 px-8 rounded-xl text-lg transition-all"
-            disabled={sending || !input.trim()}
-          >
-            {t.send}
-          </button>
-        </form>
       </div>
-    </div>
+    </ResponsiveDialog>
   );
 }; 

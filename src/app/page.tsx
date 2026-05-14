@@ -85,8 +85,8 @@ export default function HomePage() {
   return (
     <>
       <Header user={effectiveUser} onLogout={() => setUser(null)} />
-      <AppMainShell innerClassName="items-center">
-        <div className="w-full max-w-4xl mx-auto flex flex-col gap-5">
+      <AppMainShell innerClassName="items-stretch">
+        <div className="w-full flex flex-col gap-5">
           
           <div className="mt-1 text-center md:text-left">
             <h1 className="text-xl font-bold text-white tracking-tight">

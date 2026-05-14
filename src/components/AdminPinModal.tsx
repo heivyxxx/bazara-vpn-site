@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { ResponsiveDialog } from "@/components/modal/ResponsiveDialog";
 
 interface AdminPinModalProps {
   isOpen: boolean;
@@ -26,13 +27,10 @@ export function AdminPinModal({ isOpen, onClose }: AdminPinModalProps) {
         onClose();
         router.push("/admin");
       } else {
-        // Simple shake animation or just reset here
         setTimeout(() => setPin(""), 300);
       }
     }
   }, [pin, router, onClose]);
-
-  if (!isOpen) return null;
 
   const handleKeyPress = (num: string) => {
     if (pin.length < 4) {
@@ -45,70 +43,55 @@ export function AdminPinModal({ isOpen, onClose }: AdminPinModalProps) {
   };
 
   return (
-    <div className="fixed inset-0 z-[100] bg-black/85 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-200">
-      <div className="relative w-full max-w-sm px-6 py-8 flex flex-col items-center">
-        {/* Close Button */}
-        <button 
-          onClick={onClose} 
-          className="absolute top-4 right-4 text-white/50 hover:text-white"
-        >
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M18 6L6 18M6 6l12 12" />
-          </svg>
-        </button>
-
-        {/* Lock Icon */}
-        <div className="mb-8 relative">
-          <div className="w-24 h-24 flex flex-col items-center justify-center relative">
-            <span className="text-7xl">🔐</span>
-          </div>
+    <ResponsiveDialog open={isOpen} onClose={onClose} title="Вход в админку" sheetBg="#18181b" desktopMaxWidthClass="max-w-sm">
+      <div className="flex flex-col items-center px-2 pb-2 pt-2">
+        <div className="mb-6 flex flex-col items-center justify-center">
+          <span className="text-7xl" aria-hidden>
+            🔐
+          </span>
         </div>
-
-        <h2 className="text-white font-bold mb-6 text-center">Введите текущий PIN-код</h2>
-
-        {/* Pin Dots */}
-        <div className="flex gap-4 mb-8">
+        <p className="mb-6 text-center text-sm text-zinc-400">Введите 4-значный PIN</p>
+        <div className="mb-8 flex gap-4">
           {[0, 1, 2, 3].map((i) => (
-            <div 
-              key={i} 
-              className={`w-12 h-12 rounded-full border-2 flex items-center justify-center transition-all ${
-                i < pin.length 
-                  ? 'border-white bg-white' 
-                  : 'border-[#333333] bg-transparent'
+            <div
+              key={i}
+              className={`flex h-12 w-12 items-center justify-center rounded-full border-2 transition-all ${
+                i < pin.length ? 'border-white bg-white' : 'border-[#333333] bg-transparent'
               }`}
-            ></div>
+            />
           ))}
         </div>
-
-        {/* Numpad */}
-        <div className="grid grid-cols-3 gap-4 w-full">
+        <div className="grid w-full max-w-xs grid-cols-3 gap-4">
           {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
             <button
               key={num}
+              type="button"
               onClick={() => handleKeyPress(num.toString())}
-              className="bg-[#3A3941] hover:bg-[#4A4951] active:scale-95 transition-all text-white text-3xl font-bold py-4 rounded-3xl flex items-center justify-center"
+              className="flex items-center justify-center rounded-3xl bg-[#3A3941] py-4 text-3xl font-bold text-white transition-all hover:bg-[#4A4951] active:scale-95"
             >
               {num}
             </button>
           ))}
           <div className="col-start-2">
             <button
+              type="button"
               onClick={() => handleKeyPress("0")}
-              className="bg-[#3A3941] hover:bg-[#4A4951] active:scale-95 transition-all text-white text-3xl font-bold py-4 w-full rounded-3xl flex items-center justify-center"
+              className="flex w-full items-center justify-center rounded-3xl bg-[#3A3941] py-4 text-3xl font-bold text-white transition-all hover:bg-[#4A4951] active:scale-95"
             >
               0
             </button>
           </div>
-          <div className="col-start-2 mt-2">
+          <div className="col-span-3 mt-2 flex justify-center">
             <button
+              type="button"
               onClick={handleClear}
-              className="bg-[#2D2D31] hover:bg-[#3D3D41] active:scale-95 transition-all text-white font-semibold py-3 w-full rounded-xl flex items-center justify-center text-sm"
+              className="rounded-xl bg-[#2D2D31] px-8 py-3 text-sm font-semibold text-white transition-all hover:bg-[#3D3D41] active:scale-95"
             >
               Очистить
             </button>
           </div>
         </div>
       </div>
-    </div>
+    </ResponsiveDialog>
   );
 }

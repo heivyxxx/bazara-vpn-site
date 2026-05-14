@@ -2,6 +2,7 @@
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { ResponsiveDialog } from "@/components/modal/ResponsiveDialog";
 
 async function generateAdminLinks(days: number, count: number, user_id: string) {
   const links: string[] = [];
@@ -87,39 +88,62 @@ export default function AdminPanel() {
           <div className="text-base text-gray-400 text-center">Автоматически удаляет пользователей, у которых закончился срок действия подписки.</div>
         </div>
       </div>
-      {/* Модалка генерации ссылок */}
-      {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60">
-          <div className="bg-[#232323] rounded-3xl shadow-2xl p-8 w-full max-w-xs flex flex-col items-center animate-fade-in relative">
-            <button onClick={() => setShowModal(false)} className="absolute top-4 right-4 text-3xl text-gray-400 hover:text-orange-400 font-bold">&times;</button>
-            <div className="text-xl font-bold text-white mb-4">Создать ссылки</div>
-            <div className="w-full flex flex-col gap-3 mb-4">
-              <label className="text-white text-base font-semibold mb-1">Срок действия (дней):</label>
-              <input ref={daysInputRef} type="number" min={1} max={9999} value={days} onChange={e => setDays(Number(e.target.value))} className="w-full rounded-lg px-4 py-3 text-base text-white font-semibold bg-[#181818] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-400 text-center" />
-              <label className="text-white text-base font-semibold mb-1 mt-2">Количество ссылок:</label>
-              <input type="number" min={1} max={50} value={numLinks} onChange={e => setNumLinks(Number(e.target.value))} className="w-full rounded-lg px-4 py-3 text-base text-white font-semibold bg-[#181818] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-400 text-center" />
-            </div>
-            <button
-              onClick={handleGenerate}
-              disabled={genLoading || !days || days < 1 || !numLinks || numLinks < 1}
-              className="w-full bg-gradient-to-r from-orange-500 to-purple-500 text-white font-bold rounded-xl px-6 py-3 text-lg shadow hover:scale-105 transition-transform mb-2 disabled:opacity-60"
-            >
-              {genLoading ? `Генерация... (${linksList.length}/${numLinks})` : "Создать"}
-            </button>
-            {linksList.length > 0 && (
-              <div className="w-full mt-4 flex flex-col items-center gap-2 max-h-60 overflow-y-auto">
-                {linksList.map((link, idx) => (
-                  <div key={idx} className="w-full flex gap-2 items-center mb-1">
-                    <input type="text" readOnly value={link} className="flex-1 rounded-lg px-2 py-1 text-base text-white bg-[#181818] select-all" />
-                    <button onClick={() => handleCopy(link)} className="bg-orange-500 text-white font-bold rounded-xl px-2 py-1 shadow hover:bg-orange-600 transition-transform">Скопировать</button>
-                  </div>
-                ))}
-                {copySuccess && <div className="text-green-400 mt-2">Скопировано!</div>}
-              </div>
-            )}
-          </div>
+      <ResponsiveDialog
+        open={showModal}
+        onClose={() => setShowModal(false)}
+        title="Создать ссылки"
+        sheetBg="#232323"
+        desktopMaxWidthClass="max-w-md"
+        footer={
+          <button
+            type="button"
+            onClick={handleGenerate}
+            disabled={genLoading || !days || days < 1 || !numLinks || numLinks < 1}
+            className="w-full rounded-xl bg-gradient-to-r from-orange-500 to-purple-500 px-6 py-3 text-lg font-bold text-white shadow transition-transform hover:scale-[1.02] disabled:opacity-60"
+          >
+            {genLoading ? `Генерация... (${linksList.length}/${numLinks})` : "Создать"}
+          </button>
+        }
+      >
+        <div className="mb-4 flex w-full flex-col gap-3">
+          <label className="mb-1 text-base font-semibold text-white">Срок действия (дней):</label>
+          <input
+            ref={daysInputRef}
+            type="number"
+            min={1}
+            max={9999}
+            value={days}
+            onChange={(e) => setDays(Number(e.target.value))}
+            className="w-full rounded-lg bg-[#181818] px-4 py-3 text-center text-base font-semibold text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-400"
+          />
+          <label className="mb-1 mt-2 text-base font-semibold text-white">Количество ссылок:</label>
+          <input
+            type="number"
+            min={1}
+            max={50}
+            value={numLinks}
+            onChange={(e) => setNumLinks(Number(e.target.value))}
+            className="w-full rounded-lg bg-[#181818] px-4 py-3 text-center text-base font-semibold text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-400"
+          />
         </div>
-      )}
+        {linksList.length > 0 && (
+          <div className="mt-4 flex max-h-60 w-full flex-col items-center gap-2 overflow-y-auto">
+            {linksList.map((link, idx) => (
+              <div key={idx} className="mb-1 flex w-full items-center gap-2">
+                <input type="text" readOnly value={link} className="flex-1 select-all rounded-lg bg-[#181818] px-2 py-1 text-base text-white" />
+                <button
+                  type="button"
+                  onClick={() => handleCopy(link)}
+                  className="rounded-xl bg-orange-500 px-2 py-1 font-bold text-white shadow transition-transform hover:bg-orange-600"
+                >
+                  Скопировать
+                </button>
+              </div>
+            ))}
+            {copySuccess && <div className="mt-2 text-green-400">Скопировано!</div>}
+          </div>
+        )}
+      </ResponsiveDialog>
     </div>
   );
 } 

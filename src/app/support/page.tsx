@@ -20,7 +20,7 @@ export default function SupportPage() {
     <>
       <Header user={user} onLogout={() => setUser(null)} />
       <AppMainShell innerClassName="items-stretch">
-        <div className="w-full max-w-xl mx-auto flex flex-col gap-5">
+        <div className="w-full flex flex-col gap-5">
           
           <div className="mt-1 text-left">
             <h1 className="text-xl font-bold text-white tracking-tight mb-1">

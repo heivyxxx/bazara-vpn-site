@@ -4,6 +4,7 @@ import { Header } from '@/components/layout/Header';
 import { useUser } from '@/lib/LanguageContext';
 import { PaymentModal } from './PaymentModal';
 import { useRouter } from 'next/navigation';
+import { AppMainShell } from '@/components/AppMainShell';
 
 export default function TariffsPage() {
   const [user, setUser] = useUser();
@@ -28,7 +29,7 @@ export default function TariffsPage() {
   return (
     <>
       <Header user={user} onLogout={() => setUser(null)} />
-      <main className="min-h-screen pt-[calc(env(safe-area-inset-top,0px)+72px)] pb-[calc(env(safe-area-inset-bottom,0px)+var(--bottom_nav_h,88px)+4px)] px-4 flex flex-col items-center">
+      <AppMainShell innerClassName="items-center">
         <div className="w-full max-w-sm mx-auto flex flex-col items-center justify-center">
           
           <h1 className="text-2xl font-bold text-white tracking-tight mb-1">
@@ -61,7 +62,7 @@ export default function TariffsPage() {
           </div>
 
         </div>
-      </main>
+      </AppMainShell>
       <PaymentModal 
         isOpen={isModalOpen} 
         onClose={() => setIsModalOpen(false)} 

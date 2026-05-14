@@ -7,6 +7,7 @@ import { Header } from '@/components/layout/Header';
 import { useUser } from '@/lib/LanguageContext';
 import { LanguageProvider } from '@/lib/LanguageContext';
 import { DownloadModal } from '@/components/features/download/DownloadModal';
+import { AppMainShell } from '@/components/AppMainShell';
 
 const LANGS = [
   { code: "ru", label: "Русский" },
@@ -99,10 +100,9 @@ export default function DownloadPage() {
   return (
     <LanguageProvider>
       <Header user={user} onLogout={() => { setUser(null); if (typeof window !== 'undefined') localStorage.removeItem('bazaraUser'); }} />
-      <div className="relative min-h-screen flex flex-col items-center justify-center pt-24 pb-12 md:pb-16 bg-black overflow-hidden">
-        {/* SVG фон удалён */}
+      <AppMainShell className="bg-black overflow-hidden relative" innerClassName="items-center justify-center flex-1 min-h-0">
         <h1 className="text-2xl md:text-5xl font-extrabold mb-8 md:mb-12 text-center z-10" style={{color:'#fd6a32'}}>{t.title}</h1>
-        <div className={`grid grid-cols-1 md:${gridCols} gap-4 md:gap-8 w-full max-w-4xl z-10 px-2 sm:px-0`}>
+        <div className={`grid grid-cols-1 md:${gridCols} gap-4 md:gap-8 w-full max-w-4xl z-10`}>
           {platforms.map((p, i) => (
             <button
               key={p.name}
@@ -123,7 +123,7 @@ export default function DownloadPage() {
           )}
         </div>
         <DownloadModal isOpen={!!modal} onClose={() => setModal(null)} platform={modal || 'windows'} />
-      </div>
+      </AppMainShell>
       {/* <Footer /> */}
     </LanguageProvider>
   );

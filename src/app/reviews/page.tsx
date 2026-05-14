@@ -9,6 +9,7 @@ import { Header } from '@/components/layout/Header';
 // import { Footer } from '@/components/layout/Footer';
 import { LanguageProvider } from '@/lib/LanguageContext';
 import { supabase } from '@/lib/supabaseClient';
+import { AppMainShell } from '@/components/AppMainShell';
 
 const reviewsTexts = {
   ru: {
@@ -258,7 +259,7 @@ export default function ReviewsPage() {
   return (
     <LanguageProvider>
       <Header user={user} onLogin={() => setShowAuth(true)} onLogout={() => { setUser(null); if (typeof window !== 'undefined') localStorage.removeItem('bazaraUser'); }} />
-      <div className="min-h-screen bg-black pt-32 pb-14 md:pb-16 px-2 sm:px-4">
+      <AppMainShell className="bg-black" innerClassName="items-stretch">
         <style jsx>{`
           .star-filter-btn:hover .star-icon {
             fill: #fd6a32 !important;
@@ -277,7 +278,7 @@ export default function ReviewsPage() {
             transform: translateY(-2px) scale(1.01);
           }
         `}</style>
-        <section className="max-w-6xl mx-auto flex flex-col items-center gap-4 md:gap-6">
+        <section className="w-full max-w-6xl mx-auto flex flex-col items-center gap-4 md:gap-6">
           <div className="flex flex-col items-center gap-2">
             <Image src="/assets/logo-bazara.png" alt="BazaraVPN Logo" width={64} height={64} className="h-12 w-12 md:h-20 md:w-20 mx-auto" />
             <div className="flex items-center gap-2 mt-2">
@@ -315,7 +316,7 @@ export default function ReviewsPage() {
             </button>
           </div>
         </section>
-        <main className="w-full max-w-5xl mx-auto flex flex-col gap-4 md:gap-6 py-6 md:py-10 px-2 md:px-4" style={{ minHeight: '60vh' }}>
+        <div className="w-full max-w-5xl mx-auto flex flex-col gap-4 md:gap-6 py-6 md:py-10" style={{ minHeight: '60vh' }}>
           {viewMode === 'cards' ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
               {loading ? (
@@ -347,7 +348,7 @@ export default function ReviewsPage() {
               )}
             </div>
           )}
-        </main>
+        </div>
         <ReviewModal
           isOpen={isModalOpen && !!user}
           onClose={() => setIsModalOpen(false)}
@@ -386,7 +387,7 @@ export default function ReviewsPage() {
           setSort={setSort}
           resetAllFilters={resetAllFilters}
         />
-      </div>
+      </AppMainShell>
       {/* <Footer /> */}
     </LanguageProvider>
   );

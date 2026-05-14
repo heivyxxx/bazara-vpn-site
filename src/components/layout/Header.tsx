@@ -28,7 +28,7 @@ export const Header = ({ onLogin, user, onLogout }: HeaderProps) => {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-black/90 backdrop-blur-md border-b border-[#232323] pt-[env(safe-area-inset-top,0px)]">
-      <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div className="wide-shell w-full max-w-full box-border px-3 py-3 flex items-center justify-between">
         
         {/* Left: Avatar, Name & ID */}
         <div 

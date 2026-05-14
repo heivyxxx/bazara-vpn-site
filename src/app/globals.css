@@ -12,6 +12,19 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
+/* Как Bazara (index.css): на широком экране контент ограничен и по центру */
+.wide-shell {
+  width: 100%;
+  box-sizing: border-box;
+}
+@media (min-width: 900px) {
+  .wide-shell {
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
 @keyframes pageIn {
   0% {
     opacity: 0;

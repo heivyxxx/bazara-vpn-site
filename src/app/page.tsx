@@ -7,6 +7,7 @@ import { supabase } from '@/lib/supabaseClient';
 import { HowToConnectModal } from '@/components/HowToConnectModal';
 import { DeviceModal } from '@/components/DeviceModal';
 import { PaymentModal } from '@/app/tariffs/PaymentModal';
+import { AppMainShell } from '@/components/AppMainShell';
 
 export default function HomePage() {
   const [user, setUser] = useUser();
@@ -84,7 +85,7 @@ export default function HomePage() {
   return (
     <>
       <Header user={effectiveUser} onLogout={() => setUser(null)} />
-      <main className="min-h-screen pt-[calc(env(safe-area-inset-top,0px)+72px)] pb-[calc(env(safe-area-inset-bottom,0px)+var(--bottom_nav_h,88px)+4px)] px-4 flex flex-col items-center">
+      <AppMainShell innerClassName="items-center">
         <div className="w-full max-w-4xl mx-auto flex flex-col gap-5">
           
           <div className="mt-1 text-center md:text-left">
@@ -205,7 +206,7 @@ export default function HomePage() {
 
 
         </div>
-      </main>
+      </AppMainShell>
       
       <HowToConnectModal isOpen={isConnectModalOpen} onClose={() => setIsConnectModalOpen(false)} primaryLink={`https://t.me/VPNEnvyBot?start=sub${effectiveUser?.id}`} reserveLink={`https://ru-vpn.envy.com:228/sub/${effectiveUser?.id}`} />
       <DeviceModal isOpen={isDeviceModalOpen} onClose={() => setIsDeviceModalOpen(false)} currentDevices={devicesPerLocation} totalLimit={totalDevices} />

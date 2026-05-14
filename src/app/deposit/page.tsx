@@ -6,6 +6,7 @@ import sbpImg from '../../public/assets/sbp.png';
 import cryptoImg from '../../public/assets/cryptobot.png';
 import starsImg from '../../public/assets/stars.png';
 import { DepositModal } from './DepositModal';
+import { AppMainShell } from '@/components/AppMainShell';
 
 export default function DepositPage() {
   const [user, setUser] = useUser();
@@ -14,7 +15,7 @@ export default function DepositPage() {
   return (
     <>
       <Header user={user} onLogout={() => setUser(null)} />
-      <main className="min-h-screen pt-[calc(env(safe-area-inset-top,0px)+72px)] pb-[calc(env(safe-area-inset-bottom,0px)+var(--bottom_nav_h,88px)+4px)] px-4 flex flex-col items-center">
+      <AppMainShell innerClassName="items-center">
         <div className="w-full max-w-xl mx-auto flex flex-col gap-6">
           
           <div className="mt-2 text-left">
@@ -93,7 +94,7 @@ export default function DepositPage() {
           </div>
 
         </div>
-      </main>
+      </AppMainShell>
       <DepositModal 
         isOpen={!!selectedMethod} 
         onClose={() => setSelectedMethod(null)} 

@@ -8,6 +8,7 @@ import { useUser } from '@/lib/LanguageContext';
 import QRCode from 'react-qr-code';
 import { Disclosure } from '@headlessui/react';
 import { useRouter } from "next/navigation";
+import { AppMainShell } from '@/components/AppMainShell';
 
 // --- HISTORY MODAL ---
 function ProfileHistoryModal({ open, onClose, items }: { open: boolean, onClose: () => void, items: any[] }) {
@@ -261,7 +262,7 @@ export default function ProfilePage() {
   return (
     <>
       <Header user={effectiveUser} onLogout={() => setUser(null)} />
-      <main className="min-h-screen pt-[calc(env(safe-area-inset-top,0px)+72px)] pb-[calc(env(safe-area-inset-bottom,0px)+var(--bottom_nav_h,88px)+8px)] px-4 flex flex-col items-center">
+      <AppMainShell innerClassName="items-center">
         
         <div className="w-full max-w-xl mx-auto flex flex-col gap-6">
           
@@ -297,7 +298,7 @@ export default function ProfilePage() {
           )}
 
         </div>
-      </main>
+      </AppMainShell>
     </>
   );
 } 

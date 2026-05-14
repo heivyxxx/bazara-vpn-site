@@ -3,6 +3,7 @@ import { Header } from '@/components/layout/Header';
 // import { Footer } from '@/components/layout/Footer';
 import { LanguageProvider, useLang } from '@/lib/LanguageContext';
 import React from 'react';
+import { AppMainShell } from '@/components/AppMainShell';
 
 const faqTexts = {
   ru: {
@@ -38,9 +39,10 @@ function FaqContent() {
   const t = faqTexts[lang];
   const [open, setOpen] = React.useState<number|null>(null);
   return (
-    <main className="flex-1 flex flex-col items-center pt-24 pb-16 min-h-screen bg-[#181818]">
+    <AppMainShell innerClassName="items-center">
+      <div className="w-full max-w-5xl mx-auto flex flex-col items-center py-2">
       <h2 className="text-4xl font-extrabold text-[#fd6a32] mb-10 text-center">{t.title}</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-5xl">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
         {t.items.map((item, i) => (
           <div key={i} className="bg-[#232323] rounded-2xl border border-[#fd6a32] shadow-lg">
             <button
@@ -54,7 +56,8 @@ function FaqContent() {
           </div>
         ))}
       </div>
-    </main>
+      </div>
+    </AppMainShell>
   );
 }
 

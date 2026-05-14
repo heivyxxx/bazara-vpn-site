@@ -23,13 +23,6 @@ const items = [
     icon: "chat.svg",
     iconActive: "chatactive.svg",
   },
-  {
-    href: "/profile",
-    label: "Профиль",
-    match: (p: string) => p === "/profile",
-    icon: "profile.svg",
-    iconActive: "profileactive.svg",
-  },
 ];
 
 function hapticSoft() {

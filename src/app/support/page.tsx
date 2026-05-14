@@ -2,6 +2,7 @@
 import React from "react";
 import { Header } from '@/components/layout/Header';
 import { useUser } from '@/lib/LanguageContext';
+import { AppMainShell } from '@/components/AppMainShell';
 
 export default function SupportPage() {
   const [user, setUser] = useUser();
@@ -18,7 +19,7 @@ export default function SupportPage() {
   return (
     <>
       <Header user={user} onLogout={() => setUser(null)} />
-      <main className="min-h-screen pt-[calc(env(safe-area-inset-top,0px)+72px)] pb-[calc(env(safe-area-inset-bottom,0px)+var(--bottom_nav_h,88px)+4px)] px-4 flex flex-col items-center">
+      <AppMainShell innerClassName="items-stretch">
         <div className="w-full max-w-xl mx-auto flex flex-col gap-5">
           
           <div className="mt-1 text-left">
@@ -74,7 +75,7 @@ export default function SupportPage() {
           </div>
 
         </div>
-      </main>
+      </AppMainShell>
     </>
   );
 }

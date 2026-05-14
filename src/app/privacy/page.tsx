@@ -3,6 +3,7 @@ import { Header } from '@/components/layout/Header';
 // import { Footer } from '@/components/layout/Footer';
 import { LanguageProvider, useLang, useUser } from '@/lib/LanguageContext';
 import React from 'react';
+import { AppMainShell } from '@/components/AppMainShell';
 
 const privacyTexts = {
   ru: {
@@ -35,7 +36,8 @@ function PrivacyContent() {
   const { lang } = useLang();
   const t = privacyTexts[lang];
   return (
-    <main className="flex-1 flex flex-col pt-24 items-center w-full min-h-screen bg-[#181818]">
+    <AppMainShell className="bg-black" innerClassName="items-center">
+      <div className="w-full max-w-2xl mx-auto flex flex-col items-center py-2">
       <h1 className="text-2xl md:text-4xl font-extrabold text-center mb-6 md:mb-8 bg-gradient-to-r from-orange-400 to-purple-500 bg-clip-text text-transparent" style={{WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent'}}>{t.title}</h1>
       <div className="bg-[#232323] rounded-2xl shadow-xl p-4 md:p-12 max-w-md md:max-w-2xl w-full mb-8 md:mb-12">
         {t.sections.map((s, i) => (
@@ -45,7 +47,8 @@ function PrivacyContent() {
           </div>
         ))}
       </div>
-    </main>
+      </div>
+    </AppMainShell>
   );
 }
 

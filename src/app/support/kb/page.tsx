@@ -3,6 +3,7 @@ import { Header } from '@/components/layout/Header';
 // import { Footer } from '@/components/layout/Footer';
 import { LanguageProvider, useLang } from '@/lib/LanguageContext';
 import React from 'react';
+import { AppMainShell } from '@/components/AppMainShell';
 
 const kbTexts = {
   ru: {
@@ -33,7 +34,8 @@ function KbContent() {
   const { lang } = useLang();
   const t = kbTexts[lang];
   return (
-    <main className="flex-1 flex flex-col items-center pt-24 pb-16 min-h-screen bg-[#181818]">
+    <AppMainShell innerClassName="items-center">
+      <div className="w-full max-w-2xl mx-auto flex flex-col items-center py-2">
       <h2 className="text-4xl font-extrabold text-[#fd6a32] mb-10 text-center">{t.title}</h2>
       <div className="text-lg mb-10 text-gray-300 text-center max-w-2xl">{t.desc}</div>
       {t.blocks.map((block, i) => (
@@ -47,7 +49,8 @@ function KbContent() {
           )}
         </div>
       ))}
-    </main>
+      </div>
+    </AppMainShell>
   );
 }
 

@@ -1,13 +1,10 @@
 "use client";
 
-import Link from 'next/link';
-import { useLang } from '@/lib/LanguageContext';
-import { useEffect, useState } from 'react';
-import { createPortal } from 'react-dom';
-import { getTelegramUser, signInOrUpWithTelegram, upsertUserProfile } from '@/lib/auth';
-import { User } from '@/lib/types';
-import { PaymentModal } from '@/app/tariffs/PaymentModal';
-import { AdminPinModal } from '@/components/AdminPinModal';
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
+import { User } from "@/lib/types";
+import { AdminPinModal } from "@/components/AdminPinModal";
 
 interface HeaderProps {
   onLogin?: () => void;
@@ -15,10 +12,13 @@ interface HeaderProps {
   onLogout?: () => void;
 }
 
-export const Header = ({ onLogin, user, onLogout }: HeaderProps) => {
-  const { lang, setLang } = useLang();
-  const [loading, setLoading] = useState(false);
-  const [depositOpen, setDepositOpen] = useState(false);
+/** Баланс в шапке как в Bazara: `displayBalance.toFixed(2)` */
+function formatHeaderBalance(balance: number | undefined): string {
+  if (typeof balance !== "number" || Number.isNaN(balance)) return "0.00";
+  return balance.toFixed(2);
+}
+
+export const Header = ({ user }: HeaderProps) => {
   const [adminModalOpen, setAdminModalOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
 
@@ -26,57 +26,67 @@ export const Header = ({ onLogin, user, onLogout }: HeaderProps) => {
     setIsMounted(true);
   }, []);
 
-  return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-black/90 backdrop-blur-md border-b border-[#232323] pt-[env(safe-area-inset-top,0px)]">
-      <div className="wide-shell w-full max-w-full box-border px-3 py-3 flex items-center justify-between">
-        
-        {/* Left: Avatar, Name & ID */}
-        <div 
-         className="flex items-center gap-3 cursor-pointer" 
-         onClick={() => {
-           if (String(user?.id) === "980466532") {
-             setAdminModalOpen(true);
-           }
-         }}
-        >
-          <div className="relative">
-             {user?.avatar ? (
-                <img
-                  src={user.avatar}
-                  alt="Avatar"
-                  className="w-[44px] h-[44px] rounded-full object-cover border-2 border-zinc-700/60"
-                />
-             ) : (
-                <div className="w-[44px] h-[44px] rounded-full bg-[#0E0E11] border-2 border-zinc-700/60 flex items-center justify-center text-zinc-500">
-                  <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-2.5 3.5-4 8-4s8 1.5 8 4"/></svg>
-                </div>
-             )}
-          </div>
-          <div className="flex flex-col justify-center">
-            <span className="text-white font-extrabold text-[16px] leading-tight mb-0.5 tracking-tight drop-shadow-sm">
-              {user?.name || user?.username || 'Пользователь'}
-            </span>
-            <span className="text-zinc-500 text-[11px] font-medium tracking-wide">
-              ID: {user?.id || '—'}
-            </span>
-          </div>
-        </div>
+  const displayBalance = formatHeaderBalance(user?.balance);
 
-        {/* Right: Balance Badge */}
-        <div className="flex items-center gap-2 flex-shrink-0">
-          <Link href="/deposit" className="flex items-center gap-2 bg-[#0E0E11] border border-zinc-700/50 pl-2 pr-3 py-1.5 rounded-full flex-shrink-0 hover:border-[#fe6125]/40 transition-colors">
-            <span className="w-7 h-7 flex items-center justify-center shrink-0">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/assets/bazara-nav/koshel.svg" alt="" width={24} height={24} className="opacity-90" />
-            </span>
-            <span className="text-[#fe6125] font-bold text-sm tracking-wide whitespace-nowrap">
-              {typeof user?.balance === 'number' ? user.balance.toFixed(2).replace(/\.00$/, '') : '0'}<span className="text-[12px] text-zinc-400 font-semibold ml-0.5">₽</span>
-            </span>
+  return (
+    <header className="fixed left-0 right-0 top-0 z-50 border-b border-[#232323] bg-black/90 pt-[env(safe-area-inset-top,0px)] backdrop-blur-md">
+      <div
+        className="wide-shell box-border flex w-full max-w-full items-center justify-between px-4"
+        style={{
+          minHeight: 56,
+          paddingTop: "calc(env(safe-area-inset-top, 0px) + 8px)",
+          paddingBottom: 8,
+        }}
+      >
+        <div className="flex min-w-0 flex-1 items-center gap-3">
+          <Link
+            href="/"
+            className="flex h-9 w-9 flex-shrink-0 cursor-pointer select-none items-center justify-center"
+            style={{ WebkitBackfaceVisibility: "hidden", backfaceVisibility: "hidden", transform: "translateZ(0)" }}
+            onClick={(e) => {
+              if (String(user?.id) === "980466532") {
+                e.preventDefault();
+                setAdminModalOpen(true);
+              }
+            }}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/assets/logo-bazara.png"
+              alt="BazaraVPN"
+              className="h-9 w-9 cursor-pointer select-none object-contain"
+              draggable={false}
+              loading="eager"
+              decoding="async"
+              fetchPriority="high"
+            />
           </Link>
         </div>
 
+        <div className="flex flex-shrink-0 items-center gap-3">
+          <Link
+            href="/deposit"
+            className="flex min-w-[120px] cursor-pointer items-center justify-center rounded-xl bg-[#fe6125] px-2 py-1 shadow-sm transition-transform duration-200 ease-out active:scale-95"
+            style={{ borderRadius: 8 }}
+          >
+            <span className="mr-2 flex h-7 w-7 items-center justify-center">
+              <span className="relative h-4 w-4">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/assets/bazara-nav/koshel.svg"
+                  alt=""
+                  className="absolute inset-0 h-4 w-4 opacity-95"
+                  width={16}
+                  height={16}
+                />
+              </span>
+            </span>
+            <span className="mr-1 text-base font-bold text-white">{displayBalance}</span>
+            <span className="text-base font-bold text-white">₽</span>
+          </Link>
+        </div>
       </div>
-      <PaymentModal isOpen={depositOpen} onClose={() => setDepositOpen(false)} tariff={"month"} price={""} />
+
       {isMounted
         ? createPortal(
             <AdminPinModal isOpen={adminModalOpen} onClose={() => setAdminModalOpen(false)} />,
@@ -85,4 +95,4 @@ export const Header = ({ onLogin, user, onLogout }: HeaderProps) => {
         : null}
     </header>
   );
-}; 
+};

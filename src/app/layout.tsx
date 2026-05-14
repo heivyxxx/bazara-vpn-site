@@ -30,7 +30,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <head>
         <Script src="https://telegram.org/js/telegram-web-app.js" strategy="beforeInteractive" />
       </head>
-      <body className={`${inter.className} bg-[#0A0A0F] text-white antialiased`}>
+      <body className={`${inter.className} bg-black text-white antialiased`}>
         <SplashScreen />
         <UserProvider>
           <LanguageProvider>

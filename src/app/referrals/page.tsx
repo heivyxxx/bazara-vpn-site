@@ -17,7 +17,7 @@ export default function ReferralsPage() {
   return (
     <>
       <Header user={user} onLogout={() => setUser(null)} />
-      <main className="min-h-screen pt-[88px] pb-[100px] px-4 flex flex-col items-center">
+      <main className="min-h-screen pt-[calc(env(safe-area-inset-top,0px)+72px)] pb-[calc(env(safe-area-inset-bottom,0px)+var(--bottom_nav_h,88px)+4px)] px-4 flex flex-col items-center">
         <div className="w-full max-w-xl mx-auto flex flex-col gap-6">
           
           <div className="mt-2">

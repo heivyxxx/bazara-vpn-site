@@ -5,6 +5,10 @@ import { findUserRow, safeNumberFromDigits } from '@/lib/dbUserLookup';
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
+const SUPABASE_ANON_KEY =
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY || '';
+const SUPABASE_FAKE_PASSWORD =
+  process.env.SUPABASE_FAKE_PASSWORD || 'tg_secret_password';
 
 const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN!;
 const REMNAWAVE_API_BASE_URL = process.env.REMNAWAVE_API_BASE_URL;
@@ -206,10 +210,12 @@ function isDuplicateUserInsertError(err: any): boolean {
   return c === '23505' || m.includes('duplicate') || m.includes('unique');
 }
 
-/** Если пользователь только в TG/localStorage, а строки в public.users нет — создаём заготовку (как при первом входе). */
-async function tryCreateUserStubForTelegramPay(userIdRaw: string): Promise<boolean> {
+/** Минимальная вставка без Auth — часто падает, если auth_id NOT NULL. */
+async function tryCreateUserStubForTelegramPay(
+  userIdRaw: string
+): Promise<{ ok: boolean; lastError?: string }> {
   const raw = String(userIdRaw || '').trim();
-  if (!/^\d+$/.test(raw)) return false;
+  if (!/^\d+$/.test(raw)) return { ok: false, lastError: 'not_all_digits' };
   const n = safeNumberFromDigits(raw);
   const updated_at = new Date().toISOString();
   const base: Record<string, unknown> = {
@@ -221,15 +227,102 @@ async function tryCreateUserStubForTelegramPay(userIdRaw: string): Promise<boole
     lang: 'ru',
     updated_at,
   };
+  let lastError = '';
   if (n !== null) {
     const { error } = await supabase.from('users').insert({ ...base, id: n } as any);
-    if (!error) return true;
-    if (isDuplicateUserInsertError(error)) return true;
+    if (!error) return { ok: true };
+    lastError = error.message || String(error);
+    if (isDuplicateUserInsertError(error)) return { ok: true };
   }
   const { error: e2 } = await supabase.from('users').insert(base as any);
-  if (!e2) return true;
-  if (isDuplicateUserInsertError(e2)) return true;
-  return false;
+  if (!e2) return { ok: true };
+  lastError = e2.message || String(e2);
+  if (isDuplicateUserInsertError(e2)) return { ok: true };
+  return { ok: false, lastError };
+}
+
+/**
+ * Как /api/auth/telegram: Auth user + upsert public.users с auth_id.
+ * Нужен NEXT_PUBLIC_SUPABASE_ANON_KEY и SUPABASE_FAKE_PASSWORD, если в users.auth_id NOT NULL.
+ */
+async function ensureUsersRowViaTelegramAuth(
+  telegramIdStr: string
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const telegram_id = String(telegramIdStr || '').trim();
+  if (!telegram_id || !/^\d+$/.test(telegram_id)) {
+    return { ok: false, error: 'invalid_telegram_id' };
+  }
+  if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY || !SUPABASE_ANON_KEY) {
+    return {
+      ok: false,
+      error:
+        'missing_env: нужны NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, NEXT_PUBLIC_SUPABASE_ANON_KEY',
+    };
+  }
+
+  const email = `${telegram_id}@t.me`;
+  const supabaseAdmin = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
+  const supabaseAnon = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  const { error: signUpError } = await supabaseAdmin.auth.admin.createUser({
+    email,
+    password: SUPABASE_FAKE_PASSWORD,
+    email_confirm: true,
+    user_metadata: { telegram_id },
+  });
+
+  if (
+    signUpError &&
+    !(
+      signUpError.message?.includes('User already registered') ||
+      signUpError.code === 'email_exists' ||
+      signUpError.message?.includes('already been registered')
+    )
+  ) {
+    return { ok: false, error: `auth.admin.createUser: ${signUpError.message}` };
+  }
+
+  const { data: tokenData, error: tokenError } = await supabaseAnon.auth.signInWithPassword({
+    email,
+    password: SUPABASE_FAKE_PASSWORD,
+  });
+
+  if (tokenError || !tokenData?.user?.id) {
+    return { ok: false, error: `auth.signInWithPassword: ${tokenError?.message || 'no session user'}` };
+  }
+
+  const authId = tokenData.user.id;
+  const tid = safeNumberFromDigits(telegram_id) !== null ? safeNumberFromDigits(telegram_id)! : telegram_id;
+
+  const row: Record<string, unknown> = {
+    id: tid,
+    telegram_id: tid,
+    auth_id: authId,
+    username: '',
+    name: '',
+    avatar: '',
+    lang: 'ru',
+    updated_at: new Date().toISOString(),
+  };
+
+  let upsertRes = await supabaseAdmin.from('users').upsert(row as any, { onConflict: 'id' });
+  if (upsertRes.error) {
+    const rowTg: Record<string, unknown> = {
+      telegram_id: tid,
+      auth_id: authId,
+      username: '',
+      name: '',
+      avatar: '',
+      lang: 'ru',
+      updated_at: new Date().toISOString(),
+    };
+    upsertRes = await supabaseAdmin.from('users').upsert(rowTg as any, { onConflict: 'telegram_id' });
+  }
+
+  if (upsertRes.error) {
+    return { ok: false, error: `users.upsert: ${upsertRes.error.message}` };
+  }
+  return { ok: true };
 }
 
 async function insertOrderRecord(input: {
@@ -384,19 +477,30 @@ export async function POST(request: Request) {
 
     let profile = await getUserProfileByAnyId(String(user_id));
     if (!profile.data) {
-      await tryCreateUserStubForTelegramPay(String(user_id));
+      const stub = await tryCreateUserStubForTelegramPay(String(user_id));
       profile = await getUserProfileByAnyId(String(user_id));
-    }
-    if (!profile.data) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: 'User not found',
-          hint:
-            'В Supabase нет строки users для этого аккаунта (или не совпадают id / telegram_id). Откройте приложение из бота ещё раз или проверьте таблицу.',
-        },
-        { status: 400 }
-      );
+      if (!profile.data) {
+        const ensured = await ensureUsersRowViaTelegramAuth(String(user_id));
+        if (ensured.ok) {
+          profile = await getUserProfileByAnyId(String(user_id));
+        }
+        if (!profile.data) {
+          return NextResponse.json(
+            {
+              success: false,
+              error: 'User not found',
+              hint:
+                'Не удалось создать или найти пользователя в Supabase. Проверьте таблицу users, NOT NULL колонки и что на сервере заданы NEXT_PUBLIC_SUPABASE_ANON_KEY и SUPABASE_FAKE_PASSWORD (как для /api/auth/telegram).',
+              details: {
+                user_id,
+                stub_insert: stub.ok ? 'ok' : stub.lastError || 'failed',
+                auth_ensure: ensured.ok === true ? 'ok' : ensured.error,
+              },
+            },
+            { status: 400 }
+          );
+        }
+      }
     }
 
     const dbUserId = String(profile.data.id);

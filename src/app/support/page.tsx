@@ -18,56 +18,56 @@ export default function SupportPage() {
   return (
     <>
       <Header user={user} onLogout={() => setUser(null)} />
-      <main className="min-h-screen pt-[88px] pb-[100px] px-4 flex flex-col items-center">
-        <div className="w-full max-w-xl mx-auto flex flex-col gap-6">
+      <main className="min-h-screen pt-[calc(env(safe-area-inset-top,0px)+72px)] pb-[calc(env(safe-area-inset-bottom,0px)+var(--bottom_nav_h,88px)+4px)] px-4 flex flex-col items-center">
+        <div className="w-full max-w-xl mx-auto flex flex-col gap-5">
           
-          <div className="mt-2 text-left">
-            <h1 className="text-2xl font-extrabold text-white tracking-tight mb-2">
+          <div className="mt-1 text-left">
+            <h1 className="text-xl font-bold text-white tracking-tight mb-1">
               Служба поддержки
             </h1>
           </div>
 
-          <div className="glass-card flex flex-col items-center p-8 text-center rounded-3xl mt-2">
-             <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-4">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#A2A5B8" strokeWidth="2"><path d="M18 10a6 6 0 10-12 0v8h12v-8z" strokeLinecap="round" strokeLinejoin="round"/><path d="M12 21a2.5 2.5 0 01-2.5-2.5V18h5v.5A2.5 2.5 0 0112 21zM9 14h6" strokeLinecap="round" strokeLinejoin="round"/></svg>
+          <div className="bazara-panel flex flex-col items-center p-6 text-center">
+             <div className="w-14 h-14 rounded-full bg-zinc-900/50 border border-zinc-800 flex items-center justify-center mb-3">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2"><path d="M18 10a6 6 0 10-12 0v8h12v-8z" strokeLinecap="round" strokeLinejoin="round"/><path d="M12 21a2.5 2.5 0 01-2.5-2.5V18h5v.5A2.5 2.5 0 0112 21zM9 14h6" strokeLinecap="round" strokeLinejoin="round"/></svg>
              </div>
-             <p className="text-[#A2A5B8] text-[15px] mb-6">Есть вопросы? Свяжитесь с нами 24/7</p>
-             <a href="https://t.me/bazara_support" target="_blank" rel="noreferrer" className="bg-white/10 hover:bg-white/20 transition text-white font-semibold py-3 px-8 rounded-2xl flex items-center gap-2">
+             <p className="text-zinc-500 text-[14px] mb-5">Есть вопросы? Свяжитесь с нами 24/7</p>
+             <a href="https://t.me/bazara_support" target="_blank" rel="noreferrer" className="btn-glow font-semibold py-2.5 px-6 rounded-xl flex items-center gap-2 text-sm">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06 .01.24 0 .38z"/></svg>
                 Открыть чат
              </a>
           </div>
 
-          <div className="flex flex-col gap-3 mt-4">
-            <div className="flex items-center gap-2 pl-1 mb-2">
-               <span className="text-[#6A6D82] text-xs font-bold uppercase tracking-wider">Часто задаваемые вопросы</span>
+          <div className="flex flex-col gap-2 mt-1">
+            <div className="pl-1 mb-1">
+               <span className="text-zinc-500 text-xs font-semibold uppercase tracking-wide">Часто задаваемые вопросы</span>
             </div>
             
-            <div className="bg-white/[0.02] border border-white/5 rounded-3xl p-2 flex flex-col">
+            <div className="bazara-panel p-1.5 flex flex-col">
               {faqs.map((faq, idx) => {
                 const [isOpen, setIsOpen] = React.useState(false);
                 return (
                 <React.Fragment key={idx}>
                   <div 
                     onClick={() => setIsOpen(!isOpen)}
-                    className="hover:bg-white/[0.04] transition px-4 py-4 rounded-2xl flex flex-col cursor-pointer group"
+                    className="hover:bg-zinc-900/40 transition-colors px-3 py-3 rounded-xl flex flex-col cursor-pointer"
                   >
-                    <div className="flex items-center justify-between w-full">
-                      <div className="flex items-center gap-4">
-                        <div className="w-9 h-9 rounded-xl bg-white/5 flex items-center justify-center text-[#A2A5B8] group-hover:bg-[#fe6125]/10 group-hover:text-[#fe6125] transition-colors flex-shrink-0">
+                    <div className="flex items-center justify-between w-full gap-2">
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div className="w-9 h-9 rounded-lg bg-zinc-900/50 border border-zinc-800 flex items-center justify-center text-zinc-500 flex-shrink-0">
                           <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path d={faq.icon} strokeLinecap="round" strokeLinejoin="round"/></svg>
                         </div>
-                        <span className="text-white text-[13px] font-semibold tracking-wide pr-2">{faq.title}</span>
+                        <span className="text-white text-[13px] font-medium tracking-tight pr-1">{faq.title}</span>
                       </div>
-                      <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#6A6D82" strokeWidth="2" className={`flex-shrink-0 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}><path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                      <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" className={`text-zinc-500 flex-shrink-0 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}><path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round"/></svg>
                     </div>
                     {isOpen && (
-                      <div className="mt-4 pl-[3.25rem] text-[#A2A5B8] text-[13px] leading-relaxed animate-fade-in pr-4 pb-2">
-                        Здесь вы можете найти ответ на свой вопрос. Для подробной консультации, пожалуйста, обратитесь в службу поддержки через кнопку "Открыть чат" выше. Мы всегда рады помочь!
+                      <div className="mt-3 pl-12 text-zinc-500 text-[13px] leading-relaxed pr-2 pb-1">
+                        Здесь вы можете найти ответ на свой вопрос. Для подробной консультации, пожалуйста, обратитесь в службу поддержки через кнопку &quot;Открыть чат&quot; выше. Мы всегда рады помочь!
                       </div>
                     )}
                   </div>
-                  {idx < faqs.length - 1 && <div className="h-px bg-white/5 w-[85%] mx-auto"></div>}
+                  {idx < faqs.length - 1 && <div className="h-px bg-zinc-800/80 w-[92%] mx-auto"></div>}
                 </React.Fragment>
               )})}
             </div>

@@ -15,7 +15,9 @@ export const SafeArea: React.FC<{ children: React.ReactNode }> = ({ children }) 
         if (isIOS) pt += 50;
       }
       setPaddingTop(`calc(var(--tg-viewport-safe-area-inset-top, 0px) + ${pt}px)`);
-      setPaddingBottom(`calc(var(--tg-viewport-safe-area-inset-bottom, 0px) + ${pb}px)`);
+      setPaddingBottom(
+        `calc(env(safe-area-inset-bottom, 0px) + var(--bottom_nav_h, 80px) + 8px)`
+      );
     }
     updatePadding();
     window.addEventListener('resize', updatePadding);
@@ -29,7 +31,7 @@ export const SafeArea: React.FC<{ children: React.ReactNode }> = ({ children }) 
         paddingBottom,
         minHeight: '100vh',
         boxSizing: 'border-box',
-        background: '#000',
+        background: '#000000',
         width: '100%',
       }}
     >

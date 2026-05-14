@@ -28,32 +28,31 @@ export default function TariffsPage() {
   return (
     <>
       <Header user={user} onLogout={() => setUser(null)} />
-      <main className="min-h-screen pt-[100px] pb-[100px] px-4 flex flex-col items-center">
+      <main className="min-h-screen pt-[calc(env(safe-area-inset-top,0px)+72px)] pb-[calc(env(safe-area-inset-bottom,0px)+var(--bottom_nav_h,88px)+4px)] px-4 flex flex-col items-center">
         <div className="w-full max-w-sm mx-auto flex flex-col items-center justify-center">
           
-          <h1 className="text-3xl font-extrabold text-white tracking-tight mb-2">
+          <h1 className="text-2xl font-bold text-white tracking-tight mb-1">
             Тарифы
           </h1>
-          <p className="text-[#A2A5B8] text-[13px] leading-relaxed mb-8 text-center">
+          <p className="text-zinc-500 text-[13px] leading-relaxed mb-6 text-center">
             Выберите подходящий тариф для безграничного доступа.
           </p>
 
-          <div className="flex flex-col gap-4 w-full">
+          <div className="flex flex-col gap-3 w-full">
             {tariffs.map(t => (
-              <div key={t.id} className="bg-white/[0.03] hover:bg-white/[0.06] transition-all cursor-pointer p-5 rounded-[1.5rem] relative overflow-hidden group border border-white/5 hover:border-[#fe6125]/30 flex justify-between items-center w-full shadow-lg shadow-black/20">
-                <div className="absolute inset-0 bg-gradient-to-br from-[#fe6125]/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              <div key={t.id} className="bazara-panel hover:border-zinc-600/60 transition-colors cursor-pointer p-4 relative flex justify-between items-center w-full gap-3">
                 {t.popular && (
-                  <div className="absolute top-0 right-0 bg-gradient-to-r from-[#fe6125] to-[#ff9e5e] text-white text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-bl-2xl z-20 shadow-[0_2px_10px_rgba(254,97,37,0.4)]">
-                    Хит продаж
+                  <div className="absolute top-0 right-0 bg-[#fe6125] text-white text-[10px] font-bold uppercase tracking-wide px-2.5 py-0.5 rounded-bl-lg z-10">
+                    Хит
                   </div>
                 )}
-                <div className="flex flex-col z-10">
-                   <span className="text-white font-extrabold text-[17px]">{t.title}</span>
-                   <span className="text-[#6A6D82] text-[12px] font-medium mt-1">{t.desc}</span>
+                <div className="flex flex-col min-w-0">
+                   <span className="text-white font-semibold text-[16px]">{t.title}</span>
+                   <span className="text-zinc-500 text-[12px] font-medium mt-0.5">{t.desc}</span>
                 </div>
-                <div className="flex flex-col items-end z-10">
-                   <span className="text-[#fe6125] font-black text-xl tracking-tight">{t.price}</span>
-                   <button onClick={() => handleSelectTariff(t)} className="mt-2 bg-white/5 group-hover:bg-[#fe6125] group-hover:text-white text-[#A2A5B8] text-[11px] font-bold uppercase tracking-wide py-1.5 px-3.5 rounded-xl transition-all shadow-sm">
+                <div className="flex flex-col items-end shrink-0">
+                   <span className="text-[#fe6125] font-bold text-lg tracking-tight">{t.price}</span>
+                   <button type="button" onClick={() => handleSelectTariff(t)} className="mt-2 bg-zinc-800/80 hover:bg-[#fe6125] text-zinc-300 hover:text-white text-[11px] font-semibold uppercase tracking-wide py-1.5 px-3 rounded-lg transition-colors border border-zinc-700/50 hover:border-[#fe6125]">
                      Выбрать
                    </button>
                 </div>

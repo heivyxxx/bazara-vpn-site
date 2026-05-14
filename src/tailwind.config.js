@@ -19,8 +19,16 @@ module.exports = {
           500: '#fe6125',
           600: '#e04c14',
         },
-        dark: '#0A0A0F',
-        card: '#13141C',
+        dark: '#000000',
+        card: '#0E0E11',
+        bazara: {
+          bg: '#000000',
+          panel: '#0E0E11',
+          nav: '#0E0E11',
+          line: '#232323',
+          muted: '#9ca3af',
+          accent: '#fe6125',
+        },
       },
       fontFamily: {
         sans: ['Inter', 'Segoe UI', 'Arial', 'sans-serif'],

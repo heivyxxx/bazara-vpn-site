@@ -30,7 +30,7 @@ export async function POST(req) {
 
       return NextResponse.json({ error: 'Missing params' }, { status: 400 });
     }
-    // Ищем рефераfльную ссылку по name и type
+    // Ищем рефераfлываьную ссылку по name и type
     const { data: refs, error } = await supabase.from('referrals').select('*').eq('name', ref).eq('type', type);
 
     if (error || !refs || refs.length === 0) {
